@@ -23,41 +23,40 @@
         <v-col class="col" cols="12" md="6">
           <v-container>
             <div class="col1">
-              <TableData/>
+              <TableFoodData/>
             </div>
           </v-container>
         </v-col>
         <v-col class="col" cols="12" md="6">
           <v-container>
             <div class="col1 unalloc">
-              Unallocated space for now
+              <TableActivitiesData/>
             </div>
           </v-container>
         </v-col>
       </v-row>
     </div>
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
     <Footer/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 import Footer from './components/Footer.vue'
 import Header from './components/Header.vue'
 import Glucose from './components/Glucose.vue'
 import Profile from './components/Profile.vue'
-import TableData from './components/TableData.vue'
+import TableFoodData from './components/TableFoodData.vue'
+import TableActivitiesData from './components/TableActivitiesData'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld,
     Footer,
     Header,
     Glucose,
     Profile,
-    TableData
+    TableFoodData,
+    TableActivitiesData
   }
 }
 </script>
