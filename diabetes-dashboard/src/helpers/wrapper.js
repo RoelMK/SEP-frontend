@@ -1,44 +1,42 @@
 import axios from 'axios'
 
 export class AxiosWrapper {
-    constructor(headers = {}) {
-        headers['accept'] = 'application/json'
-
+    constructor(headers = { 'accept': 'application/json' }) {
         let service = axios.create({
             headers: headers
-        })
+        });
 
         /* Use custom response handlers for axios */
-        service.interceptors.response.use(this._successHandler, this._errorHandler)
-        this.service = service
+        service.interceptors.response.use(this._successHandler, this._errorHandler);
+        this.service = service;
     }
 
-    _successHandler(response) { return response }
+    _successHandler(response) { return response; }
 
     _errorHandler(error) { 
-        let responseStatus = error.response.status
+        let responseStatus = error.response.status;
 
         switch (responseStatus) {
             case 400:
-                console.log(`Bad Request: ${ responseStatus }`)
-                break
+                console.log(`Bad Request: ${ responseStatus }`);
+                break;
             case 401:
-                console.log(`Unauthorized Access: ${ responseStatus }`)
-                break
+                console.log(`Unauthorized Access: ${ responseStatus }`);
+                break;
             case 403:
-                console.log(`Forbidden: ${ responseStatus }`)
-                break
+                console.log(`Forbidden: ${ responseStatus }`);
+                break;
             case 404:
-                console.log(`Not Found: ${ responseStatus }`)
-                break
+                console.log(`Not Found: ${ responseStatus }`);
+                break;
             case 500:
-                console.log(`Internal Server Error: ${ responseStatus }`)
-                break
+                console.log(`Internal Server Error: ${ responseStatus }`);
+                break;
             default:
-                console.log(`Response Error: ${ responseStatus }`)
-                break
+                console.log(`Response Error: ${ responseStatus }`);
+                break;
         }
-        return Promise.reject(error)
+        return Promise.reject(error);
     }
 
     /**
@@ -49,7 +47,7 @@ export class AxiosWrapper {
      */
     get(url, callback) {
         return this.service.get(url)
-            .then(response => callback(response.data))
+            .then(response => callback(response.data));
     }
 
     /**
@@ -61,7 +59,7 @@ export class AxiosWrapper {
      */
     post(url, payload, callback) {
         return this.service.post(url, payload, { responseType: 'json' })
-            .then(response => callback(response.data))
+            .then(response => callback(response.data));
     }
 
     /**
@@ -73,7 +71,7 @@ export class AxiosWrapper {
      */
     put(url, payload, callback) {
         return this.service.put(url, payload)
-            .then(response => callback(response.data))
+            .then(response => callback(response.data));
     }
 
     /**
@@ -85,6 +83,6 @@ export class AxiosWrapper {
      */
     delete(url, payload, callback) {
         return this.service.delete(url, { data: payload })
-            .then(response => callback(response.data))
+            .then(response => callback(response.data));
     }
 }
