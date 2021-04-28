@@ -17,7 +17,7 @@ import { VueReactionEmoji, VueFeedbackReaction } from 'vue-feedback-reaction'
 import { AxiosWrapper } from '@/helpers/wrapper.js'
 
 /* Create a new instance of AxiosWrapper with required headers */
-const wrapper = new AxiosWrapper({ 'accept': 'application/json' })
+const wrapper = new AxiosWrapper()
 
 export default {
     name: 'profile',

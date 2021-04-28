@@ -1,7 +1,9 @@
 import axios from 'axios'
 
 export class AxiosWrapper {
-    constructor(headers) {
+    constructor(headers = {}) {
+        headers['accept'] = 'application/json'
+
         let service = axios.create({
             headers: headers
         })
