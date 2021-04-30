@@ -2,7 +2,7 @@
   <div class="table">
     <v-data-table
       :headers="headers"
-      :items="desserts"
+      :items="allActivities"
       item-key="name"
       class="elevation-1"
       :search="search"
@@ -24,6 +24,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
     name: 'profile',
     data() {
@@ -46,45 +48,45 @@ export default {
                     value: "calories"
                 }
             ],
-            desserts: [
-                {
-                    activity: "Run",
-                    date: new Date("04-20-2021").toLocaleDateString(),
-                    duration: "1 hour",
-                    calories: 159
-                },
-                {
-                    activity: "Yoga",
-                    date: new Date("04-05-2021").toLocaleDateString(),
-                    duration: "30 minutes",
-                    calories: 100,
-                },
-                {
-                    activity: "Chess",
-                    date: new Date("04-01-2021").toLocaleDateString(),
-                    duration: "1.5 hour",
-                    calories: null,
-                },
-                {
-                    activity: "Health check",
-                    date: new Date("03-24-2021").toLocaleDateString(),
-                    duration: null,
-                    calories: null,
-                },
-                {
-                    activity: "Ice hokey",
-                    date: new Date("03-16-2021").toLocaleDateString(),
-                    duration: "2.5 hours",
-                    calories: 349,
-                },
-            ],
+            // desserts: [
+            //     {
+            //         activity: "Run",
+            //         date: new Date("04-20-2021").toLocaleDateString(),
+            //         duration: "1 hour",
+            //         calories: 159
+            //     },
+            //     {
+            //         activity: "Yoga",
+            //         date: new Date("04-05-2021").toLocaleDateString(),
+            //         duration: "30 minutes",
+            //         calories: 100,
+            //     },
+            //     {
+            //         activity: "Chess",
+            //         date: new Date("04-01-2021").toLocaleDateString(),
+            //         duration: "1.5 hour",
+            //         calories: null,
+            //     },
+            //     {
+            //         activity: "Health check",
+            //         date: new Date("03-24-2021").toLocaleDateString(),
+            //         duration: null,
+            //         calories: null,
+            //     },
+            //     {
+            //         activity: "Ice hokey",
+            //         date: new Date("03-16-2021").toLocaleDateString(),
+            //         duration: "2.5 hours",
+            //         calories: 349,
+            //     },
+            // ],
             search: ""
         }
     },
     mounted() {
     },
-    computed: {
-    },
+    // state getters you need to use
+    computed: mapGetters(['allActivities']),
     methods: {
     }
 }
