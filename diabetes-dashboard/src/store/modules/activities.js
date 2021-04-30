@@ -2,36 +2,14 @@ import axios from 'axios';
 
 const state = {
     activities: [
-        {
-            activity: "Run",
-            date: new Date("04-28-2021").toLocaleDateString(),
-            duration: "2 hours",
-            calories: 159
-        },
-        {
-            activity: "Yoga",
-            date: new Date("04-05-2021").toLocaleDateString(),
-            duration: "30 minutes",
-            calories: 100,
-        },
-        {
-            activity: "Chess",
-            date: new Date("04-01-2021").toLocaleDateString(),
-            duration: "1.5 hour",
-            calories: null,
-        },
-        {
-            activity: "Health check",
-            date: new Date("03-24-2021").toLocaleDateString(),
-            duration: null,
-            calories: null,
-        },
-        {
-            activity: "Ice hokey",
-            date: new Date("03-16-2021").toLocaleDateString(),
-            duration: "2.5 hours",
-            calories: 349,
-        },
+        // {
+        //     activityType: "Run",
+        //     userId: 1,
+        //     date: moment("20210429T000000+0200").format('L'),
+        //     startTime: "16:00",
+        //     endTime: "17:00",
+        //     burntCalories: 159,
+        // },
     ]
 };
 
@@ -41,13 +19,41 @@ const getters = {
 
 const actions = {
     async fetchActivities({ commit }) {
-        const response = await axios.get('');
+        const response = await axios.get('https://jsonplaceholder.typicode.com/albums');
+        commit('setActivities', response.data)
+    },
+    async addActivity({ commit }, activity, date, duration) {
+        const response = await axios.post('https://jsonplaceholder.typicode.com/albums',
+            { activity, date, duration, completed: false });
 
-        console.log(response.data);
-    }
+        commit('newActivity', response.data)
+    },
+    async deleteActivity({ commit }, id) {
+        await axios.delete(`https://jsonplaceholder.typicode.com/albums/${id}`);
+
+        commit('removeActivity', id)
+    },
+    async updateActivity({ commit }, id, activity, date, duration) {
+        const response = await axios.put(`https://jsonplaceholder.typicode.com/albums/${id}`,
+            { activity, date, duration, completed: false });
+
+        commit('updateActivity', id, response.data)
+    },
 };
 
-const mutations = {};
+const mutations = {
+    setActivities: (state, newActivities) => (state.activities = newActivities),
+    newActivity: (state, newActivitiy) => state.activities.unshift(newActivitiy),
+    removeActivity: (state, id) => state.activities = state.activities.filter(activity => activity.id !== id),
+    updateActivity: (state, id, updatedActivity) => {
+        const index = state.activities.findIndex(activity => activity.id === id);
+        if (index !== -1) {
+            state.activities.splice(index, 1, updatedActivity);
+        } else {
+            state.activities.splice(index, 0, updatedActivity);
+        }
+    }
+};
 
 export default {
     state,

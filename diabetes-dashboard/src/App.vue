@@ -29,7 +29,7 @@
         </v-col>
         <v-col class="col" cols="12" md="6">
           <v-container>
-            <div class="col1 unalloc">
+            <div data-app class="col1 unalloc">
               <TableActivitiesData/>
             </div>
           </v-container>
