@@ -22,3 +22,8 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+## Git
+### Checkout new branch
+Ctrl+Shift+p > "Create branch" > (feature|bug)/name (for example "feature/axios-wrapper" or "bug/login-error") 
