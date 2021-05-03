@@ -46,7 +46,7 @@ import Header from './components/Header.vue'
 import Glucose from './components/Glucose.vue'
 import Profile from './components/Profile.vue'
 import TableFoodData from './components/TableFoodData.vue'
-import TableActivitiesData from './components/TableActivitiesData'
+import TableActivitiesData from './components/TableActivitiesData.vue'
 
 export default {
   name: 'App',

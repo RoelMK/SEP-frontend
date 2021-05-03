@@ -2,12 +2,11 @@
   <div class="table">
     <v-data-table
       :headers="headers"
-      :items="desserts"
+      :items="activities"
       item-key="name"
       class="elevation-1"
       :search="search"
       :hide-default-footer="true"
-      :custom-filter="filterOnlyCapsText"
     >
       <template v-slot:top>
         <v-container>
@@ -24,6 +23,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 export default {
     name: 'profile',
     data() {
@@ -46,34 +46,34 @@ export default {
                     value: "calories"
                 }
             ],
-            desserts: [
+            activities: [
                 {
                     activity: "Run",
-                    date: new Date("04-20-2021").toLocaleDateString(),
+                    date: moment("20210429T000000+0200").format('L'),
                     duration: "1 hour",
                     calories: 159
                 },
                 {
                     activity: "Yoga",
-                    date: new Date("04-05-2021").toLocaleDateString(),
+                    date: moment("20210424T000000+0200").format('L'),
                     duration: "30 minutes",
                     calories: 100,
                 },
                 {
                     activity: "Chess",
-                    date: new Date("04-01-2021").toLocaleDateString(),
+                    date: moment("20210425T000000+0200").format('L'),
                     duration: "1.5 hour",
                     calories: null,
                 },
                 {
                     activity: "Health check",
-                    date: new Date("03-24-2021").toLocaleDateString(),
+                    date: moment("20210426T000000+0200").format('L'),
                     duration: null,
                     calories: null,
                 },
                 {
                     activity: "Ice hokey",
-                    date: new Date("03-16-2021").toLocaleDateString(),
+                    date: moment("20210427T000000+0200").format('L'),
                     duration: "2.5 hours",
                     calories: 349,
                 },

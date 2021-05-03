@@ -4,6 +4,7 @@
           Hey Jeroen!
           <vue-reaction-emoji :reaction="reaction" :is-active="isActive" :is-disabled="isDisabled" :height="height" />
       </h2>
+      <h4>{{ title }}</h4>
       <p>Your current glucose level is 140 mg/dL.</p>
       <p>Your heart rate is 90 bpm.</p>
       <p>And some more interesting data, of course</p>
@@ -12,7 +13,11 @@
 </template>
 
 <script>
-import { VueReactionEmoji, VueFeedbackReaction } from 'vue-feedback-reaction';
+import { VueReactionEmoji, VueFeedbackReaction } from 'vue-feedback-reaction'
+import { AxiosWrapper } from '@/helpers/wrapper.js'
+
+/* Create a new instance of AxiosWrapper with required headers */
+const wrapper = new AxiosWrapper()
 
 export default {
     name: 'profile',
@@ -25,10 +30,19 @@ export default {
             reaction: 'excellent',
             isActive: false,
             isDisabled: false,
-            height: "30px"
+            height: "30px",
+            title: '',
+            payload: {
+                title: 'Hello from POST request',
+                body: 'Example body',
+                userId: 1,
+            }
         }
     },
     mounted() {
+        /* Example of POST Request, similar requests can be made for GET, PUT and DELETE */
+        wrapper.post('https://jsonplaceholder.typicode.com/posts', this.payload, dataPromise => dataPromise)
+            .then(data => this.title = data.title)
     },
     computed: {
     },
