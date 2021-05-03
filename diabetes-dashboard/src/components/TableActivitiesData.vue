@@ -151,10 +151,12 @@ export default {
 
     save() {
       this.updateActivity(
-        this.editedItem.originalId,
-        this.editedItem.userId,
-        this.editedItem.id,
-        this.editedItem.title
+          {
+              originalId: this.editedItem.originalId, 
+              userId: this.editedItem.userId, 
+              id: this.editedItem.id, 
+              title: this.editedItem.title
+          }
       );
       this.close();
     },

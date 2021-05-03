@@ -22,9 +22,9 @@ const actions = {
         const response = await axios.get('https://jsonplaceholder.typicode.com/albums');
         commit('setActivities', response.data)
     },
-    async addActivity({ commit }, activity, date, duration) {
+    async addActivity({ commit }, {id, title, userId}) {
         const response = await axios.post('https://jsonplaceholder.typicode.com/albums',
-            { activity, date, duration, completed: false });
+            { userId, id, title, completed: false });
 
         commit('newActivity', response.data)
     },
@@ -33,11 +33,12 @@ const actions = {
 
         commit('removeActivity', id)
     },
-    async updateActivity({ commit }, id, activity, date, duration) {
-        const response = await axios.put(`https://jsonplaceholder.typicode.com/albums/${id}`,
-            { activity, date, duration, completed: false });
+    async updateActivity({ commit }, {originalId, userId, id, title}) {
+        const response = await axios.put(`https://jsonplaceholder.typicode.com/albums/${originalId}`,
+            { userId, id, title, completed: false });
+        const data = response.data;
 
-        commit('updateActivity', id, response.data)
+        commit('updateActivity', {originalId: originalId, updatedActivity: data})
     },
 };
 
@@ -45,12 +46,10 @@ const mutations = {
     setActivities: (state, newActivities) => (state.activities = newActivities),
     newActivity: (state, newActivitiy) => state.activities.unshift(newActivitiy),
     removeActivity: (state, id) => state.activities = state.activities.filter(activity => activity.id !== id),
-    updateActivity: (state, id, updatedActivity) => {
-        const index = state.activities.findIndex(activity => activity.id === id);
+    updateActivity: (state, { originalId, updatedActivity }) => {         
+        const index = state.activities.findIndex(activity => activity.id === originalId);
         if (index !== -1) {
             state.activities.splice(index, 1, updatedActivity);
-        } else {
-            state.activities.splice(index, 0, updatedActivity);
         }
     }
 };

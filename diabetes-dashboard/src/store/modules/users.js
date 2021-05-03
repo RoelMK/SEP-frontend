@@ -1,5 +1,13 @@
 const state = {
-    users: []
+    users: [
+        // {
+        //     userId: 1,
+        //     age: 20,
+        //     weight: 75,
+        //     height: 180,
+        //     email: fake@gmail.com,
+        // },
+    ]
 };
 
 const getters = {
