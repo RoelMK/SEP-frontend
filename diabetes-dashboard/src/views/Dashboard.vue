@@ -1,57 +1,80 @@
 <template>
-    <div id="dashboard">
-        <div class="main">
-            <v-row>
-                <v-col class="col" cols="12" md="6">
-                    <v-container>
-                        <div class="col1">
-                            <Glucose/>
-                        </div>
-                    </v-container>
-                </v-col>
-                <v-col class="col" cols="12" md="6">
-                    <v-container>
-                        <div class="col1">
-                            <Profile/>
-                        </div>
-                    </v-container>
-                </v-col>
-            </v-row>
-            <v-row>
-                <v-col class="col" cols="12" md="6">
-                    <v-container>
-                        <div class="col1">
-                            <TableFoodData/>
-                        </div>
-                    </v-container>
-                </v-col>
-                <v-col class="col" cols="12" md="6">
-                    <v-container>
-                        <div class="col1 unalloc">
-                            <TableActivitiesData/>
-                        </div>
-                    </v-container>
-                </v-col>
-            </v-row>
-        </div>
+  <div id="dashboard">
+    <div class="main">
+      <v-row>
+        <v-col class="col" cols="12" md="6">
+          <v-container>
+            <div class="col1">
+              <Glucose />
+            </div>
+          </v-container>
+        </v-col>
+        <v-col class="col" cols="12" md="6">
+          <v-container>
+            <div class="col1">
+              <Profile />
+            </div>
+          </v-container>
+        </v-col>
+      </v-row>
+
+      <v-row>
+        <v-col class="col" cols="12" md="6">
+          <v-container>
+            <div data-app class="col1">
+              <v-card>
+
+                <v-tabs v-model="tab">
+                  <v-tab v-for="item in items" :key="item">
+                    {{ item }}
+                  </v-tab>
+                </v-tabs>
+
+                <v-tabs-items v-model="tab">
+                  <v-tab-item>
+                    <TableInsulinData />
+                  </v-tab-item>
+                  <v-tab-item>
+                    <TableFoodData />
+                  </v-tab-item>
+                  <v-tab-item>
+                    <TableActivitiesData />
+                  </v-tab-item>
+                </v-tabs-items>
+                
+              </v-card>
+            </div>
+          </v-container>
+        </v-col>
+      </v-row>
+
     </div>
+  </div>
 </template>
 
 <script>
-import Glucose from '@/components/Glucose.vue';
-import Profile from '@/components/Profile.vue';
-import TableFoodData from '@/components/TableFoodData.vue';
-import TableActivitiesData from '@/components/TableActivitiesData.vue';
+import Glucose from "@/components/Glucose.vue";
+import Profile from "@/components/Profile.vue";
+import TableFoodData from "@/components/TableFoodData.vue";
+import TableActivitiesData from "@/components/TableActivitiesData.vue";
+import TableInsulinData from "@/components/TableInsulinData.vue";
 
 export default {
-  name: 'Dashboard',
+  name: "Dashboard",
   components: {
     Glucose,
     Profile,
     TableFoodData,
-    TableActivitiesData
-  }
-}
+    TableActivitiesData,
+    TableInsulinData,
+  },
+  data() {
+    return {
+      tab: null,
+      items: ["insulin", "food", "activities"],
+    };
+  },
+};
 </script>
 
 <style>
@@ -67,7 +90,7 @@ export default {
   border-radius: 20px;
   left: 3%;
   right: 3%;
-  background-color: white
+  background-color: white;
 }
 .main {
   background-color: #f2f2f2;
