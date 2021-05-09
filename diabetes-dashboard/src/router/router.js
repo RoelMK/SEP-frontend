@@ -9,6 +9,12 @@ const routes = [
         component: () => import('@/views/Dashboard.vue'),
         props: { param: "optional" },
         name: "dashboard"
+    },
+    {
+        path: '/login',
+        component: () => import('@/views/Login.vue'),
+        props: { param: "optional" },
+        name: "login"
     }
 ]
 

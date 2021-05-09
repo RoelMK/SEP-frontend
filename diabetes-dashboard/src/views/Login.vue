@@ -1,0 +1,52 @@
+<template>
+  <div class="main">
+    <v-container>
+      <v-row>
+        <v-col cols="12" sm="12" md="6" lg="6" align="center">
+          <v-form>
+            <h2>Welcome to Diabetter!</h2>
+            <br><br>
+            <v-text-field
+              class="customField"
+              label="Email"
+              prepend-inner-icon="mdi-account"
+            ></v-text-field>
+            <v-text-field
+              class="customField"
+              label="Password"
+              prepend-inner-icon="mdi-lock"
+              append-icon="mdi-eye-off"
+              type="password"
+            ></v-text-field>
+            <v-btn style="color:white; background-color:#1B98E0">Log in</v-btn>
+          </v-form>
+        </v-col>
+        <v-divider vertical></v-divider>
+        <v-col cols="12" sm="12" md="6" lg="6"><img src="../assets/DiabetterLogo.png" class="image-fit"> </v-col>
+      </v-row>
+    </v-container>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "Login",
+};
+</script>
+
+<style>
+.main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+.customField {
+  width: 80%
+}
+.image-fit{
+  height: 80%;
+  width: 80%;
+  object-fit: cover;
+}
+</style>
