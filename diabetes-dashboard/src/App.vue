@@ -1,5 +1,5 @@
 <template>
-    <div id="app">
+    <div id="app" data-app>
         <Header class="header"/>
         <div class="clearfix"></div>
         <router-view/>
