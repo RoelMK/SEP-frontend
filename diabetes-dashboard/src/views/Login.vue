@@ -20,6 +20,8 @@
             ></v-text-field>
             <v-btn style="color:white; background-color:#1B98E0">Log in</v-btn>
           </v-form>
+          <br><br>
+          <a class='register' href="https://app.gamebus.eu/auth/signup" target=”_blank”>Don't have an account? Register here</a>
         </v-col>
         <v-divider vertical></v-divider>
         <v-col cols="12" sm="12" md="6" lg="6"><img src="../assets/DiabetterLogo.png" class="image-fit"> </v-col>
@@ -48,5 +50,8 @@ export default {
   height: 80%;
   width: 80%;
   object-fit: cover;
+}
+.register {
+  font-size: 13px;
 }
 </style>
