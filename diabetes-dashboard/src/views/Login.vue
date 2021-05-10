@@ -15,8 +15,10 @@
               class="customField"
               label="Password"
               prepend-inner-icon="mdi-lock"
-              append-icon="mdi-eye-off"
-              type="password"
+              :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
+              :type="showPass ? 'text' : 'password'"
+              v-model="password"
+              @click:append="showPass = !showPass"
             ></v-text-field>
             <v-btn style="color:white; background-color:#1B98E0">Log in</v-btn>
           </v-form>
@@ -33,6 +35,11 @@
 <script>
 export default {
   name: "Login",
+  data () {
+    return {
+      showPass: false
+    }
+  },
 };
 </script>
 
