@@ -2,7 +2,7 @@
   <div>
     <v-card flat tile>
       <v-toolbar color="blue" flat dense>
-        <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+        <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
         <v-toolbar-title>Diabetter</v-toolbar-title>
 

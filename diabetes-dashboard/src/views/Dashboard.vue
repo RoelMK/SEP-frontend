@@ -12,7 +12,7 @@
         <v-col class="col" cols="12" md="6">
           <v-container>
             <div class="col1">
-              <Profile />
+              <Profile v-bind:selectedFoodItem="chosenFood" v-bind:selectedActivity="chosenActivity"/>
             </div>
           </v-container>
         </v-col>
@@ -35,10 +35,10 @@
                     <TableInsulinData />
                   </v-tab-item>
                   <v-tab-item>
-                    <TableFoodData />
+                    <TableFoodData  @selectedFood="getSelectedFood"/>
                   </v-tab-item>
                   <v-tab-item>
-                    <TableActivitiesData />
+                    <TableActivitiesData @selectedActivity="getSelectedActivity"/>
                   </v-tab-item>
                 </v-tabs-items>
                 
@@ -72,8 +72,19 @@ export default {
     return {
       tab: null,
       items: ["insulin", "food", "activities"],
+      chosenFood: '',
+      chosenActivity: '',
     };
   },
+  methods: {
+      getSelectedFood(food) {
+          this.chosenFood = food;
+      },
+      getSelectedActivity(activity) {
+          this.chosenActivity = activity;
+      }
+
+  }
 };
 </script>
 

@@ -7,6 +7,7 @@
       class="elevation-1"
       :search="search"
       :hide-default-footer="true"
+      @click:row="selectActivity"
     >
       <template v-slot:top>
         <v-container>
@@ -23,9 +24,10 @@
 </template>
 
 <script>
-import moment from 'moment'
+import moment from 'moment';
+
 export default {
-    name: 'profile',
+    name: 'TableActivitiesData',
     data() {
         return {
             headers: [
@@ -81,12 +83,13 @@ export default {
             search: ""
         }
     },
-    mounted() {
-    },
     computed: {
     },
     methods: {
-    }
+        selectActivity(activity) {
+            this.$emit('selectedActivity', activity);
+        }
+    },
 }
 </script>
 

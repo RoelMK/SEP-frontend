@@ -9,7 +9,7 @@
           <input
             type="number"
             v-model="veryHighThreshold"
-            placeholder="Enter value (int)"
+            placeholder="Enter value"
           />
           <input type="submit" value="Submit" class="button" />
         </form>
@@ -23,7 +23,7 @@
           <input
             type="number"
             v-model="highRangeMax"
-            placeholder="Enter value (int)"
+            placeholder="Enter value"
           />
           <input type="submit" value="Submit" class="button" />
         </form>
@@ -37,7 +37,7 @@
           <input
             type="number"
             v-model="highRangeMin"
-            placeholder="Enter value (int)"
+            placeholder="Enter value"
           />
           <input type="submit" value="Submit" class="button" />
         </form>
@@ -51,7 +51,7 @@
           <input
             type="number"
             v-model="normalRangeMax"
-            placeholder="Enter value (int)"
+            placeholder="Enter value"
           />
           <input type="submit" value="Submit" class="button" />
         </form>
@@ -65,7 +65,7 @@
           <input
             type="number"
             v-model="normalRangeMin"
-            placeholder="Enter value (int)"
+            placeholder="Enter value"
           />
           <input type="submit" value="Submit" class="button" />
         </form>
@@ -79,7 +79,7 @@
           <input
             type="number"
             v-model="lowRangeMax"
-            placeholder="Enter value (int)"
+            placeholder="Enter value"
           />
           <input type="submit" value="Submit" class="button" />
         </form>
@@ -93,7 +93,7 @@
           <input
             type="number"
             v-model="lowRangeMin"
-            placeholder="Enter value (int)"
+            placeholder="Enter value"
           />
           <input type="submit" value="Submit" class="button" />
         </form>
@@ -107,7 +107,7 @@
           <input
             type="number"
             v-model="veryLowThreshold"
-            placeholder="Enter value (int)"
+            placeholder="Enter value"
           />
           <input type="submit" value="Submit" class="button" />
         </form>
@@ -121,7 +121,7 @@
           <input
             type="number"
             v-model="fastingRangeMax"
-            placeholder="Enter value (int)"
+            placeholder="Enter value"
           />
           <input type="submit" value="Submit" class="button" />
         </form>
@@ -135,7 +135,7 @@
           <input
             type="number"
             v-model="fastingRangeMin"
-            placeholder="Enter value (int)"
+            placeholder="Enter value"
           />
           <input type="submit" value="Submit" class="button" />
         </form>
@@ -149,7 +149,7 @@
           <input
             type="number"
             v-model="ppRangeThreshold"
-            placeholder="Enter value (int)"
+            placeholder="Enter value"
           />
           <input type="submit" value="Submit" class="button" />
         </form>
@@ -163,7 +163,7 @@
           <input
             type="number"
             v-model="goalA1C"
-            placeholder="Enter value (int)"
+            placeholder="Enter value"
           />
           <input type="submit" value="Submit" class="button" />
         </form>
@@ -206,11 +206,6 @@ export default {
       ppRangeThreshold: "",
       goalA1C: "",
     };
-  },
-  methods: {
-    onSubmit(e) {
-      e.preventDefault();
-    },
   },
 };
 </script>

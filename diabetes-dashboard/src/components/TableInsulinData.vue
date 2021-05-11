@@ -7,7 +7,6 @@
       class="elevation-1"
       :search="search"
       :hide-default-footer="true"
-      :custom-filter="filterOnlyCapsText"
     >
       <template v-slot:top>
         <v-container>
@@ -139,7 +138,6 @@ export default {
       search: "",
     };
   },
-  mounted() {},
   methods: {
     ...mapActions(["fetchInsulinData", "addInsulinInput", "deleteInsulinInput", "updateInsulinInput"]),
 

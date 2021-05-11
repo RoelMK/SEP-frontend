@@ -11,7 +11,7 @@
           <input
             type="number"
             v-model="goalConsumedCalories"
-            placeholder="Enter value (int)"
+            placeholder="Enter value"
           />
           <input type="submit" value="Submit" class="button"/>
         </form>
@@ -27,7 +27,7 @@
           <input
             type="number"
             v-model="goalBurntCalories"
-            placeholder="Enter value (int)"
+            placeholder="Enter value"
           />
           <input type="submit" value="Submit" class="button"/>
         </form>

@@ -13,7 +13,6 @@ const routes = [
     {
         path: '/profile',
         component: () => import('@/views/UserProfile.vue'),
-        props: { param: "optional" },
         name: "profile"
     },
 ]

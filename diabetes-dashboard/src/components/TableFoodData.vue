@@ -7,6 +7,7 @@
       class="elevation-1"
       :search="search"
       :hide-default-footer="true"
+      @click:row="selectFood"
     >
       <template v-slot:top>
         <v-container>
@@ -24,7 +25,7 @@
 
 <script>
 export default {
-    name: 'profile',
+    name: 'TableFoodData',
     data() {
         return {
             headers: [
@@ -98,11 +99,12 @@ export default {
             search: ""
         }
     },
-    mounted() {
-    },
     computed: {
     },
     methods: {
+        selectFood(food) {
+            this.$emit('selectedFood', food);
+        }
     }
 }
 </script>

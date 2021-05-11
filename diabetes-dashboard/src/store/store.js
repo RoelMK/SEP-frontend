@@ -111,54 +111,39 @@ const store = new Vuex.Store({
         ADD_ACTIVITY: (state, newActivitiy) => state.activities.unshift(newActivitiy),
         REMOVE_ACTIVITY: (state, id) => state.activities = state.activities.filter(activity => activity.id !== id),
         UPDATE_ACTIVITY: (state, { originalId, updatedActivity }) => {         
-            const index = state.activities.findIndex(activity => activity.id === originalId);
-            if (index !== -1) {
-                state.activities.splice(index, 1, updatedActivity);
-            }
+            state.activities.splice(state.activities.findIndex(activity => activity.id === originalId), 1, updatedActivity)
         },
 
         SET_EMOTIONS: (state, newEmotions) => state.emotions = newEmotions,
         RESET_EMOTIONS: state => Object.assign(state.emotions, []),
         ADD_EMOTION: (state, newEmotion) => state.emotions.unshift(newEmotion),
         REMOVE_EMOTION: (state, id) => state.emotions = state.emotions.filter(emotion => emotion.id !== id),
-        UPDATE_EMOTION: (state, { originalId, updatedEmotion }) => {         
-            const index = state.emotions.findIndex(emotion => emotion.id === originalId);
-            if (index !== -1) {
-                state.emotions.splice(index, 1, updatedEmotion);
-            }
+        UPDATE_EMOTION: (state, { originalId, updatedEmotion }) => {
+            state.emotions.splice(state.emotions.findIndex(emotion => emotion.id === originalId), 1, updatedEmotion)
         },
 
         SET_FOOD_ITEMS: (state, newFoodItems) => state.foodItems = newFoodItems,
         RESET_FOOD_ITEMS: state => Object.assign(state.foodItems, []),
         ADD_FOOD_ITEM: (state, newFoodItem) => state.foodItems.unshift(newFoodItem),
         REMOVE_FOOD_ITEM: (state, id) => state.foodItems = state.foodItems.filter(foodItem => foodItem.id !== id),
-        UPDATE_FOOD_ITEM: (state, { originalId, updatedFoodItem }) => {         
-            const index = state.foodItems.findIndex(foodItem => foodItem.id === originalId);
-            if (index !== -1) {
-                state.foodItems.splice(index, 1, updatedFoodItem);
-            }
+        UPDATE_FOOD_ITEM: (state, { originalId, updatedFoodItem }) => {
+            state.foodItems.splice(state.foodItems.findIndex(foodItem => foodItem.id === originalId), 1, updatedFoodItem)
         },
 
         SET_GLUCOSE_DATA: (state, newGlucoseData) => state.glucoseData = newGlucoseData,
         RESET_GLUCOSE_DATA: state => Object.assign(state.glucoseData, []),
         ADD_GLUCOSE_VALUE: (state, newGlucoseValue) => state.glucoseData.unshift(newGlucoseValue),
         REMOVE_GLUCOSE_VALUE: (state, id) => state.glucoseData = state.glucoseData.filter(glucoseValue => glucoseValue.id !== id),
-        UPDATE_GLUCOSE_VALUE: (state, { originalId, updatedGlucoseValue }) => {         
-            const index = state.glucoseData.findIndex(glucoseValue => glucoseValue.id === originalId);
-            if (index !== -1) {
-                state.glucoseData.splice(index, 1, updatedGlucoseValue);
-            }
+        UPDATE_GLUCOSE_VALUE: (state, { originalId, updatedGlucoseValue }) => {
+            state.glucoseData.splice(state.glucoseData.findIndex(glucoseValue => glucoseValue.id === originalId), 1, updatedGlucoseValue)
         },
 
         SET_INSULIN_DATA: (state, newInsulinData) => state.insulinData = newInsulinData,
         RESET_INSULIN_DATA: state => Object.assign(state.insulinData, []),
         ADD_INSULIN_VALUE: (state, newInsulinValue) => state.insulinData.unshift(newInsulinValue),
         REMOVE_INSULIN_VALUE: (state, id) => state.insulinData = state.insulinData.filter(insulinValue => insulinValue.id !== id),
-        UPDATE_INSULIN_VALUE: (state, { originalId, updatedInsulinValue }) => {         
-            const index = state.insulinData.findIndex(insulinValue => insulinValue.id === originalId);
-            if (index !== -1) {
-                state.insulinData.splice(index, 1, updatedInsulinValue);
-            }
+        UPDATE_INSULIN_VALUE: (state, { originalId, updatedInsulinValue }) => {
+            state.insulinData.splice(state.insulinData.findIndex(insulinValue => insulinValue.id === originalId), 1, updatedInsulinValue)
         },
 
         SET_USERS: (state, newUsers) => state.users = newUsers,
@@ -166,10 +151,7 @@ const store = new Vuex.Store({
         ADD_USER: (state, newUser) => state.users.unshift(newUser),
         REMOVE_USER: (state, id) => state.users = state.users.filter(user => user.id !== id),
         UPDATE_USER: (state, { originalId, updatedUser }) => {         
-            const index = state.users.findIndex(user => user.id === originalId);
-            if (index !== -1) {
-                state.users.splice(index, 1, updatedUser);
-            }
+            state.users.splice(state.users.findIndex(user => user.id === originalId), 1, updatedUser)
         },
     },
 });
