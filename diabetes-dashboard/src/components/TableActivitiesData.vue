@@ -12,7 +12,7 @@
       <template v-slot:top>
         <v-container>
             <v-row>
-                <v-col xs="11" sm="11" md="11" lg="11">
+                <v-col xs="10" sm="10" md="10" lg="10">
                     <v-text-field v-model="search" label="Search"></v-text-field>
                 </v-col>
                 <v-col><v-icon medium>mdi-plus</v-icon></v-col>

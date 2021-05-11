@@ -21,9 +21,7 @@
       <v-row>
         <v-col class="col" cols="12" md="6">
           <v-container>
-            <div data-app class="col1">
-              <v-card>
-
+              <v-card style="border-radius:20px;">
                 <v-tabs v-model="tab">
                   <v-tab v-for="item in items" :key="item">
                     {{ item }}
@@ -43,7 +41,6 @@
                 </v-tabs-items>
                 
               </v-card>
-            </div>
           </v-container>
         </v-col>
       </v-row>
