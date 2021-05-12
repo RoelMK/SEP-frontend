@@ -7,8 +7,12 @@ const routes = [
     {
         path: '/',
         component: () => import('@/views/Dashboard.vue'),
-        props: { param: "optional" },
         name: "dashboard"
+    },
+    {
+        path: '/login',
+        component: () => import('@/views/Login.vue'),
+        name: "login"
     },
     {
         path: '/profile',
