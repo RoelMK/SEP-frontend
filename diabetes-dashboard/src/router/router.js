@@ -10,6 +10,11 @@ const routes = [
         props: { param: "optional" },
         name: "dashboard"
     },
+    {
+        path: '/profile',
+        component: () => import('@/views/UserProfile.vue'),
+        name: "profile"
+    },
 ]
 
 const router = new VueRouter({
