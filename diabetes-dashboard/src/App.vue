@@ -1,7 +1,7 @@
 <template>
     <div id="app">
-        <Header class="header" v-show="$route.path==='/login' ? false : true" ></Header>
-        <div class="clearfix" v-show="$route.path==='/login' ? false : true"></div>
+        <Header class="header" v-if="$route.path==='/login' ? false : true" ></Header>
+        <div class="clearfix" v-if="$route.path==='/login' ? false : true"></div>
         <router-view/>
         <Footer/>
     </div>
