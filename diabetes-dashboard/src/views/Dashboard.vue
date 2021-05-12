@@ -5,31 +5,40 @@
                 <v-col class="col" cols="12" md="6">
                     <v-container>
                         <div class="col1">
-                            <Glucose/>
+                            <Glucose />
                         </div>
                     </v-container>
                 </v-col>
                 <v-col class="col" cols="12" md="6">
                     <v-container>
                         <div class="col1">
-                            <Profile/>
+                            <Profile v-bind:selectedFoodItem="chosenFood" v-bind:selectedActivity="chosenActivity"/>
                         </div>
                     </v-container>
                 </v-col>
             </v-row>
+
             <v-row>
                 <v-col class="col" cols="12" md="6">
                     <v-container>
-                        <div class="col1">
-                            <TableFoodData/>
-                        </div>
-                    </v-container>
-                </v-col>
-                <v-col class="col" cols="12" md="6">
-                    <v-container>
-                        <div class="col1 unalloc">
-                            <TableActivitiesData/>
-                        </div>
+                        <v-card style="border-radius:20px;">
+                            <v-tabs v-model="tab">
+                                <v-tab v-for="item in items" :key="item">
+                                    {{ item }}
+                                </v-tab>
+                            </v-tabs>
+                            <v-tabs-items v-model="tab">
+                                <v-tab-item>
+                                    <TableInsulinData />
+                                </v-tab-item>
+                                <v-tab-item>
+                                    <TableFoodData  @selectedFood="getSelectedFood"/>
+                                </v-tab-item>
+                                <v-tab-item>
+                                    <TableActivitiesData @selectedActivity="getSelectedActivity"/>
+                                </v-tab-item>
+                            </v-tabs-items>
+                        </v-card>
                     </v-container>
                 </v-col>
             </v-row>
@@ -45,10 +54,11 @@
 </template>
 
 <script>
-import Glucose from '@/components/Glucose.vue';
-import Profile from '@/components/Profile.vue';
-import TableFoodData from '@/components/TableFoodData.vue';
-import TableActivitiesData from '@/components/TableActivitiesData.vue';
+import Glucose from "@/components/Glucose.vue";
+import Profile from "@/components/Profile.vue";
+import TableFoodData from "@/components/TableFoodData.vue";
+import TableActivitiesData from "@/components/TableActivitiesData.vue";
+import TableInsulinData from "@/components/TableInsulinData.vue";
 import LineChart from '@/components/LineChart.vue';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
@@ -60,16 +70,29 @@ const rr = moment.range(moment().subtract(1, 'days').format('YYYY-MM-DD HH:mm'),
 const arr = Array.from(rr.by("minutes"));
 
 export default {
-  name: 'Dashboard',
+  name: "Dashboard",
   components: {
     Glucose,
     Profile,
     TableFoodData,
     TableActivitiesData,
+    TableInsulinData,
     LineChart
+  },
+  methods: {
+      getSelectedFood(food) {
+          this.chosenFood = food;
+      },
+      getSelectedActivity(activity) {
+          this.chosenActivity = activity;
+      }
   },
   data() {
       return {
+          tab: null,
+          items: ["insulin", "food", "activities"],
+          chosenFood: '',
+          chosenActivity: '',
           labels: arr.map(date => moment(date)),
           datasets: [  
             {
@@ -91,7 +114,7 @@ export default {
         ]
       }
   }
-}
+};
 </script>
 
 <style>
@@ -102,7 +125,7 @@ export default {
   border-radius: 20px;
   left: 3%;
   right: 3%;
-  background-color: white
+  background-color: white;
 }
 .main {
   background-color: #f2f2f2;
