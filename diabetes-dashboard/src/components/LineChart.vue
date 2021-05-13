@@ -197,7 +197,14 @@ export default {
          */
         displayChartX(chart, data){
             chart.data.datasets = data;
-            chart.options.scales = this.options.options.scales;
+            // reset time interval:
+            // chart.options.scales.x.min = moment().subtract(5, 'minutes').valueOf();
+            // chart.options.scales.x.max = moment().valueOf();
+            
+            //keep current time interval:
+            chart.options.scales.x.min = moment(chart.scales.x.min);
+            chart.options.scales.x.max = moment(chart.scales.x.max);
+
             chart.update();
 
             // Set title
