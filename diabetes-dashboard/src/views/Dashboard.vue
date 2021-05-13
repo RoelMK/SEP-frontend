@@ -45,7 +45,7 @@
             <v-row>
                 <v-col class="wide-chart" cols="12">
                     <div class="col1">
-                        <LineChart :datasets="this.datasets" :labels="this.labels" />
+                        <LineChart @filtered="updateData" :datasets="this.datasets" :labels="this.labels" v-if="rendered" />
                     </div>
                 </v-col>
             </v-row>
@@ -60,14 +60,11 @@ import TableFoodData from "@/components/TableFoodData.vue";
 import TableActivitiesData from "@/components/TableActivitiesData.vue";
 import TableInsulinData from "@/components/TableInsulinData.vue";
 import LineChart from '@/components/LineChart.vue';
-import Moment from 'moment';
-import { extendMoment } from 'moment-range';
+import moment from 'moment';
+import { AxiosWrapper } from '@/helpers/wrapper.js';
 
-const moment = extendMoment(Moment);
-
-// For testing purposes
-const rr = moment.range(moment().subtract(1, 'days').format('YYYY-MM-DD HH:mm'), moment().format("YYYY-MM-DD HH:mm"));
-const arr = Array.from(rr.by("minutes"));
+const wrapper = new AxiosWrapper();
+const URL = 'https://gist.githubusercontent.com/nbalasovs/4e766292125780ce206e5790d46f2978/raw/19488c092c0f778f33c0a43c68542c5767c0c568/5min.json';
 
 export default {
   name: "Dashboard",
@@ -80,6 +77,9 @@ export default {
     LineChart
   },
   methods: {
+      updateData(value) {
+          console.log(value);
+      },
       getSelectedFood(food) {
           this.chosenFood = food;
       },
@@ -93,26 +93,26 @@ export default {
           items: ["insulin", "food", "activities"],
           chosenFood: '',
           chosenActivity: '',
-          labels: arr.map(date => moment(date)),
-          datasets: [  
-            {
-                label: 'Glucose',
-                fill: 'start',
-                data: Array.from({length: arr.length}, () => Math.floor(Math.random() * 120)),
-                backgroundColor: "rgba(54,73,93,.5)",
-                borderColor: "#36495d",
-                borderWidth: 3
-            },
-            {
-                label: 'Iron',
-                fill: 'start',
-                data: Array.from({length: arr.length}, () => Math.floor(Math.random() * 120)),
-                backgroundColor: "rgba(71, 183,132,.5)",
-                borderColor: "#47b784",
-                borderWidth: 3
-            }
-        ]
+          datasets: [
+              {
+                  label: 'Glucose',
+                  fill: 'start',
+                  data: null,
+                  backgroundColor: "rgba(54,73,93,.5)",
+                  borderColor: "#36495d",
+                  borderWidth: 3
+              }
+          ],
+          labels: null,
+          rendered: false
       }
+  },
+  created() {
+    wrapper.get(URL, dataPromise => dataPromise).then(data => {
+        this.labels = data.map(l => moment(l.date));
+        this.datasets[0].data = data.map(d => d.value);
+        this.rendered = true;
+    });
   }
 };
 </script>

@@ -2,10 +2,10 @@
     <v-container class="line">
         <v-row class="filter-tools">
             <v-col id="filter-options" cols="8">
-                <span v-on:click="updateGraph(chart, null, '3h')">3H</span>
-                <span v-on:click="updateGraph(chart, null, '1h')">1H</span>
-                <span v-on:click="updateGraph(chart, null, '5m')">5M</span>
-                <span>Intervals</span>
+                <span v-on:click="updateChart('3h')">3H</span>
+                <span v-on:click="updateChart('1h')">1H</span>
+                <span v-on:click="updateChart('5m')">5M</span>
+                <span v-on:click="resetZoom()">Reset</span>
             </v-col>
             <v-col id="date-filter" cols="4">
                 <v-menu v-model="show" :close-on-content-click="false" offset-y>
@@ -18,24 +18,26 @@
                     <div class="menu-content">
                         <vc-date-picker v-model="range" mode="dateTime" is-range  is-expanded is24hr is-required />
                         <div class="filter-buttons">
-                            <v-btn medium tile depressed v-on:click="updateGraph(chart, range, null)">Apply</v-btn>
+                            <v-btn medium tile depressed v-on:click="updateChart(null, range)">Apply</v-btn>
                             <v-btn medium tile plain v-on:click="show = !show">Cancel</v-btn>
                         </div>
                     </div>
                 </v-menu>
             </v-col>
         </v-row>
-        <canvas id="lineChart"></canvas>
+        <canvas id="line-chart"></canvas>
     </v-container>
 </template>
 
 <script>
 import Chart from 'chart.js/auto';
 import pluginZoom from 'chartjs-plugin-zoom';
+import pluginAnnotation from 'chartjs-plugin-annotation';
 import moment from 'moment';
 
 import 'chartjs-adapter-moment';
 
+Chart.register(pluginAnnotation);
 Chart.register(pluginZoom);
 
 export default {
@@ -47,7 +49,6 @@ export default {
     data() {
         return {
             title: null,
-            chart: null,
             range: {
                 start: null,
                 end: null,
@@ -64,22 +65,52 @@ export default {
                             type: 'time',
                             time: {
                                 minUnit: 'minute',
-                            },
-                            max: moment().valueOf(),
-                            min: moment().subtract(5, 'minutes').valueOf()
+                            }
                         },
                         y: {
                             min: 0,
-                            max: 200,
+                            max: 20,
                             ticks: {
-                                stepSize: 10
+                                stepSize: 1
                             }
                         }
                     },
                     plugins: {
+                        annotation: {
+                            annotations: {
+                                line1: {
+                                    type: 'line',
+                                    yMin: 13.9,
+                                    yMax: 13.9,
+                                    borderColor: 'rgb(247, 179, 69)',
+                                    borderWidth: 3
+                                },
+                                line2: {
+                                    type: 'line',
+                                    yMin: 10.1,
+                                    yMax: 10.1,
+                                    borderColor: 'rgb(250, 216, 71)',
+                                    borderWidth: 3
+                                },
+                                line3: {
+                                    type: 'line',
+                                    yMin: 3.9,
+                                    yMax: 3.9,
+                                    borderColor: 'rgb(110, 158, 94)',
+                                    borderWidth: 3
+                                },
+                                line4: {
+                                    type: 'line',
+                                    yMin: 3.0,
+                                    yMax: 3.0,
+                                    borderColor: 'rgb(218, 42, 61)',
+                                    borderWidth: 3
+                                }
+                            }
+                        },
                         zoom: {
                             pan: {
-                                enabled: true,
+                                enabled: false,
                                 mode: "x",
                                 modifierKey: "shift",
                                 onPanStart: this.setInteractionArea,
@@ -106,58 +137,66 @@ export default {
     },
     mounted() {
         // Create chart
-        const ctx = document.getElementById('lineChart');
-        this.chart = new Chart(ctx, this.options);
+        const ctx = document.getElementById('line-chart');
+        window.lineChart = new Chart(ctx, this.options);
 
-        // Set title
-        let x = this.chart.scales.x;
-        let startDate = moment(x.min).format("DD/MM/YYYY HH:mm:ss");
-        let endDate = moment(x.max).format("DD/MM/YYYY HH:mm:ss");
-        this.title = `${startDate} - ${endDate}`;
+        this.title = this.updateTitle(window.lineChart);
     },
     methods: {
         /**
-         * Update graph after filtering
+         * Update chart's title
          * @param  { Object }       chart Chart object
-         * @param  { Object }       range Range object containing start and end date/time
-         * @param  { string }       preset Preset value used for the filtering
-         * @return { boolean }
+         * @return { string }
          */
-        updateGraph(chart, range, preset = null) {
-            // If preset set filter accoring to the respective value
-            if (preset) {
-                range = { end: moment() };
-                if (preset === '5m') {
-                    range.start = moment().subtract(5, 'minutes');
-                } else if (preset === '1h') {
-                    range.start = moment().subtract(1, 'hours');
-                } else if (preset === '3h') {
-                    range.start = moment().subtract(3, 'hours');
-                } else {
-                    return false;
+        updateChart(flag, filter = null) {
+            let range = { start: null, end: null };
+            if (flag) {
+                const now = moment();
+                switch (flag) {
+                    case '3h':
+                        range.start = now.subtract(3, 'hours');
+                        break;
+                    case '1h':
+                        range.start = now.subtract(1, 'hours');
+                        break;
+                    case '5m':
+                        range.start = now.subtract(5, 'minutes');
+                        break;
+                    default:
+                        return false;
                 }
+                range.end = moment();
+            } else {
+                range.start = moment(filter.start);
+                range.end = moment(filter.end);
             }
 
-            // Check if both start and end date/time set
-            if (range.start === null || range.end === null)
-                return false;
+            if (range.start && range.end) {
+                this.$emit('filtered', range);
+                this.title = this.updateTitle(window.lineChart);
+                return true;
+            }
 
-            let startDate = moment(range.start);
-            let endDate = moment(range.end);
-
-            chart.options.scales.x.min = endDate.valueOf();
-            chart.options.scales.x.max = startDate.valueOf();
-            
-            chart.update();
-
-            this.title = `${startDate.format("DD/MM/YYYY HH:mm:ss")} - ${endDate.format("DD/MM/YYYY HH:mm:ss")}`;
-            this.show = false;
-            this.range = {
-                start: null,
-                end: null
-            };
-
-            return true;
+            return false;
+        },
+        /**
+         * Update chart's title
+         * @param  { Object }       chart Chart object
+         * @return { string }
+         */
+        updateTitle(chart) {
+            let x = chart.scales.x;
+            let startDate = moment(x.min).format("DD/MM/YYYY HH:mm:ss");
+            let endDate = moment(x.max).format("DD/MM/YYYY HH:mm:ss");
+            return `${startDate} - ${endDate}`;
+        },
+        /**
+         * Reset chart's zoom
+         */
+        resetZoom() { 
+            let chart = window.lineChart;
+            chart.resetZoom();
+            this.title = this.updateTitle(chart);
         },
         /**
          * Sets the padding for interaction area
@@ -176,16 +215,8 @@ export default {
          * @return
          */
         filterSelectedArea(chart) {
-            // Example of how we can retrieve labels in a graph after zooming
-            let x = chart.scales.x;
-            let startDate = moment(x.min).format("DD/MM/YYYY HH:mm:ss")
-            let endDate = moment(x.max).format("DD/MM/YYYY HH:mm:ss")
-            this.title = `${startDate} - ${endDate}`
+            this.title = this.updateTitle(chart);
         }
-    },
-    beforeDestroy() {
-        // Destroy chart object before leaving the view
-        if (this.chart) this.chart.destroy();
     }
 }
 </script>
@@ -244,8 +275,6 @@ export default {
 #filter-options span:nth-child(4) {
     border-left: 1px solid rgba(0, 0, 0, .35);
     font-weight: bold;
-    text-decoration: none;
-    cursor: auto;
 }
 
 .v-menu__content {
