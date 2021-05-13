@@ -12,7 +12,7 @@
                 <v-col class="col" cols="12" md="6">
                     <v-container>
                         <div class="col1">
-                            <Profile v-bind:selectedFoodItem="chosenFood" v-bind:selectedActivity="chosenActivity"/>
+                            <Profile :selectedFoodItem="chosenFood" :selectedActivity="chosenActivity.activity"/>
                         </div>
                     </v-container>
                 </v-col>
@@ -45,7 +45,7 @@
             <v-row>
                 <v-col class="wide-chart" cols="12">
                     <div class="col1">
-                        <LineChart :datasets="this.datasets" :labels="this.labels" />
+                        <LineChart :datasets="this.datasets" :labels="this.labels" :selectedActivity="chosenActivity"/>
                     </div>
                 </v-col>
             </v-row>
@@ -84,15 +84,15 @@ export default {
           this.chosenFood = food;
       },
       getSelectedActivity(activity) {
-          this.chosenActivity = activity;
+          this.chosenActivity = { activity: activity, now: moment() };
       }
   },
   data() {
       return {
           tab: null,
           items: ["insulin", "food", "activities"],
-          chosenFood: '',
-          chosenActivity: '',
+          chosenFood: { },
+          chosenActivity: { activity: null, now: ''},
           labels: arr.map(date => moment(date)),
           datasets: [  
             {
@@ -110,7 +110,15 @@ export default {
                 backgroundColor: "rgba(71, 183,132,.5)",
                 borderColor: "#47b784",
                 borderWidth: 3
-            }
+            },
+            {
+                label: 'Carbs',
+                fill: 'start',
+                data: Array.from({length: arr.length}, () => Math.floor(Math.random() * 120)),
+                backgroundColor: "rgba(255, 255, 0, .5)",
+                borderColor: "#abab07",
+                borderWidth: 3
+            },
         ]
       }
   }

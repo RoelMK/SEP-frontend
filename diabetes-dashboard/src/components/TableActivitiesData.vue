@@ -40,8 +40,12 @@ export default {
                     value: "date"
                 },
                 {
-                    text: "Duration",
-                    value: "duration"
+                    text: "Start Time",
+                    value: "startTime"
+                },
+                                {
+                    text: "End Time",
+                    value: "endTime"
                 },
                 {
                     text: "Calories",
@@ -51,32 +55,37 @@ export default {
             activities: [
                 {
                     activity: "Run",
-                    date: moment("20210429T000000+0200").format('L'),
-                    duration: "1 hour",
+                    date: moment().subtract(1,'day').format('L'),
+                    startTime: moment().subtract(24,'hours').format('HH:mm'),
+                    endTime: moment().subtract(23,'hours').subtract(10,'minutes').format('HH:mm'),
                     calories: 159
                 },
                 {
                     activity: "Yoga",
-                    date: moment("20210424T000000+0200").format('L'),
-                    duration: "30 minutes",
+                    date: moment("20210512T160000+0200").format('L'),
+                    startTime: moment().subtract(20,'hours').format('HH:mm'),
+                    endTime: moment().subtract(19,'hours').subtract(30,'minutes').format('HH:mm'),
                     calories: 100,
                 },
                 {
                     activity: "Chess",
-                    date: moment("20210425T000000+0200").format('L'),
-                    duration: "1.5 hour",
+                    date: moment("20210512T180000+0200").format('L'),
+                    startTime: moment().subtract(22,'hours').format('HH:mm'),
+                    endTime: moment().subtract(21,'hours').format('HH:mm'),
                     calories: null,
                 },
                 {
                     activity: "Health check",
-                    date: moment("20210426T000000+0200").format('L'),
-                    duration: null,
+                    date: moment("20210513T080000+0200").format('L'),
+                    startTime: moment().subtract(4,'hours').format('HH:mm'),
+                    endTime: moment().subtract(3,'hours').subtract(30,'minutes').format('HH:mm'),
                     calories: null,
                 },
                 {
                     activity: "Ice hokey",
-                    date: moment("20210427T000000+0200").format('L'),
-                    duration: "2.5 hours",
+                    date: moment("20210513T100000+0200").format('L'),
+                    startTime: moment().subtract(2,'hours').format('HH:mm'),
+                    endTime: moment().subtract(1,'hours').format('HH:mm'),
                     calories: 349,
                 },
             ],

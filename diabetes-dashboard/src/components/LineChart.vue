@@ -1,11 +1,15 @@
 <template>
     <v-container class="line">
         <v-row class="filter-tools">
-            <v-col id="filter-options" cols="8">
+            <v-col id="filter-options" cols="4">
                 <span v-on:click="updateGraph(chart, null, '3h')">3H</span>
                 <span v-on:click="updateGraph(chart, null, '1h')">1H</span>
                 <span v-on:click="updateGraph(chart, null, '5m')">5M</span>
                 <span>Intervals</span>
+            </v-col>
+            <v-col id="filter-options" cols="4">
+                <span v-on:click="displayChartX(chart, datasets.slice(2,3))">Show: Carbs |</span>
+                <span v-on:click="displayChartX(chart, datasets.slice(0,2))">Show: Glucose and Iron</span>
             </v-col>
             <v-col id="date-filter" cols="4">
                 <v-menu v-model="show" :close-on-content-click="false" offset-y>
@@ -16,6 +20,7 @@
                         </div>
                     </template>
                     <div class="menu-content">
+
                         <vc-date-picker v-model="range" mode="dateTime" is-range  is-expanded is24hr is-required />
                         <div class="filter-buttons">
                             <v-btn medium tile depressed v-on:click="updateGraph(chart, range, null)">Apply</v-btn>
@@ -42,7 +47,8 @@ export default {
     name: 'lineChart',
     props: {
         'labels': Array,
-        'datasets': Array
+        'datasets': Array,
+        'selectedActivity': Object,
     },
     data() {
         return {
@@ -55,7 +61,7 @@ export default {
             show: false,
             options: {
                 type: 'line',
-                data: { labels: this.labels, datasets: this.datasets },
+                data: { labels: this.labels, datasets: this.datasets.slice(0, 2) },
                 options: {
                     responsive: true,
                     lineTension: 0.4,
@@ -115,6 +121,7 @@ export default {
         let endDate = moment(x.max).format("DD/MM/YYYY HH:mm:ss");
         this.title = `${startDate} - ${endDate}`;
     },
+
     methods: {
         /**
          * Update graph after filtering
@@ -147,7 +154,7 @@ export default {
 
             chart.options.scales.x.min = endDate.valueOf();
             chart.options.scales.x.max = startDate.valueOf();
-            
+
             chart.update();
 
             this.title = `${startDate.format("DD/MM/YYYY HH:mm:ss")} - ${endDate.format("DD/MM/YYYY HH:mm:ss")}`;
@@ -181,12 +188,43 @@ export default {
             let startDate = moment(x.min).format("DD/MM/YYYY HH:mm:ss")
             let endDate = moment(x.max).format("DD/MM/YYYY HH:mm:ss")
             this.title = `${startDate} - ${endDate}`
+        },
+        /**
+         * Update graph for input data
+         * @param  { Object }       chart Chart object
+         * @param  { Object }       data Data object to be visualized in the chart
+         * @return
+         */
+        displayChartX(chart, data){
+            chart.data.datasets = data;
+            chart.options.scales = this.options.options.scales;
+            chart.update();
+
+            // Set title
+            let x = chart.scales.x;
+            let startDate = moment(x.min).format("DD/MM/YYYY HH:mm:ss");
+            let endDate = moment(x.max).format("DD/MM/YYYY HH:mm:ss");
+            this.title = `${startDate} - ${endDate}`;
         }
     },
     beforeDestroy() {
         // Destroy chart object before leaving the view
         if (this.chart) this.chart.destroy();
-    }
+    },
+    watch: {
+        selectedActivity: {
+            deep: true,
+            immediate:true,
+            handler: function() {
+                if(this.selectedActivity.activity !== null){
+                    let activity = this.selectedActivity.activity;
+                    let start = moment(activity.date+" "+activity.startTime);
+                    let end = moment(activity.date+" "+activity.endTime);
+                    this.updateGraph(this.chart, { start, end }, null);
+                }
+            }
+        }
+    },
 }
 </script>
 
