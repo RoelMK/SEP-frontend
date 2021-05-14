@@ -20,7 +20,7 @@
               v-model="password"
               @click:append="showPass = !showPass"
             ></v-text-field>
-            <v-btn style="color:white; background-color:#1B98E0">Log in</v-btn>
+            <v-btn v-on:click="loginClicked" style="color:white; background-color:#1B98E0">Log in</v-btn>
           </v-form>
           <br><br>
           <a class='register' href="https://app.gamebus.eu/auth/signup" target=”_blank”>Don't have an account? Register here</a>
@@ -40,6 +40,11 @@ export default {
       showPass: false
     }
   },
+  methods: {
+    loginClicked: function () {
+      this.$toasted.show('Login Clicked', { duration: '2000' });
+    }
+  }
 };
 </script>
 
