@@ -43,8 +43,21 @@ Chart.register(pluginZoom);
 export default {
     name: 'lineChart',
     props: {
-        'labels': Array,
-        'datasets': Array
+        'data': {
+            type: Object,
+            default: null
+        }
+    },
+    watch: {
+        data: {
+            deep: true,
+            handler(newValue) {
+                const chart = window.lineChart;
+                chart.data = newValue;
+                chart.update();
+                this.title = this.updateTitle(chart);
+            }
+        }
     },
     data() {
         return {
@@ -56,7 +69,7 @@ export default {
             show: false,
             options: {
                 type: 'line',
-                data: { labels: this.labels, datasets: this.datasets },
+                data: this.data,
                 options: {
                     responsive: true,
                     lineTension: 0.4,
@@ -71,7 +84,7 @@ export default {
                             min: 0,
                             max: 20,
                             ticks: {
-                                stepSize: 1
+                                stepSize: 0.1
                             }
                         }
                     },

@@ -45,7 +45,7 @@
             <v-row>
                 <v-col class="wide-chart" cols="12">
                     <div class="col1">
-                        <LineChart @filtered="updateData" :datasets="this.datasets" :labels="this.labels" v-if="rendered" />
+                        <LineChart v-on:filtered="updateData" :data="data" v-if="rendered" />
                     </div>
                 </v-col>
             </v-row>
@@ -64,7 +64,10 @@ import moment from 'moment';
 import { AxiosWrapper } from '@/helpers/wrapper.js';
 
 const wrapper = new AxiosWrapper();
+
+// These URL's will be removed in the future
 const URL = 'https://gist.githubusercontent.com/nbalasovs/4e766292125780ce206e5790d46f2978/raw/19488c092c0f778f33c0a43c68542c5767c0c568/5min.json';
+const TEST_URL = 'https://gist.githubusercontent.com/nbalasovs/e1b44f2e5dc7f2ded698994102afe225/raw/e0f6cd42c966747e7d505d61aa3f0c1c53e69642/20min.json';
 
 export default {
   name: "Dashboard",
@@ -77,8 +80,14 @@ export default {
     LineChart
   },
   methods: {
+      // Test request that simulates receiving updated chart data, proper
+      // documentation will be required
       updateData(value) {
           console.log(value);
+          wrapper.get(TEST_URL, dataPromise => dataPromise).then(data => {
+              this.data.labels = data.map(l => moment(l.date));
+              this.data.datasets[0].data = data.map(d => d.value);
+          });
       },
       getSelectedFood(food) {
           this.chosenFood = food;
@@ -93,24 +102,26 @@ export default {
           items: ["insulin", "food", "activities"],
           chosenFood: '',
           chosenActivity: '',
-          datasets: [
-              {
-                  label: 'Glucose',
-                  fill: 'start',
-                  data: null,
-                  backgroundColor: "rgba(54,73,93,.5)",
-                  borderColor: "#36495d",
-                  borderWidth: 3
-              }
-          ],
-          labels: null,
+          data: {
+              labels: null,
+              datasets: [
+                  {
+                      label: 'Glucose',
+                      fill: 'start',
+                      data: null,
+                      backgroundColor: "rgba(54,73,93,.5)",
+                      borderColor: "#36495d",
+                      borderWidth: 3
+                  }
+              ]
+          },
           rendered: false
       }
   },
   created() {
     wrapper.get(URL, dataPromise => dataPromise).then(data => {
-        this.labels = data.map(l => moment(l.date));
-        this.datasets[0].data = data.map(d => d.value);
+        this.data.labels = data.map(l => moment(l.date));
+        this.data.datasets[0].data = data.map(d => d.value);
         this.rendered = true;
     });
   }
