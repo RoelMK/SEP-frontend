@@ -43,9 +43,19 @@
                 </v-col>
             </v-row>
             <v-row>
-                <v-col class="wide-chart" cols="12">
+                <v-col v-if="displayDoughnut" class="wide-chart" cols="9">
                     <div class="col1">
-                        <LineChart :datasets="this.datasets" :labels="this.labels" :selectedActivity="chosenActivity"/>
+                        <LineChart @displayDoughnut="getDisplayDoughnutStatus" :datasets="this.datasets" :labels="this.labels" :selectedActivity="chosenActivity"/>
+                    </div>
+                </v-col>
+                <v-col v-else class="wide-chart" cols="12">
+                    <div class="col1">
+                        <LineChart @displayDoughnut="getDisplayDoughnutStatus" :datasets="this.datasets" :labels="this.labels" :selectedActivity="chosenActivity"/>
+                    </div>
+                </v-col>
+                <v-col v-if="displayDoughnut" cols="3">
+                    <div class="col1">
+                        <DoughnutChart :datasets="this.datasets"/>
                     </div>
                 </v-col>
             </v-row>
@@ -60,6 +70,7 @@ import TableFoodData from "@/components/TableFoodData.vue";
 import TableActivitiesData from "@/components/TableActivitiesData.vue";
 import TableInsulinData from "@/components/TableInsulinData.vue";
 import LineChart from '@/components/LineChart.vue';
+import DoughnutChart from '@/components/DoughnutChart.vue';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 
@@ -77,7 +88,8 @@ export default {
     TableFoodData,
     TableActivitiesData,
     TableInsulinData,
-    LineChart
+    LineChart,
+    DoughnutChart,
   },
   methods: {
       getSelectedFood(food) {
@@ -85,6 +97,9 @@ export default {
       },
       getSelectedActivity(activity) {
           this.chosenActivity = { activity: activity, now: moment() };
+      },
+      getDisplayDoughnutStatus(status) {
+          this.displayDoughnut = status;
       }
   },
   data() {
@@ -92,7 +107,8 @@ export default {
           tab: null,
           items: ["insulin", "food", "activities"],
           chosenFood: { },
-          chosenActivity: { activity: null, now: ''},
+          chosenActivity: { activity: null, now: null },
+          displayDoughnut: true,
           labels: arr.map(date => moment(date)),
           datasets: [  
             {
