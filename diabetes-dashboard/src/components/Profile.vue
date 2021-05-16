@@ -8,7 +8,9 @@
       <p>Your current glucose level is 140 mg/dL.</p>
       <p>Your heart rate is 90 bpm.</p>
       <p>And some more interesting data, of course</p>
-      <vue-feedback-reaction />
+      <p>The selected activity is: {{ selectedActivity }}</p>
+      <p>The selected food is: {{ selectedFoodItem }}</p>
+      <vue-feedback-reaction :labels="['angry', 'moody', 'neutral', 'happy', 'excellent']"/>
   </div>
 </template>
 
@@ -20,7 +22,7 @@ import { AxiosWrapper } from '@/helpers/wrapper.js'
 const wrapper = new AxiosWrapper()
 
 export default {
-    name: 'profile',
+    name: 'Profile',
     components: {
         VueReactionEmoji,
         VueFeedbackReaction
@@ -47,7 +49,8 @@ export default {
     computed: {
     },
     methods: {
-    }
+    },
+    props: ['selectedFoodItem', 'selectedActivity'],
 }
 </script>
 
