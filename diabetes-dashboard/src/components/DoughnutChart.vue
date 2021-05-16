@@ -15,7 +15,6 @@ export default {
   },
   data() {
     return {
-      showDoughnut: true,
       doughnutChart: null,
       config: {
         type: "doughnut",

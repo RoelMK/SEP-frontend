@@ -8,8 +8,8 @@
                 <span>Intervals</span>
             </v-col>
             <v-col id="filter-options" cols="4">
-                <span v-on:click="displayChartX(chart, datasets.slice(2,3)), $emit('displayDoughnut', false)">Show: Carbs |</span>
-                <span v-on:click="displayChartX(chart, datasets.slice(0,2)), $emit('displayDoughnut', true)">Show: Glucose and Iron</span>
+                <span v-on:click="displayChartX(chart, datasets.slice(2,3)), $emit('displayDoughnut', false)">Show Carbs |</span>
+                <span v-on:click="displayChartX(chart, datasets.slice(0,2)), $emit('displayDoughnut', true)">Show Glucose and Iron</span>
             </v-col>
             <v-col id="date-filter" cols="4">
                 <v-menu v-model="show" :close-on-content-click="false" offset-y>
