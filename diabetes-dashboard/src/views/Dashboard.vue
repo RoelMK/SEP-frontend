@@ -1,5 +1,6 @@
 <template>
     <div id="dashboard">
+        <Header class="header" v-if="$route.path==='/login' ? false : true" ></Header>
         <div class="main">
             <v-row>
                 <v-col class="col" cols="12" md="6">
