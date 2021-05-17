@@ -82,12 +82,25 @@ export default {
   methods: {
       // Test request that simulates receiving updated chart data, proper
       // documentation will be required
+      // eslint-disable-next-line
       updateData(value) {
-          console.log(value);
           wrapper.get(TEST_URL, dataPromise => dataPromise).then(data => {
               this.data.labels = data.map(l => moment(l.date));
               this.data.datasets[0].data = data.map(d => d.value);
+              this.data.datasets[0].pointBackgroundColor = data.map(c => this.setColor(c.value));
           });
+      },
+      /**
+        * Set point fill color
+        * @param  { int }       value Data point
+        * @return { string }
+        */
+      setColor(value) {
+          if (value < 3.0) return 'rgb(218, 42, 61)';
+          else if (3.0 <= value && value <= 3.8) return 'rgba(218, 42, 61, 0.2)';
+          else if (3.9 <= value && value <= 10.0) return 'rgb(110, 158, 94)';
+          else if (10.1 <= value && value <= 13.9) return 'rgb(250, 216, 71)';
+          else return 'rgb(247, 179, 69)';
       },
       getSelectedFood(food) {
           this.chosenFood = food;
@@ -107,10 +120,15 @@ export default {
               datasets: [
                   {
                       label: 'Glucose',
-                      fill: 'start',
+                      fill: {
+                          target: 'start',
+                          above: 'rgba(54,73,93,.2)'
+                      },
                       data: null,
-                      backgroundColor: "rgba(54,73,93,.5)",
+                      pointBackgroundColor: null,
+                      radius: 4,
                       borderColor: "#36495d",
+                      pointBorderWidth: 1,
                       borderWidth: 3
                   }
               ]
@@ -122,6 +140,7 @@ export default {
     wrapper.get(URL, dataPromise => dataPromise).then(data => {
         this.data.labels = data.map(l => moment(l.date));
         this.data.datasets[0].data = data.map(d => d.value);
+        this.data.datasets[0].pointBackgroundColor = data.map(c => this.setColor(c.value));
         this.rendered = true;
     });
   }

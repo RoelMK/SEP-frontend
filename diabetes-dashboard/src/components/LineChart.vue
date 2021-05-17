@@ -2,9 +2,9 @@
     <v-container class="line">
         <v-row class="filter-tools">
             <v-col id="filter-options" cols="8">
-                <span v-on:click="updateChart('3h')">3H</span>
-                <span v-on:click="updateChart('1h')">1H</span>
-                <span v-on:click="updateChart('5m')">5M</span>
+                <span v-on:click="updateChart(180)">3H</span>
+                <span v-on:click="updateChart(60)">1H</span>
+                <span v-on:click="updateChart(5)">5M</span>
                 <span v-on:click="resetZoom()">Reset</span>
             </v-col>
             <v-col id="date-filter" cols="4">
@@ -89,38 +89,6 @@ export default {
                         }
                     },
                     plugins: {
-                        annotation: {
-                            annotations: {
-                                line1: {
-                                    type: 'line',
-                                    yMin: 13.9,
-                                    yMax: 13.9,
-                                    borderColor: 'rgb(247, 179, 69)',
-                                    borderWidth: 3
-                                },
-                                line2: {
-                                    type: 'line',
-                                    yMin: 10.1,
-                                    yMax: 10.1,
-                                    borderColor: 'rgb(250, 216, 71)',
-                                    borderWidth: 3
-                                },
-                                line3: {
-                                    type: 'line',
-                                    yMin: 3.9,
-                                    yMax: 3.9,
-                                    borderColor: 'rgb(110, 158, 94)',
-                                    borderWidth: 3
-                                },
-                                line4: {
-                                    type: 'line',
-                                    yMin: 3.0,
-                                    yMax: 3.0,
-                                    borderColor: 'rgb(218, 42, 61)',
-                                    borderWidth: 3
-                                }
-                            }
-                        },
                         zoom: {
                             pan: {
                                 enabled: false,
@@ -158,26 +126,14 @@ export default {
     methods: {
         /**
          * Update chart's title
-         * @param  { Object }       chart Chart object
-         * @return { string }
+         * @param  { int }       minutes Pre-defined interval in minutes
+         * @param  { Object }    filter  Date/time interval
+         * @return
          */
-        updateChart(flag, filter = null) {
+        updateChart(minutes, filter = null) {
             let range = { start: null, end: null };
-            if (flag) {
-                const now = moment();
-                switch (flag) {
-                    case '3h':
-                        range.start = now.subtract(3, 'hours');
-                        break;
-                    case '1h':
-                        range.start = now.subtract(1, 'hours');
-                        break;
-                    case '5m':
-                        range.start = now.subtract(5, 'minutes');
-                        break;
-                    default:
-                        return false;
-                }
+            if (minutes) {
+                range.start = moment().subtract(minutes, 'minutes');
                 range.end = moment();
             } else {
                 range.start = moment(filter.start);
@@ -187,10 +143,10 @@ export default {
             if (range.start && range.end) {
                 this.$emit('filtered', range);
                 this.title = this.updateTitle(window.lineChart);
-                return true;
+                return;
             }
 
-            return false;
+            return;
         },
         /**
          * Update chart's title
