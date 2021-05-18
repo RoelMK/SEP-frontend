@@ -106,6 +106,23 @@ export default {
     window.scatterChart.options.plugins.annotation.annotations.normal.yMin = this.getHealthSettings.hypoThreshold;
     window.scatterChart.options.plugins.annotation.annotations.normal.yMax = this.getHealthSettings.hyperThreshold;
     window.scatterChart.update();
+
+    ctx1.onclick = function (evt) {    
+        const points = window.scatterChart.getElementsAtEventForMode(evt, 'nearest', { intersect: true }, true);
+
+        if (points.length) {
+            const firstPoint = points[0];
+            var label = window.scatterChart.data.labels[firstPoint.index];
+            var value = window.scatterChart.data.datasets[firstPoint.datasetIndex].data[firstPoint.index];
+            var date = label.format('L');
+            var time = label.format('HH:mm');
+            console.log(label, value);
+            console.log(date);
+            console.log(time);
+            var timeAndDate = moment(date + ' ' + time);
+            console.log(timeAndDate);
+        }
+    };
   },
 
   beforeDestroy() {
