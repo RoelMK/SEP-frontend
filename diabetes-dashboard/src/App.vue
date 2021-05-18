@@ -1,10 +1,10 @@
 <template>
-    <div id="app" data-app>
+    <v-app id="app" data-app>
         <Header class="header" v-show="$route.path==='/login' ? false : true" ></Header>
         <div class="clearfix" v-show="$route.path==='/login' ? false : true"></div>
         <router-view/>
         <Footer/>
-    </div>
+    </v-app>
 </template>
 
 <script>
