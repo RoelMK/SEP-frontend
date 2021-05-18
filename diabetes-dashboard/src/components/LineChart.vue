@@ -46,6 +46,10 @@ export default {
         'data': {
             type: Object,
             default: null
+        },
+        'selectedActivity': {
+            type: Object,
+            default: null
         }
     },
     watch: {
@@ -56,6 +60,18 @@ export default {
                 chart.data = newValue;
                 chart.update();
                 this.title = this.updateTitle(chart);
+            }
+        },
+        selectedActivity: {
+            deep: true,
+            immediate:true,
+            handler: function() {
+                if(this.selectedActivity.activity !== null){
+                    let activity = this.selectedActivity.activity;
+                    let start = moment(activity.date+" "+activity.startTime);
+                    let end = moment(activity.date+" "+activity.endTime);
+                    this.updateGraph(this.chart, { start, end }, null);
+                }
             }
         }
     },
@@ -123,6 +139,7 @@ export default {
 
         this.title = this.updateTitle(window.lineChart);
     },
+
     methods: {
         /**
          * Update chart's title
@@ -183,6 +200,30 @@ export default {
          * @param  { Object }       chart Chart object
          * @return
          */
+        /**
+         * Update graph for input data
+         * @param  { Object }       chart Chart object
+         * @param  { Object }       data Data object to be visualized in the chart
+         * @return
+         */
+        displayChartX(chart, data){
+            chart.data.datasets = data;
+            // reset time interval:
+            // chart.options.scales.x.min = moment().subtract(5, 'minutes').valueOf();
+            // chart.options.scales.x.max = moment().valueOf();
+            
+            //keep current time interval:
+            chart.options.scales.x.min = moment(chart.scales.x.min);
+            chart.options.scales.x.max = moment(chart.scales.x.max);
+
+            chart.update();
+
+            // Set title
+            let x = chart.scales.x;
+            let startDate = moment(x.min).format("DD/MM/YYYY HH:mm:ss");
+            let endDate = moment(x.max).format("DD/MM/YYYY HH:mm:ss");
+            this.title = `${startDate} - ${endDate}`;
+        },
         filterSelectedArea(chart) {
             this.title = this.updateTitle(chart);
         }

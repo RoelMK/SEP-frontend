@@ -70,6 +70,21 @@ const store = new Vuex.Store({
             //     email: fake@gmail.com,
             // },
         ],
+        healthSettings: {
+            unit: "mmol/L",
+            veryHighThreshold: 13.9,
+            highRangeMin: 10.1,
+            highRangeMax: 13.9,
+            normalRangeMin: 3.9,
+            normalRangeMax: 10.0,
+            lowRangeMin: 3.0,
+            lowRangeMax: 3.8,
+            veryLowThreshold: 3.0,
+            fastingRangeMin: 4.4,
+            fastingRangeMax: 7.2,
+            ppRangeThreshold: 10.0,
+            goalA1C: 7,
+          },
     },
     
     getters: {
@@ -79,6 +94,7 @@ const store = new Vuex.Store({
         getGlucoseData: state => state.glucoseData,
         getInsulinData: state => state.insulinData,
         getUsers: state => state.users,
+        getHealthSettings: state => state.healthSettings,
     },
     
     actions: {
@@ -153,6 +169,8 @@ const store = new Vuex.Store({
         UPDATE_USER: (state, { originalId, updatedUser }) => {         
             state.users.splice(state.users.findIndex(user => user.id === originalId), 1, updatedUser)
         },
+
+        SET_HEALTH_SETTINGS: (state, newHealthSettings) => state.healthSettings = newHealthSettings,
     },
 });
 

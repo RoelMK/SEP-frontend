@@ -19,6 +19,11 @@ const routes = [
         component: () => import('@/views/UserProfile.vue'),
         name: "profile"
     },
+    {
+        path: '/emotions',
+        component: () => import('@/views/Emotions.vue'),
+        name: "emotions"
+    },
 ]
 
 const router = new VueRouter({

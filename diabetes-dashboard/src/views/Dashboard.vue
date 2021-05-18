@@ -1,5 +1,7 @@
 <template>
     <div id="dashboard">
+        <Header class="header"></Header>
+        <div class="clearfix"></div>
         <div class="main">
             <v-row>
                 <v-col class="col" cols="12" md="6">
@@ -12,7 +14,7 @@
                 <v-col class="col" cols="12" md="6">
                     <v-container>
                         <div class="col1">
-                            <Profile v-bind:selectedFoodItem="chosenFood" v-bind:selectedActivity="chosenActivity"/>
+                            <Profile :selectedFoodItem="chosenFood" :selectedActivity="chosenActivity.activity"/>
                         </div>
                     </v-container>
                 </v-col>
@@ -43,9 +45,27 @@
                 </v-col>
             </v-row>
             <v-row>
-                <v-col class="wide-chart" cols="12">
+                <v-col v-if="displayDoughnut" class="wide-chart" cols="9">
                     <div class="col1">
-                        <LineChart v-on:filtered="updateData" :data="data" v-if="rendered" />
+                        <LineChart v-if="rendered" 
+                            @filtered="updateData"
+                            @displayDoughnut="getDisplayDoughnutStatus"
+                            :data="data" 
+                            :selectedActivity="chosenActivity"/>
+                    </div>
+                </v-col>
+                <v-col v-else class="wide-chart" cols="12">
+                    <div class="col1">
+                        <LineChart v-if="rendered" 
+                            @filtered="updateData"
+                            @displayDoughnut="getDisplayDoughnutStatus"
+                            :data="data" 
+                            :selectedActivity="chosenActivity"/>
+                    </div>
+                </v-col>
+                <v-col v-if="displayDoughnut" cols="3">
+                    <div class="col1">
+                        <DoughnutChart :datasets="this.data.datasets"/>
                     </div>
                 </v-col>
             </v-row>
@@ -60,6 +80,8 @@ import TableFoodData from "@/components/TableFoodData.vue";
 import TableActivitiesData from "@/components/TableActivitiesData.vue";
 import TableInsulinData from "@/components/TableInsulinData.vue";
 import LineChart from '@/components/LineChart.vue';
+import DoughnutChart from '@/components/DoughnutChart.vue';
+import Header from '@/components/Header.vue';
 import moment from 'moment';
 import { AxiosWrapper } from '@/helpers/wrapper.js';
 
@@ -77,7 +99,9 @@ export default {
     TableFoodData,
     TableActivitiesData,
     TableInsulinData,
-    LineChart
+    LineChart,
+    DoughnutChart,
+    Header
   },
   methods: {
       // Test request that simulates receiving updated chart data, proper
@@ -106,15 +130,19 @@ export default {
           this.chosenFood = food;
       },
       getSelectedActivity(activity) {
-          this.chosenActivity = activity;
+          this.chosenActivity = { activity: activity, now: moment() };
+      },
+      getDisplayDoughnutStatus(status) {
+          this.displayDoughnut = status;
       }
   },
   data() {
       return {
           tab: null,
           items: ["insulin", "food", "activities"],
-          chosenFood: '',
-          chosenActivity: '',
+          chosenFood: { },
+          chosenActivity: { activity: null, now: null },
+          displayDoughnut: true,
           data: {
               labels: null,
               datasets: [
@@ -160,5 +188,9 @@ export default {
 .main {
   background-color: #f2f2f2;
   padding: 0 2% 0 2%;
+}
+.clearfix {
+  height: 3vh;
+  background-color: #f2f2f2;
 }
 </style>
