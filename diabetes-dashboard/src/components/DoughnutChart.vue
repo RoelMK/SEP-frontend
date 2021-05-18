@@ -11,7 +11,20 @@ import { mapGetters } from "vuex";
 export default {
   name: "doughnutChart",
   props: {
-    datasets: Array,
+    data: Array,
+  },
+  // when the input dataset changes modify the graph
+  watch: {
+    data: {
+      deep: true,
+      handler(newData) {
+        if (newData === null) {
+          this.$emit("noDataDialog", true);
+        } else {
+          this.updateDoughnutChart(newData[0].data);
+        }
+      },
+    },
   },
   data() {
     return {
@@ -54,8 +67,8 @@ export default {
   },
   mounted() {
     const ctx1 = document.getElementById("doughnutChart");
-    this.doughnutChart = new Chart(ctx1, this.config);
-    this.updateDoughnutChart(this.datasets.slice(0, 1)[0].data);
+    window.doughnutChart = new Chart(ctx1, this.config);
+    this.updateDoughnutChart(this.data[0].data);
   },
 
   methods: {
@@ -82,18 +95,24 @@ export default {
       // in the current fake glucose data there is 1 observation for every min
       for (var i = 0; i < len; i++) {
         if (data[i] > this.getHealthSettings.veryHighThreshold) {
-            veryHighCount += 1;
-        } else if (data[i] >= this.getHealthSettings.highRangeMin &&
-          data[i] <= this.getHealthSettings.highRangeMax) {
-            highCount += 1;
-        } else if (data[i] >= this.getHealthSettings.normalRangeMin &&
-          data[i] <= this.getHealthSettings.normalRangeMax) {
-            normalCount += 1;
-        } else if (data[i] >= this.getHealthSettings.lowRangeMin &&
-          data[i] <= this.getHealthSettings.lowRangeMax) {
-            lowCount += 1;
+          veryHighCount += 1;
+        } else if (
+          data[i] >= this.getHealthSettings.highRangeMin &&
+          data[i] <= this.getHealthSettings.highRangeMax
+        ) {
+          highCount += 1;
+        } else if (
+          data[i] >= this.getHealthSettings.normalRangeMin &&
+          data[i] <= this.getHealthSettings.normalRangeMax
+        ) {
+          normalCount += 1;
+        } else if (
+          data[i] >= this.getHealthSettings.lowRangeMin &&
+          data[i] <= this.getHealthSettings.lowRangeMax
+        ) {
+          lowCount += 1;
         } else {
-            veryLowCount += 1;
+          veryLowCount += 1;
         }
       }
 
@@ -142,23 +161,13 @@ export default {
 
       this.config.data.datasets[0].data = percentages;
       this.config.data.labels = labels;
-      this.doughnutChart.data = this.config.data;
-      this.doughnutChart.update();
+      window.doughnutChart.data = this.config.data;
+      window.doughnutChart.update();
     },
   },
   beforeDestroy() {
     // Destroy chart object before leaving the view
-    if (this.doughnutChart) this.doughnutChart.destroy();
-  },
-  // when the input dataset changes modify the graph
-  watch: {
-    datasets: {
-      deep: true,
-      immediate: true,
-      handler: function () {
-        this.updateDoughnutChart(this.datasets.slice(0, 1)[0].data);
-      },
-    },
+    if (window.doughnutChart) window.doughnutChart.destroy();
   },
 };
 </script>

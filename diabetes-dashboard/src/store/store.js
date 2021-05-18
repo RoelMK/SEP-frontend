@@ -80,6 +80,8 @@ const store = new Vuex.Store({
             lowRangeMin: 3.0,
             lowRangeMax: 3.8,
             veryLowThreshold: 3.0,
+            hypoThreshold: 4.0,
+            hyperThreshold: 10.0,
             fastingRangeMin: 4.4,
             fastingRangeMax: 7.2,
             ppRangeThreshold: 10.0,
