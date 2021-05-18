@@ -1,5 +1,7 @@
 <template>
     <div id="dashboard">
+        <Header class="header"></Header>
+        <div class="clearfix"></div>
         <div class="main">
             <v-row>
                 <v-col class="col" cols="12" md="6">
@@ -72,6 +74,7 @@ import TableInsulinData from "@/components/TableInsulinData.vue";
 import LineChart from '@/components/LineChart.vue';
 import DoughnutChart from '@/components/DoughnutChart.vue';
 import Moment from 'moment';
+import Header from '@/components/Header.vue';
 import { extendMoment } from 'moment-range';
 
 const moment = extendMoment(Moment);
@@ -90,6 +93,7 @@ export default {
     TableInsulinData,
     LineChart,
     DoughnutChart,
+    Header
   },
   methods: {
       getSelectedFood(food) {
@@ -154,5 +158,9 @@ export default {
 .main {
   background-color: #f2f2f2;
   padding: 0 2% 0 2%;
+}
+.clearfix {
+  height: 3vh;
+  background-color: #f2f2f2;
 }
 </style>
