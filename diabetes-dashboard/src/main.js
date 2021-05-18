@@ -10,7 +10,7 @@ import '@mdi/font/css/materialdesignicons.css' // Ensure you are using css-loade
 Vue.config.productionTip = false;
 
 Vue.use(VCalendar, { componentPrefix: 'vc' });
-Vue.use(Toasted, {theme: 'bubble', position: 'top-center'});
+Vue.use(Toasted, {theme: 'bubble', position: 'top-center', duration: '2000'});
 
 new Vue({
     store,

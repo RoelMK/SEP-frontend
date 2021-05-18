@@ -42,7 +42,7 @@ export default {
   },
   methods: {
     loginClicked: function () {
-      this.$toasted.show('Login Clicked', { duration: '2000' });
+      this.$toasted.show('Login Clicked');
     }
   }
 };
