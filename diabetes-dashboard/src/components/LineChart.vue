@@ -35,8 +35,6 @@ import pluginZoom from 'chartjs-plugin-zoom';
 import pluginAnnotation from 'chartjs-plugin-annotation';
 import moment from 'moment';
 
-import 'chartjs-adapter-moment';
-
 Chart.register(pluginAnnotation);
 Chart.register(pluginZoom);
 
