@@ -1,17 +1,16 @@
 import App from './App.vue';
-import Vue from 'vue' ;
+import Vue from 'vue';
 import vuetify from '@/plugins/vuetify';
 import router from './router/router.js';
 import store from './store/store.js';
 import VCalendar from 'v-calendar';
-import VueApexCharts from "vue-apexcharts";
+import Toasted from 'vue-toasted'
 
 import '@mdi/font/css/materialdesignicons.css' // Ensure you are using css-loader
 Vue.config.productionTip = false;
 
 Vue.use(VCalendar, { componentPrefix: 'vc' });
-Vue.use(VueApexCharts);
-Vue.component("apexchart", VueApexCharts);
+Vue.use(Toasted, {theme: 'bubble', position: 'top-center', duration: '2000'});
 
 new Vue({
     store,

@@ -60,6 +60,7 @@ export default {
     min-height: 40vh;
     width: 100%;
     overflow: auto;
+    text-align: center;
 }
 
 .profile h2 {
