@@ -65,7 +65,7 @@
                 </v-col>
                 <v-col v-if="displayDoughnut" cols="3">
                     <div class="col1">
-                        <DoughnutChart :datasets="this.data.datasets"/>
+                        <DoughnutChart :datasets="data.datasets"/>
                     </div>
                 </v-col>
             </v-row>

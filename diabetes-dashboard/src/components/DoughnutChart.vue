@@ -54,8 +54,8 @@ export default {
   },
   mounted() {
     const ctx1 = document.getElementById("doughnutChart");
-    this.doughnutChart = new Chart(ctx1, this.config);
-    this.updateDoughnutChart(this.datasets.slice(0, 1)[0].data);
+    window.doughnutChart = new Chart(ctx1, this.config);
+    this.updateDoughnutChart(this.datasets[0].data);
   },
 
   methods: {
@@ -63,7 +63,7 @@ export default {
      * Update doughnut chart for input data
      * data must have the precentages and the hours for each type of glucose,
      *      so that we do not have to comute manually
-     * @param  { Object }       data Data object to be visualized in the doughnut chart
+     * @param  { Array }       data Data object to be visualized in the doughnut chart
      * @return
      */
     updateDoughnutChart(data) {
@@ -142,21 +142,20 @@ export default {
 
       this.config.data.datasets[0].data = percentages;
       this.config.data.labels = labels;
-      this.doughnutChart.data = this.config.data;
-      this.doughnutChart.update();
+      window.doughnutChart.data = this.config.data;
+      window.doughnutChart.update();
     },
   },
   beforeDestroy() {
     // Destroy chart object before leaving the view
-    if (this.doughnutChart) this.doughnutChart.destroy();
+    if (window.doughnutChart) window.doughnutChart.destroy();
   },
   // when the input dataset changes modify the graph
   watch: {
     datasets: {
       deep: true,
-      immediate: true,
       handler: function () {
-        this.updateDoughnutChart(this.datasets.slice(0, 1)[0].data);
+          this.updateDoughnutChart(this.datasets[0].data);
       },
     },
   },
