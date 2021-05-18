@@ -46,6 +46,19 @@
       ></vue-slider>
     </v-row>
     <v-row class="mt-5">
+      <v-text>Low glucose range</v-text>
+      <vue-slider
+        class="price_slider"
+        :width="'100%'"
+        :min="range[0]"
+        :max="range[1]"
+        ref="slider"
+        v-model="healthSettings.lowRange"
+        v-bind="options"
+        :interval="0.1"
+      ></vue-slider>
+    </v-row>
+    <v-row class="mt-5">
       <v-text>Normal glucose range when fasting</v-text>
       <vue-slider
         class="price_slider"
@@ -64,6 +77,14 @@
         label="A1C goal"
         v-model="healthSettings.goalA1C"
         hint="Below x, in mmol/L"
+      />
+    </v-row>
+    <v-row>
+      <v-text-field
+        class="input"
+        label="Normal blood glucose PP threshold"
+        v-model="healthSettings.ppRangeThreshold"
+        hint=""
       />
     </v-row>
 
