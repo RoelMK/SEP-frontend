@@ -48,7 +48,27 @@
     "parserOptions": {
       "parser": "babel-eslint"
     },
-    "rules": {}
+    "rules": {
+        "indent": ["error", 4],
+        "vue/html-indent": ["error", 4],
+        "vue/max-len": ["error", {
+            "code": 80,
+            "template": 100,
+            "comments": 100,
+            "ignoreComments": false,
+            "ignoreTrailingComments": false,
+            "ignoreUrls": true,
+            "ignoreStrings": false,
+            "ignoreTemplateLiterals": false,
+            "ignoreHTMLAttributeValues": false,
+            "ignoreHTMLTextContents": false
+        }],
+        "semi": ["error", "always"],
+        "no-trailing-spaces": ["error", {
+            "skipBlankLines": false,
+            "ignoreComments": false
+        }]
+    }
   },
   "browserslist": [
     "> 1%",

@@ -1,17 +1,17 @@
 <template>
-  <div class="glucose">
-    <canvas id="planet-chart"></canvas></div>
+    <div class="glucose">
+        <canvas id="planet-chart"></canvas></div>
 </template>
 
 <script>
-import Chart from 'chart.js/auto'
-import planetChartData from '../planet-data.js'
+import Chart from 'chart.js/auto';
+import planetChartData from '../planet-data.js';
 export default {
     name: 'glucose',
     data() {
         return {
-        planetChartData: planetChartData
-        }
+            planetChartData: planetChartData
+        };
     },
     mounted() {
         const ctx = document.getElementById('planet-chart');
@@ -21,7 +21,7 @@ export default {
     },
     methods: {
     }
-}
+};
 </script>
 
 <style scoped>

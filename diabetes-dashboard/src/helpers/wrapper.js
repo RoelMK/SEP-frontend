@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from 'axios';
 
 export class AxiosWrapper {
     constructor(headers = { 'accept': 'application/json' }) {
@@ -7,34 +7,35 @@ export class AxiosWrapper {
         });
 
         /* Use custom response handlers for axios */
-        service.interceptors.response.use(this._successHandler, this._errorHandler);
+        service.interceptors.response
+            .use(this._successHandler, this._errorHandler);
         this.service = service;
     }
 
     _successHandler(response) { return response; }
 
-    _errorHandler(error) { 
+    _errorHandler(error) {
         let responseStatus = error.response.status;
 
         switch (responseStatus) {
-            case 400:
-                console.log(`Bad Request: ${ responseStatus }`);
-                break;
-            case 401:
-                console.log(`Unauthorized Access: ${ responseStatus }`);
-                break;
-            case 403:
-                console.log(`Forbidden: ${ responseStatus }`);
-                break;
-            case 404:
-                console.log(`Not Found: ${ responseStatus }`);
-                break;
-            case 500:
-                console.log(`Internal Server Error: ${ responseStatus }`);
-                break;
-            default:
-                console.log(`Response Error: ${ responseStatus }`);
-                break;
+        case 400:
+            console.log(`Bad Request: ${ responseStatus }`);
+            break;
+        case 401:
+            console.log(`Unauthorized Access: ${ responseStatus }`);
+            break;
+        case 403:
+            console.log(`Forbidden: ${ responseStatus }`);
+            break;
+        case 404:
+            console.log(`Not Found: ${ responseStatus }`);
+            break;
+        case 500:
+            console.log(`Internal Server Error: ${ responseStatus }`);
+            break;
+        default:
+            console.log(`Response Error: ${ responseStatus }`);
+            break;
         }
         return Promise.reject(error);
     }

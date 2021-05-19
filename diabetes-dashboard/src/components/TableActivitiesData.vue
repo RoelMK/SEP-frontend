@@ -1,26 +1,26 @@
 <template>
-  <div class="table">
-    <v-data-table
-      :headers="headers"
-      :items="activities"
-      item-key="name"
-      class="elevation-1"
-      :search="search"
-      :hide-default-footer="true"
-      @click:row="selectActivity"
-    >
-      <template v-slot:top>
-        <v-container>
-            <v-row>
-                <v-col xs="10" sm="10" md="10" lg="10">
-                    <v-text-field v-model="search" label="Search"></v-text-field>
-                </v-col>
-                <v-col><v-icon medium>mdi-plus</v-icon></v-col>
-            </v-row>
-        </v-container>
-      </template>
-    </v-data-table>
-  </div>
+    <div class="table">
+        <v-data-table
+            :headers="headers"
+            :items="activities"
+            item-key="name"
+            class="elevation-1"
+            :search="search"
+            :hide-default-footer="true"
+            @click:row="selectActivity"
+        >
+            <template v-slot:top>
+                <v-container>
+                    <v-row>
+                        <v-col xs="10" sm="10" md="10" lg="10">
+                            <v-text-field v-model="search" label="Search"></v-text-field>
+                        </v-col>
+                        <v-col><v-icon medium>mdi-plus</v-icon></v-col>
+                    </v-row>
+                </v-container>
+            </template>
+        </v-data-table>
+    </div>
 </template>
 
 <script>
@@ -43,7 +43,7 @@ export default {
                     text: "Start Time",
                     value: "startTime"
                 },
-                                {
+                {
                     text: "End Time",
                     value: "endTime"
                 },
@@ -57,14 +57,16 @@ export default {
                     activity: "Run",
                     date: moment().subtract(1,'day').format('L'),
                     startTime: moment().subtract(24,'hours').format('HH:mm'),
-                    endTime: moment().subtract(23,'hours').subtract(10,'minutes').format('HH:mm'),
+                    endTime: moment().subtract(23,'hours')
+                        .subtract(10,'minutes').format('HH:mm'),
                     calories: 159
                 },
                 {
                     activity: "Yoga",
                     date: moment().subtract(1,'day').format('L'),
                     startTime: moment().subtract(20,'hours').format('HH:mm'),
-                    endTime: moment().subtract(19,'hours').subtract(30,'minutes').format('HH:mm'),
+                    endTime: moment().subtract(19,'hours')
+                        .subtract(30,'minutes').format('HH:mm'),
                     calories: 100,
                 },
                 {
@@ -78,7 +80,8 @@ export default {
                     activity: "Health check",
                     date: moment().format('L'),
                     startTime: moment().subtract(4,'hours').format('HH:mm'),
-                    endTime: moment().subtract(3,'hours').subtract(30,'minutes').format('HH:mm'),
+                    endTime: moment().subtract(3,'hours')
+                        .subtract(30,'minutes').format('HH:mm'),
                     calories: null,
                 },
                 {
@@ -90,7 +93,7 @@ export default {
                 },
             ],
             search: ""
-        }
+        };
     },
     computed: {
     },
@@ -99,7 +102,7 @@ export default {
             this.$emit('selectedActivity', activity);
         }
     },
-}
+};
 </script>
 
 <style scoped>

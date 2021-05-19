@@ -1,50 +1,50 @@
 <template>
-  <div>
-    <h4 class="center">Modify Food Settings:</h4>
-    <hr />
-    <v-row>
-      <v-col>
-        Consumed Calories Goal:
-      </v-col>
-      <v-col>
-        <form class="center">
-          <input
-            type="number"
-            v-model="goalConsumedCalories"
-            placeholder="Enter value"
-          />
-          <input type="submit" value="Submit" class="button"/>
-        </form>
-      </v-col>
-    </v-row>
-    <hr/>
-    <v-row>
-      <v-col>
-        Burnt Calories Goal:
-      </v-col>
-      <v-col>
-        <form class="center">
-          <input
-            type="number"
-            v-model="goalBurntCalories"
-            placeholder="Enter value"
-          />
-          <input type="submit" value="Submit" class="button"/>
-        </form>
-      </v-col>
-    </v-row>
-  </div>
+    <div>
+        <h4 class="center">Modify Food Settings:</h4>
+        <hr />
+        <v-row>
+            <v-col>
+                Consumed Calories Goal:
+            </v-col>
+            <v-col>
+                <form class="center">
+                    <input
+                        type="number"
+                        v-model="goalConsumedCalories"
+                        placeholder="Enter value"
+                    />
+                    <input type="submit" value="Submit" class="button"/>
+                </form>
+            </v-col>
+        </v-row>
+        <hr/>
+        <v-row>
+            <v-col>
+                Burnt Calories Goal:
+            </v-col>
+            <v-col>
+                <form class="center">
+                    <input
+                        type="number"
+                        v-model="goalBurntCalories"
+                        placeholder="Enter value"
+                    />
+                    <input type="submit" value="Submit" class="button"/>
+                </form>
+            </v-col>
+        </v-row>
+    </div>
 </template>
 
 <script>
 export default {
-  name: "FoodSettings",
-  data() {
-    return {
-        goalConsumedCalories: '',
-        goalBurntCalories: '',
-    };
-  },
+    name: "FoodSettings",
+    data() {
+        return {
+            goalConsumedCalories: '',
+            goalBurntCalories: '',
+        };
+    },
 };
 </script>
 

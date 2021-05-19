@@ -9,11 +9,11 @@
 import Footer from './components/Footer.vue';
 
 export default {
-  name: 'App',
-  components: {
-    Footer
-  }
-}
+    name: 'App',
+    components: {
+        Footer
+    }
+};
 </script>
 
 <style>

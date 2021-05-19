@@ -4,9 +4,9 @@ import vuetify from '@/plugins/vuetify';
 import router from './router/router.js';
 import store from './store/store.js';
 import VCalendar from 'v-calendar';
-import Toasted from 'vue-toasted'
+import Toasted from 'vue-toasted';
 
-import '@mdi/font/css/materialdesignicons.css' // Ensure you are using css-loader
+import '@mdi/font/css/materialdesignicons.css';
 Vue.config.productionTip = false;
 
 Vue.use(VCalendar, { componentPrefix: 'vc' });
@@ -17,4 +17,4 @@ new Vue({
     vuetify,
     router,
     render: h => h(App)
-}).$mount('#app')
+}).$mount('#app');
