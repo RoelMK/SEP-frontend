@@ -1,15 +1,11 @@
 <template>
     <v-container class="line">
         <v-row class="filter-tools">
-            <v-col id="filter-options" cols="4">
-                <span v-on:click="updateGraph(chart, null, '3h')">3H</span>
-                <span v-on:click="updateGraph(chart, null, '1h')">1H</span>
-                <span v-on:click="updateGraph(chart, null, '5m')">5M</span>
-                <span>Intervals</span>
-            </v-col>
-            <v-col id="filter-options" cols="4">
-                <span v-on:click="displayChartX(chart, datasets.slice(2,3)), $emit('displayDoughnut', false)">Show Carbs |</span>
-                <span v-on:click="displayChartX(chart, datasets.slice(0,2)), $emit('displayDoughnut', true)">Show Glucose and Iron</span>
+            <v-col id="filter-options" cols="8">
+                <span v-on:click="updateChart(180)">3H</span>
+                <span v-on:click="updateChart(60)">1H</span>
+                <span v-on:click="updateChart(5)">5M</span>
+                <span v-on:click="resetZoom()">Reset</span>
             </v-col>
             <v-col id="date-filter" cols="4">
                 <v-menu v-model="show" :close-on-content-click="false" offset-y>
@@ -20,40 +16,66 @@
                         </div>
                     </template>
                     <div class="menu-content">
-
                         <vc-date-picker v-model="range" mode="dateTime" is-range  is-expanded is24hr is-required />
                         <div class="filter-buttons">
-                            <v-btn medium tile depressed v-on:click="updateGraph(chart, range, null)">Apply</v-btn>
+                            <v-btn medium tile depressed v-on:click="updateChart(null, range)">Apply</v-btn>
                             <v-btn medium tile plain v-on:click="show = !show">Cancel</v-btn>
                         </div>
                     </div>
                 </v-menu>
             </v-col>
         </v-row>
-        <canvas id="lineChart"></canvas>
+        <canvas id="line-chart"></canvas>
     </v-container>
 </template>
 
 <script>
 import Chart from 'chart.js/auto';
 import pluginZoom from 'chartjs-plugin-zoom';
+import pluginAnnotation from 'chartjs-plugin-annotation';
 import moment from 'moment';
 
-import 'chartjs-adapter-moment';
-
+Chart.register(pluginAnnotation);
 Chart.register(pluginZoom);
 
 export default {
     name: 'lineChart',
     props: {
-        'labels': Array,
-        'datasets': Array,
-        'selectedActivity': Object,
+        'data': {
+            type: Object,
+            default: null
+        },
+        'selectedActivity': {
+            type: Object,
+            default: null
+        }
+    },
+    watch: {
+        data: {
+            deep: true,
+            handler(newValue) {
+                const chart = window.lineChart;
+                chart.data = newValue;
+                chart.update();
+                this.title = this.updateTitle(chart);
+            }
+        },
+        selectedActivity: {
+            deep: true,
+            immediate:true,
+            handler: function() {
+                if(this.selectedActivity.activity !== null){
+                    let activity = this.selectedActivity.activity;
+                    let start = moment(activity.date+" "+activity.startTime);
+                    let end = moment(activity.date+" "+activity.endTime);
+                    this.updateGraph(this.chart, { start, end }, null);
+                }
+            }
+        }
     },
     data() {
         return {
             title: null,
-            chart: null,
             range: {
                 start: null,
                 end: null,
@@ -61,7 +83,7 @@ export default {
             show: false,
             options: {
                 type: 'line',
-                data: { labels: this.labels, datasets: this.datasets.slice(0, 2) },
+                data: this.data,
                 options: {
                     responsive: true,
                     lineTension: 0.4,
@@ -70,22 +92,20 @@ export default {
                             type: 'time',
                             time: {
                                 minUnit: 'minute',
-                            },
-                            max: moment().valueOf(),
-                            min: moment().subtract(5, 'minutes').valueOf()
+                            }
                         },
                         y: {
                             min: 0,
-                            max: 200,
+                            max: 20,
                             ticks: {
-                                stepSize: 10
+                                stepSize: 0.1
                             }
                         }
                     },
                     plugins: {
                         zoom: {
                             pan: {
-                                enabled: true,
+                                enabled: false,
                                 mode: "x",
                                 modifierKey: "shift",
                                 onPanStart: this.setInteractionArea,
@@ -112,59 +132,55 @@ export default {
     },
     mounted() {
         // Create chart
-        const ctx = document.getElementById('lineChart');
-        this.chart = new Chart(ctx, this.options);
+        const ctx = document.getElementById('line-chart');
+        window.lineChart = new Chart(ctx, this.options);
 
-        // Set title
-        let x = this.chart.scales.x;
-        let startDate = moment(x.min).format("DD/MM/YYYY HH:mm:ss");
-        let endDate = moment(x.max).format("DD/MM/YYYY HH:mm:ss");
-        this.title = `${startDate} - ${endDate}`;
+        this.title = this.updateTitle(window.lineChart);
     },
 
     methods: {
         /**
-         * Update graph after filtering
-         * @param  { Object }       chart Chart object
-         * @param  { Object }       range Range object containing start and end date/time
-         * @param  { string }       preset Preset value used for the filtering
-         * @return { boolean }
+         * Update chart's title
+         * @param  { int }       minutes Pre-defined interval in minutes
+         * @param  { Object }    filter  Date/time interval
+         * @return
          */
-        updateGraph(chart, range, preset = null) {
-            // If preset set filter accoring to the respective value
-            if (preset) {
-                range = { end: moment() };
-                if (preset === '5m') {
-                    range.start = moment().subtract(5, 'minutes');
-                } else if (preset === '1h') {
-                    range.start = moment().subtract(1, 'hours');
-                } else if (preset === '3h') {
-                    range.start = moment().subtract(3, 'hours');
-                } else {
-                    return false;
-                }
+        updateChart(minutes, filter = null) {
+            let range = { start: null, end: null };
+            if (minutes) {
+                range.start = moment().subtract(minutes, 'minutes');
+                range.end = moment();
+            } else {
+                range.start = moment(filter.start);
+                range.end = moment(filter.end);
             }
 
-            // Check if both start and end date/time set
-            if (range.start === null || range.end === null)
-                return false;
+            if (range.start && range.end) {
+                this.$emit('filtered', range);
+                this.title = this.updateTitle(window.lineChart);
+                return;
+            }
 
-            let startDate = moment(range.start);
-            let endDate = moment(range.end);
-
-            chart.options.scales.x.min = endDate.valueOf();
-            chart.options.scales.x.max = startDate.valueOf();
-
-            chart.update();
-
-            this.title = `${startDate.format("DD/MM/YYYY HH:mm:ss")} - ${endDate.format("DD/MM/YYYY HH:mm:ss")}`;
-            this.show = false;
-            this.range = {
-                start: null,
-                end: null
-            };
-
-            return true;
+            return;
+        },
+        /**
+         * Update chart's title
+         * @param  { Object }       chart Chart object
+         * @return { string }
+         */
+        updateTitle(chart) {
+            let x = chart.scales.x;
+            let startDate = moment(x.min).format("DD/MM/YYYY HH:mm:ss");
+            let endDate = moment(x.max).format("DD/MM/YYYY HH:mm:ss");
+            return `${startDate} - ${endDate}`;
+        },
+        /**
+         * Reset chart's zoom
+         */
+        resetZoom() { 
+            let chart = window.lineChart;
+            chart.resetZoom();
+            this.title = this.updateTitle(chart);
         },
         /**
          * Sets the padding for interaction area
@@ -182,13 +198,6 @@ export default {
          * @param  { Object }       chart Chart object
          * @return
          */
-        filterSelectedArea(chart) {
-            // Example of how we can retrieve labels in a graph after zooming
-            let x = chart.scales.x;
-            let startDate = moment(x.min).format("DD/MM/YYYY HH:mm:ss")
-            let endDate = moment(x.max).format("DD/MM/YYYY HH:mm:ss")
-            this.title = `${startDate} - ${endDate}`
-        },
         /**
          * Update graph for input data
          * @param  { Object }       chart Chart object
@@ -212,26 +221,11 @@ export default {
             let startDate = moment(x.min).format("DD/MM/YYYY HH:mm:ss");
             let endDate = moment(x.max).format("DD/MM/YYYY HH:mm:ss");
             this.title = `${startDate} - ${endDate}`;
+        },
+        filterSelectedArea(chart) {
+            this.title = this.updateTitle(chart);
         }
-    },
-    beforeDestroy() {
-        // Destroy chart object before leaving the view
-        if (this.chart) this.chart.destroy();
-    },
-    watch: {
-        selectedActivity: {
-            deep: true,
-            immediate:true,
-            handler: function() {
-                if(this.selectedActivity.activity !== null){
-                    let activity = this.selectedActivity.activity;
-                    let start = moment(activity.date+" "+activity.startTime);
-                    let end = moment(activity.date+" "+activity.endTime);
-                    this.updateGraph(this.chart, { start, end }, null);
-                }
-            }
-        }
-    },
+    }
 }
 </script>
 
@@ -289,8 +283,6 @@ export default {
 #filter-options span:nth-child(4) {
     border-left: 1px solid rgba(0, 0, 0, .35);
     font-weight: bold;
-    text-decoration: none;
-    cursor: auto;
 }
 
 .v-menu__content {

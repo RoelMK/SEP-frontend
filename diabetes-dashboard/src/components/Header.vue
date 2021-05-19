@@ -36,6 +36,12 @@
               <v-list-item-title> Profile </v-list-item-title>
             </v-list-item>
           </router-link>
+
+          <router-link :to="{ name: 'emotions' }">
+            <v-list-item>
+              <v-list-item-title> Emotions </v-list-item-title>
+            </v-list-item>
+          </router-link>
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
