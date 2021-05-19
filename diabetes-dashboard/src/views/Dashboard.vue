@@ -69,6 +69,7 @@
                     </div>
                 </v-col>
             </v-row>
+            <HeatMap :data="data"/>
         </div>
     </div>
 </template>
@@ -82,6 +83,7 @@ import TableInsulinData from "@/components/TableInsulinData.vue";
 import LineChart from '@/components/LineChart.vue';
 import DoughnutChart from '@/components/DoughnutChart.vue';
 import Header from '@/components/Header.vue';
+import HeatMap from '@/components/HeatMap.vue';
 import moment from 'moment';
 import { AxiosWrapper } from '@/helpers/wrapper.js';
 
@@ -99,6 +101,7 @@ export default {
     TableFoodData,
     TableActivitiesData,
     TableInsulinData,
+    HeatMap,
     LineChart,
     DoughnutChart,
     Header
