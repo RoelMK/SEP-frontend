@@ -211,17 +211,4 @@ export default {
 </script>
 
 <style>
-.center {
-  justify-content: center;
-  align-items: center;
-  display: flex;
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
-.button {
-  background-color: #008cba;
-  border-radius: 12px;
-  padding: 6px 18px;
-  color: white;
-}
 </style>
