@@ -1,65 +1,53 @@
 <template>
-  <v-app>
-    <div class="main">
-      <v-row class="col">
-        <v-col class="col" cols="12" md="6">
+  <div>
+    <div class="profile">
+      <v-row class="">
+        <v-col class="" cols="12" md="6">
           <v-container>
-            <div class="col1"><ProfileInfo /></div>
+            <div class="card"><ProfileInfo /></div>
           </v-container>
         </v-col>
-        <v-col class="col" cols="12" md="6">
+        <v-col class="" cols="12" md="6">
+          <!-- <v-container>
+            <div class="card"><GlucoseSettings /></div>
+          </v-container> -->
           <v-container>
-            <div class="col1"><GlucoseSettings /></div>
+            <div class="card"><UploadData/></div>
           </v-container>
-        </v-col>
-      </v-row>
-      <v-row class="col">
-        <v-col class="col" cols="12" md="6">
           <v-container>
-            <div class="col1"><EmotionSettings /></div>
-          </v-container>
-        </v-col>
-        <v-col class="col" cols="12" md="6">
-          <v-container>
-            <div class="col1"><FoodSettings /></div>
+            <div class="card"><EmotionSettings /></div>
           </v-container>
         </v-col>
       </v-row>
     </div>
-  </v-app>
+  </div>
 </template>
 
 <script>
 import ProfileInfo from "./profileComponents/ProfileInfo";
-import GlucoseSettings from "./profileComponents/GlucoseSettings";
+import UploadData from "./profileComponents/UploadData";
 import EmotionSettings from "./profileComponents/EmotionSettings";
-import FoodSettings from "./profileComponents/FoodSettings";
+//import FoodSettings from "./profileComponents/FoodSettings";
 
 export default {
   name: "Dashboard",
   components: {
     ProfileInfo,
-    GlucoseSettings,
+    UploadData,
     EmotionSettings,
-    FoodSettings,
+    //FoodSettings,
   },
 };
 </script>
 
 <style>
-.col {
-  justify-content: center;
-  align-items: center;
-  display: flex;
-}
-.col1 {
-  border-radius: 20px;
-  left: 3%;
-  right: 3%;
+.card {
+  padding: 20px;
   background-color: white;
 }
-.main {
+.profile {
   background-color: #f2f2f2;
   padding: 0 2% 0 2%;
+  min-height: 93vh;
 }
 </style>

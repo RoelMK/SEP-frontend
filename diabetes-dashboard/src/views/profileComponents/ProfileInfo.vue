@@ -1,71 +1,133 @@
 <template>
-  <div>
-    <h3 class="center">Hey {{ profileData.name }}!</h3>
-    <hr>
+  <div class="profile-info">
+    <h3 class="">Hey {{ profileData.name }}!</h3>
 
-    <h4 class="center">Your Profile Information is:</h4>
-    <hr>
-    <v-row class="center"> Age: {{ profileData.age }} </v-row>
-    <v-row class="center"> Height: {{ profileData.height }} cm</v-row>
-    <v-row class="center"> Weight: {{ profileData.weight }} kg</v-row>
-    <v-row class="center"> E-mail: {{ profileData.email }} </v-row>
-    <hr>
+    <h4 class="">Profile Information</h4>
+    <p class=""> Age: {{ profileData.age }} </p>
+    <p class=""> Height: {{ profileData.height }} cm</p>
+    <p class=""> Weight: {{ profileData.weight }} kg</p>
+    <p class=""> E-mail: {{ profileData.email }} </p>
 
-    <h4 class="center">Your Glucose Settings are:</h4>
-    <hr>
-    <v-row class="center">
-      "Very High" threshold: {{ healthSettings.veryHighThreshold }}
-      {{ healthSettings.unit }}
+    <h4 class="">Glucose Settings</h4>
+    
+    <v-row>
+      <v-text-field
+        class="input"
+        label="'Very high' treshold"
+        v-model="healthSettings.veryHighThreshold"
+        hint="in mmol/L"
+      />
     </v-row>
-    <v-row class="center">
-      "High" range: from {{ healthSettings.highRangeMin }}
-      {{ healthSettings.unit }} to {{ healthSettings.highRangeMax }}
-      {{ healthSettings.unit }}
-    </v-row>
-    <v-row class="center">
-      "Normal" range: from {{ healthSettings.normalRangeMin }}
-      {{ healthSettings.unit }} to {{ healthSettings.normalRangeMax }}
-      {{ healthSettings.unit }}
-    </v-row>
-    <v-row class="center">
-      "Low" range: from {{ healthSettings.lowRangeMin }}
-      {{ healthSettings.unit }} to {{ healthSettings.lowRangeMax }}
-      {{ healthSettings.unit }}
-    </v-row>
-    <v-row class="center">
-      "Very High" threshold: {{ healthSettings.veryLowThreshold }}
-      {{ healthSettings.unit }}
-    </v-row>
-    <v-row class="center">
-      "Normal" fasting blood glucose range: from
-      {{ healthSettings.fastingRangeMin }} {{ healthSettings.unit }} to
-      {{ healthSettings.fastingRangeMax }} {{ healthSettings.unit }}
-    </v-row>
-    <v-row class="center">
-      "Normal" blood glucose PP threshold:
-      {{ healthSettings.veryLowThreshold }} {{ healthSettings.unit }}
-    </v-row>
-    <v-row class="center">
-      A1C goal: below {{ healthSettings.goalA1C }}%
-    </v-row>
-    <hr>
+    <v-row class="mt-3">
+      <v-text>High glucose range</v-text>
+      <vue-slider
+        class="price_slider"
+        :width="'100%'"
+        :min="range[0]"
+        :max="range[1]"
+        ref="slider"
+        v-model="healthSettings.highRange"
+        v-bind="options"
+        :interval="0.1"
+      ></vue-slider>
 
-    <h4 class="center">Your Food Settings are:</h4>
-    <hr>
-    <v-row class="center">
-      Consumed calories goal: {{ foodSettings.goalConsumedCalories }}
     </v-row>
-    <v-row class="center">
-      Burnt calories goal: {{ foodSettings.goalBurntCalories }}
+    <v-row class="mt-5">
+      <v-text>Normal glucose range</v-text>
+      <vue-slider
+        class="price_slider"
+        :width="'100%'"
+        :min="range[0]"
+        :max="range[1]"
+        ref="slider"
+        v-model="healthSettings.normalRange"
+        v-bind="options"
+        :interval="0.1"
+      ></vue-slider>
     </v-row>
+    <v-row class="mt-5">
+      <v-text>Low glucose range</v-text>
+      <vue-slider
+        class="price_slider"
+        :width="'100%'"
+        :min="range[0]"
+        :max="range[1]"
+        ref="slider"
+        v-model="healthSettings.lowRange"
+        v-bind="options"
+        :interval="0.1"
+      ></vue-slider>
+    </v-row>
+    <v-row class="mt-5">
+      <v-text>Normal glucose range when fasting</v-text>
+      <vue-slider
+        class="price_slider"
+        :width="'100%'"
+        :min="range[0]"
+        :max="range[1]"
+        ref="slider"
+        v-model="healthSettings.fastingRange"
+        v-bind="options"
+        :interval="0.1"
+      ></vue-slider>
+    </v-row>
+    <v-row>
+      <v-text-field
+        class="input"
+        label="A1C goal"
+        v-model="healthSettings.goalA1C"
+        hint="Below x, in mmol/L"
+      />
+    </v-row>
+    <v-row>
+      <v-text-field
+        class="input"
+        label="Normal blood glucose PP threshold"
+        v-model="healthSettings.ppRangeThreshold"
+        hint=""
+      />
+    </v-row>
+
+    <h4 class="">Food Settings</h4>
+    <v-row>
+      <v-text-field
+        class="input"
+        label="Consumed calories goal"
+        v-model="foodSettings.goalConsumedCalories"
+        hint=""
+      />
+    </v-row>
+    <v-row>
+      <v-text-field
+        class="input"
+        label="Burnt calories goal"
+        v-model="foodSettings.goalBurntCalories"
+        hint=""
+      />
+    </v-row>
+    <v-btn 
+      color="success">
+      Save changes
+    </v-btn>
   </div>
 </template>
 
 <script>
+import VueSlider from 'vue-slider-component'
+import 'vue-slider-component/theme/default.css'
 export default {
   name: "ProfileInfo",
+  components: {
+    VueSlider
+  },
   data() {
     return {
+          options: {
+              process: pos => [
+                  [pos[0], pos[1]],
+              ],
+              //enableCross: true
+          },
       profileData: {
         name: "Peter",
         age: 20,
@@ -73,18 +135,15 @@ export default {
         height: 180,
         email: "fake@gmail.com",
       },
+      range: [2.0, 20.0],
       healthSettings: {
         unit: "mmol/L",
         veryHighThreshold: 13.9,
-        highRangeMin: 10.1,
-        highRangeMax: 13.9,
-        normalRangeMin: 3.9,
-        normalRangeMax: 10.0,
-        lowRangeMin: 3.0,
-        lowRangeMax: 3.8,
+        highRange: [10.0, 13.0],
+        normalRange: [3.9, 10.0],
+        lowRange: [3.0, 3.8],
         veryLowThreshold: 3.0,
-        fastingRangeMin: 4.4,
-        fastingRangeMax: 7.2,
+        fastingRange: [4.4, 7.2],
         ppRangeThreshold: 10.0,
         goalA1C: 7,
       },
@@ -99,16 +158,11 @@ export default {
   },
 };
 </script>
-
 <style>
+.profile-info {
+  padding: 0 5% 0 5%;
+}
 .border {
   border-style: solid;
-}
-.center {
-  justify-content: center;
-  align-items: center;
-  display: flex;
-  padding-top: 10px;
-  padding-bottom: 10px;
 }
 </style>
