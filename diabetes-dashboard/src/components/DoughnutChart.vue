@@ -1,6 +1,6 @@
 <template>
     <v-container class="doughnut">
-        <canvas style="position: center" id="doughnutChart"></canvas>
+        <canvas id="doughnutChart"></canvas>
     </v-container>
 </template>
 
@@ -13,10 +13,21 @@ export default {
     props: {
         datasets: Array,
     },
+    computed: {
+        ...mapGetters(["getHealthSettings"]),
+    },
+    // when the input dataset changes modify the graph
+    watch: {
+        datasets: {
+            deep: true,
+            handler: function () {
+                this.updateDoughnutChart(this.datasets.slice(0, 1)[0].data);
+            },
+        },
+    },
     data() {
         return {
-            doughnutChart: null,
-            config: {
+            options: {
                 type: "doughnut",
                 data: {
                     labels: ["Very Low", "Low", "Normal", "High", "Very High"],
@@ -25,11 +36,11 @@ export default {
                             label: "DoughnutChart",
                             data: [],
                             backgroundColor: [
-                                "rgb(128,0,128)",
-                                "rgb(255,0,0)",
-                                "rgb(0,255,0)",
-                                "rgb(255, 255, 0)",
-                                "rgb(255, 153, 51)",
+                                "rgba(218, 42, 61, 1)",
+                                "rgba(218, 42, 61, 0.2)",
+                                "rgba(110, 158, 94, 1)",
+                                "rgba(250, 216, 71, 1)",
+                                "rgba(247, 179, 69, 1)",
                             ],
                         },
                     ],
@@ -49,24 +60,21 @@ export default {
             },
         };
     },
-    computed: {
-        ...mapGetters(["getHealthSettings"]),
-    },
     mounted() {
-        const ctx1 = document.getElementById("doughnutChart");
-        this.doughnutChart = new Chart(ctx1, this.config);
+        const doughnutCtx = document.getElementById("doughnutChart");
+        window.doughnutChart = new Chart(doughnutCtx, this.options);
         this.updateDoughnutChart(this.datasets.slice(0, 1)[0].data);
     },
 
     methods: {
-    /**
-     * Update doughnut chart for input data
-     * data must have the precentages and the hours for each type of glucose,
-     *      so that we do not have to comute manually
-     * @param  { Object }   data Data object to be visualized in
-     * the doughnut chart
-     * @return
-     */
+        /**
+         * Update doughnut chart for input data
+         * data must have the precentages and the hours for each type of glucose,
+         *      so that we do not have to comute manually
+         * @param  { Object }   data Data object to be visualized in
+         * the doughnut chart
+         * @return
+         */
         updateDoughnutChart(data) {
             let len = data.length;
             let veryHighCount = 0;
@@ -132,38 +140,26 @@ export default {
 
             let labels = ["Very Low", "Low", "Normal", "High", "Very High"];
             for (var j = 0; j < labels.length; j++) {
-                labels[j] =
-          labels[j] +
-          ": " +
-          Math.round(percentages[j] * 100) / 100 +
-          "%" +
-          " | " +
-          hours[j] +
-          " h";
+                labels[j] = ` ${labels[j]}: `
+                + `${Math.round(percentages[j] * 100) / 100}% | `
+                + `${hours[j]} h`;
             }
 
-            this.config.data.datasets[0].data = percentages;
-            this.config.data.labels = labels;
-            this.doughnutChart.data = this.config.data;
-            this.doughnutChart.update();
+            this.options.data.datasets[0].data = percentages;
+            this.options.data.labels = labels;
+            window.doughnutChart.data = this.options.data;
+            window.doughnutChart.update();
         },
     },
     beforeDestroy() {
     // Destroy chart object before leaving the view
-        if (this.doughnutChart) this.doughnutChart.destroy();
-    },
-    // when the input dataset changes modify the graph
-    watch: {
-        datasets: {
-            deep: true,
-            immediate: true,
-            handler: function () {
-                this.updateDoughnutChart(this.datasets.slice(0, 1)[0].data);
-            },
-        },
-    },
+        if (window.doughnutChart) window.doughnutChart.destroy();
+    }
 };
 </script>
 
 <style scoped>
+#doughnutChart {
+    position: center;
+}
 </style>

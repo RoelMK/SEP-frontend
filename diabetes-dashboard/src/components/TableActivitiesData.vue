@@ -4,9 +4,9 @@
             :headers="headers"
             :items="activities"
             item-key="name"
-            class="elevation-1"
             :search="search"
             :hide-default-footer="true"
+            elevation="0"
             @click:row="selectActivity"
         >
             <template v-slot:top>

@@ -4,9 +4,9 @@
             :headers="headers"
             :items="desserts"
             item-key="name"
-            class="elevation-1"
             :search="search"
             :hide-default-footer="true"
+            elevation="0"
             @click:row="selectFood"
         >
             <template v-slot:top>

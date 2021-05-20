@@ -275,6 +275,10 @@ export default {
     padding-right: .4rem;
 }
 
+#date-filter p {
+    margin-bottom: 0;
+}
+
 #filter-options {
     text-align: start;
 }

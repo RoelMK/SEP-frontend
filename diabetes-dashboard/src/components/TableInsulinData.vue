@@ -4,9 +4,9 @@
             :headers="headers"
             :items="getInsulinData"
             item-key="name"
-            class="elevation-1"
             :search="search"
             :hide-default-footer="true"
+            elevation="0"
         >
             <template v-slot:top>
                 <v-container>

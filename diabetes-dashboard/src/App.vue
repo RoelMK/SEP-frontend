@@ -3,17 +3,13 @@
         <Header class="header" v-show="$route.path==='/login' ? false : true" ></Header>
         <div class="clearfix" v-show="$route.path==='/login' ? false : true"></div>
         <router-view/>
-        <Footer/>
     </v-app>
 </template>
 
 <script>
-import Footer from './components/Footer.vue';
-
 export default {
     name: 'App',
     components: {
-        Footer
     }
 };
 </script>
