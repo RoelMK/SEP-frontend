@@ -1,6 +1,6 @@
 <template>
     <div id="dashboard">
-        <Header class="header"></Header>
+        <Navbar class="header"></Navbar>
         <div class="clearfix"></div>
         <div class="main">
             <v-row>
@@ -68,7 +68,7 @@ import TableActivitiesData from "@/components/TableActivitiesData.vue";
 import TableInsulinData from "@/components/TableInsulinData.vue";
 import LineChart from '@/components/LineChart.vue';
 import DoughnutChart from '@/components/DoughnutChart.vue';
-import Header from '@/components/Header.vue';
+import Navbar from '@/components/Navbar.vue';
 import moment from 'moment';
 import { AxiosWrapper } from '@/helpers/wrapper.js';
 
@@ -87,7 +87,7 @@ export default {
         TableInsulinData,
         LineChart,
         DoughnutChart,
-        Header
+        Navbar
     },
     methods: {
         // Test request that simulates receiving updated chart data, proper

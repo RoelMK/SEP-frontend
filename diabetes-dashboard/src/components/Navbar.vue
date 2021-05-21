@@ -50,7 +50,7 @@
 
 <script>
 export default {
-    name: "HelloWorld",
+    name: "Navbar",
     props: {
         msg: String,
     },
