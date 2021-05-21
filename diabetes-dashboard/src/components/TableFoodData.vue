@@ -1,26 +1,26 @@
 <template>
-  <div class="table">
-    <v-data-table
-      :headers="headers"
-      :items="desserts"
-      item-key="name"
-      class="elevation-1"
-      :search="search"
-      :hide-default-footer="true"
-      @click:row="selectFood"
-    >
-      <template v-slot:top>
-        <v-container>
-            <v-row>
-                <v-col xs="10" sm="10" md="10" lg="10">
-                    <v-text-field v-model="search" label="Search"></v-text-field>
-                </v-col>
-                <v-col><v-icon medium>mdi-plus</v-icon></v-col>
-            </v-row>
-        </v-container>
-      </template>
-    </v-data-table>
-  </div>
+    <div class="table">
+        <v-data-table
+            :headers="headers"
+            :items="desserts"
+            item-key="name"
+            :search="search"
+            :hide-default-footer="true"
+            elevation="0"
+            @click:row="selectFood"
+        >
+            <template v-slot:top>
+                <v-container>
+                    <v-row>
+                        <v-col xs="10" sm="10" md="10" lg="10">
+                            <v-text-field v-model="search" label="Search"></v-text-field>
+                        </v-col>
+                        <v-col><v-icon medium>mdi-plus</v-icon></v-col>
+                    </v-row>
+                </v-container>
+            </template>
+        </v-data-table>
+    </div>
 </template>
 
 <script>
@@ -45,7 +45,7 @@ export default {
                     text: "Carbs (g)",
                     value: "carbs"
                 },
-                { 
+                {
                     text: "Protein (g)",
                     value: "protein"
                 },
@@ -97,7 +97,7 @@ export default {
                 },
             ],
             search: ""
-        }
+        };
     },
     computed: {
     },
@@ -106,7 +106,7 @@ export default {
             this.$emit('selectedFood', food);
         }
     }
-}
+};
 </script>
 
 <style scoped>

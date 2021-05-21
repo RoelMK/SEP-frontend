@@ -24,7 +24,7 @@ const routes = [
         component: () => import('@/views/Emotions.vue'),
         name: "emotions"
     },
-]
+];
 
 const router = new VueRouter({
     mode: 'history',

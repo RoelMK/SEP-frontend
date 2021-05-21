@@ -16,9 +16,16 @@
                         </div>
                     </template>
                     <div class="menu-content">
-                        <vc-date-picker v-model="range" mode="dateTime" is-range  is-expanded is24hr is-required />
+                        <vc-date-picker v-model="range" mode="dateTime"
+                                        is-range
+                                        is-expanded
+                                        is24hr
+                                        is-required
+                        />
                         <div class="filter-buttons">
-                            <v-btn medium tile depressed v-on:click="updateChart(null, range)">Apply</v-btn>
+                            <v-btn medium tile depressed v-on:click="updateChart(null, range)">
+                                Apply
+                            </v-btn>
                             <v-btn medium tile plain v-on:click="show = !show">Cancel</v-btn>
                         </div>
                     </div>
@@ -128,7 +135,7 @@ export default {
                     }
                 }
             }
-        }
+        };
     },
     mounted() {
         // Create chart
@@ -177,14 +184,15 @@ export default {
         /**
          * Reset chart's zoom
          */
-        resetZoom() { 
+        resetZoom() {
             let chart = window.lineChart;
             chart.resetZoom();
             this.title = this.updateTitle(chart);
         },
         /**
          * Sets the padding for interaction area
-         * @param  { Object }       { chart, point } Object containing chart object and current mouse point
+         * @param  { Object }   { chart, point } Object containing chart
+         * object and current mouse point
          * @return { boolean }
          */
         setInteractionArea({ chart, point }) {
@@ -209,7 +217,7 @@ export default {
             // reset time interval:
             // chart.options.scales.x.min = moment().subtract(5, 'minutes').valueOf();
             // chart.options.scales.x.max = moment().valueOf();
-            
+
             //keep current time interval:
             chart.options.scales.x.min = moment(chart.scales.x.min);
             chart.options.scales.x.max = moment(chart.scales.x.max);
@@ -226,7 +234,7 @@ export default {
             this.title = this.updateTitle(chart);
         }
     }
-}
+};
 </script>
 
 <style scoped>
@@ -265,6 +273,10 @@ export default {
 #date-filter i {
     font-size: 1.3rem;
     padding-right: .4rem;
+}
+
+#date-filter p {
+    margin-bottom: 0;
 }
 
 #filter-options {

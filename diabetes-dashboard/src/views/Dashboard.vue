@@ -1,29 +1,12 @@
 <template>
     <div id="dashboard">
-        <Header class="header"></Header>
+        <Navbar class="header"></Navbar>
         <div class="clearfix"></div>
         <div class="main">
             <v-row>
-                <v-col class="col" cols="12" md="6">
-                    <v-container>
-                        <div class="col1">
-                            <Glucose />
-                        </div>
-                    </v-container>
-                </v-col>
-                <v-col class="col" cols="12" md="6">
-                    <v-container>
-                        <div class="col1">
-                            <Profile :selectedFoodItem="chosenFood" :selectedActivity="chosenActivity.activity"/>
-                        </div>
-                    </v-container>
-                </v-col>
-            </v-row>
-
-            <v-row>
-                <v-col class="col" cols="12" md="6">
-                    <v-container>
-                        <v-card style="border-radius:20px;">
+                <v-col cols="12" md="6">
+                    <v-container class="col1">
+                        <v-card elevation="0">
                             <v-tabs v-model="tab">
                                 <v-tab v-for="item in items" :key="item">
                                     {{ item }}
@@ -43,47 +26,49 @@
                         </v-card>
                     </v-container>
                 </v-col>
+                <v-col cols="12" md="6">
+                    <div class="col1">
+                        <Profile />
+                    </div>
+                </v-col>
             </v-row>
             <v-row>
                 <v-col v-if="displayDoughnut" class="wide-chart" cols="9">
                     <div class="col1">
-                        <LineChart v-if="rendered" 
-                            @filtered="updateData"
-                            @displayDoughnut="getDisplayDoughnutStatus"
-                            :data="data" 
-                            :selectedActivity="chosenActivity"/>
+                        <LineChart v-if="rendered"
+                                   @filtered="updateData"
+                                   @displayDoughnut="getDisplayDoughnutStatus"
+                                   :data="data"
+                                   :selectedActivity="chosenActivity"/>
                     </div>
                 </v-col>
                 <v-col v-else class="wide-chart" cols="12">
                     <div class="col1">
-                        <LineChart v-if="rendered" 
-                            @filtered="updateData"
-                            @displayDoughnut="getDisplayDoughnutStatus"
-                            :data="data" 
-                            :selectedActivity="chosenActivity"/>
+                        <LineChart v-if="rendered"
+                                   @filtered="updateData"
+                                   @displayDoughnut="getDisplayDoughnutStatus"
+                                   :data="data"
+                                   :selectedActivity="chosenActivity"/>
                     </div>
                 </v-col>
                 <v-col v-if="displayDoughnut" cols="3">
                     <div class="col1">
-                        <DoughnutChart :datasets="this.data.datasets"/>
+                        <DoughnutChart v-if="rendered" :datasets="this.data.datasets"/>
                     </div>
                 </v-col>
             </v-row>
-            <HeatMap :data="data"/>
         </div>
     </div>
 </template>
 
 <script>
-import Glucose from "@/components/Glucose.vue";
 import Profile from "@/components/Profile.vue";
 import TableFoodData from "@/components/TableFoodData.vue";
 import TableActivitiesData from "@/components/TableActivitiesData.vue";
 import TableInsulinData from "@/components/TableInsulinData.vue";
 import LineChart from '@/components/LineChart.vue';
 import DoughnutChart from '@/components/DoughnutChart.vue';
-import Header from '@/components/Header.vue';
-import HeatMap from '@/components/HeatMap.vue';
+import Navbar from '@/components/Navbar.vue';
 import moment from 'moment';
 import { AxiosWrapper } from '@/helpers/wrapper.js';
 
@@ -94,87 +79,91 @@ const URL = 'https://gist.githubusercontent.com/nbalasovs/4e766292125780ce206e57
 const TEST_URL = 'https://gist.githubusercontent.com/nbalasovs/e1b44f2e5dc7f2ded698994102afe225/raw/e0f6cd42c966747e7d505d61aa3f0c1c53e69642/20min.json';
 
 export default {
-  name: "Dashboard",
-  components: {
-    Glucose,
-    Profile,
-    TableFoodData,
-    TableActivitiesData,
-    TableInsulinData,
-    HeatMap,
-    LineChart,
-    DoughnutChart,
-    Header
-  },
-  methods: {
-      // Test request that simulates receiving updated chart data, proper
-      // documentation will be required
-      // eslint-disable-next-line
+    name: "Dashboard",
+    components: {
+        Profile,
+        TableFoodData,
+        TableActivitiesData,
+        TableInsulinData,
+        LineChart,
+        DoughnutChart,
+        Navbar
+    },
+    methods: {
+        // Test request that simulates receiving updated chart data, proper
+        // documentation will be required
+        // eslint-disable-next-line
       updateData(value) {
-          wrapper.get(TEST_URL, dataPromise => dataPromise).then(data => {
-              this.data.labels = data.map(l => moment(l.date));
-              this.data.datasets[0].data = data.map(d => d.value);
-              this.data.datasets[0].pointBackgroundColor = data.map(c => this.setColor(c.value));
-          });
-      },
-      /**
+            wrapper.get(TEST_URL, dataPromise => dataPromise).then(data => {
+                this.data.labels = data.map(l => moment(l.date));
+                this.data.datasets[0].data = data.map(d => d.value);
+                this.data.datasets[0].pointBackgroundColor = data
+                    .map(c => this.setColor(c.value));
+            });
+        },
+        /**
         * Set point fill color
         * @param  { int }       value Data point
         * @return { string }
         */
-      setColor(value) {
-          if (value < 3.0) return 'rgb(218, 42, 61)';
-          else if (3.0 <= value && value <= 3.8) return 'rgba(218, 42, 61, 0.2)';
-          else if (3.9 <= value && value <= 10.0) return 'rgb(110, 158, 94)';
-          else if (10.1 <= value && value <= 13.9) return 'rgb(250, 216, 71)';
-          else return 'rgb(247, 179, 69)';
-      },
-      getSelectedFood(food) {
-          this.chosenFood = food;
-      },
-      getSelectedActivity(activity) {
-          this.chosenActivity = { activity: activity, now: moment() };
-      },
-      getDisplayDoughnutStatus(status) {
-          this.displayDoughnut = status;
-      }
-  },
-  data() {
-      return {
-          tab: null,
-          items: ["insulin", "food", "activities"],
-          chosenFood: { },
-          chosenActivity: { activity: null, now: null },
-          displayDoughnut: true,
-          data: {
-              labels: null,
-              datasets: [
-                  {
-                      label: 'Glucose',
-                      fill: {
-                          target: 'start',
-                          above: 'rgba(54,73,93,.2)'
-                      },
-                      data: null,
-                      pointBackgroundColor: null,
-                      radius: 4,
-                      borderColor: "#36495d",
-                      pointBorderWidth: 1,
-                      borderWidth: 3
-                  }
-              ]
-          },
-          rendered: false
-      }
-  },
-  created() {
-    wrapper.get(URL, dataPromise => dataPromise).then(data => {
-        this.data.labels = data.map(l => moment(l.date));
-        this.data.datasets[0].data = data.map(d => d.value);
-        this.data.datasets[0].pointBackgroundColor = data.map(c => this.setColor(c.value));
-        this.rendered = true;
-    });
-  }
+        setColor(value) {
+            if (value < 3.0) return 'rgba(218, 42, 61, 1)';
+            else if (3.0 <= value && value <= 3.8)
+                return 'rgba(218, 42, 61, 0.2)';
+            else if (3.9 <= value && value <= 10.0)
+                return 'rgba(110, 158, 94, 1)';
+            else if (10.1 <= value && value <= 13.9)
+                return 'rgba(250, 216, 71, 1)';
+            else
+                return 'rgba(247, 179, 69, 1)';
+        },
+        getSelectedFood(food) {
+            this.chosenFood = food;
+        },
+        getSelectedActivity(activity) {
+            this.chosenActivity = { activity: activity, now: moment() };
+        },
+        getDisplayDoughnutStatus(status) {
+            this.displayDoughnut = status;
+        }
+    },
+    data() {
+        return {
+            tab: null,
+            items: ["insulin", "food", "activities"],
+            chosenFood: { },
+            chosenActivity: { activity: null, now: null },
+            displayDoughnut: true,
+            data: {
+                labels: null,
+                datasets: [
+                    {
+                        label: 'Glucose',
+                        fill: {
+                            target: 'start',
+                            above: 'rgba(54,73,93,.2)'
+                        },
+                        data: null,
+                        pointBackgroundColor: null,
+                        radius: 4,
+                        borderColor: "#36495d",
+                        pointBorderWidth: 1,
+                        borderWidth: 3
+                    }
+                ]
+            },
+            rendered: false
+        };
+    },
+    created() {
+        wrapper.get(URL, dataPromise => dataPromise).then(data => {
+            this.data.labels = data.map(l => moment(l.date));
+            this.data.datasets[0].data = data.map(d => d.value);
+            this.data.datasets[0].pointBackgroundColor = data
+                .map(c => this.setColor(c.value));
+            this.rendered = true;
+        });
+    }
 };
 </script>
 
