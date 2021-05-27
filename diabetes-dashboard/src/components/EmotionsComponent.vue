@@ -1,62 +1,62 @@
 <template>
-    <v-container>
-        <h1 class="title">Enter Emotions</h1>
-        <v-row align="center" justify="space-around" class="pdn">
-            <b class="pdn">How happy are you?:</b>
+    <v-container class="emotion">
+        <h2>Enter Emotions</h2>
+        <p class="margin">
+            How happy are you?:
             <v-icon
-                class="pdn"
-                x-large
+                class="margin"
+                size="25"
                 v-on:click="selectedButtonHappiness = 'laugh'"
                 v-bind:color="selectedButtonHappiness === 'laugh' ? 'blue darken-2' : 'gray'"
             >
                 fas fa-laugh-beam
             </v-icon>
             <v-icon
-                class="pdn"
-                x-large
+                class="margin"
+                size="25"
                 v-on:click="selectedButtonHappiness = 'smile'"
                 v-bind:color="selectedButtonHappiness === 'smile' ? 'blue darken-2' : 'gray'"
             >
                 fas fa-smile-beam
             </v-icon>
             <v-icon
-                class="pdn"
-                x-large
+                class="margin"
+                size="25"
                 v-on:click="selectedButtonHappiness = 'angry'"
                 v-bind:color="selectedButtonHappiness === 'angry' ? 'blue darken-2' : 'gray'"
             >
                 fas fa-angry
             </v-icon>
-        </v-row>
-        <v-row align="center" justify="space-around" class="pdn">
-            <b class="pdn">How excited are you?:</b>
+        </p>
+        <p class="margin">
+            How excited are you?:
             <v-icon
-                class="pdn"
-                x-large
+                class="margin"
+                size="25"
                 v-on:click="selectedButtonExcitement = 'excited'"
                 v-bind:color="selectedButtonExcitement === 'excited' ? 'blue darken-2' : 'gray'"
             >
                 fas fa-grin-stars
             </v-icon>
             <v-icon
-                class="pdn"
-                x-large
+                class="margin"
+                size="25"
                 v-on:click="selectedButtonExcitement = 'smile-2'"
                 v-bind:color="selectedButtonExcitement === 'smile-2' ? 'blue darken-2' : 'gray'"
             >
                 fas fa-smile-beam
             </v-icon>
             <v-icon
-                class="pdn"
-                x-large
+                class="margin"
+                size="25"
                 v-on:click="selectedButtonExcitement = 'tired'"
                 v-bind:color="selectedButtonExcitement === 'tired' ? 'blue darken-2' : 'gray'"
             >
                 fas fa-tired
             </v-icon>
-        </v-row>
-        <div class="pdn">
-            <v-btn color="primary" elevation="2" rounded class="bttn">
+        </p>
+        <div class="margin">
+            <v-btn color="primary" elevation="2" class="bttn">
                 Enter Emotion
             </v-btn>
         </div>
@@ -76,15 +76,22 @@ export default {
 </script>
 
 <style>
-.title {
-    text-decoration: underline;
-    font-weight: bolder;
+.emotion {
+    height: auto;
+    text-align: center;
+}
+
+.emotion h2 {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .bttn {
     margin: 0 auto;
     display: block;
 }
-.pdn {
-    padding: 0.5rem;
+.margin {
+    margin-left: 10px;
 }
 </style>
