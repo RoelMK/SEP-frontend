@@ -35,7 +35,7 @@
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
     "moment-range": "^4.0.2",
-    "sass-loader": "^11.0.1",
+    "sass-loader": "^10.2.0",
     "vue-template-compiler": "^2.6.11"
   },
   "eslintConfig": {
@@ -51,25 +51,40 @@
       "parser": "babel-eslint"
     },
     "rules": {
-        "indent": ["error", 4],
-        "vue/html-indent": ["error", 4],
-        "vue/max-len": ["error", {
-            "code": 80,
-            "template": 100,
-            "comments": 100,
-            "ignoreComments": false,
-            "ignoreTrailingComments": false,
-            "ignoreUrls": true,
-            "ignoreStrings": false,
-            "ignoreTemplateLiterals": false,
-            "ignoreHTMLAttributeValues": false,
-            "ignoreHTMLTextContents": false
-        }],
-        "semi": ["error", "always"],
-        "no-trailing-spaces": ["error", {
-            "skipBlankLines": false,
-            "ignoreComments": false
-        }]
+      "indent": [
+        "error",
+        4
+      ],
+      "vue/html-indent": [
+        "error",
+        4
+      ],
+      "vue/max-len": [
+        "error",
+        {
+          "code": 80,
+          "template": 100,
+          "comments": 100,
+          "ignoreComments": false,
+          "ignoreTrailingComments": false,
+          "ignoreUrls": true,
+          "ignoreStrings": false,
+          "ignoreTemplateLiterals": false,
+          "ignoreHTMLAttributeValues": false,
+          "ignoreHTMLTextContents": false
+        }
+      ],
+      "semi": [
+        "error",
+        "always"
+      ],
+      "no-trailing-spaces": [
+        "error",
+        {
+          "skipBlankLines": false,
+          "ignoreComments": false
+        }
+      ]
     }
   },
   "browserslist": [
