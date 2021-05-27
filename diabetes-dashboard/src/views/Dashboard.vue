@@ -27,7 +27,7 @@
                     </v-container>
                 </v-col>
                 <v-col cols="4">
-                    <div class="col1" style="height: 100%">
+                    <div class="col1">
                         <Statistics />
                     </div>
                 </v-col>
@@ -178,6 +178,7 @@ export default {
   left: 3%;
   right: 3%;
   background-color: white;
+  height: 100%
 }
 .main {
   background-color: #f2f2f2;
