@@ -4,10 +4,10 @@
         <div class="clearfix"></div>
         <div class="main">
             <v-row>
-                <v-col cols="12" sm="6" md="6" lg="6">
+                <v-col cols="12" sm="6" md="6" lg="6" class="pb-0">
                     <p>23 May 2021</p>
                 </v-col>
-                <v-col cols="12" sm="6" md="6" lg="6" class="rightAligned">
+                <v-col cols="12" sm="6" md="6" lg="6" class="rightAligned pb-0">
                     <p>00:00 - 24:00</p>
                 </v-col>
             </v-row>
