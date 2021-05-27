@@ -9,16 +9,13 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
-    "chart.js": "^3.2.1",
-    "chartjs-adapter-moment": "^1.0.0",
-    "chartjs-chart-matrix": "^1.0.0",
-    "chartjs-plugin-annotation": "^1.0.1",
-    "chartjs-plugin-zoom": "^1.0.0-beta.5",
     "core-js": "^3.6.5",
+    "echarts": "^5.1.1",
     "material-design-icons-iconfont": "^6.1.0",
     "moment": "^2.29.1",
     "v-calendar": "^2.3.0",
     "vue": "^2.6.11",
+    "vue-echarts": "*",
     "vue-feedback-reaction": "^1.2.0",
     "vue-router": "^3.5.1",
     "vue-slider-component": "^3.2.11",
@@ -31,6 +28,7 @@
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-service": "^4.5.13",
+    "@vue/composition-api": "*",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
@@ -51,25 +49,40 @@
       "parser": "babel-eslint"
     },
     "rules": {
-        "indent": ["error", 4],
-        "vue/html-indent": ["error", 4],
-        "vue/max-len": ["error", {
-            "code": 80,
-            "template": 100,
-            "comments": 100,
-            "ignoreComments": false,
-            "ignoreTrailingComments": false,
-            "ignoreUrls": true,
-            "ignoreStrings": false,
-            "ignoreTemplateLiterals": false,
-            "ignoreHTMLAttributeValues": false,
-            "ignoreHTMLTextContents": false
-        }],
-        "semi": ["error", "always"],
-        "no-trailing-spaces": ["error", {
-            "skipBlankLines": false,
-            "ignoreComments": false
-        }]
+      "indent": [
+        "error",
+        4
+      ],
+      "vue/html-indent": [
+        "error",
+        4
+      ],
+      "vue/max-len": [
+        "error",
+        {
+          "code": 80,
+          "template": 100,
+          "comments": 100,
+          "ignoreComments": false,
+          "ignoreTrailingComments": false,
+          "ignoreUrls": true,
+          "ignoreStrings": false,
+          "ignoreTemplateLiterals": false,
+          "ignoreHTMLAttributeValues": false,
+          "ignoreHTMLTextContents": false
+        }
+      ],
+      "semi": [
+        "error",
+        "always"
+      ],
+      "no-trailing-spaces": [
+        "error",
+        {
+          "skipBlankLines": false,
+          "ignoreComments": false
+        }
+      ]
     }
   },
   "browserslist": [
