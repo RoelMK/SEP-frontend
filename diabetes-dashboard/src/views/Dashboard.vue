@@ -4,7 +4,7 @@
         <div class="clearfix"></div>
         <div class="main">
             <v-row>
-                <v-col cols="12" md="6">
+                <v-col cols="8">
                     <v-container class="col1">
                         <v-card elevation="0">
                             <v-tabs v-model="tab">
@@ -26,9 +26,9 @@
                         </v-card>
                     </v-container>
                 </v-col>
-                <v-col cols="12" md="6">
-                    <div class="col1">
-                        <Profile />
+                <v-col cols="4">
+                    <div class="col1" style="height: 100%">
+                        <Statistics />
                     </div>
                 </v-col>
             </v-row>
@@ -62,7 +62,8 @@
 </template>
 
 <script>
-import Profile from "@/components/Profile.vue";
+import Statistics from "@/components/Statistics.vue";
+//import Profile from "@/components/Profile.vue";
 import TableFoodData from "@/components/TableFoodData.vue";
 import TableActivitiesData from "@/components/TableActivitiesData.vue";
 import TableInsulinData from "@/components/TableInsulinData.vue";
@@ -81,7 +82,8 @@ const TEST_URL = 'https://gist.githubusercontent.com/nbalasovs/e1b44f2e5dc7f2ded
 export default {
     name: "Dashboard",
     components: {
-        Profile,
+        Statistics,
+        //Profile,
         TableFoodData,
         TableActivitiesData,
         TableInsulinData,
