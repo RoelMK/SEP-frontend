@@ -7,6 +7,7 @@ import VCalendar from 'v-calendar';
 import Toasted from 'vue-toasted';
 
 import '@mdi/font/css/materialdesignicons.css';
+import '@fortawesome/fontawesome-free/css/all.css';
 import 'chartjs-adapter-moment';
 Vue.config.productionTip = false;
 
