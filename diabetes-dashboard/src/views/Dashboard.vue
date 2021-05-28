@@ -11,86 +11,7 @@
                     <p>00:00 - 24:00</p>
                 </v-col>
             </v-row>
-            <v-row>
-                <v-col cols="12" sm="6" md="6" lg="3">
-                    <v-card>
-                        <v-card-title class="cardTitle">
-                            <p><v-icon style="color: #BB2628">mdi-water</v-icon></p>
-                            <p id="cardName">Blood Glucose</p>
-                        </v-card-title>
-                        <v-card-text style="color: black">
-                            <v-row class="centered">
-                                <v-col>
-                                    <p id="inlined" class="cardValue">98</p>
-                                    <p id="inlined" class="units">mg/dL</p>
-                                </v-col>
-                                <v-col class="rightAligned">
-                                    <p id="inlined" class="cardTime">t: 14:00</p>
-                                </v-col>
-                            </v-row>
-                        </v-card-text>
-                    </v-card>
-                </v-col>
-                <v-col cols="12" sm="6" md="6" lg="3">
-                    <v-card>
-                        <v-card-title class="cardTitle">
-                            <p><v-icon style="color: #33985A">mdi-diabetes</v-icon></p>
-                            <p id="cardName">Insulin</p>
-                        </v-card-title>
-                        <v-card-text style="color: black">
-                            <v-row class="centered">
-                                <v-col>
-                                    <p id="inlined" class="cardValue">4</p>
-                                    <p id="inlined" class="units">units</p>
-                                </v-col>
-                                <v-col class="rightAligned">
-                                    <p id="inlined" class="cardTime">t: 14:00</p>
-                                </v-col>
-                            </v-row>
-                        </v-card-text>
-                    </v-card>
-                </v-col>
-                <v-col cols="12" sm="6" md="6" lg="3">
-                    <v-card>
-                        <v-card-title class="cardTitle">
-                            <p><v-icon style="color: #ebbd68">mdi-barley</v-icon></p>
-                            <p id="cardName">Carbohydrates</p>
-                        </v-card-title>
-                        <v-card-text style="color: black">
-                            <v-row class="centered">
-                                <v-col>
-                                    <p id="inlined" class="cardValue">43</p>
-                                    <p id="inlined" class="units">g</p>
-                                </v-col>
-                                <v-col class="rightAligned">
-                                    <p id="inlined" class="cardTime">t: 14:00</p>
-                                </v-col>
-                            </v-row>
-                        </v-card-text>
-                    </v-card>
-                </v-col>
-                <v-col cols="12" sm="6" md="6" lg="3">
-                    <v-card>
-                        <v-card-title class="cardTitle">
-                            <p><v-icon style="color: black">mdi-run</v-icon></p>
-                            <p id="cardName">Activity Name</p>
-                        </v-card-title>
-                        <v-card-text style="color: black">
-                            <v-row class="centered">
-                                <v-col>
-                                    <p id="inlined" class="cardValue">365</p>
-                                    <p id="inlined" class="units">
-                                        kcal
-                                    </p>
-                                </v-col>
-                                <v-col class="rightAligned">
-                                    <p id="inlined" class="cardTime">t: 11:30</p>
-                                </v-col>
-                            </v-row>
-                        </v-card-text>
-                    </v-card>
-                </v-col>
-            </v-row>
+            <Cards />
             <v-row>
                 <v-col cols="12" md="6">
                     <v-container class="col1">
@@ -159,6 +80,7 @@ import DoughnutChart from '@/components/DoughnutChart.vue';
 import Navbar from '@/components/Navbar.vue';
 import moment from 'moment';
 import { AxiosWrapper } from '@/helpers/wrapper.js';
+import Cards from '@/components/Cards.vue';
 
 const wrapper = new AxiosWrapper();
 
@@ -175,7 +97,8 @@ export default {
         TableInsulinData,
         LineChart,
         DoughnutChart,
-        Navbar
+        Navbar,
+        Cards
     },
     methods: {
         // Test request that simulates receiving updated chart data, proper
@@ -274,30 +197,7 @@ export default {
   height: 3vh;
   background-color: #F4FAFD;
 }
-#inlined {
-    display: inline;
-}
 .rightAligned {
     text-align: right;
-}
-.centered {
-    display: flex;
-    align-items: center;
-}
-.cardTitle {
-    font-size: 17px;
-}
-.cardTitle #cardName {
-    padding-left: 7px;
-}
-.cardValue {
-    font-size: 25px;
-}
-.units {
-    font-size: 15px;
-    padding-left: 5px;
-}
-.cardTime {
-    font-size: 12px;
 }
 </style>
