@@ -4,6 +4,13 @@
         <div class="clearfix"></div>
         <div class="main">
             <v-row>
+                <v-col class="wide-chart" cols="9">
+                    <v-card elevation="2">
+                        <OverviewChart v-if="rendered" :data="data" />
+                    </v-card>
+                </v-col>
+            </v-row>
+            <v-row>
                 <v-col cols="12" md="6">
                     <v-container class="col1">
                         <v-card elevation="0">
@@ -29,13 +36,6 @@
                 <v-col cols="12" md="6">
                     <div class="col1">
                         <Profile />
-                    </div>
-                </v-col>
-            </v-row>
-            <v-row>
-                <v-col class="wide-chart" cols="12">
-                    <div class="col1">
-                        <OverviewChart v-if="rendered" :data="data" />
                     </div>
                 </v-col>
             </v-row>
