@@ -20,6 +20,22 @@ export default {
             options: {
                 tooltip: {
                     trigger: 'axis',
+                    formatter: function(params) {
+                        var tooltip = `<div style="margin: 0px 0 0;"> \
+                            <div style="color:#666; margin-bottom: 10px;"> \
+                            ${params[0].axisValueLabel}</div>`;
+                        params.forEach(({ marker, seriesName, value }) => {
+                            if (value[1] !== null) {
+                                tooltip += '<div>';
+                                tooltip += `<span>${marker} ${seriesName} \
+                                    </span><span style="float:right; \
+                                    font-weight:bold;"> \
+                                    ${value[1]}</span></div>`;
+                            }
+                        });
+                        tooltip += '</div>';
+                        return tooltip;
+                    }
                 },
                 axisPointer: {
                     link: {
@@ -28,7 +44,9 @@ export default {
                 },
                 dataZoom: {
                     show: true,
-                    xAxisIndex: [0, 1, 2, 3, 4],
+                    showDetail: false,
+                    xAxisIndex: [0, 1, 2, 3],
+                    bottom: '3%',
                 },
                 grid: [
                     {
@@ -42,29 +60,22 @@ export default {
                         bottom: 0,
                         right: '2%',
                         left: '6%',
-                        height: '12%',
+                        height: '15%',
                     },
                     {
-                        top: '57%',
+                        top: '60%',
                         bottom: 0,
                         right: '2%',
                         left: '6%',
-                        height: '12%',
+                        height: '15%',
                     },
                     {
-                        top: '69%',
+                        top: '75%',
                         bottom: 0,
                         right: '2%',
                         left: '6%',
-                        height: '12%',
+                        height: '15%',
                     },
-                    {
-                        top: '81%',
-                        bottom: 0,
-                        right: '2%',
-                        left: '6%',
-                        height: '12%'
-                    }
                 ],
                 xAxis: [
                     {
@@ -119,20 +130,6 @@ export default {
                             show: true
                         },
                     },
-                    {
-                        show: true,
-                        gridIndex: 4,
-                        type: "time",
-                        axisTick: {
-                            show: false,
-                        },
-                        axisLabel: {
-                            show: false
-                        },
-                        splitArea: {
-                            show: true
-                        },
-                    },
                 ],
                 yAxis: [
                     {
@@ -149,7 +146,7 @@ export default {
                     },
                     {
                         gridIndex: 1,
-                        name: 'Insulin',
+                        name: 'Events',
                         nameTextStyle: {
                             fontSize: 14,
                             padding: [0, 0, 35, 0],
@@ -167,7 +164,7 @@ export default {
                     },
                     {
                         gridIndex: 2,
-                        name: 'Carbs',
+                        name: 'Insulin',
                         nameTextStyle: {
                             fontSize: 14,
                             padding: [0, 0, 35, 0],
@@ -185,7 +182,7 @@ export default {
                     },
                     {
                         gridIndex: 3,
-                        name: 'Exercises',
+                        name: 'Carbs',
                         nameTextStyle: {
                             fontSize: 14,
                             padding: [0, 0, 35, 0],
@@ -200,23 +197,6 @@ export default {
                             show: false,
                         },
                         boundaryGap: [0, "100%"],
-                    },
-                    {
-                        gridIndex: 4,
-                        name: 'Emotions',
-                        nameTextStyle: {
-                            fontSize: 14,
-                            padding: [0, 0, 35, 0],
-                        },
-                        nameLocation: 'center',
-                        nameGap: 5,
-                        type: "value",
-                        splitLine: {
-                            show: false,
-                        },
-                        axisLabel: {
-                            show: false,
-                        },
                     },
                 ],
                 visualMap: {
@@ -239,54 +219,59 @@ export default {
                         type: "line",
                         symbol: "none",
                         areaStyle: {},
-                        data: this.prepareGlucose(DATA),
+                        data: this.prepareData(DATA, 'ts', 'value'),
                     },
                     {
                         xAxisIndex: 1,
                         yAxisIndex: 1,
-                        name: "Insulin",
+                        name: "Events",
                         type: "bar",
-                        data: this.prepareInsulin(DATA),
+                        data: this.prepareData(DATA, 'ts', 'carbs'),
                     },
                     {
                         xAxisIndex: 2,
                         yAxisIndex: 2,
-                        name: "Meal",
+                        name: "Insulin",
+                        itemStyle: {
+                            color: '#ce97b0',
+                        },
                         type: "bar",
-                        data: this.prepareMeal(DATA),
+                        data: this.prepareData(DATA, 'ts', 'insulin'),
                     },
                     {
                         xAxisIndex: 3,
                         yAxisIndex: 3,
-                        name: "Exercises",
-                        type: "line",
-                        data: this.prepareExercies(DATA),
+                        name: "Carbs",
+                        type: "scatter",
+                        data: this.prepareData(DATA, 'ts', 'carbs', 'type'),
+                        symbolSize: 14,
+                        itemStyle: {
+                            color: function({ data }) {
+                                var type = data[2];
+                                switch (type) {
+                                case 'Breakfast':
+                                    return '#de8971';
+                                case 'Lunch':
+                                    return '#7b6079';
+                                case 'Snack':
+                                    return '#a7d0cd';
+                                case 'Dinner':
+                                    return '#867ae9';
+                                default:
+                                    return null;
+                                }
+                            }
+                        }
                     },
-                    {
-                        xAxisIndex: 4,
-                        yAxisIndex: 4,
-                        name: "Meal",
-                        type: "bar",
-                        data: this.prepareMeal(DATA),
-                    }
                 ],
             }
         };
     },
     mounted() {},
     methods: {
-        prepareGlucose(data) {
-            return data.map(d => [d.ts, d.value]);
+        prepareData(data, ...properties) {
+            return data.map(d => properties.map(prop => d[prop]));
         },
-        prepareInsulin(data) {
-            return data.map(d => [d.ts, d.insulin]);
-        },
-        prepareMeal(data) {
-            return data.map(d => [d.ts, d.carbs]);
-        },
-        prepareExercies(data) {
-            return data.map(d => [d.ts, d.intensity]);
-        }
     }
 };
 </script>
