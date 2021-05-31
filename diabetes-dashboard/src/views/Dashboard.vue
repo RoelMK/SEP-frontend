@@ -4,12 +4,21 @@
         <div class="clearfix"></div>
         <div class="main">
             <v-row>
-                <v-col cols="8">
+                <v-col cols="12" sm="6" md="6" lg="6" class="pb-0">
+                    <p>23 May 2021</p>
+                </v-col>
+                <v-col cols="12" sm="6" md="6" lg="6" class="rightAligned pb-0">
+                    <p>00:00 - 24:00</p>
+                </v-col>
+            </v-row>
+            <Cards />
+            <v-row>
+                <v-col cols="12" md="6">
                     <v-container class="col1">
                         <v-card elevation="0">
                             <v-tabs v-model="tab">
                                 <v-tab v-for="item in items" :key="item">
-                                    {{ item }}
+                                    {{ $t(item) }}
                                 </v-tab>
                             </v-tabs>
                             <v-tabs-items v-model="tab">
@@ -85,11 +94,12 @@ import EmotionsComponent from "@/components/EmotionsComponent.vue";
 import TableFoodData from "@/components/TableFoodData.vue";
 import TableActivitiesData from "@/components/TableActivitiesData.vue";
 import TableInsulinData from "@/components/TableInsulinData.vue";
-import LineChart from "@/components/LineChart.vue";
-import DoughnutChart from "@/components/DoughnutChart.vue";
-import Navbar from "@/components/Navbar.vue";
-import moment from "moment";
-import { AxiosWrapper } from "@/helpers/wrapper.js";
+import LineChart from '@/components/LineChart.vue';
+import DoughnutChart from '@/components/DoughnutChart.vue';
+import Navbar from '@/components/Navbar.vue';
+import moment from 'moment';
+import { AxiosWrapper } from '@/helpers/wrapper.js';
+import Cards from '@/components/Cards.vue';
 
 const wrapper = new AxiosWrapper();
 
@@ -110,6 +120,7 @@ export default {
         LineChart,
         DoughnutChart,
         Navbar,
+        Cards
     },
     methods: {
         // Test request that simulates receiving updated chart data, proper
@@ -177,6 +188,7 @@ export default {
                 ],
             },
             rendered: false,
+            range: ''
         };
     },
     created() {
@@ -205,11 +217,14 @@ export default {
     background-color: white;
 }
 .main {
-    background-color: #f2f2f2;
-    padding: 0 2% 0 2%;
+  background-color: #F4FAFD;
+  padding: 0 2% 0 2%;
 }
 .clearfix {
-    height: 3vh;
-    background-color: #f2f2f2;
+  height: 3vh;
+  background-color: #F4FAFD;
+}
+.rightAligned {
+    text-align: right;
 }
 </style>

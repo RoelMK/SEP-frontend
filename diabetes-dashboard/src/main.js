@@ -5,11 +5,13 @@ import router from './router/router.js';
 import store from './store/store.js';
 import VCalendar from 'v-calendar';
 import Toasted from 'vue-toasted';
+import i18n from './i18n';
 
 import '@mdi/font/css/materialdesignicons.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import 'chartjs-adapter-moment';
 Vue.config.productionTip = false;
+
 
 Vue.use(VCalendar, { componentPrefix: 'vc' });
 Vue.use(Toasted, {theme: 'bubble', position: 'top-center', duration: '2000'});
@@ -18,5 +20,6 @@ new Vue({
     store,
     vuetify,
     router,
+    i18n,
     render: h => h(App)
 }).$mount('#app');
