@@ -8,6 +8,7 @@ import Toasted from 'vue-toasted';
 import i18n from './i18n';
 
 import '@mdi/font/css/materialdesignicons.css';
+import '@fortawesome/fontawesome-free/css/all.css';
 import 'chartjs-adapter-moment';
 Vue.config.productionTip = false;
 
