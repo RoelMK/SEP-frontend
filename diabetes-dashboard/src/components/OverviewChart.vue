@@ -21,16 +21,28 @@ export default {
                 tooltip: {
                     trigger: 'axis',
                     formatter: function(params) {
-                        var tooltip = `<div style="margin: 0px 0 0;"> \
-                            <div style="color:#666; margin-bottom: 10px;"> \
-                            ${params[0].axisValueLabel}</div>`;
+                        var tooltip = '<div style="margin: 0px 0 0;">'
+                            + '<div style="color:#666; margin-bottom: 10px;">'
+                            + params[0].axisValueLabel + '</div>';
                         params.forEach(({ marker, seriesName, value }) => {
                             if (value[1] !== null) {
+                                var val = value[1];
+                                if (seriesName === 'Emotions') {
+                                    marker = marker.replace(
+                                        'background-color:#fff;',
+                                        'background-color:#91cc75;'
+                                    );
+                                } else if (seriesName === 'Exercises') {
+                                    marker = marker.replace(
+                                        'background-color:#fff;',
+                                        'background-color:#0c4271;'
+                                    );
+                                }
                                 tooltip += '<div>';
-                                tooltip += `<span>${marker} ${seriesName} \
-                                    </span><span style="float:right; \
-                                    font-weight:bold;"> \
-                                    ${value[1]}</span></div>`;
+                                tooltip += '<span>' + marker + seriesName
+                                    + '</span><span style="float:right;'
+                                    + 'font-weight:bold;">'
+                                    + val + '</span></div>';
                             }
                         });
                         tooltip += '</div>';
@@ -224,9 +236,53 @@ export default {
                     {
                         xAxisIndex: 1,
                         yAxisIndex: 1,
-                        name: "Events",
-                        type: "bar",
-                        data: this.prepareData(DATA, 'ts', 'carbs'),
+                        name: "Emotions",
+                        type: "scatter",
+                        symbolSize: 20,
+                        label: {
+                            show: true,
+                            formatter: 'M'
+                        },
+                        itemStyle: {
+                            color: '#fff',
+                            borderWidth: 1,
+                            borderColor: '#91cc75'
+                        },
+                        data: this.prepareData(
+                            DATA,
+                            'ts',
+                            'valence',
+                            'arousal'
+                        ).map(d => {
+                            if (d[1] === null || d[2] === null)
+                                return [d[0], null];
+                            return [
+                                d[0],
+                                this.normalizeData((d[1] + d[2]) / 2, 5, 0)
+                            ];
+                        }),
+                    },
+                    {
+                        xAxisIndex: 1,
+                        yAxisIndex: 1,
+                        name: "Exercises",
+                        type: "scatter",
+                        symbolSize: 20,
+                        label: {
+                            show: true,
+                            formatter: 'E'
+                        },
+                        itemStyle: {
+                            color: '#fff',
+                            borderWidth: 1,
+                            borderColor: '#0c4271',
+                        },
+                        data: this.prepareData(DATA, 'ts', 'intensity')
+                            .map(d => {
+                                if (d[1] === null)
+                                    return [d[0], null];
+                                return [d[0], this.normalizeData(d[1], 5, 0)];
+                            }),
                     },
                     {
                         xAxisIndex: 2,
@@ -272,6 +328,9 @@ export default {
         prepareData(data, ...properties) {
             return data.map(d => properties.map(prop => d[prop]));
         },
+        normalizeData(val, max, min) {
+            return (val - min) / (max - min);
+        }
     }
 };
 </script>
