@@ -43,4 +43,18 @@ export default {
 </script>
 
 <style>
+.statistics-container {
+    padding-top: 2rem;
+}
+.statistics-container ul {
+    list-style: none;
+    padding-left: 0;
+}
+.statistics-container li {
+    font-size: 1rem;
+    padding-bottom: 0.8rem;
+}
+.statistics-container li span {
+    font-weight: bold;
+}
 </style>
