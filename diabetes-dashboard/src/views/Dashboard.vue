@@ -69,9 +69,11 @@
                 </v-col>
             </v-row>
             <v-row>
-                <div class="col1">
-                    <EmotionsComponent />
-                </div>
+                <v-col offset="9" col="3">
+                    <div class="col1">
+                        <EmotionsComponent />
+                    </div>
+                </v-col>
             </v-row>
         </div>
     </div>
