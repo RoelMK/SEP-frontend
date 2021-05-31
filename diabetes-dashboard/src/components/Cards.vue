@@ -4,7 +4,7 @@
             <v-card>
                 <v-card-title class="cardTitle">
                     <p><v-icon color="#bb2628">mdi-water</v-icon></p>
-                    <p id="cardName">Blood Glucose</p>
+                    <p id="cardName">{{ $t('information-cards.glucose') }}</p>
                 </v-card-title>
                 <v-card-text class="black--text">
                     <v-row class="centered">
@@ -23,7 +23,7 @@
             <v-card>
                 <v-card-title class="cardTitle">
                     <p><v-icon color="#33985a">mdi-diabetes</v-icon></p>
-                    <p id="cardName">Insulin</p>
+                    <p id="cardName">{{ $t('information-cards.insulin') }}</p>
                 </v-card-title>
                 <v-card-text class="black--text">
                     <v-row class="centered">
@@ -42,7 +42,7 @@
             <v-card>
                 <v-card-title class="cardTitle">
                     <p><v-icon color="#ebbd68">mdi-barley</v-icon></p>
-                    <p id="cardName">Carbohydrates</p>
+                    <p id="cardName">{{ $t('information-cards.carbohydrates') }}</p>
                 </v-card-title>
                 <v-card-text class="black--text">
                     <v-row class="centered">
@@ -61,7 +61,7 @@
             <v-card>
                 <v-card-title class="cardTitle">
                     <p><v-icon color="black">mdi-run</v-icon></p>
-                    <p id="cardName">Activity Name</p>
+                    <p id="cardName">{{ $t('information-cards.activity-name') }}</p>
                 </v-card-title>
                 <v-card-text class="black--text">
                     <v-row class="centered">

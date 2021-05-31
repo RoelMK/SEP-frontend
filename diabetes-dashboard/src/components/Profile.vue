@@ -1,7 +1,7 @@
 <template>
     <div class="profile">
         <h2>
-            Hey Jeroen!
+            {{ $t('profile.hello') }} Jeroen!
             <vue-reaction-emoji
                 :reaction="reaction"
                 :is-active="isActive"
@@ -10,11 +10,10 @@
             />
         </h2>
         <h4>{{ title }}</h4>
-        <p>Your current glucose level is 140 mg/dL.</p>
-        <p>Your heart rate is 90 bpm.</p>
-        <p>And some more interesting data, of course</p>
-        <p>The selected activity is: {{ selectedActivity }}</p>
-        <p>The selected food is: {{ selectedFoodItem }}</p>
+        <p>{{ $t('profile.glucose-level') }} 140 mg/dL.</p>
+        <p>{{ $t('profile.heartrate-level') }} 90 bpm.</p>
+        <p>{{ $t('profile.selected-activity') }} {{ selectedActivity }}</p>
+        <p>{{ $t('profile.selected-food') }} {{ selectedFoodItem }}</p>
         <vue-feedback-reaction :labels="['angry', 'moody', 'neutral', 'happy', 'excellent']"/>
     </div>
 </template>
