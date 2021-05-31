@@ -11,7 +11,10 @@
                     <BloodGlucoseStatistics />
                 </v-tab-item>
                 <v-tab-item>
-                    <OtherStatistics />
+                    <CumulativeStatistics />
+                </v-tab-item>
+                <v-tab-item>
+                    <DailyStatistics />
                 </v-tab-item>
             </v-tabs-items>
         </v-card>
@@ -20,18 +23,20 @@
 
 <script>
 import BloodGlucoseStatistics from "@/components/BloodGlucoseStatistics.vue";
-import OtherStatistics from "@/components/OtherStatistics.vue";
+import CumulativeStatistics from "@/components/CumulativeStatistics.vue";
+import DailyStatistics from "@/components/DailyStatistics.vue";
 
 export default {
     name: "Statistics",
     components: {
         BloodGlucoseStatistics,
-        OtherStatistics,
+        CumulativeStatistics,
+        DailyStatistics
     },
     data() {
         return {
             tab: null,
-            items: ["blood glucose", "other"],
+            items: ["blood glucose", "cumulative", "daily"],
         };
     },
 };

@@ -1,10 +1,26 @@
 <template>
-    <v-container>
-        <p>Average BG: {{ avgBG }} {{ unitBG }}</p>
-        <p>Jitter in BG: {{ jitterBG }} {{ unitBG }}</p>
-        <p>Max BG: {{ minBG }} {{ unitBG }}</p>
-        <p>Min BG: {{ maxBG }} {{ unitBG }}</p>
-    </v-container>
+    <v-card flat>
+        <v-card-text class="statistics-container">
+            <ul>
+                <li>
+                    Average BG:
+                    <span>{{ avgBG }} {{ unitBG }}</span>
+                </li>
+                <li>
+                    Jitter in BG:
+                    <span>{{ jitterBG }} {{ unitBG }}</span>
+                </li>
+                <li>
+                    Max BG:
+                    <span>{{ maxBG }} {{ unitBG }}</span>
+                </li>
+                <li>
+                    Min BG:
+                    <span>{{ minBG }} {{ unitBG }}</span>
+                </li>
+            </ul>
+        </v-card-text>
+    </v-card>
 </template>
 
 <script>
@@ -23,4 +39,17 @@ export default {
 </script>
 
 <style>
+.statistics-container {
+    padding-top: 2rem;
+}
+.statistics-container ul {
+    list-style: none;
+}
+.statistics-container li {
+    font-size: 1rem;
+    padding-bottom: 0.8rem;
+}
+.statistics-container li span {
+    font-weight: bold;
+}
 </style>
