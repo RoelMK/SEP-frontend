@@ -40,8 +40,8 @@
                     </v-container>
                 </v-col>
                 <v-col cols="4">
-                    <div class="col1" md="6">
-                        <Profile />
+                    <div class="col1">
+                        <Statistics />
                     </div>
                 </v-col>
             </v-row>
@@ -89,7 +89,7 @@
 </template>
 
 <script>
-import Profile from "@/components/Profile.vue";
+import Statistics from "@/components/Statistics.vue";
 import EmotionsComponent from "@/components/EmotionsComponent.vue";
 import TableFoodData from "@/components/TableFoodData.vue";
 import TableActivitiesData from "@/components/TableActivitiesData.vue";
@@ -112,8 +112,8 @@ const TEST_URL =
 export default {
     name: "Dashboard",
     components: {
+        Statistics,
         EmotionsComponent,
-        Profile,
         TableFoodData,
         TableActivitiesData,
         TableInsulinData,
@@ -211,10 +211,11 @@ export default {
     min-height: 40vh;
 }
 .col1 {
-    border-radius: 20px;
-    left: 3%;
-    right: 3%;
-    background-color: white;
+  border-radius: 20px;
+  left: 3%;
+  right: 3%;
+  background-color: white;
+  height: 100%
 }
 .main {
   background-color: #F4FAFD;
