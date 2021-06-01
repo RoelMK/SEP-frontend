@@ -66,8 +66,6 @@
         "error",
         {
           "code": 80,
-          "template": 100,
-          "comments": 100,
           "ignoreComments": false,
           "ignoreTrailingComments": false,
           "ignoreUrls": true,
