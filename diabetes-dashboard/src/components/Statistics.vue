@@ -8,7 +8,7 @@
             </v-tabs>
             <v-tabs-items v-model="tab">
                 <v-tab-item>
-                    <BloodGlucoseStatistics />
+                    <BloodGlucoseStatistics :data="data" />
                 </v-tab-item>
                 <v-tab-item>
                     <CumulativeStatistics />
@@ -33,10 +33,16 @@ export default {
         CumulativeStatistics,
         DailyStatistics
     },
+    props: {
+        data: {
+            type: Array,
+            default: null
+        }
+    },
     data() {
         return {
             tab: null,
-            items: ["blood glucose", "cumulative", "daily"],
+            items: ["glucose", "cumulative", "daily"],
         };
     },
 };
