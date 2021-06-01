@@ -350,7 +350,6 @@ export default {
             }
         };
     },
-    mounted() {},
     methods: {
         /**
          * Set up received data in eCharts format
