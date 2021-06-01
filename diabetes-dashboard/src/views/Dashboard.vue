@@ -4,20 +4,34 @@
         <div class="clearfix"></div>
         <div class="main">
             <v-row>
-                <v-col class="wide-chart" cols="9">
+                <v-col cols="12" sm="6" md="6" lg="6" class="pb-0">
+                    <p>23 May 2021</p>
+                </v-col>
+                <v-col cols="12" sm="6" md="6" lg="6" class="rightAligned pb-0">
+                    <p>00:00 - 24:00</p>
+                </v-col>
+            </v-row>
+            <Cards />
+            <v-row>
+                <v-col class="wide-chart" cols="8">
                     <v-card class="overview-chart-container" elevation="2">
                         <v-progress-circular indeterminate color="primary" size="50" v-if="!rendered" />
                         <OverviewChart v-if="rendered" :data="data" />
                     </v-card>
                 </v-col>
+                <v-col cols="4">
+                    <v-card class="full-height" elevation="2">
+                        <Statistics />
+                    </v-card>
+                </v-col>
             </v-row>
             <v-row>
-                <v-col cols="12" md="6">
-                    <v-container class="col1">
+                <v-col md="8">
+                    <v-card elevation="2">
                         <v-card elevation="0">
                             <v-tabs v-model="tab">
                                 <v-tab v-for="item in items" :key="item">
-                                    {{ item }}
+                                    {{ $t(item) }}
                                 </v-tab>
                             </v-tabs>
                             <v-tabs-items v-model="tab">
@@ -25,19 +39,23 @@
                                     <TableInsulinData />
                                 </v-tab-item>
                                 <v-tab-item>
-                                    <TableFoodData  @selectedFood="getSelectedFood"/>
+                                    <TableFoodData
+                                        @selectedFood="getSelectedFood"
+                                    />
                                 </v-tab-item>
                                 <v-tab-item>
-                                    <TableActivitiesData @selectedActivity="getSelectedActivity"/>
+                                    <TableActivitiesData
+                                        @selectedActivity="getSelectedActivity"
+                                    />
                                 </v-tab-item>
                             </v-tabs-items>
                         </v-card>
-                    </v-container>
+                    </v-card>
                 </v-col>
-                <v-col cols="12" md="6">
-                    <div class="col1">
-                        <Profile />
-                    </div>
+                <v-col col="3">
+                    <v-card elevation="2">
+                        <EmotionsComponent />
+                    </v-card>
                 </v-col>
             </v-row>
         </div>
@@ -45,14 +63,15 @@
 </template>
 
 <script>
-import Profile from '@/components/Profile.vue';
-import TableFoodData from '@/components/TableFoodData.vue';
-import TableActivitiesData from '@/components/TableActivitiesData.vue';
-import TableInsulinData from '@/components/TableInsulinData.vue';
 import OverviewChart from '@/components/OverviewChart.vue';
+import Statistics from "@/components/Statistics.vue";
+import EmotionsComponent from "@/components/EmotionsComponent.vue";
+import TableFoodData from "@/components/TableFoodData.vue";
+import TableActivitiesData from "@/components/TableActivitiesData.vue";
+import TableInsulinData from "@/components/TableInsulinData.vue";
 import Navbar from '@/components/Navbar.vue';
-import moment from 'moment';
 import { AxiosWrapper } from '@/helpers/wrapper.js';
+import Cards from '@/components/Cards.vue';
 
 const wrapper = new AxiosWrapper();
 
@@ -62,23 +81,14 @@ const URL = 'https://gist.githubusercontent.com/nbalasovs/e212107367c65915668cf2
 export default {
     name: 'Dashboard',
     components: {
-        Profile,
+        Statistics,
+        EmotionsComponent,
         TableFoodData,
         TableActivitiesData,
         TableInsulinData,
         OverviewChart,
-        Navbar
-    },
-    methods: {
-        getSelectedFood(food) {
-            this.chosenFood = food;
-        },
-        getSelectedActivity(activity) {
-            this.chosenActivity = { activity: activity, now: moment() };
-        },
-        getDisplayDoughnutStatus(status) {
-            this.displayDoughnut = status;
-        }
+        Navbar,
+        Cards
     },
     data() {
         return {
@@ -101,21 +111,21 @@ export default {
 
 <style>
 .unalloc {
-  min-height: 40vh;
+    min-height: 40vh;
 }
-.col1 {
-  border-radius: 20px;
-  left: 3%;
-  right: 3%;
-  background-color: white;
+.full-height {
+  height: 100%;
 }
 .main {
-  background-color: #f2f2f2;
+  background-color: #F4FAFD;
   padding: 0 2% 0 2%;
 }
 .clearfix {
   height: 3vh;
-  background-color: #f2f2f2;
+  background-color: #F4FAFD;
+}
+.rightAligned {
+    text-align: right;
 }
 .overview-chart-container {
     height: 700px;

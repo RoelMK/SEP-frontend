@@ -10,6 +10,7 @@ import { use } from 'echarts/core';
 import VueCompositionAPI from '@vue/composition-api';
 
 import '@mdi/font/css/materialdesignicons.css';
+import '@fortawesome/fontawesome-free/css/all.css';
 import { CanvasRenderer } from 'echarts/renderers';
 import { LineChart, ScatterChart, BarChart } from 'echarts/charts';
 import {
@@ -20,6 +21,7 @@ import {
     VisualMapComponent,
     DataZoomComponent
 } from 'echarts/components';
+import i18n from './i18n';
 
 Vue.config.productionTip = false;
 
@@ -46,5 +48,6 @@ new Vue({
     store,
     vuetify,
     router,
+    i18n,
     render: h => h(App)
 }).$mount('#app');

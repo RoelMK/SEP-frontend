@@ -1,0 +1,18 @@
+{
+    "insulin": "Insuline",
+    "food": "Voedsel",
+    "activities": "Activiteiten",
+    "profile": {
+        "hello": "Hallo",
+        "glucose-level": "Uw glucose niveau is",
+        "heartrate-level": "Uw hartslag is",
+        "selected-activity": "Uw geselecteerde activiteit is",
+        "selected-food": "Uw geselecteerde voedsel is"
+    },
+    "information-cards": {
+        "glucose": "Bloed Glucose",
+        "insulin": "Insuline",
+        "carbohydrates": "Koolhydraten",
+        "activity-name": "Activiteit"
+    }
+}
