@@ -13,15 +13,15 @@
             </v-row>
             <Cards />
             <v-row>
-                <v-col class="wide-chart" cols="8">
+                <v-col class="wide-chart" cols="9">
                     <v-card class="overview-chart-container" elevation="2">
                         <v-progress-circular indeterminate color="primary" size="50" v-if="!rendered" />
                         <OverviewChart v-if="rendered" :data="data" />
                     </v-card>
                 </v-col>
-                <v-col cols="4">
+                <v-col cols="3">
                     <v-card class="full-height" elevation="2">
-                        <Statistics />
+                        <Statistics :data="data" />
                     </v-card>
                 </v-col>
             </v-row>
@@ -39,14 +39,10 @@
                                     <TableInsulinData />
                                 </v-tab-item>
                                 <v-tab-item>
-                                    <TableFoodData
-                                        @selectedFood="getSelectedFood"
-                                    />
+                                    <TableFoodData />
                                 </v-tab-item>
                                 <v-tab-item>
-                                    <TableActivitiesData
-                                        @selectedActivity="getSelectedActivity"
-                                    />
+                                    <TableActivitiesData />
                                 </v-tab-item>
                             </v-tabs-items>
                         </v-card>

@@ -1,6 +1,7 @@
 <template>
     <v-card flat>
         <v-card-text class="statistics-container">
+            <StackedBarChart :data="data" />
             <ul>
                 <li>
                     Average BG:
@@ -24,8 +25,19 @@
 </template>
 
 <script>
+import StackedBarChart from '@/components/StackedBarChart.vue';
+
 export default {
     name: "BGStatistics",
+    components: {
+        StackedBarChart
+    },
+    props: {
+        data: {
+            type: Array,
+            default: null
+        }
+    },
     data() {
         return {
             avgBG: 0,
@@ -38,5 +50,8 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.statistics-container .echarts {
+    height: 270px;
+}
 </style>
