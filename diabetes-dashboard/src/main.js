@@ -5,16 +5,44 @@ import router from './router/router.js';
 import store from './store/store.js';
 import VCalendar from 'v-calendar';
 import Toasted from 'vue-toasted';
-import i18n from './i18n';
+import ECharts from 'vue-echarts';
+import { use } from 'echarts/core';
+import VueCompositionAPI from '@vue/composition-api';
 
 import '@mdi/font/css/materialdesignicons.css';
 import '@fortawesome/fontawesome-free/css/all.css';
-import 'chartjs-adapter-moment';
+import { CanvasRenderer } from 'echarts/renderers';
+import { LineChart, ScatterChart, BarChart } from 'echarts/charts';
+import {
+    GridComponent,
+    TooltipComponent,
+    LegendComponent,
+    TimelineComponent,
+    VisualMapComponent,
+    DataZoomComponent
+} from 'echarts/components';
+import i18n from './i18n';
+
 Vue.config.productionTip = false;
 
+use([
+    CanvasRenderer,
+    GridComponent,
+    TooltipComponent,
+    TimelineComponent,
+    VisualMapComponent,
+    DataZoomComponent,
+    LegendComponent,
+    ScatterChart,
+    LineChart,
+    BarChart,
+]);
 
+Vue.use(VueCompositionAPI);
 Vue.use(VCalendar, { componentPrefix: 'vc' });
 Vue.use(Toasted, {theme: 'bubble', position: 'top-center', duration: '2000'});
+
+Vue.component('v-chart', ECharts);
 
 new Vue({
     store,

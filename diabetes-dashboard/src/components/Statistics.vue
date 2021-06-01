@@ -1,7 +1,7 @@
 <template>
     <v-container>
         <v-card elevation="0">
-            <v-tabs v-model="tab">
+            <v-tabs fixed-tabs v-model="tab">
                 <v-tab v-for="item in items" :key="item">
                     {{ item }}
                 </v-tab>
