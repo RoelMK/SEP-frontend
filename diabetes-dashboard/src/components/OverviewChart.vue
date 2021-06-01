@@ -352,9 +352,22 @@ export default {
     },
     mounted() {},
     methods: {
+        /**
+         * Set up received data in eCharts format
+         * @param  { Object }   data Data object
+         * @param  { Array }    properties Properties to be extracted from data
+         * @return
+         */
         prepareData(data, ...properties) {
             return data.map(d => properties.map(prop => d[prop]));
         },
+        /**
+         * Normalize data
+         * @param  { Object }   val Value to be normalized
+         * @param  { Object }   min Normalization range min
+         * @param  { Object }   max Normalization range max
+         * @return
+         */
         normalizeData(val, max, min) {
             return (val - min) / (max - min);
         }
