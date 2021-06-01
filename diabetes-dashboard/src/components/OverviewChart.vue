@@ -1,7 +1,5 @@
 <template>
-    <v-card class="overview-chart-container" elevation="2">
-        <v-chart id="overview-chart" :option="options" autoresize />
-    </v-card>
+    <v-chart id="overview-chart" :option="options" autoresize />
 </template>
 
 <script>
@@ -374,8 +372,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.overview-chart-container {
-    height: 700px;
-}
-</style>
+<style scoped></style>

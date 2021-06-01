@@ -5,7 +5,10 @@
         <div class="main">
             <v-row>
                 <v-col class="wide-chart" cols="9">
-                    <OverviewChart v-if="rendered" :data="data" />
+                    <v-card class="overview-chart-container" elevation="2">
+                        <v-progress-circular indeterminate color="primary" size="50" v-if="!rendered" />
+                        <OverviewChart v-if="rendered" :data="data" />
+                    </v-card>
                 </v-col>
             </v-row>
             <v-row>
@@ -113,5 +116,12 @@ export default {
 .clearfix {
   height: 3vh;
   background-color: #f2f2f2;
+}
+.overview-chart-container {
+    height: 700px;
+}
+.overview-chart-container .v-progress-circular {
+    left: 50%;
+    top: 45%;
 }
 </style>
