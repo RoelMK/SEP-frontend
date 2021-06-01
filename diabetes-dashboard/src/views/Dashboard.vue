@@ -5,9 +5,7 @@
         <div class="main">
             <v-row>
                 <v-col class="wide-chart" cols="9">
-                    <v-card elevation="2">
-                        <OverviewChart v-if="rendered" :data="data" />
-                    </v-card>
+                    <OverviewChart v-if="rendered" :data="data" />
                 </v-col>
             </v-row>
             <v-row>
@@ -44,11 +42,11 @@
 </template>
 
 <script>
-import Profile from "@/components/Profile.vue";
-import TableFoodData from "@/components/TableFoodData.vue";
-import TableActivitiesData from "@/components/TableActivitiesData.vue";
-import TableInsulinData from "@/components/TableInsulinData.vue";
-import OverviewChart from "@/components/OverviewChart.vue";
+import Profile from '@/components/Profile.vue';
+import TableFoodData from '@/components/TableFoodData.vue';
+import TableActivitiesData from '@/components/TableActivitiesData.vue';
+import TableInsulinData from '@/components/TableInsulinData.vue';
+import OverviewChart from '@/components/OverviewChart.vue';
 import Navbar from '@/components/Navbar.vue';
 import moment from 'moment';
 import { AxiosWrapper } from '@/helpers/wrapper.js';
@@ -56,10 +54,10 @@ import { AxiosWrapper } from '@/helpers/wrapper.js';
 const wrapper = new AxiosWrapper();
 
 // These URL's will be removed in the future
-const URL = 'https://gist.githubusercontent.com/nbalasovs/e212107367c65915668cf26e75d2ccfa/raw/0658bd3e1b54668f7349e902d920d253afb93e1e/dummy.json';
+const URL = 'https://gist.githubusercontent.com/nbalasovs/e212107367c65915668cf26e75d2ccfa/raw/f5b7bff5d5a87b8af1b23bec3059b400f189559a/dummy.json';
 
 export default {
-    name: "Dashboard",
+    name: 'Dashboard',
     components: {
         Profile,
         TableFoodData,
@@ -83,7 +81,7 @@ export default {
         return {
             data: null,
             tab: null,
-            items: ["insulin", "food", "activities"],
+            items: ['insulin', 'food', 'activities'],
             chosenFood: { },
             chosenActivity: { activity: null, now: null },
             rendered: false
@@ -91,9 +89,7 @@ export default {
     },
     created() {
         wrapper.get(URL, dataPromise => dataPromise).then(data => {
-            this.data = data.map(e => {
-                return [moment(e.date).unix(), e.value];
-            });
+            this.data = data;
             this.rendered = true;
         });
     }

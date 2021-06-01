@@ -1,12 +1,10 @@
 <template>
-    <div class="overview-chart-container">
+    <v-card class="overview-chart-container" elevation="2">
         <v-chart id="overview-chart" :option="options" autoresize />
-    </div>
+    </v-card>
 </template>
 
 <script>
-import DATA from '../datasets/dummy_data.json';
-
 export default {
     name: 'overviewChart',
     props: {
@@ -21,22 +19,37 @@ export default {
                 tooltip: {
                     trigger: 'axis',
                     formatter: function(params) {
+                        // Set up tooltip container and append label
                         var tooltip = '<div style="margin: 0px 0 0;">'
                             + '<div style="color:#666; margin-bottom: 10px;">'
                             + params[0].axisValueLabel + '</div>';
+                        // Iterate through tooltip elements and display
+                        // only those that have value
                         params.forEach(({ marker, seriesName, value }) => {
                             if (value[1] !== null) {
                                 var val = value[1];
+                                // Due to custom icon style background color
+                                // is set to #fff hence need to set tooltip
+                                // color
                                 if (seriesName === 'Emotions') {
                                     marker = marker.replace(
                                         'background-color:#fff;',
                                         'background-color:#91cc75;'
                                     );
+                                    // Set custom label for valence and arousal
+                                    tooltip += '<div>';
+                                    tooltip += '<span>' + marker + 'Valence'
+                                        + '</span><span style="float:right;'
+                                        + 'font-weight:bold;">'
+                                        + value[2] + '</span></div>';
+                                    val = value[3];
+                                    seriesName = 'Arousal';
                                 } else if (seriesName === 'Exercises') {
                                     marker = marker.replace(
                                         'background-color:#fff;',
                                         'background-color:#0c4271;'
                                     );
+                                    val = value[2];
                                 }
                                 tooltip += '<div>';
                                 tooltip += '<span>' + marker + seriesName
@@ -92,7 +105,7 @@ export default {
                 xAxis: [
                     {
                         gridIndex: 0,
-                        type: "time",
+                        type: 'time',
                         position: 'top',
                         offset: 10,
                         boundaryGap: false,
@@ -103,7 +116,7 @@ export default {
                     {
                         show: true,
                         gridIndex: 1,
-                        type: "time",
+                        type: 'time',
                         axisTick: {
                             show: false,
                         },
@@ -117,7 +130,7 @@ export default {
                     {
                         show: true,
                         gridIndex: 2,
-                        type: "time",
+                        type: 'time',
                         axisTick: {
                             show: false,
                         },
@@ -131,7 +144,7 @@ export default {
                     {
                         show: true,
                         gridIndex: 3,
-                        type: "time",
+                        type: 'time',
                         axisTick: {
                             show: false,
                         },
@@ -153,8 +166,8 @@ export default {
                         },
                         nameLocation: 'center',
                         nameGap: 5,
-                        type: "value",
-                        boundaryGap: [0, "100%"],
+                        type: 'value',
+                        boundaryGap: [0, '100%'],
                     },
                     {
                         gridIndex: 1,
@@ -165,14 +178,14 @@ export default {
                         },
                         nameLocation: 'center',
                         nameGap: 5,
-                        type: "value",
+                        type: 'value',
                         splitLine: {
                             show: false,
                         },
                         axisLabel: {
                             show: false,
                         },
-                        boundaryGap: [0, "100%"],
+                        boundaryGap: [0, '100%'],
                     },
                     {
                         gridIndex: 2,
@@ -183,14 +196,14 @@ export default {
                         },
                         nameLocation: 'center',
                         nameGap: 5,
-                        type: "value",
+                        type: 'value',
                         splitLine: {
                             show: false,
                         },
                         axisLabel: {
                             show: false,
                         },
-                        boundaryGap: [0, "100%"],
+                        boundaryGap: [0, '100%'],
                     },
                     {
                         gridIndex: 3,
@@ -201,18 +214,18 @@ export default {
                         },
                         nameLocation: 'center',
                         nameGap: 5,
-                        type: "value",
+                        type: 'value',
                         splitLine: {
                             show: false,
                         },
                         axisLabel: {
                             show: false,
                         },
-                        boundaryGap: [0, "100%"],
+                        boundaryGap: [0, '100%'],
                     },
                 ],
                 visualMap: {
-                    type: "piecewise",
+                    type: 'piecewise',
                     show: false,
                     splitNumber: 4,
                     seriesIndex: 0,
@@ -227,17 +240,19 @@ export default {
                     {
                         xAxisIndex: 0,
                         yAxisIndex: 0,
-                        name: "Glucose",
-                        type: "line",
-                        symbol: "none",
-                        areaStyle: {},
-                        data: this.prepareData(DATA, 'ts', 'value'),
+                        name: 'Glucose',
+                        type: 'line',
+                        symbol: 'none',
+                        areaStyle: {
+                            show: true,
+                        },
+                        data: this.prepareData(this.data, 'ts', 'value'),
                     },
                     {
                         xAxisIndex: 1,
                         yAxisIndex: 1,
-                        name: "Emotions",
-                        type: "scatter",
+                        name: 'Emotions',
+                        type: 'scatter',
                         symbolSize: 20,
                         label: {
                             show: true,
@@ -249,7 +264,7 @@ export default {
                             borderColor: '#91cc75'
                         },
                         data: this.prepareData(
-                            DATA,
+                            this.data,
                             'ts',
                             'valence',
                             'arousal'
@@ -258,15 +273,17 @@ export default {
                                 return [d[0], null];
                             return [
                                 d[0],
-                                this.normalizeData((d[1] + d[2]) / 2, 5, 0)
+                                this.normalizeData((d[1] + d[2]) / 2, 5, 0),
+                                d[1],
+                                d[2]
                             ];
                         }),
                     },
                     {
                         xAxisIndex: 1,
                         yAxisIndex: 1,
-                        name: "Exercises",
-                        type: "scatter",
+                        name: 'Exercises',
+                        type: 'scatter',
                         symbolSize: 20,
                         label: {
                             show: true,
@@ -277,31 +294,41 @@ export default {
                             borderWidth: 1,
                             borderColor: '#0c4271',
                         },
-                        data: this.prepareData(DATA, 'ts', 'intensity')
+                        data: this.prepareData(this.data, 'ts', 'intensity')
                             .map(d => {
                                 if (d[1] === null)
                                     return [d[0], null];
-                                return [d[0], this.normalizeData(d[1], 5, 0)];
+                                return [
+                                    d[0],
+                                    this.normalizeData(d[1], 5, 0),
+                                    d[1]
+                                ];
                             }),
                     },
                     {
                         xAxisIndex: 2,
                         yAxisIndex: 2,
-                        name: "Insulin",
+                        name: 'Insulin',
                         itemStyle: {
                             color: '#ce97b0',
                         },
-                        type: "bar",
-                        data: this.prepareData(DATA, 'ts', 'insulin'),
+                        type: 'bar',
+                        data: this.prepareData(this.data, 'ts', 'insulin'),
                     },
                     {
                         xAxisIndex: 3,
                         yAxisIndex: 3,
-                        name: "Carbs",
-                        type: "scatter",
-                        data: this.prepareData(DATA, 'ts', 'carbs', 'type'),
+                        name: 'Carbs',
+                        type: 'scatter',
+                        data: this.prepareData(
+                            this.data,
+                            'ts',
+                            'carbs',
+                            'type'
+                        ),
                         symbolSize: 14,
                         itemStyle: {
+                            // Assign color depending on the meal type
                             color: function({ data }) {
                                 var type = data[2];
                                 switch (type) {
