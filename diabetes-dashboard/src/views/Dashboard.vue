@@ -26,26 +26,9 @@
                 </v-col>
             </v-row>
             <v-row>
-                <v-col md="8">
-                    <v-card elevation="2">
-                        <v-card elevation="0">
-                            <v-tabs v-model="tab">
-                                <v-tab v-for="item in items" :key="item">
-                                    {{ $t(item) }}
-                                </v-tab>
-                            </v-tabs>
-                            <v-tabs-items v-model="tab">
-                                <v-tab-item>
-                                    <TableInsulinData />
-                                </v-tab-item>
-                                <v-tab-item>
-                                    <TableFoodData />
-                                </v-tab-item>
-                                <v-tab-item>
-                                    <TableActivitiesData />
-                                </v-tab-item>
-                            </v-tabs-items>
-                        </v-card>
+                <v-col md="9">
+                    <v-card class="full-height" elevation="2">
+                        <Legend />
                     </v-card>
                 </v-col>
                 <v-col col="3">
@@ -60,11 +43,9 @@
 
 <script>
 import OverviewChart from '@/components/OverviewChart.vue';
-import Statistics from "@/components/Statistics.vue";
-import EmotionsComponent from "@/components/EmotionsComponent.vue";
-import TableFoodData from "@/components/TableFoodData.vue";
-import TableActivitiesData from "@/components/TableActivitiesData.vue";
-import TableInsulinData from "@/components/TableInsulinData.vue";
+import Statistics from '@/components/Statistics.vue';
+import EmotionsComponent from '@/components/EmotionsComponent.vue';
+import Legend from '@/components/Legend.vue';
 import Navbar from '@/components/Navbar.vue';
 import { AxiosWrapper } from '@/helpers/wrapper.js';
 import Cards from '@/components/Cards.vue';
@@ -79,11 +60,9 @@ export default {
     components: {
         Statistics,
         EmotionsComponent,
-        TableFoodData,
-        TableActivitiesData,
-        TableInsulinData,
         OverviewChart,
         Navbar,
+        Legend,
         Cards
     },
     data() {

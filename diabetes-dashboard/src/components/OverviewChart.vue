@@ -310,7 +310,10 @@ export default {
                         itemStyle: {
                             color: '#ce97b0',
                         },
-                        type: 'bar',
+                        areaStyle: {
+                            show: true,
+                        },
+                        type: 'line',
                         data: this.prepareData(this.data, 'ts', 'insulin'),
                     },
                     {
