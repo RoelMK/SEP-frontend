@@ -55,7 +55,7 @@
                     ref="timeMenu"
                     v-model="timeMenu"
                     :close-on-content-click="false"
-                    :return-value.sync="time"
+                    :return-value.sync="timeRange"
                     transition="scale-transition"
                     offset-y
                     min-width="auto"
@@ -224,7 +224,7 @@
                 <p>Specify Food:</p>
                 <v-text-field
                     class="removeMargin"
-                    v-model="foodName"
+                    v-model="foodFilter.foodName"
                     label="Enter Food Name"
                     required
                 ></v-text-field>
