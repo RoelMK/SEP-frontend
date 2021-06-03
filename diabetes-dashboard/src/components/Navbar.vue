@@ -27,7 +27,7 @@
 
                 <v-menu offset-y>
                     <template v-slot:activator="{ on, attrs }">
-                        <v-btn v-bind="attrs" v-on="on" icon>
+                        <v-btn class="no-background__hover" v-bind="attrs" v-on="on" icon :ripple="false">
                             <v-icon size="20">mdi-chevron-down</v-icon>
                         </v-btn>
                     </template>
@@ -48,18 +48,18 @@
 
                 <v-divider inset vertical />
 
-                <v-btn icon>
+                <v-btn class="no-background__hover" icon :ripple="false">
                     <v-icon size="20" color="dark-gray">mdi-file-table</v-icon>
                 </v-btn>
 
                 <v-badge bordered dot offset-x="20" offset-y="20"
                          color="red" :value="notifications">
-                    <v-btn icon>
+                    <v-btn class="no-background__hover" icon :ripple="false">
                         <v-icon size="20" color="#FFCD00">mdi-bell</v-icon>
                     </v-btn>
                 </v-badge>
 
-                <v-btn icon>
+                <v-btn class="no-background__hover" icon :ripple="false">
                     <v-icon size="20">mdi-menu</v-icon>
                 </v-btn>
             </v-toolbar>
@@ -121,7 +121,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <!-- scoped lang="scss" -->
-<style>
+<style scoped>
 .personalInfo {
     display: flex;
     flex-direction: column;
@@ -140,5 +140,8 @@ export default {
 
 .pointer {
     cursor: pointer;
+}
+.no-background__hover::before {
+   background-color: transparent !important;
 }
 </style>
