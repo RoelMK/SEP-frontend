@@ -3,7 +3,9 @@
         <v-card flat tile>
             <v-toolbar flat dense>
                 <div class="ml-n5 mt-3">
-                    <img src="../assets/DiabetterLogo.png" height="100" width="200">
+                    <img src="../assets/DiabetterLogo.png"
+                         height="100" width="200"
+                         v-on:click="logoClicked" class="pointer">
                 </div>
 
                 <v-spacer></v-spacer>
@@ -88,6 +90,9 @@ export default {
         },
     },
     methods: {
+        logoClicked: function () {
+            this.$router.push('/');
+        },
         profileClicked: function () {
             this.$router.push('/profile');
         },
