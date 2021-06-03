@@ -29,7 +29,7 @@
                 </v-col>
                 <v-divider vertical></v-divider>
                 <v-col cols="12" sm="12" md="6" lg="6">
-                    <img src="../assets/DiabetterLogo.png" class="image-fit">
+                    <img src="../assets/DiabetterLogo.png" class="image-fit ml-16">
                 </v-col>
             </v-row>
         </v-container>
