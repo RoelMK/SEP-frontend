@@ -19,7 +19,6 @@
                     </span>
                     <span slot="default">
                         <v-avatar size="35" color="red">
-                            <!-- <span class="white--text">CS</span> -->
                             <v-img src="https://cdn.vuetifyjs.com/images/lists/2.jpg"></v-img>
                         </v-avatar>
                     </span>
@@ -119,8 +118,6 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<!-- scoped lang="scss" -->
 <style scoped>
 .personalInfo {
     display: flex;
