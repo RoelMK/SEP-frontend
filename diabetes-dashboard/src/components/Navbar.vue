@@ -59,13 +59,13 @@
                     </v-btn>
                 </v-badge>
 
-                <v-btn icon>
+                <v-btn icon  @click="drawer = !drawer">
                     <v-icon size="20">mdi-menu</v-icon>
                 </v-btn>
             </v-toolbar>
         </v-card>
 
-        <v-navigation-drawer v-model="drawer" app temporary absolute>
+        <v-navigation-drawer v-model="drawer" app temporary absolute right>
             <v-list nav dense>
                 <v-list-item-group v-model="group">
                     <router-link :to="{ name: 'dashboard' }">
@@ -110,7 +110,7 @@ export default {
     },
     methods: {
         profileClicked: function () {
-            this.$toasted.show('Profile Clicked');
+            this.$router.push('/profile');
         },
         logoutClicked: function () {
             this.$toasted.show('Logout Clicked');
