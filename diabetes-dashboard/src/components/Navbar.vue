@@ -26,7 +26,11 @@
 
                 <v-menu offset-y>
                     <template v-slot:activator="{ on, attrs }">
-                        <v-btn class="no-background__hover" v-bind="attrs" v-on="on" icon :ripple="false">
+                        <v-btn class="no-background__hover"
+                               v-bind="attrs"
+                               v-on="on"
+                               icon
+                               :ripple="false">
                             <v-icon size="20">mdi-chevron-down</v-icon>
                         </v-btn>
                     </template>
@@ -58,35 +62,11 @@
                     </v-btn>
                 </v-badge>
 
-                <v-btn class="no-background__hover" icon :ripple="false" @click="drawer = !drawer">
+                <v-btn class="no-background__hover" icon :ripple="false">
                     <v-icon size="20">mdi-menu</v-icon>
                 </v-btn>
             </v-toolbar>
         </v-card>
-
-        <v-navigation-drawer v-model="drawer" app temporary absolute right>
-            <v-list nav dense>
-                <v-list-item-group v-model="group">
-                    <router-link :to="{ name: 'dashboard' }">
-                        <v-list-item>
-                            <v-list-item-title> Dashboard </v-list-item-title>
-                        </v-list-item>
-                    </router-link>
-
-                    <router-link :to="{ name: 'profile' }">
-                        <v-list-item>
-                            <v-list-item-title> Profile </v-list-item-title>
-                        </v-list-item>
-                    </router-link>
-
-                    <router-link :to="{ name: 'emotions' }">
-                        <v-list-item>
-                            <v-list-item-title> Emotions </v-list-item-title>
-                        </v-list-item>
-                    </router-link>
-                </v-list-item-group>
-            </v-list>
-        </v-navigation-drawer>
     </div>
 </template>
 
