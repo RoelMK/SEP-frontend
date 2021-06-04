@@ -3,6 +3,12 @@
 </template>
 
 <script>
+import grid from '@/components/configurations/grid.js';
+import xAxis from '@/components/configurations/xAxis.js';
+import yAxis from '@/components/configurations/yAxis.js';
+import visualMap from '@/components/configurations/visualMap.js';
+import moment from 'moment';
+
 export default {
     name: 'overviewChart',
     props: {
@@ -26,192 +32,13 @@ export default {
                 dataZoom: {
                     show: true,
                     showDetail: false,
-                    xAxisIndex: [0, 1, 2, 3],
-                    bottom: '3%',
+                    xAxisIndex: [0, 1, 2, 3, 4],
+                    bottom: '4%',
                 },
-                grid: [
-                    {
-                        top: '8%',
-                        bottom: '55%',
-                        right: '2%',
-                        left: '6%',
-                    },
-                    {
-                        top: '45%',
-                        bottom: 0,
-                        right: '2%',
-                        left: '6%',
-                        height: '15%',
-                    },
-                    {
-                        top: '60%',
-                        bottom: 0,
-                        right: '2%',
-                        left: '6%',
-                        height: '15%',
-                    },
-                    {
-                        top: '75%',
-                        bottom: 0,
-                        right: '2%',
-                        left: '6%',
-                        height: '15%',
-                    },
-                ],
-                xAxis: [
-                    {
-                        gridIndex: 0,
-                        type: 'time',
-                        position: 'top',
-                        offset: 10,
-                        boundaryGap: false,
-                        splitArea: {
-                            show: true
-                        },
-                    },
-                    {
-                        show: true,
-                        gridIndex: 1,
-                        type: 'time',
-                        axisTick: {
-                            show: false,
-                        },
-                        axisLabel: {
-                            show: false
-                        },
-                        splitArea: {
-                            show: true
-                        },
-                    },
-                    {
-                        show: true,
-                        gridIndex: 2,
-                        type: 'time',
-                        axisTick: {
-                            show: false,
-                        },
-                        axisLabel: {
-                            show: false
-                        },
-                        splitArea: {
-                            show: true
-                        },
-                    },
-                    {
-                        show: true,
-                        gridIndex: 3,
-                        type: 'time',
-                        axisTick: {
-                            show: false,
-                        },
-                        axisLabel: {
-                            show: false
-                        },
-                        splitArea: {
-                            show: true
-                        },
-                    },
-                ],
-                yAxis: [
-                    {
-                        gridIndex: 0,
-                        name: 'Glucose',
-                        nameTextStyle: {
-                            fontSize: 14,
-                            padding: [0, 0, 35, 0],
-                        },
-                        nameLocation: 'center',
-                        nameGap: 5,
-                        type: 'value',
-                        boundaryGap: [0, '100%'],
-                    },
-                    {
-                        gridIndex: 1,
-                        name: 'Events',
-                        nameTextStyle: {
-                            fontSize: 14,
-                            padding: [0, 0, 35, 0],
-                        },
-                        nameLocation: 'center',
-                        nameGap: 5,
-                        type: 'value',
-                        splitLine: {
-                            show: false,
-                        },
-                        axisLabel: {
-                            show: false,
-                        },
-                        boundaryGap: [0, '100%'],
-                    },
-                    {
-                        gridIndex: 2,
-                        name: 'Insulin',
-                        nameTextStyle: {
-                            fontSize: 14,
-                            padding: [0, 0, 35, 0],
-                        },
-                        nameLocation: 'center',
-                        nameGap: 5,
-                        type: 'value',
-                        splitLine: {
-                            show: false,
-                        },
-                        axisLabel: {
-                            show: false,
-                        },
-                        boundaryGap: [0, '100%'],
-                    },
-                    {
-                        gridIndex: 3,
-                        name: 'Carbs',
-                        nameTextStyle: {
-                            fontSize: 14,
-                            padding: [0, 0, 35, 0],
-                        },
-                        nameLocation: 'center',
-                        nameGap: 5,
-                        type: 'value',
-                        splitLine: {
-                            show: false,
-                        },
-                        axisLabel: {
-                            show: false,
-                        },
-                        boundaryGap: [0, '100%'],
-                    },
-                ],
-                visualMap: {
-                    type: 'piecewise',
-                    show: false,
-                    splitNumber: 4,
-                    seriesIndex: 0,
-                    pieces: [
-                        {
-
-                            max: 2.9,
-                            color: '#c1232b'
-                        },
-                        {
-                            min: 3.0,
-                            max: 3.8,
-                            color: '#d7504b'
-                        },
-                        {
-                            min: 3.9,
-                            max: 10.0,
-                            color: '#b5c334'
-                        },
-                        {
-                            min: 10.1,
-                            max: 13.9,
-                            color: '#fad860'
-                        },
-                        {
-                            min: 14.0,
-                            color: '#f3a43b'
-                        },
-                    ],
-                },
+                grid: grid,
+                xAxis: xAxis,
+                yAxis: yAxis,
+                visualMap: visualMap,
                 series: [
                     {
                         xAxisIndex: 0,
@@ -237,7 +64,7 @@ export default {
                         itemStyle: {
                             color: '#fff',
                             borderWidth: 1,
-                            borderColor: '#91cc75'
+                            borderColor: '#26c0c0'
                         },
                         data: this.prepareData(
                             this.data,
@@ -247,51 +74,17 @@ export default {
                         ).map(d => {
                             if (d[1] === null || d[2] === null)
                                 return [d[0], null];
-                            return [
-                                d[0],
-                                this.normalizeData((d[1] + d[2]) / 2, 5, 0),
-                                d[1],
-                                d[2]
-                            ];
+                            return [d[0], (d[1] + d[2]) / 2, d[1], d[2]];
                         }),
-                    },
-                    {
-                        xAxisIndex: 1,
-                        yAxisIndex: 1,
-                        name: 'Exercises',
-                        type: 'scatter',
-                        symbolSize: 20,
-                        label: {
-                            show: true,
-                            formatter: 'E'
-                        },
-                        itemStyle: {
-                            color: '#fff',
-                            borderWidth: 1,
-                            borderColor: '#0c4271',
-                        },
-                        data: this.prepareData(this.data, 'ts', 'intensity')
-                            .map(d => {
-                                if (d[1] === null)
-                                    return [d[0], null];
-                                return [
-                                    d[0],
-                                    this.normalizeData(d[1], 5, 0),
-                                    d[1]
-                                ];
-                            }),
                     },
                     {
                         xAxisIndex: 2,
                         yAxisIndex: 2,
                         name: 'Insulin',
                         itemStyle: {
-                            color: '#fe8463',
+                            color: '#a0a7e6',
                         },
-                        areaStyle: {
-                            show: true,
-                        },
-                        symbol: 'none',
+                        barWidth: 3,
                         type: 'bar',
                         data: this.prepareData(this.data, 'ts', 'insulin'),
                     },
@@ -299,38 +92,139 @@ export default {
                         xAxisIndex: 3,
                         yAxisIndex: 3,
                         name: 'Carbs',
-                        type: 'scatter',
-                        data: this.prepareData(
-                            this.data,
-                            'ts',
-                            'carbs',
-                            'type'
-                        ),
-                        symbolSize: 14,
+                        type: 'bar',
+                        data: this.prepareData(this.data, 'ts', 'carbs', 'gi'),
+                        barWidth: 5,
+                        connectNulls: true,
+                        symbol: 'none',
                         itemStyle: {
-                            // Assign color depending on the meal type
                             color: function({ data }) {
-                                var type = data[2];
-                                switch (type) {
-                                case 'Breakfast':
-                                    return '#de8971';
-                                case 'Lunch':
-                                    return '#7b6079';
-                                case 'Snack':
+                                var index = data[2];
+                                if (0 <= index <= 55)
                                     return '#a7d0cd';
-                                case 'Dinner':
-                                    return '#867ae9';
-                                default:
-                                    return null;
-                                }
+                                else if (55 < index <= 69)
+                                    return '#de8971';
+                                else if (index > 69)
+                                    return '#ce97b0';
+                                else
+                                    return '#ce97b0';
                             }
-                        }
+                        },
+                    },
+                    {
+                        xAxisIndex: 4,
+                        yAxisIndex: 4,
+                        name: 'Heartbeat',
+                        type: 'scatter',
+                        itemStyle: {
+                            color: '#f2b3c9',
+                        },
+                        symbolSize: 5,
+                        z: 1,
+                        data: this.prepareData(this.data, 'ts', 'heartbeat')
+                    },
+                    {
+                        xAxisIndex: 4,
+                        yAxisIndex: 4,
+                        name: 'Exercises',
+                        type: 'custom',
+                        data: this.prepareData(
+                            this.data, 'ts', 'intensity', 'duration'
+                        ).map(d => {
+                            if (d[1] === null)
+                                return [d[0], null];
+                            return [
+                                d[0],
+                                this.scaleValue(d[1], [1, 5], [0, 200]),
+                                d[1]
+                            ];
+                        }),
+                        renderItem: function (param, api) {
+                            var point = api.coord(
+                                [api.value(0), api.value(1)]
+                            );
+                            var endDate = moment(api.value(0))
+                                .add(api.value(2))
+                                .format("YYYY-MM-DDTHH:MM");
+                            var end = api.coord([endDate, api.value(1)]);
+
+                            const arr = [
+                                {
+                                    type: "line",
+                                    shape: {
+                                        x1: point[0],
+                                        x2: end[0],
+                                        y1: point[1],
+                                        y2: end[1],
+                                    },
+                                    style: {
+                                        fill: null,
+                                        stroke: '#4b565b',
+                                        lineWidth: 2,
+                                    },
+                                },
+                                {
+                                    type: "circle",
+                                    shape: {
+                                        cx: point[0],
+                                        cy: point[1],
+                                        r: 2,
+                                    },
+                                    style: {
+                                        fill: null,
+                                        stroke: '#4b565b',
+                                        lineWidth: 2,
+                                    },
+                                },
+                                {
+                                    type: "circle",
+                                    shape: {
+                                        cx: end[0],
+                                        cy: end[1],
+                                        r: 2,
+                                    },
+                                    style: {
+                                        fill: null,
+                                        stroke: '#0c4271',
+                                        lineWidth: 2,
+                                    },
+                                }
+                            ];
+                            return {
+                                type: 'group',
+                                children: arr
+                            };
+                        },
                     },
                 ],
-            }
+            },
+            emotions: {
+                valence: {
+                    1: '<i class="fas fa-laugh-beam"></i>',
+                    2: '<i class="fas fa-smile-beam"></i>',
+                    3: '<i class="fas fa-angry"></i>'
+                },
+                arousal: {
+                    1: '<i class="fas fa-grin-stars"></i>',
+                    2: '<i class="fas fa-smile-beam"></i>',
+                    3: '<i class="fas fa-tired"></i>'
+                }
+            },
         };
     },
     methods: {
+        /**
+         * Scale value to a certain range
+         * @param  { int }      value Value to be scaled
+         * @param  { from }     from Original range of the value
+         * @param  { Array }    to Resulting range after scaling
+         * @return
+         */
+        scaleValue(value, from, to) {
+            var scale = (to[1] - to[0]) / (from[1] - from[0]);
+            var capped = Math.min(from[1], Math.max(from[0], value)) - from[0];
+            return ~~(capped * scale + to[0]);
+        },
         /**
          * Set up received data in eCharts format
          * @param  { Object }   data Data object
@@ -350,6 +244,11 @@ export default {
         normalizeData(val, max, min) {
             return (val - min) / (max - min);
         },
+        /**
+         * Set up received data in eCharts format
+         * @param  { Object }   params Chart object parameters
+         * @return
+         */
         prepareTooltip(params) {
             // Set up tooltip container and append label
             var tooltip = '<div style="margin: 0px 0 0;">'
@@ -366,20 +265,20 @@ export default {
                     if (seriesName === 'Emotions') {
                         marker = marker.replace(
                             'background-color:#fff;',
-                            'background-color:#91cc75;'
+                            'background-color:#26c0c0;'
                         );
                         // Set custom label for valence and arousal
                         tooltip += '<div>';
                         tooltip += '<span>' + marker + 'Valence'
                             + '</span><span style="float:right;'
                             + 'font-weight:bold;">'
-                            + value[2] + '</span></div>';
-                        val = value[3];
+                            + this.emotions.valence[value[2]] +'</span></div>';
+                        val = this.emotions.arousal[value[3]];
                         seriesName = 'Arousal';
                     } else if (seriesName === 'Exercises') {
                         marker = marker.replace(
-                            'background-color:#fff;',
-                            'background-color:#0c4271;'
+                            'background-color:#fac858;',
+                            'background-color:#4b565b;'
                         );
                         val = value[2];
                     }
@@ -396,5 +295,3 @@ export default {
     }
 };
 </script>
-
-<style scoped></style>

@@ -54,7 +54,7 @@ import Cards from '@/components/Cards.vue';
 const wrapper = new AxiosWrapper();
 
 // These URL's will be removed in the future
-const URL = 'https://gist.githubusercontent.com/nbalasovs/e212107367c65915668cf26e75d2ccfa/raw/923f8c7f5eaf993444a4ce2f20783a0b1afba21a/dummy.json';
+const URL = 'https://gist.githubusercontent.com/nbalasovs/e212107367c65915668cf26e75d2ccfa/raw/14fde6559649d3fc5c6e2bd7d002e0000e50a54f/dummy.json';
 
 export default {
     name: 'Dashboard',

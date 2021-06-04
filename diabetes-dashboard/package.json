@@ -51,7 +51,7 @@
     "parserOptions": {
       "parser": "babel-eslint"
     },
-    "rules": {
+    "rules": {  
       "indent": [
         "error",
         4
@@ -75,6 +75,7 @@
           "ignoreHTMLTextContents": false
         }
       ],
+      "no-unused-vars": "off",
       "semi": [
         "error",
         "always"
