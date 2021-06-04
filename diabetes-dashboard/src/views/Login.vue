@@ -10,17 +10,9 @@
                             class="customField"
                             label="Email"
                             prepend-inner-icon="mdi-account"
+                            v-model="email"
                         ></v-text-field>
-                        <v-text-field
-                            class="customField"
-                            label="Password"
-                            prepend-inner-icon="mdi-lock"
-                            :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
-                            :type="showPass ? 'text' : 'password'"
-                            v-model="password"
-                            @click:append="showPass = !showPass"
-                        ></v-text-field>
-                        <v-btn v-on:click="loginClicked" class="login-button">Log in</v-btn>
+                        <v-btn @click="loginClicked" class="login-button">Log in</v-btn>
                     </v-form>
                     <br><br>
                     <a class='register' href="https://app.gamebus.eu/auth/signup" target=”_blank”>
@@ -37,15 +29,35 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
-    name: "Login",
+    name: "login",
     data () {
         return {
-            showPass: false
+            showPass: false,
+            email: ""
         };
     },
     methods: {
-        loginClicked: function () {
+        async loginClicked() {
+            // await Auth.login(this.email)
+            //     .then((resp) => {
+            //         console.log("responding");
+            //         console.log(resp);
+            //     })
+            //     .catch((err) => {
+            //         console.log("Throwing error");
+            //         console.log(err);
+            //     });
+            axios.get("http://localhost:8080/login", { params: { email: this.email } })
+                .then((resp) => {
+                    console.log("responding");
+                    console.log(resp);
+                })
+                .catch((err) => {
+                    console.log("Throwing error");
+                    console.log(err);
+                });
             this.$toasted.show('Login Clicked');
         }
     }
