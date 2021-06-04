@@ -1,5 +1,6 @@
 <template>
     <div>
+        <Navbar class="header"></Navbar>
         <div class="profile">
             <v-row class="">
                 <v-col class="" cols="12" md="6">
@@ -8,11 +9,8 @@
                     </v-container>
                 </v-col>
                 <v-col class="" cols="12" md="6">
-                    <!-- <v-container>
-            <div class="card"><GlucoseSettings /></div>
-          </v-container> -->
                     <v-container>
-                        <div class="card"><UploadData/></div>
+                        <v-card elevation="2" class="card"><UploadData/></v-card>
                     </v-container>
                     <v-container>
                         <div class="card"><EmotionSettings /></div>
@@ -27,7 +25,7 @@
 import ProfileInfo from "./profileComponents/ProfileInfo";
 import UploadData from "./profileComponents/UploadData";
 import EmotionSettings from "./profileComponents/EmotionSettings";
-//import FoodSettings from "./profileComponents/FoodSettings";
+import Navbar from '@/components/Navbar.vue';
 
 export default {
     name: "Dashboard",
@@ -35,7 +33,7 @@ export default {
         ProfileInfo,
         UploadData,
         EmotionSettings,
-    //FoodSettings,
+        Navbar
     },
 };
 </script>
