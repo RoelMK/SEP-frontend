@@ -2,7 +2,7 @@
     <div class="main">
         <v-container>
             <v-row>
-                <v-col cols="12" sm="12" md="6" lg="6" align="center">
+                <v-col cols="12" sm="12" md="6" lg="6" align="center" v-if="!enteredEmail">
                     <v-form>
                         <h2>Welcome to Diabetter!</h2>
                         <br><br>
@@ -15,10 +15,17 @@
                         <v-btn @click="loginClicked" class="login-button">Log in</v-btn>
                     </v-form>
                     <br><br>
-                    <a class='register' href="https://app.gamebus.eu/auth/signup" target=”_blank”>
+                    <a class='register' href="https://app3.gamebus.eu/auth/signup" target=”_blank”>
                         Don't have an account? Register here
                     </a>
                 </v-col>
+                <v-col cols="12" sm="12" md="6" lg="6" align="center" v-else>
+                    <h2>Welcome to Diabetter!</h2>
+                    <p>Please click the connect button on the GameBus website.</p>
+                    <v-btn @click="confirmLogin" color="primary" class="login-button">Done</v-btn>
+                    <v-btn @click="cancel()" color="secondary ml-2" class="login-button">Cancel</v-btn>
+                </v-col>
+
                 <v-divider vertical></v-divider>
                 <v-col cols="12" sm="12" md="6" lg="6">
                     <img src="../assets/DiabetterLogo.png" class="image-fit">
@@ -35,30 +42,39 @@ export default {
     data () {
         return {
             showPass: false,
-            email: ""
+            email: "",
+            enteredEmail: false,
         };
     },
     methods: {
         async loginClicked() {
-            // await Auth.login(this.email)
-            //     .then((resp) => {
-            //         console.log("responding");
-            //         console.log(resp);
-            //     })
-            //     .catch((err) => {
-            //         console.log("Throwing error");
-            //         console.log(err);
-            //     });
             axios.get("http://localhost:8080/login", { params: { email: this.email } })
                 .then((resp) => {
-                    console.log("responding");
-                    console.log(resp);
+                    this.$cookies.set("LOGIN_TOKEN",
+                        resp.data.loginToken, resp.data.expires);
+                    window.open('https://app3.gamebus.eu/nav/settings/data', '_blank').focus();
+                    this.enteredEmail = true;
                 })
                 .catch((err) => {
-                    console.log("Throwing error");
-                    console.log(err);
+                    this.$toasted.error("Something went wrong: "
+                     + err.response.status);
                 });
-            this.$toasted.show('Login Clicked');
+        },
+        async confirmLogin() {
+            axios.get("http://localhost:8080/login", { params: { loginToken: this.$cookies.get("LOGIN_TOKEN") } })
+                .then((resp) => {
+                    this.$cookies.set("JWT", resp.data.newJwt, '30d');
+                    this.$router.push("/");
+                })
+                .catch((err) => {
+                    this.$toasted.error("Something went wrong: "
+                     + err.response.status);
+                });
+
+        },
+        cancel() {
+            this.enteredEmail = false;
+            this.$cookies.remove("LOGIN_TOKEN");
         }
     }
 };
