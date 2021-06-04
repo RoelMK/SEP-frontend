@@ -73,10 +73,20 @@
 
 <script>
 export default {
+    props: {
+        chart: Object,
+        default: null
+    },
+    mounted() {
+        console.log(this.chart.overview.$children[0]);
+    },
     data() {
         return {
             buttonText: 'Show less'
         };
+    },
+    methods: {
+
     }
 };
 </script>

@@ -16,7 +16,7 @@
                 <v-col class="wide-chart" cols="9">
                     <v-card class="overview-chart-container" elevation="2">
                         <v-progress-circular indeterminate color="primary" size="50" v-if="!rendered" />
-                        <OverviewChart v-if="rendered" :data="data" />
+                        <OverviewChart ref="overview" v-if="rendered" :data="data" />
                     </v-card>
                 </v-col>
                 <v-col cols="3">
@@ -28,7 +28,8 @@
             <v-row>
                 <v-col md="9">
                     <v-card class="full-height" elevation="2">
-                        <Legend />
+                        <v-progress-circular indeterminate color="primary" size="50" v-if="!rendered" />
+                        <Legend :chart="$refs.overview" v-if="rendered" />
                     </v-card>
                 </v-col>
                 <v-col col="3">
@@ -53,7 +54,7 @@ import Cards from '@/components/Cards.vue';
 const wrapper = new AxiosWrapper();
 
 // These URL's will be removed in the future
-const URL = 'https://gist.githubusercontent.com/nbalasovs/e212107367c65915668cf26e75d2ccfa/raw/f5b7bff5d5a87b8af1b23bec3059b400f189559a/dummy.json';
+const URL = 'https://gist.githubusercontent.com/nbalasovs/e212107367c65915668cf26e75d2ccfa/raw/923f8c7f5eaf993444a4ce2f20783a0b1afba21a/dummy.json';
 
 export default {
     name: 'Dashboard',

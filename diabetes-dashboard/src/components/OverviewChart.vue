@@ -16,49 +16,7 @@ export default {
             options: {
                 tooltip: {
                     trigger: 'axis',
-                    formatter: function(params) {
-                        // Set up tooltip container and append label
-                        var tooltip = '<div style="margin: 0px 0 0;">'
-                            + '<div style="color:#666; margin-bottom: 10px;">'
-                            + params[0].axisValueLabel + '</div>';
-                        // Iterate through tooltip elements and display
-                        // only those that have value
-                        params.forEach(({ marker, seriesName, value }) => {
-                            if (value[1] !== null) {
-                                var val = value[1];
-                                // Due to custom icon style background color
-                                // is set to #fff hence need to set tooltip
-                                // color
-                                if (seriesName === 'Emotions') {
-                                    marker = marker.replace(
-                                        'background-color:#fff;',
-                                        'background-color:#91cc75;'
-                                    );
-                                    // Set custom label for valence and arousal
-                                    tooltip += '<div>';
-                                    tooltip += '<span>' + marker + 'Valence'
-                                        + '</span><span style="float:right;'
-                                        + 'font-weight:bold;">'
-                                        + value[2] + '</span></div>';
-                                    val = value[3];
-                                    seriesName = 'Arousal';
-                                } else if (seriesName === 'Exercises') {
-                                    marker = marker.replace(
-                                        'background-color:#fff;',
-                                        'background-color:#0c4271;'
-                                    );
-                                    val = value[2];
-                                }
-                                tooltip += '<div>';
-                                tooltip += '<span>' + marker + seriesName
-                                    + '</span><span style="float:right;'
-                                    + 'font-weight:bold;">'
-                                    + val + '</span></div>';
-                            }
-                        });
-                        tooltip += '</div>';
-                        return tooltip;
-                    }
+                    formatter: this.prepareTooltip
                 },
                 axisPointer: {
                     link: {
@@ -228,10 +186,30 @@ export default {
                     splitNumber: 4,
                     seriesIndex: 0,
                     pieces: [
-                        { min: 151, max: 200 },
-                        { min: 101, max: 150 },
-                        { min: 51, max: 100 },
-                        { min: 0, max: 50 },
+                        {
+
+                            max: 2.9,
+                            color: '#c1232b'
+                        },
+                        {
+                            min: 3.0,
+                            max: 3.8,
+                            color: '#d7504b'
+                        },
+                        {
+                            min: 3.9,
+                            max: 10.0,
+                            color: '#b5c334'
+                        },
+                        {
+                            min: 10.1,
+                            max: 13.9,
+                            color: '#fad860'
+                        },
+                        {
+                            min: 14.0,
+                            color: '#f3a43b'
+                        },
                     ],
                 },
                 series: [
@@ -308,12 +286,13 @@ export default {
                         yAxisIndex: 2,
                         name: 'Insulin',
                         itemStyle: {
-                            color: '#ce97b0',
+                            color: '#fe8463',
                         },
                         areaStyle: {
                             show: true,
                         },
-                        type: 'line',
+                        symbol: 'none',
+                        type: 'bar',
                         data: this.prepareData(this.data, 'ts', 'insulin'),
                     },
                     {
@@ -370,6 +349,49 @@ export default {
          */
         normalizeData(val, max, min) {
             return (val - min) / (max - min);
+        },
+        prepareTooltip(params) {
+            // Set up tooltip container and append label
+            var tooltip = '<div style="margin: 0px 0 0;">'
+                + '<div style="color:#666; margin-bottom: 10px;">'
+                + params[0].axisValueLabel + '</div>';
+            // Iterate through tooltip elements and display
+            // only those that have value
+            params.forEach(({ marker, seriesName, value }) => {
+                if (value[1] !== null) {
+                    var val = value[1];
+                    // Due to custom icon style background color
+                    // is set to #fff hence need to set tooltip
+                    // color
+                    if (seriesName === 'Emotions') {
+                        marker = marker.replace(
+                            'background-color:#fff;',
+                            'background-color:#91cc75;'
+                        );
+                        // Set custom label for valence and arousal
+                        tooltip += '<div>';
+                        tooltip += '<span>' + marker + 'Valence'
+                            + '</span><span style="float:right;'
+                            + 'font-weight:bold;">'
+                            + value[2] + '</span></div>';
+                        val = value[3];
+                        seriesName = 'Arousal';
+                    } else if (seriesName === 'Exercises') {
+                        marker = marker.replace(
+                            'background-color:#fff;',
+                            'background-color:#0c4271;'
+                        );
+                        val = value[2];
+                    }
+                    tooltip += '<div>';
+                    tooltip += '<span>' + marker + seriesName
+                        + '</span><span style="float:right;'
+                        + 'font-weight:bold;">'
+                        + val + '</span></div>';
+                }
+            });
+            tooltip += '</div>';
+            return tooltip;
         }
     }
 };

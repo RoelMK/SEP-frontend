@@ -47,7 +47,7 @@ export default {
                         stack: 'init',
                         barWidth: 50,
                         itemStyle: {
-                            color: 'rgba(218, 42, 61, 1)'
+                            color: '#c1232b'
                         },
                         data: [10]
                     },
@@ -57,7 +57,7 @@ export default {
                         stack: 'init',
                         barWidth: 5,
                         itemStyle: {
-                            color: 'rgba(218, 42, 61, 0.2)'
+                            color: '#d7504b'
                         },
                         data: [10]
                     },
@@ -67,7 +67,7 @@ export default {
                         stack: 'init',
                         barWidth: 5,
                         itemStyle: {
-                            color: 'rgba(110, 158, 94, 1)'
+                            color: '#b5c334'
                         },
                         data: [60]
                     },
@@ -77,7 +77,7 @@ export default {
                         stack: 'init',
                         barWidth: 5,
                         itemStyle: {
-                            color: 'rgba(250, 216, 71, 1)'
+                            color: '#fad860'
                         },
                         data: [10]
                     },
@@ -87,7 +87,7 @@ export default {
                         stack: 'init',
                         barWidth: 5,
                         itemStyle: {
-                            color: 'rgba(247, 179, 69, 1)'
+                            color: '#f3a43b'
                         },
                         data: [10]
                     }
