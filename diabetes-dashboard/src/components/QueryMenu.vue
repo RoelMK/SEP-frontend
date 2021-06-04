@@ -11,7 +11,7 @@
             <p class="title">Query Menu</p>
 
             <v-container class="section">
-                <p class="removeMargin">Specify Time Frame:</p>
+                <p>Specify Time Frame:</p>
                 <v-menu
                     ref="dateMenu"
                     v-model="dateMenu"
@@ -101,26 +101,26 @@
                 <v-row class="glucoseOptions">
                     <v-col>
                         <v-checkbox
-                            class="removeMargin"
                             v-model="glucoseFilter.hypoGlucoseCheckbox"
                             :label="`Hypos`"
                             hide-details
+                            class="mt-0 pt-0"
                         ></v-checkbox>
                     </v-col>
                     <v-col>
                         <v-checkbox
-                            class="removeMargin"
                             v-model="glucoseFilter.normalGlucoseCheckbox"
                             :label="`Normal`"
                             hide-details
+                            class="mt-0 pt-0"
                         ></v-checkbox>
                     </v-col>
                     <v-col>
                         <v-checkbox
-                            class="removeMargin"
                             v-model="glucoseFilter.hyperGlucoseCheckbox"
                             :label="`Hypers`"
                             hide-details
+                            class="mt-0 pt-0"
                         ></v-checkbox>
                     </v-col>
                 </v-row>
@@ -134,7 +134,7 @@
                     label="Select activities"
                     multiple
                     chips
-                    class="removeMargin"
+                    class="mt-0 pt-0"
                 ></v-select>
             </v-container>
 
@@ -223,16 +223,16 @@
             <v-container class="section">
                 <p>Specify Food:</p>
                 <v-text-field
-                    class="removeMargin"
                     v-model="foodFilter.foodName"
                     label="Enter Food Name"
                     required
+                    class="mt-0 pt-0"
                 ></v-text-field>
                 <v-checkbox
-                    class="removeMargin"
                     v-model="foodFilter.breakfast"
                     :label="`Breakfast`"
                     hide-details
+                    class="mt-0 pt-0"
                 ></v-checkbox>
                 <v-checkbox
                     v-model="foodFilter.lunch"
@@ -402,10 +402,6 @@ export default {
     margin-top: 2rem;
     display: block;
 }
-.removeMargin {
-    margin-top: 0;
-    padding-top: 0;
-}
 .glucoseOptions {
     margin-bottom: 0.3rem;
 }
@@ -422,7 +418,7 @@ export default {
     display: none;
 }
 .timePickerContainer {
-    background: white;
+    background-color: white;
 }
 .timePickerContainer button {
     margin-top: 0.8rem;

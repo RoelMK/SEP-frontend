@@ -22,7 +22,7 @@
                     <v-icon>mdi-dots-vertical</v-icon>
                 </v-btn>
 
-                <v-app-bar-nav-icon @click.stop="showQueryMenu = !showQueryMenu">
+                <v-app-bar-nav-icon @click="showQueryMenu = !showQueryMenu">
                 </v-app-bar-nav-icon>
             </v-toolbar>
         </v-card>
