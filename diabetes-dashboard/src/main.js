@@ -8,6 +8,7 @@ import Toasted from 'vue-toasted';
 import ECharts from 'vue-echarts';
 import { use } from 'echarts/core';
 import VueCompositionAPI from '@vue/composition-api';
+import VueCookies from 'vue-cookies';
 
 import '@mdi/font/css/materialdesignicons.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -38,6 +39,7 @@ use([
     BarChart,
 ]);
 
+Vue.use(VueCookies);
 Vue.use(VueCompositionAPI);
 Vue.use(VCalendar, { componentPrefix: 'vc' });
 Vue.use(Toasted, {theme: 'bubble', position: 'top-center', duration: '2000'});

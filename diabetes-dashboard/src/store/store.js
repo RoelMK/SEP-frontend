@@ -13,62 +13,16 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
     state: {
         activities: [
-            // {
-            //     activityType: "Run",
-            //     userId: 1,
-            //     date: moment("20210429T000000+0200").format('L'),
-            //     startTime: "16:00",
-            //     endTime: "17:00",
-            //     burntCalories: 159,
-            // },
         ],
         emotions: [
-            // {
-            //     emotionType: "Happy", // or encoded as number, e.g. 1
-            //     userId: 1,
-            //     date: moment("20210429T000000+0200").format('L'),
-            //     time: "16:00",
-            // },
         ],
         foodItems: [
-            // {
-            //     foodItemName: "Pasta",
-            //     userId: 1,
-            //     date: moment("20210429T000000+0200").format('L'),
-            //     time: "16:00",
-            //     calories: 600,
-            //     carbs: 60,
-            // },
         ],
         glucoseData: [
-            // {
-            //     value: 6.0
-            //     userId: 1,
-            //     date: moment("20210429T000000+0200").format('L'),
-            //     startTime: "16:00",
-            //     endTime: "16:05",
-            //     // or just time
-            //     time: "16:00",
-            // },
         ],
         insulinData: [
-            // {
-            //     value: 6.0
-            //     type: 'fasting'
-            //     userId: 1,
-            //     date: moment("20210429T000000+0200").format('L'),
-            //     time: "16:00",
-            // },
         ],
         users: [
-            // {
-            //     userId: 1,
-            //     name: 'Peter',
-            //     age: 20,
-            //     weight: 75,
-            //     height: 180,
-            //     email: fake@gmail.com,
-            // },
         ],
         healthSettings: {
             unit: "mmol/L",
@@ -237,7 +191,6 @@ const store = new Vuex.Store({
                 updatedUser
             );
         },
-
         SET_HEALTH_SETTINGS: (state, newHealthSettings) => {
             state.healthSettings = newHealthSettings;
         },

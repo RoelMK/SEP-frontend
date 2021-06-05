@@ -17,6 +17,7 @@
     "moment": "^2.29.1",
     "v-calendar": "^2.3.0",
     "vue": "^2.6.11",
+    "vue-cookies": "^1.7.4",
     "vue-echarts": "*",
     "vue-feedback-reaction": "^1.2.0",
     "vue-i18n": "^8.24.4",
