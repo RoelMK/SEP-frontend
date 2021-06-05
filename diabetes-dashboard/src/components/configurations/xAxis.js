@@ -8,6 +8,9 @@ export default [
         splitArea: {
             show: true
         },
+        axisTick: {
+            show: false
+        }
     },
     {
         show: true,

@@ -8,26 +8,26 @@ export default [
             {
 
                 max: 2.9,
-                color: '#dd6b66'
+                color: '#A63A50'
             },
             {
                 min: 3.0,
                 max: 3.8,
-                color: 'rgba(204,88,57,0.6)'
+                color: '#C3423F'
             },
             {
                 min: 3.9,
                 max: 10.0,
-                color: '#73a373'
+                color: '#6CAE75'
             },
             {
                 min: 10.1,
                 max: 13.9,
-                color: '#eedd78'
+                color: '#FFD046'
             },
             {
                 min: 14.0,
-                color: '#f49f42'
+                color: '#F3A712'
             },
         ],
     },
@@ -39,16 +39,16 @@ export default [
         pieces: [
             {
                 max: 55,
-                color: '#516b91'
+                color: '#C297B8'
             },
             {
                 min: 56,
                 max: 69,
-                color: '#59c4e6'
+                color: '#DA7422'
             },
             {
                 min: 70,
-                color: '#93b7e3'
+                color: '#779FA1'
             }
         ]
     }

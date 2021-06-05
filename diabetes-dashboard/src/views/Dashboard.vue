@@ -27,7 +27,7 @@
             </v-row>
             <v-row>
                 <v-col md="9">
-                    <v-card class="full-height" elevation="2">
+                    <v-card class="full-height legend-container" elevation="2">
                         <v-progress-circular indeterminate color="primary" size="50" v-if="!rendered" />
                         <Legend :chart="$refs.overview" v-if="rendered" />
                     </v-card>
@@ -106,7 +106,8 @@ export default {
 .overview-chart-container {
     height: 700px;
 }
-.overview-chart-container .v-progress-circular {
+.overview-chart-container .v-progress-circular,
+.legend-container .v-progress-circular {
     left: 50%;
     top: 45%;
 }
