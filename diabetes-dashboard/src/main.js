@@ -13,7 +13,7 @@ import VueCookies from 'vue-cookies';
 import '@mdi/font/css/materialdesignicons.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import { CanvasRenderer } from 'echarts/renderers';
-import { LineChart, ScatterChart, BarChart } from 'echarts/charts';
+import { LineChart, ScatterChart, BarChart, CustomChart } from 'echarts/charts';
 import {
     GridComponent,
     TooltipComponent,
@@ -37,6 +37,7 @@ use([
     ScatterChart,
     LineChart,
     BarChart,
+    CustomChart
 ]);
 
 Vue.use(VueCookies);

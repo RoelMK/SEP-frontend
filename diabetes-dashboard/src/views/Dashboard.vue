@@ -16,7 +16,7 @@
                 <v-col class="wide-chart" cols="9">
                     <v-card class="overview-chart-container" elevation="2">
                         <v-progress-circular indeterminate color="primary" size="50" v-if="!rendered" />
-                        <OverviewChart v-if="rendered" :data="data" />
+                        <OverviewChart ref="overview" v-if="rendered" :data="data" />
                     </v-card>
                 </v-col>
                 <v-col cols="3">
@@ -26,26 +26,10 @@
                 </v-col>
             </v-row>
             <v-row>
-                <v-col md="8">
-                    <v-card elevation="2">
-                        <v-card elevation="0">
-                            <v-tabs v-model="tab">
-                                <v-tab v-for="item in items" :key="item">
-                                    {{ $t(item) }}
-                                </v-tab>
-                            </v-tabs>
-                            <v-tabs-items v-model="tab">
-                                <v-tab-item>
-                                    <TableInsulinData />
-                                </v-tab-item>
-                                <v-tab-item>
-                                    <TableFoodData />
-                                </v-tab-item>
-                                <v-tab-item>
-                                    <TableActivitiesData />
-                                </v-tab-item>
-                            </v-tabs-items>
-                        </v-card>
+                <v-col md="9">
+                    <v-card class="full-height legend-container" elevation="2">
+                        <v-progress-circular indeterminate color="primary" size="50" v-if="!rendered" />
+                        <Legend :chart="$refs.overview" v-if="rendered" />
                     </v-card>
                 </v-col>
                 <v-col col="3">
@@ -60,11 +44,9 @@
 
 <script>
 import OverviewChart from '@/components/OverviewChart.vue';
-import Statistics from "@/components/Statistics.vue";
-import EmotionsComponent from "@/components/EmotionsComponent.vue";
-import TableFoodData from "@/components/TableFoodData.vue";
-import TableActivitiesData from "@/components/TableActivitiesData.vue";
-import TableInsulinData from "@/components/TableInsulinData.vue";
+import Statistics from '@/components/Statistics.vue';
+import EmotionsComponent from '@/components/EmotionsComponent.vue';
+import Legend from '@/components/Legend.vue';
 import Navbar from '@/components/Navbar.vue';
 import { AxiosWrapper } from '@/helpers/wrapper.js';
 import Cards from '@/components/Cards.vue';
@@ -72,18 +54,16 @@ import Cards from '@/components/Cards.vue';
 const wrapper = new AxiosWrapper();
 
 // These URL's will be removed in the future
-const URL = 'https://gist.githubusercontent.com/nbalasovs/e212107367c65915668cf26e75d2ccfa/raw/f5b7bff5d5a87b8af1b23bec3059b400f189559a/dummy.json';
+const URL = 'https://gist.githubusercontent.com/nbalasovs/e212107367c65915668cf26e75d2ccfa/raw/14fde6559649d3fc5c6e2bd7d002e0000e50a54f/dummy.json';
 
 export default {
     name: 'Dashboard',
     components: {
         Statistics,
         EmotionsComponent,
-        TableFoodData,
-        TableActivitiesData,
-        TableInsulinData,
         OverviewChart,
         Navbar,
+        Legend,
         Cards
     },
     data() {
@@ -126,7 +106,8 @@ export default {
 .overview-chart-container {
     height: 700px;
 }
-.overview-chart-container .v-progress-circular {
+.overview-chart-container .v-progress-circular,
+.legend-container .v-progress-circular {
     left: 50%;
     top: 45%;
 }
