@@ -3,67 +3,18 @@
         <v-row>
             <v-col class="legend-header d-flex align-center">
                 <h3>Legend</h3>
-                <v-btn :v-ripple="false" small plain text>{{ buttonText }}</v-btn>
             </v-col>
         </v-row>
         <v-row class="legend-content">
-            <v-col>
+            <v-col v-for="(item, index) in legend.sections" :key="index">
                 <ul>
-                    <li>
-                        <div class="legend-marker red-1"></div>
-                        <p>Very High</p>
-                    </li>
-                    <li>
-                        <div class="legend-marker redish-1"></div>
-                        <p>High</p>
-                    </li>
-                    <li>
-                        <div class="legend-marker orange-1"></div>
-                        <p>Normal</p>
-                    </li>
-                    <li>
-                        <div class="legend-marker yellow-1"></div>
-                        <p>Low</p>
-                    </li>
-                </ul>
-            </v-col>
-            <v-col>
-                <ul>
-                    <li>
-                        <div class="legend-marker green-1"></div>
-                        <p>Emotions</p>
-                    </li>
-                    <li>
-                        <div class="legend-marker blue-1"></div>
-                        <p>Exercises</p>
-                    </li>
-                </ul>
-            </v-col>
-            <v-col>
-                <ul>
-                    <li>
-                        <div class="legend-marker pink-1"></div>
-                        <p>Insulin</p>
-                    </li>
-                </ul>
-            </v-col>
-            <v-col>
-                <ul>
-                    <li>
-                        <div class="legend-marker brown-1"></div>
-                        <p>Breakfast</p>
-                    </li>
-                    <li>
-                        <div class="legend-marker deep-purple-1"></div>
-                        <p>Lunch</p>
-                    </li>
-                    <li>
-                        <div class="legend-marker ocean-blue-1"></div>
-                        <p>Snack</p>
-                    </li>
-                    <li>
-                        <div class="legend-marker purple-1"></div>
-                        <p>Dinner</p>
+                    <li v-for="(prop, index) in item.properties" :key="index">
+                        <div
+                            v-on:click="toggleLegendItem(prop.type, prop.key)"
+                            :class="`legend-marker ${prop.class}`"
+                            :style="`background-color: ${prop.color}`"
+                        ></div>
+                        <p>{{ prop.label }}</p>
                     </li>
                 </ul>
             </v-col>
@@ -72,21 +23,28 @@
 </template>
 
 <script>
+import legend from '@/components/configurations/legend.js';
+import { getInstanceByDom } from 'echarts/core';
+
 export default {
-    props: {
-        chart: Object,
-        default: null
-    },
-    mounted() {
-        console.log(this.chart.overview.$children[0]);
-    },
     data() {
         return {
-            buttonText: 'Show less'
+            legend: legend,
+            chartInstance: getInstanceByDom(document
+                .getElementById('overview-chart-container')
+                .firstElementChild
+            ),
         };
     },
     methods: {
-
+        toggleLegendItem(type, key) {
+            if (type !== null) {
+                this.chartInstance.dispatchAction({
+                    type: type,
+                    name: key
+                });
+            }
+        }
     }
 };
 </script>
@@ -110,38 +68,13 @@ export default {
 .legend-marker {
     height: 18px;
     width: 18px;
+    border: 1px solid inherit;
 }
-.red-1 {
-    background-color: rgba(191,68,76,1);
+.__circle {
+    border-radius: 50%;
+    border: 1px solid inherit;
 }
-.redish-1 {
-    background-color: rgba(208,109,102,1);
-}
-.orange-1 {
-    background-color: #ECC1AA;
-}
-.yellow-1 {
-    background-color: #F4EEBE;
-}
-.green-1 {
-    background-color: #91cc75;
-}
-.blue-1 {
-    background-color: #0c4271;
-}
-.pink-1 {
-    background-color: #ce97b0;
-}
-.brown-1 {
-    background-color: #de8971;
-}
-.deep-purple-1 {
-    background-color: #7b6079;
-}
-.ocean-blue-1 {
-    background-color: #a7d0cd;
-}
-.purple-1 {
-    background-color: #867ae9;
+.__pointer {
+    cursor: pointer;
 }
 </style>
