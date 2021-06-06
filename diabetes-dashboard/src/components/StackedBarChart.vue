@@ -1,8 +1,10 @@
 <template>
-    <v-chart id="stacked-bar-chart" :option="options" />
+    <v-chart :option="options" />
 </template>
 
 <script>
+import legend from '@/components/configurations/legend.js';
+
 export default {
     name: "stackedBarChart",
     props: {
@@ -47,7 +49,7 @@ export default {
                         stack: 'init',
                         barWidth: 50,
                         itemStyle: {
-                            color: '#A63A50'
+                            color: legend.sections[0].properties[0].color
                         },
                         data: [10]
                     },
@@ -55,9 +57,9 @@ export default {
                         name: 'Low',
                         type: 'bar',
                         stack: 'init',
-                        barWidth: 5,
+                        barWidth: 50,
                         itemStyle: {
-                            color: '#C3423F'
+                            color: legend.sections[0].properties[1].color
                         },
                         data: [10]
                     },
@@ -65,9 +67,9 @@ export default {
                         name: 'Normal',
                         type: 'bar',
                         stack: 'init',
-                        barWidth: 5,
+                        barWidth: 50,
                         itemStyle: {
-                            color: '#6CAE75'
+                            color: legend.sections[0].properties[2].color
                         },
                         data: [60]
                     },
@@ -75,9 +77,9 @@ export default {
                         name: 'High',
                         type: 'bar',
                         stack: 'init',
-                        barWidth: 5,
+                        barWidth: 50,
                         itemStyle: {
-                            color: '#FFD046'
+                            color: legend.sections[0].properties[3].color
                         },
                         data: [10]
                     },
@@ -85,9 +87,9 @@ export default {
                         name: 'Very High',
                         type: 'bar',
                         stack: 'init',
-                        barWidth: 5,
+                        barWidth: 50,
                         itemStyle: {
-                            color: '#F3A712'
+                            color: legend.sections[0].properties[4].color
                         },
                         data: [10]
                     }

@@ -14,7 +14,7 @@
             <Cards />
             <v-row>
                 <v-col class="wide-chart" cols="9">
-                    <v-card class="overview-chart-container" elevation="2">
+                    <v-card id="overview-chart-container" elevation="2">
                         <v-progress-circular indeterminate color="primary" size="50" v-if="!rendered" />
                         <OverviewChart ref="overview" v-if="rendered" :data="data" />
                     </v-card>
@@ -29,11 +29,11 @@
                 <v-col md="9">
                     <v-card class="full-height legend-container" elevation="2">
                         <v-progress-circular indeterminate color="primary" size="50" v-if="!rendered" />
-                        <Legend :chart="$refs.overview" v-if="rendered" />
+                        <Legend v-if="rendered" />
                     </v-card>
                 </v-col>
                 <v-col col="3">
-                    <v-card elevation="2">
+                    <v-card class="full-height" elevation="2">
                         <EmotionsComponent />
                     </v-card>
                 </v-col>
@@ -103,10 +103,10 @@ export default {
 .rightAligned {
     text-align: right;
 }
-.overview-chart-container {
+#overview-chart-container {
     height: 700px;
 }
-.overview-chart-container .v-progress-circular,
+#overview-chart-container .v-progress-circular,
 .legend-container .v-progress-circular {
     left: 50%;
     top: 45%;

@@ -1,3 +1,5 @@
+import legend from '@/components/configurations/legend.js';
+
 export default [
     {
         type: 'piecewise',
@@ -8,26 +10,26 @@ export default [
             {
 
                 max: 2.9,
-                color: '#A63A50'
+                color: legend.sections[0].properties[0].color
             },
             {
                 min: 3.0,
                 max: 3.8,
-                color: '#C3423F'
+                color: legend.sections[0].properties[1].color
             },
             {
                 min: 3.9,
                 max: 10.0,
-                color: '#6CAE75'
+                color: legend.sections[0].properties[2].color
             },
             {
                 min: 10.1,
                 max: 13.9,
-                color: '#FFD046'
+                color: legend.sections[0].properties[3].color
             },
             {
                 min: 14.0,
-                color: '#F3A712'
+                color: legend.sections[0].properties[4].color
             },
         ],
     },
@@ -39,16 +41,16 @@ export default [
         pieces: [
             {
                 max: 55,
-                color: '#C297B8'
+                color: legend.sections[3].properties[0].color
             },
             {
                 min: 56,
                 max: 69,
-                color: '#DA7422'
+                color: legend.sections[3].properties[1].color
             },
             {
                 min: 70,
-                color: '#779FA1'
+                color: legend.sections[3].properties[2].color
             }
         ]
     }
