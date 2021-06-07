@@ -11,8 +11,8 @@
                 <v-spacer></v-spacer>
 
                 <div class="personalInfo">
-                    <v-text-area id="name">Cody Simpson</v-text-area>
-                    <v-text-area id="role">Supervisor</v-text-area>
+                    <p id="name">Cody Simpson</p>
+                    <p id="role">Supervisor</p>
                 </div>
 
                 <v-badge bottom overlap offset-x="11" offset-y="15" color="transparent">
@@ -26,7 +26,7 @@
                     </span>
                 </v-badge>
 
-                <v-menu offset-y>
+                <v-menu offset-y left>
                     <template v-slot:activator="{ on, attrs }">
                         <v-btn class="no-background__hover"
                                v-bind="attrs"
@@ -36,17 +36,17 @@
                             <v-icon size="20">mdi-chevron-down</v-icon>
                         </v-btn>
                     </template>
-                    <v-list>
+                    <v-list class="dropdown-list">
                         <v-list-item>
-                            <v-text-area class="pointer" v-on:click="profileClicked">
+                            <v-list-item-title class="pointer" v-on:click="profileClicked">
                                 Profile
-                            </v-text-area>
+                            </v-list-item-title>
                         </v-list-item>
                         <v-divider class="mx-2"/>
                         <v-list-item>
-                            <v-text-area class="pointer" v-on:click="logoutClicked">
+                            <v-list-item-title class="pointer" v-on:click="logoutClicked">
                                 Logout
-                            </v-text-area>
+                            </v-list-item-title>
                         </v-list-item>
                     </v-list>
                 </v-menu>
@@ -104,11 +104,19 @@ export default {
 </script>
 
 <style scoped>
+.dropdown-list div {
+    margin: 0 1.5rem;
+}
+
 .personalInfo {
     display: flex;
     flex-direction: column;
     text-align: right;
     padding-right: 10px;
+}
+
+.personalInfo p {
+    margin-bottom: 0;
 }
 
 .personalInfo #name {
