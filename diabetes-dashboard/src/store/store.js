@@ -18,67 +18,67 @@ const store = new Vuex.Store({
             {
                 happiness: 1,
                 excitement: 1,
-                date: '2021',
+                date: '07/30/2021',
                 time: '16:00'
             },
             {
                 happiness: 2,
                 excitement: 2,
-                date: '2011',
+                date: '07/07/2011',
                 time: '18:00'
             },
             {
                 happiness: 0,
                 excitement: 0,
-                date: '2017',
+                date: '07/07/2017',
                 time: '16:00'
             },
             {
                 happiness: 0,
                 excitement: 1,
-                date: '2019',
+                date: '07/07/2018',
                 time: '18:00'
             },
             {
                 happiness: 0,
                 excitement: 2,
-                date: '2020',
+                date: '08/22/2020',
                 time: '18:00'
             },
             {
                 happiness: 1,
                 excitement: 0,
-                date: '2021',
+                date: '06/12/2019',
                 time: '16:00'
             },
             {
                 happiness: 1,
                 excitement: 1,
-                date: '2014',
+                date: '07/07/2014',
                 time: '18:00'
             },
             {
                 happiness: 1,
                 excitement: 2,
-                date: '2018',
+                date: '07/07/2015',
                 time: '18:00'
             },
             {
                 happiness: 2,
                 excitement: 0,
-                date: '2019',
+                date: '07/07/2019',
                 time: '16:00'
             },
             {
                 happiness: 2,
                 excitement: 1,
-                date: '2020',
+                date: '06/07/2020',
                 time: '18:00'
             },
             {
                 happiness: 2,
                 excitement: 2,
-                date: '2020',
+                date: '06/06/2020',
                 time: '18:00'
             },
         ],

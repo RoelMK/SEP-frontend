@@ -9,23 +9,15 @@
             elevation="0"
             @click:row="selectActivity"
         >
-            <template v-slot:top>
-                <v-container>
-                    <v-row>
-                        <v-col xs="10" sm="10" md="10" lg="10">
-                            <v-text-field
-                                v-model="search"
-                                label="Search"
-                            ></v-text-field>
-                        </v-col>
-                        <v-col><v-icon medium>mdi-plus</v-icon></v-col>
-                    </v-row>
-                </v-container>
-            </template>
-
             <template v-slot:[`body.prepend`]>
                 <tr>
-                    <td></td>
+                    <td>
+                        <v-text-field
+                            v-model="activityName"
+                            type="string"
+                            label="Activity Name"
+                        ></v-text-field>
+                    </td>
                     <td>
                         <v-text-field
                             v-model="date"
@@ -73,6 +65,11 @@ export default {
                 {
                     text: "Activities",
                     value: "activity",
+                    filter: (f) => {
+                        return (f + "")
+                            .toLowerCase()
+                            .includes(this["activityName"].toLowerCase());
+                    },
                 },
                 {
                     text: "Date",
@@ -170,8 +167,7 @@ export default {
             ],
         };
     },
-    computed: {
-    },
+    computed: {},
     methods: {
         selectActivity(activity) {
             this.$emit("selectedActivity", activity);

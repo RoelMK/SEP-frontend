@@ -8,27 +8,68 @@
             :search="search"
             :hide-default-footer="true"
         >
-            <template v-slot:top>
-                <v-container>
-                    <v-row>
-                        <v-col xs="10" sm="10" md="10" lg="10">
-                            <v-text-field
-                                v-model="search"
-                                label="Search"
-                            ></v-text-field>
-                        </v-col>
-                        <v-col>
-                            <v-dialog v-model="dialog" max-width="500px">
-                                <template v-slot:activator="{ on, attrs }">
-                                    <v-icon v-bind="attrs" v-on="on">
-                                        mdi-plus
-                                    </v-icon>
-                                </template>
-                            </v-dialog>
-                        </v-col>
-                    </v-row>
-                </v-container>
+            <template v-slot:[`body.prepend`]>
+                <tr>
+                    <td> </td>
+                    <td> </td>
+                    <td>
+                        <v-text-field
+                            v-model="date"
+                            type="string"
+                            label="Before"
+                        ></v-text-field>
+                    </td>
+                    <td>
+                        <v-text-field
+                            v-model="time"
+                            type="string"
+                            label="Before"
+                        ></v-text-field>
+                    </td>
+                    <td>
+                        <v-icon @click="dialog = true">
+                            mdi-plus
+                        </v-icon>
+                    </td>
+                </tr>
+            </template>
 
+            <template v-slot:item="{ item }">
+                <tr>
+                    <td width="10%">
+                        <v-icon
+                            size="25"
+                            color="blue darken-1"
+                        >
+                            {{ displayHappiness(item.happiness) }}
+                        </v-icon>
+                    </td>
+                    <td width="10%">
+                        <v-icon
+                            size="25"
+                            color="blue darken-1"
+                        >
+                            {{ displayExcitement(item.excitement) }}
+                        </v-icon>
+                    </td>
+                    <td width="20%">
+                        {{ item.date }}
+                    </td>
+                    <td width="20%">
+                        {{ item.time }}
+                    </td>
+                    <td width="10%">
+                        <v-icon small @click="editItem(item)">
+                            mdi-pencil
+                        </v-icon>
+                        <v-icon small @click="deleteItem(item.id)">
+                            mdi-minus
+                        </v-icon>
+                    </td>
+                </tr>
+            </template>
+
+            <template v-slot:top>
                 <v-dialog v-model="dialog" max-width="500px">
                     <v-card>
                         <v-card-title>
@@ -170,53 +211,6 @@
                 </v-dialog>
             </template>
 
-            <template v-slot:[`body.prepend`]>
-                <tr>
-                    <td></td>
-                    <td>
-                        <v-text-field
-                            v-model="date"
-                            type="string"
-                            label="Before"
-                        ></v-text-field>
-                    </td>
-                    <td>
-                        <v-text-field
-                            v-model="time"
-                            type="string"
-                            label="Before"
-                        ></v-text-field>
-                    </td>
-                    <td></td>
-                </tr>
-            </template>
-
-            <template v-slot:item="{ item }">
-                <tr>
-                    <td>
-                        <v-icon
-                            size="25"
-                            v-bind:color="displayExcitement(item.excitement)"
-                        >
-                            {{ displayHappiness(item.happiness) }}
-                        </v-icon>
-                    </td>
-                    <td>
-                        {{ item.date }}
-                    </td>
-                    <td>
-                        {{ item.time }}
-                    </td>
-                    <td>
-                        <v-icon small @click="editItem(item)">
-                            mdi-pencil
-                        </v-icon>
-                        <v-icon small @click="deleteItem(item.id)">
-                            mdi-minus
-                        </v-icon>
-                    </td>
-                </tr>
-            </template>
         </v-data-table>
     </div>
 </template>
@@ -233,25 +227,23 @@ export default {
         return {
             // must be modified when we use real data
             headers: [
-                // {
-                //     text: "Happiness",
-                //     value: "happiness",
-                // },
-                // {
-                //     text: "Excitement",
-                //     value: "excitement",
-                // },
                 {
-                    text: "Emotion",
-                    value: "emotion",
-                    sortable: false,
+                    text: "Happiness",
+                    value: "happiness",
+                },
+                {
+                    text: "Excitement",
+                    value: "excitement",
                 },
                 {
                     text: "Date",
                     value: "date",
                     filter: (value) => {
                         if (!this.date) return true;
-                        return moment(value) < moment(this.date);
+                        return (
+                            moment(value).format("L") <
+                            moment(this.date).format("L")
+                        );
                     },
                 },
                 {
@@ -313,11 +305,11 @@ export default {
         },
         displayExcitement(excitement) {
             if (excitement === 0) {
-                return "red";
+                return "fas fa-tired";
             } else if (excitement === 1) {
-                return "blue darken-2";
+                return "fas fa-smile-beam";
             } else {
-                return "green";
+                return "fas fa-grin-stars";
             }
         },
 
@@ -372,6 +364,7 @@ export default {
 .mdi-plus {
     border-radius: 50%;
     padding: 0.2rem;
+    margin-left: 12px;
     background: rgba(0, 0, 0, 0.15);
 }
 .mdi-minus {
