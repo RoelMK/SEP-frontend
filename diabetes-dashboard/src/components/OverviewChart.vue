@@ -1,5 +1,5 @@
 <template>
-    <v-chart id="overview-chart" :option="options" autoresize />
+    <v-chart :option="options" autoresize />
 </template>
 
 <script>
@@ -7,6 +7,7 @@ import grid from '@/components/configurations/grid.js';
 import xAxis from '@/components/configurations/xAxis.js';
 import yAxis from '@/components/configurations/yAxis.js';
 import visualMap from '@/components/configurations/visualMap.js';
+import legend from '@/components/configurations/legend.js';
 import moment from 'moment';
 
 export default {
@@ -20,6 +21,9 @@ export default {
     data() {
         return {
             options: {
+                legend: {
+                    show: false
+                },
                 tooltip: {
                     trigger: 'axis',
                     formatter: this.prepareTooltip
@@ -68,7 +72,7 @@ export default {
                         itemStyle: {
                             color: '#fff',
                             borderWidth: 1,
-                            borderColor: '#26c0c0'
+                            borderColor: legend.sections[1].properties[0].color
                         },
                         data: this.prepareData(
                             this.data,
@@ -97,7 +101,7 @@ export default {
                         yAxisIndex: 2,
                         name: 'Insulin',
                         itemStyle: {
-                            color: '#3F7CAC',
+                            color: legend.sections[2].properties[0].color,
                         },
                         barWidth: 3,
                         type: 'bar',
@@ -108,23 +112,16 @@ export default {
                         yAxisIndex: 3,
                         name: 'Carbs',
                         type: 'bar',
-                        data: this.prepareData(this.data, 'ts', 'carbs', 'gi'),
                         barWidth: 5,
                         connectNulls: true,
                         symbol: 'none',
-                        itemStyle: {
-                            color: function({ data }) {
-                                var index = data[2];
-                                if (0 <= index <= 55)
-                                    return '#a7d0cd';
-                                else if (55 < index <= 69)
-                                    return '#de8971';
-                                else if (index > 69)
-                                    return '#ce97b0';
-                                else
-                                    return '#ce97b0';
-                            }
-                        },
+                        data: this.prepareData(
+                            this.data,
+                            'ts',
+                            'carbs',
+                            'carbs',
+                            'gi'
+                        ),
                     },
                     {
                         xAxisIndex: 4,
@@ -132,7 +129,7 @@ export default {
                         name: 'Heartbeat',
                         type: 'scatter',
                         itemStyle: {
-                            color: '#f2b3c9',
+                            color: legend.sections[4].properties[0].color,
                         },
                         symbolSize: 5,
                         z: 1,
@@ -144,7 +141,7 @@ export default {
                         name: 'Exercises',
                         type: 'custom',
                         itemStyle: {
-                            color: '#4b565b',
+                            color: legend.sections[4].properties[1].color,
                             borderWidth: 2,
                         },
                         data: this.prepareData(
@@ -177,6 +174,17 @@ export default {
         };
     },
     methods: {
+        check() {
+            this.$refs.hello.dispatchAction({
+                type: 'selectDataRange',
+                visualMapIndex: 0,
+                selected: {
+                    0: false,
+                    1: false,
+                    2: false
+                }
+            });
+        },
         /**
          * Scale value to a certain range
          * @param  { int }      value Value to be scaled
@@ -273,8 +281,8 @@ export default {
                             y2: end[1],
                         },
                         style: {
-                            stroke: api.style().fill,
-                            lineWidth: api.style().lineWidth,
+                            stroke: api.visual('color'),
+                            lineWidth: 2,
                         },
                     },
                     {
@@ -284,7 +292,7 @@ export default {
                             cy: start[1],
                             r: 2,
                         },
-                        style: api.style()
+                        style: api.visual(),
                     },
                     {
                         type: "circle",
@@ -293,7 +301,7 @@ export default {
                             cy: end[1],
                             r: 2,
                         },
-                        style: api.style()
+                        style: api.visual()
                     }
                 ]
             };
@@ -301,9 +309,3 @@ export default {
     }
 };
 </script>
-
-<style scoped>
-.check {
-    background-color: aqua;
-}
-</style>
