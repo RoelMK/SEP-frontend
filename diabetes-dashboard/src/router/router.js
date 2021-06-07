@@ -20,9 +20,9 @@ const routes = [
         name: "profile"
     },
     {
-        path: '/emotions',
-        component: () => import('@/views/Emotions.vue'),
-        name: "emotions"
+        path: '/history',
+        component: () => import('@/views/History.vue'),
+        name: "history"
     },
 ];
 
