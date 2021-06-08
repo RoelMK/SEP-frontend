@@ -56,8 +56,11 @@ export default {
                     this.enteredEmail = true;
                 })
                 .catch((err) => {
-                    this.$toasted.error("Something went wrong: "
-                     + err.response.status);
+                    this.$toaster.showMessage({
+                        message:`Something went wrong: ${err.response.status}`,
+                        color: 'dark',
+                        btnColor: 'pink'
+                    });
                 });
         },
         async confirmLogin() {
@@ -67,8 +70,11 @@ export default {
                     this.$router.push("/");
                 })
                 .catch((err) => {
-                    this.$toasted.error("Something went wrong: "
-                     + err.response.status);
+                    this.$toaster.showMessage({
+                        message:`Something went wrong: ${err.response.status}`,
+                        color: 'dark',
+                        btnColor: 'pink'
+                    });
                 });
 
         },

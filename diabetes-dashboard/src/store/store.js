@@ -12,6 +12,7 @@ Vue.use(Vuex);
 // Create store
 const store = new Vuex.Store({
     state: {
+        toast: { message: '', color: '', btnColor: '' },
         activities: [
         ],
         emotions: [
@@ -52,6 +53,9 @@ const store = new Vuex.Store({
     },
 
     actions: {
+        showMessage({ commit }, toast) {
+            commit('SHOW_MESSAGE', toast);
+        },
         async fetchInsulinData({ commit }) {
             const response = await wrapper.get(
                 'https://jsonplaceholder.typicode.com/albums',
@@ -90,6 +94,11 @@ const store = new Vuex.Store({
     },
 
     mutations: {
+        SHOW_MESSAGE(state, toast) {
+            state.toast.message = toast.message;
+            state.toast.color = toast.color;
+            state.toast.btnColor = toast.btnColor;
+        },
         SET_ACTIVITIES: (state, newActivities) => {
             return state.activities = newActivities;
         },
