@@ -32,6 +32,7 @@ export default {
                     selectedMode: false,
                     top: '25%',
                     left: '35%',
+                    data: ['Very High', 'High', 'Normal', 'Low', 'Very Low']
                 },
                 xAxis: {
                     type: 'category',
