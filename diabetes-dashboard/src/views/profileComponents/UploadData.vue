@@ -1,33 +1,41 @@
 <template>
-    <div>
-        <h4 class="">Upload</h4>
-        <v-row class="mt-2">
-            <v-col cols="9">
+    <v-card>
+        <v-row class="mx-2">
+            <v-col cols="12" class="gTitle">Upload</v-col>
+        </v-row>
+        <v-row class="mx-2">
+            <v-col cols="8">
                 <v-file-input
+                    outlined
+                    hide-details
                     truncate-length="15"
                     label="Upload excel/csv file"
                     small-chips
-                    outlined
                     accept=".csv, .xlsx, .xml"
                     v-model="file"
                 ></v-file-input>
             </v-col>
-            <v-col cols="3">
+            <v-col cols="4">
                 <v-select
+                    outlined
+                    hide-details
                     :items="items"
                     label="Select type"
-                    outlined
                 ></v-select>
             </v-col>
         </v-row>
-        <v-btn
-            color="primary"
-            @click="fileUpload"
-        >
-            Upload
-        </v-btn>
-
-    </div>
+        <v-row class="centered">
+            <v-col cols="12">
+                <v-btn
+                    class="white--text"
+                    color="#1B98E0"
+                    @click="fileUpload"
+                >
+                    Upload
+                </v-btn>
+            </v-col>
+        </v-row>
+    </v-card>
 </template>
 
 <script>
@@ -58,4 +66,12 @@ export default {
 </script>
 
 <style>
+.gTitle {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.centered {
+    text-align: center;
+}
 </style>
