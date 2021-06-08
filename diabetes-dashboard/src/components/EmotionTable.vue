@@ -3,10 +3,8 @@
         <v-data-table
             :headers="headers"
             :items="getEmotions"
-            item-key="name"
             elevation="0"
             :search="search"
-            :hide-default-footer="true"
         >
             <template v-slot:[`body.prepend`]>
                 <tr>
@@ -16,14 +14,14 @@
                         <v-text-field
                             v-model="date"
                             type="string"
-                            label="Before"
+                            label="<="
                         ></v-text-field>
                     </td>
                     <td>
                         <v-text-field
                             v-model="time"
                             type="string"
-                            label="Before"
+                            label="<="
                         ></v-text-field>
                     </td>
                     <td>
@@ -230,18 +228,21 @@ export default {
                 {
                     text: "Happiness",
                     value: "happiness",
+                    sortable: false,
                 },
                 {
                     text: "Excitement",
                     value: "excitement",
+                    sortable: false,
                 },
                 {
                     text: "Date",
                     value: "date",
+                    sortable: false,
                     filter: (value) => {
                         if (!this.date) return true;
                         return (
-                            moment(value).format("L") <
+                            moment(value).format("L") <=
                             moment(this.date).format("L")
                         );
                     },
@@ -249,10 +250,11 @@ export default {
                 {
                     text: "Time",
                     value: "time",
+                    sortable: false,
                     filter: (value) => {
                         if (!this.time) return true;
                         return (
-                            moment(value, "HH:mm").format("HH:mm") <
+                            moment(value, "HH:mm").format("HH:mm") <=
                             moment(this.time, "HH:mm").format("HH:mm")
                         );
                     },

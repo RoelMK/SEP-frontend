@@ -3,9 +3,7 @@
         <v-data-table
             :headers="headers"
             :items="getInsulinData"
-            item-key="name"
             :search="search"
-            :hide-default-footer="true"
             elevation="0"
             @click:row="selectInsulin"
         >
@@ -103,14 +101,17 @@ export default {
                 {
                     text: "Value",
                     value: "userId",
+                    sortable: false,
                 },
                 {
                     text: "Type",
                     value: "id",
+                    sortable: false,
                 },
                 {
                     text: "Date",
                     value: "title",
+                    sortable: false,
                 },
                 {
                     text: "Actions",

@@ -3,11 +3,10 @@
         <Navbar class="header"></Navbar>
         <div class="clearfix"></div>
         <div class="main">
-            <v-row>
-                <v-col xs="7" sm="7" md="7" lg="7">
+            <div class="row">
+                <div class="leftColumn">
                     <v-card
                         height="100%"
-                        width="100%"
                         id="overview-chart-container"
                         elevation="2"
                     >
@@ -23,9 +22,9 @@
                             :data="data"
                         />
                     </v-card>
-                </v-col>
-                <v-col xs="5" sm="5" md="5" lg="5">
-                    <v-card elevation="2">
+                </div>
+                <div class="rightColumn">
+                    <v-card elevation="2" height="100%">
                         <v-card elevation="0">
                             <v-tabs v-model="tab">
                                 <v-tab v-for="item in items" :key="item">
@@ -54,10 +53,10 @@
                             </v-tabs-items>
                         </v-card>
                     </v-card>
-                </v-col>
-            </v-row>
-            <v-row>
-                <v-col cols="12">
+                </div>
+            </div>
+            <div class="row">
+                <div class="legend">
                     <v-card class="full-height legend-container" elevation="2">
                         <v-progress-circular
                             indeterminate
@@ -67,8 +66,8 @@
                         />
                         <Legend v-if="rendered" />
                     </v-card>
-                </v-col>
-            </v-row>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -159,5 +158,28 @@ export default {
 .legend-container .v-progress-circular {
     left: 50%;
     top: 45%;
+}
+.leftColumn {
+  float: left;
+  width: 56%;
+  margin-right: 1%;
+  margin-top: 1%;
+}
+.rightColumn {
+  float: left;
+  width: 42%;
+  margin-left: 1%;
+  margin-top: 1%;
+}
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.legend {
+  float: left;
+  width: 100%;
+  margin-top: 2%;
+  margin-bottom: 2%;
 }
 </style>
