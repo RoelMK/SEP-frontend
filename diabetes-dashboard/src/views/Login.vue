@@ -1,7 +1,7 @@
 <template>
     <div class="main">
-        <v-container>
-            <v-row>
+        <v-container fill-height fluid>
+            <v-row align="center" justify="center">
                 <v-col cols="12" sm="12" md="6" lg="6" align="center" v-if="!enteredEmail">
                     <v-form>
                         <h2>Welcome to Diabetter!</h2>
@@ -86,9 +86,6 @@ export default {
 
 <style>
 .main {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   height: 100vh;
 }
 .customField {
