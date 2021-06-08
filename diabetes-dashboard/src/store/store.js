@@ -116,7 +116,6 @@ const store = new Vuex.Store({
         getUsers: state => state.users,
         getHealthSettings: state => state.healthSettings,
     },
-
     actions: {
         async fetchInsulinData({ commit }) {
             const response = await wrapper.get(
