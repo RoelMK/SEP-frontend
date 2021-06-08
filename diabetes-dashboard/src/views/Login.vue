@@ -37,6 +37,7 @@
 
 <script>
 import axios from "axios";
+import Auth from "../repositories/Auth.js";
 export default {
     name: "login",
     data () {
@@ -48,28 +49,31 @@ export default {
     },
     methods: {
         async loginClicked() {
-            axios.get("http://localhost:8080/login", { params: { email: this.email } })
-                .then((resp) => {
-                    this.$cookies.set("LOGIN_TOKEN",
-                        resp.data.loginToken, resp.data.expires);
-                    window.open('https://app3.gamebus.eu/nav/settings/data', '_blank').focus();
-                    this.enteredEmail = true;
-                })
-                .catch((err) => {
-                    this.$toasted.error("Something went wrong: "
-                     + err.response.status);
-                });
+            Auth.login({ email: this.email })
+                .then(
+                    (resp) => {
+                        this.$cookies.set("LOGIN_TOKEN",
+                            resp.data.loginToken, resp.data.expires);
+                        window.open('https://app3.gamebus.eu/nav/settings/data', '_blank').focus();
+                        this.enteredEmail = true;
+                    },
+                    (error) => {
+                        this.$toasted.error("Something went wrong: "
+                        + error.response.status);
+                    });
+
         },
         async confirmLogin() {
-            axios.get("http://localhost:8080/login", { params: { loginToken: this.$cookies.get("LOGIN_TOKEN") } })
-                .then((resp) => {
-                    this.$cookies.set("JWT", resp.data.newJwt, '30d');
-                    this.$router.push("/");
-                })
-                .catch((err) => {
-                    this.$toasted.error("Something went wrong: "
-                     + err.response.status);
-                });
+            Auth.login({ loginToken: this.$cookies.get("LOGIN_TOKEN") })
+                .then(
+                    (resp) => {
+                        this.$cookies.set("JWT", resp.data.newJwt, '30d');
+                        this.$router.push("/");
+                    },
+                    (error) => {
+                        this.$toasted.error("Something went wrong: "
+                        + error.response.status);
+                    });
 
         },
         cancel() {

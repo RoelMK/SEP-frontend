@@ -1,6 +1,5 @@
 import Client from './Client.js';
 const resource = '/';
-import axios from "axios";
 
 export default {
     login(payload) {
@@ -9,7 +8,8 @@ export default {
             headers: {
                 "ijsco": "ijsco"
             },
+            params: payload
         };
-        return Client.get(url, payload, config);
-    }
+        return Client.get(url, config);
+    },
 };
