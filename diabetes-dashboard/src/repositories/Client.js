@@ -7,5 +7,4 @@ export default axios.create({
     baseURL,
     headers: {
     },
-    //withCredentials: true,
 });
