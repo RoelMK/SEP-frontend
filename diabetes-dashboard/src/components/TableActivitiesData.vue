@@ -13,14 +13,28 @@
                 <tr>
                     <td>
                         <v-text-field
-                            v-model="activityName"
+                            v-model="name"
                             type="string"
-                            label="Activity Name"
+                            label="Name"
                         ></v-text-field>
                     </td>
                     <td>
                         <v-text-field
-                            v-model="date"
+                            v-model="type"
+                            type="string"
+                            label="Type"
+                        ></v-text-field>
+                    </td>
+                    <td>
+                        <v-text-field
+                            v-model="startDate"
+                            type="string"
+                            label="Before"
+                        ></v-text-field>
+                    </td>
+                    <td>
+                        <v-text-field
+                            v-model="endDate"
                             type="string"
                             label="Before"
                         ></v-text-field>
@@ -39,11 +53,18 @@
                             label="Before"
                         ></v-text-field>
                     </td>
+                    <!-- <td>
+                        <v-text-field
+                            v-model="duration"
+                            type="number"
+                            label="Less"
+                        ></v-text-field>
+                    </td> -->
                     <td>
                         <v-text-field
                             v-model="calories"
                             type="number"
-                            label="Less than"
+                            label="Less"
                         ></v-text-field>
                     </td>
                 </tr>
@@ -63,24 +84,48 @@ export default {
         return {
             headers: [
                 {
-                    text: "Activities",
-                    value: "activity",
+                    text: "Name",
+                    value: "name",
                     filter: (f) => {
                         return (f + "")
                             .toLowerCase()
-                            .includes(this["activityName"].toLowerCase());
+                            .includes(this["name"].toLowerCase());
                     },
+                    width: "10%"
                 },
                 {
-                    text: "Date",
-                    value: "date",
+                    text: "Type",
+                    value: "type",
+                    filter: (f) => {
+                        return (f + "")
+                            .toLowerCase()
+                            .includes(this["type"].toLowerCase());
+                    },
+                    width: "10%"
+                },
+                {
+                    text: "Start Date",
+                    value: "startDate",
                     filter: (value) => {
-                        if (!this.date) return true;
+                        if (!this.startDate) return true;
                         return (
                             moment(value).format("L") <
-                            moment(this.date).format("L")
+                            moment(this.startDate).format("L")
                         );
                     },
+                    width: "10%"
+                },
+                {
+                    text: "End Date",
+                    value: "endDate",
+                    filter: (value) => {
+                        if (!this.endDate) return true;
+                        return (
+                            moment(value).format("L") <
+                            moment(this.endDate).format("L")
+                        );
+                    },
+                    width: "10%"
                 },
                 {
                     text: "Start Time",
@@ -92,6 +137,7 @@ export default {
                             moment(this.startTime, "HH:mm").format("HH:mm")
                         );
                     },
+                    width: "10%"
                 },
                 {
                     text: "End Time",
@@ -103,7 +149,17 @@ export default {
                             moment(this.endTime, "HH:mm").format("HH:mm")
                         );
                     },
+                    width: "10%"
                 },
+                // {
+                //     text: "Duration",
+                //     value: "duration",
+                //     filter: (value) => {
+                //         if (!this.duration) return true;
+                //         return value < this.duration;
+                //     },
+                //     width: "10%"
+                // },
                 {
                     text: "Calories",
                     value: "calories",
@@ -111,58 +167,32 @@ export default {
                         if (!this.calories) return true;
                         return value < this.calories;
                     },
+                    width: "10%"
                 },
             ],
             search: "",
-            activityName: "",
-            date: "",
+            name: "",
+            type: "",
+            startDate: "",
+            endDate: "",
             startTime: "",
             endTime: "",
+            duration: "",
             calories: "",
+
             activities: [
                 {
-                    activity: "Run",
-                    date: moment().subtract(1, "day").format("L"),
+                    name: "Run",
+                    type: "Physical",
+                    startDate: moment().subtract(1, "day").format("L"),
+                    endDate: moment().subtract(1, "day").format("L"),
                     startTime: moment().subtract(24, "hours").format("HH:mm"),
                     endTime: moment()
                         .subtract(23, "hours")
                         .subtract(10, "minutes")
                         .format("HH:mm"),
+                    //duration: 50,
                     calories: 159,
-                },
-                {
-                    activity: "Yoga",
-                    date: moment().subtract(1, "day").format("L"),
-                    startTime: moment().subtract(20, "hours").format("HH:mm"),
-                    endTime: moment()
-                        .subtract(19, "hours")
-                        .subtract(30, "minutes")
-                        .format("HH:mm"),
-                    calories: 100,
-                },
-                {
-                    activity: "Chess",
-                    date: moment().subtract(1, "day").format("L"),
-                    startTime: moment().subtract(22, "hours").format("HH:mm"),
-                    endTime: moment().subtract(21, "hours").format("HH:mm"),
-                    calories: null,
-                },
-                {
-                    activity: "Health check",
-                    date: moment().format("L"),
-                    startTime: moment().subtract(4, "hours").format("HH:mm"),
-                    endTime: moment()
-                        .subtract(3, "hours")
-                        .subtract(30, "minutes")
-                        .format("HH:mm"),
-                    calories: null,
-                },
-                {
-                    activity: "Ice hokey",
-                    date: moment().format("L"),
-                    startTime: moment().subtract(2, "hours").format("HH:mm"),
-                    endTime: moment().subtract(1, "hours").format("HH:mm"),
-                    calories: 349,
                 },
             ],
         };

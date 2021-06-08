@@ -9,103 +9,201 @@
             elevation="0"
             @click:row="selectFood"
         >
-            <template v-slot:top>
-                <v-container>
-                    <v-row>
-                        <v-col xs="10" sm="10" md="10" lg="10">
-                            <v-text-field v-model="search" label="Search"></v-text-field>
-                        </v-col>
-                        <v-col><v-icon medium>mdi-plus</v-icon></v-col>
-                    </v-row>
-                </v-container>
+            <template v-slot:[`body.prepend`]>
+                <tr>
+                    <td>
+                        <v-text-field
+                            v-model="name"
+                            type="string"
+                            label="Name"
+                        ></v-text-field>
+                    </td>
+                    <td>
+                        <v-text-field
+                            v-model="type"
+                            type="string"
+                            label="Type"
+                        ></v-text-field>
+                    </td>
+                    <td>
+                        <v-text-field
+                            v-model="time"
+                            type="string"
+                            label="Before"
+                        ></v-text-field>
+                    </td>
+                    <td>
+                        <v-text-field
+                            v-model="date"
+                            type="string"
+                            label="Before"
+                        ></v-text-field>
+                    </td>
+                    <td>
+                        <v-text-field
+                            v-model="carbs"
+                            type="string"
+                            label="Less"
+                        ></v-text-field>
+                    </td>
+                    <td>
+                        <v-text-field
+                            v-model="calories"
+                            type="string"
+                            label="Less"
+                        ></v-text-field>
+                    </td>
+                    <!-- <td>
+                        <v-text-field
+                            v-model="glycemicIndex"
+                            type="string"
+                            label="Less"
+                        ></v-text-field>
+                    </td> -->
+                </tr>
             </template>
         </v-data-table>
     </div>
 </template>
 
 <script>
+import Moment from "moment";
+import { extendMoment } from "moment-range";
+const moment = extendMoment(Moment);
+
 export default {
-    name: 'TableFoodData',
+    name: "TableFoodData",
     data() {
         return {
             headers: [
                 {
-                    text: "Dessert (100g topping)",
-                    value: "dessert"
+                    text: "Name",
+                    value: "name",
+                    filter: (f) => {
+                        return (f + "")
+                            .toLowerCase()
+                            .includes(this["name"].toLowerCase());
+                    },
                 },
                 {
-                    text: "Calories",
-                    value: "calories"
+                    text: "Type",
+                    value: "type",
+                    filter: (f) => {
+                        return (f + "")
+                            .toLowerCase()
+                            .includes(this["type"].toLowerCase());
+                    },
                 },
                 {
-                    text: "Fat (g)",
-                    value: "fat"
+                    text: "Time",
+                    value: "time",
+                    filter: (value) => {
+                        if (!this.time) return true;
+                        return (
+                            moment(value, "HH:mm").format("HH:mm") <
+                            moment(this.time, "HH:mm").format("HH:mm")
+                        );
+                    },
+                },
+                {
+                    text: "Date",
+                    value: "date",
+                    filter: (value) => {
+                        if (!this.date) return true;
+                        return (
+                            moment(value).format("L") <
+                            moment(this.date).format("L")
+                        );
+                    },
                 },
                 {
                     text: "Carbs (g)",
-                    value: "carbs"
+                    value: "carbs",
+                    filter: (value) => {
+                        if (!this.carbs) return true;
+                        return value < this.carbs;
+                    },
                 },
                 {
-                    text: "Protein (g)",
-                    value: "protein"
+                    text: "Calories (kcal)",
+                    value: "calories",
+                    filter: (value) => {
+                        if (!this.calories) return true;
+                        return value < this.calories;
+                    },
                 },
-                {
-                    text: "Iron (%)",
-                    value: "iron"
-                }
+                // {
+                //     text: "GI",
+                //     value: "glycemicIndex",
+                //     filter: (value) => {
+                //         if (!this.glycemicIndex) return true;
+                //         return value < this.glycemicIndex;
+                //     },
+                // },
             ],
             desserts: [
                 {
-                    dessert: "Frozen Yoghurt",
-                    calories: 159,
-                    fat: 6,
+                    name: "Frozen Yoghurt",
+                    type: "Dessert",
+                    time: moment().subtract(5, "hours").format("HH:mm"),
+                    date: moment().subtract(1, "day").format("L"),
                     carbs: 24,
-                    protein: 4,
-                    iron: 1,
+                    calories: 4,
+                    glycemicIndex: 1,
                 },
                 {
-                    dessert: "Ice cream sandwich",
-                    calories: 237,
-                    fat: 9,
-                    carbs: 37,
-                    protein: 4.3,
-                    iron: 1,
+                    name: "Ice cream sandwich",
+                    type: "Dessert",
+                    time: moment().subtract(5, "hours").format("HH:mm"),
+                    date: moment().subtract(1, "day").format("L"),
+                    carbs: 24,
+                    calories: 4,
+                    glycemicIndex: 1,
                 },
                 {
-                    dessert: "Eclair",
-                    calories: 262,
-                    fat: 16,
-                    carbs: 23,
-                    protein: 6,
-                    iron: 9,
+                    name: "Eclair",
+                    type: "Dessert",
+                    time: moment().subtract(5, "hours").format("HH:mm"),
+                    date: moment().subtract(1, "day").format("L"),
+                    carbs: 24,
+                    calories: 4,
+                    glycemicIndex: 1,
                 },
                 {
-                    dessert: "Cupcake",
-                    calories: 305,
-                    fat: 3.7,
-                    carbs: 67,
-                    protein: 4.3,
-                    iron: 8,
+                    name: "Cupcake",
+                    type: "Dessert",
+                    time: moment().subtract(5, "hours").format("HH:mm"),
+                    date: moment().subtract(1, "day").format("L"),
+                    carbs: 24,
+                    calories: 4,
+                    glycemicIndex: 1,
                 },
                 {
-                    dessert: "Gingerbread",
-                    calories: 356,
-                    fat: 16,
-                    carbs: 49,
-                    protein: 3.9,
-                    iron: 16,
+                    name: "Gingerbread",
+                    type: "Dessert",
+                    time: moment().subtract(5, "hours").format("HH:mm"),
+                    date: moment().subtract(1, "day").format("L"),
+                    carbs: 24,
+                    calories: 4,
+                    glycemicIndex: 1,
                 },
             ],
-            search: ""
+            search: "",
+            name: "",
+            type: "",
+            time: "",
+            date: "",
+            carbs: "",
+            calories: "",
+            glycemicIndex: "",
         };
     },
-    computed: {
-    },
+    computed: {},
     methods: {
         selectFood(food) {
-            this.$emit('selectedFood', food);
-        }
-    }
+            this.$emit("selectedFood", food);
+        },
+    },
 };
 </script>
 
@@ -120,7 +218,7 @@ export default {
 
 .mdi-plus {
     border-radius: 50%;
-    padding: .2rem;
-    background: rgba(0, 0, 0, .15);
+    padding: 0.2rem;
+    background: rgba(0, 0, 0, 0.15);
 }
 </style>

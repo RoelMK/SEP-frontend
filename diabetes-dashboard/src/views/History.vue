@@ -4,8 +4,13 @@
         <div class="clearfix"></div>
         <div class="main">
             <v-row>
-                <v-col class="wide-chart" cols="8">
-                    <v-card id="overview-chart-container" elevation="2">
+                <v-col xs="7" sm="7" md="7" lg="7">
+                    <v-card
+                        height="100%"
+                        width="100%"
+                        id="overview-chart-container"
+                        elevation="2"
+                    >
                         <v-progress-circular
                             indeterminate
                             color="primary"
@@ -19,7 +24,7 @@
                         />
                     </v-card>
                 </v-col>
-                <v-col cols="4">
+                <v-col xs="5" sm="5" md="5" lg="5">
                     <v-card elevation="2">
                         <v-card elevation="0">
                             <v-tabs v-model="tab">
@@ -29,7 +34,7 @@
                             </v-tabs>
                             <v-tabs-items v-model="tab">
                                 <v-tab-item>
-                                    <TableInsulinData />
+                                    <TableInsulinData @selectedInsulin="getSelectedInsulin"/>
                                 </v-tab-item>
                                 <v-tab-item>
                                     <TableFoodData
@@ -43,22 +48,35 @@
                                 </v-tab-item>
                                 <v-tab-item>
                                     <EmotionTable
-                                        @selectedActivity="getSelectedActivity"
+                                        @selectedEmotion="getSelectedEmotion"
                                     />
                                 </v-tab-item>
                             </v-tabs-items>
                         </v-card>
                     </v-card>
                 </v-col>
-                <v-col> </v-col>
+            </v-row>
+            <v-row>
+                <v-col cols="12">
+                    <v-card class="full-height legend-container" elevation="2">
+                        <v-progress-circular
+                            indeterminate
+                            color="primary"
+                            size="50"
+                            v-if="!rendered"
+                        />
+                        <Legend v-if="rendered" />
+                    </v-card>
+                </v-col>
             </v-row>
         </div>
     </div>
 </template>
 
 <script>
-import Navbar from '@/components/Navbar.vue';
+import Navbar from "@/components/Navbar.vue";
 import OverviewChart from "@/components/OverviewChart.vue";
+import Legend from "@/components/Legend.vue";
 import TableFoodData from "@/components/TableFoodData.vue";
 import TableActivitiesData from "@/components/TableActivitiesData.vue";
 import TableInsulinData from "@/components/TableInsulinData.vue";
@@ -83,13 +101,20 @@ export default {
         TableInsulinData,
         EmotionTable,
         OverviewChart,
+        Legend,
     },
     methods: {
+        getSelectedInsulin(insulin) {
+            this.chosenInsulin = { insulin: insulin, now: moment() };
+        },
         getSelectedFood(food) {
-            this.chosenFood = food;
+            this.chosenFood = { food: food, now: moment() };
         },
         getSelectedActivity(activity) {
             this.chosenActivity = { activity: activity, now: moment() };
+        },
+        getSelectedEmotion(emotion) {
+            this.chosenEmotion = { emotion: emotion, now: moment() };
         },
     },
     data() {
@@ -98,8 +123,10 @@ export default {
             items: ["insulin", "food", "activities", "emotions"],
             data: null,
             rendered: false,
-            chosenFood: {},
+            chosenInsulin: { insulin: null, now: null },
+            chosenFood: { food: null, now: null },
             chosenActivity: { activity: null, now: null },
+            chosenEmotion: { emotion: null, now: null },
         };
     },
     created() {
@@ -114,13 +141,16 @@ export default {
 </script>
 
 <style>
+.full-height {
+    height: 100%;
+}
 .main {
     background-color: #f4fafd;
     padding: 0 2% 0 2%;
 }
 .clearfix {
-  height: 3vh;
-  background-color: #F4FAFD;
+    height: 3vh;
+    background-color: #f4fafd;
 }
 #overview-chart-container {
     height: 700px;

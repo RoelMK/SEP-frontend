@@ -35,7 +35,7 @@
             </template>
 
             <template v-slot:item="{ item }">
-                <tr>
+                <tr @click="selectEmotion(item)">
                     <td width="10%">
                         <v-icon
                             size="25"
@@ -52,10 +52,10 @@
                             {{ displayExcitement(item.excitement) }}
                         </v-icon>
                     </td>
-                    <td width="20%">
+                    <td width="10%">
                         {{ item.date }}
                     </td>
-                    <td width="20%">
+                    <td width="10%">
                         {{ item.time }}
                     </td>
                     <td width="10%">
@@ -294,6 +294,9 @@ export default {
         },
     },
     methods: {
+        selectEmotion(emotion) {
+            this.$emit("selectedEmotion", emotion);
+        },
         displayHappiness(happiness) {
             if (happiness === 0) {
                 return "fas fa-angry";
