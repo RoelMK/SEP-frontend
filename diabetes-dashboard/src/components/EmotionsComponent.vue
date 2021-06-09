@@ -56,7 +56,7 @@
             </v-icon>
         </p>
         <div>
-            <v-btn color="primary" elevation="2" class="bttn">
+            <v-btn color="primary" elevation="2">
                 Enter Emotion
             </v-btn>
         </div>
@@ -85,10 +85,6 @@ export default {
     font-weight: bold;
 }
 
-.bttn {
-    margin: 0 auto;
-    display: block;
-}
 .icon {
     margin-left: 15px;
 }
