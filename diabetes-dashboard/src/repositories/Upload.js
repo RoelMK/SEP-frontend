@@ -1,14 +1,14 @@
 import Client from './Client.js';
-const resource = '/';
+const resource = '/upload';
 
 export default {
-    login(payload) {
-        let url = `${resource}login`;
+    upload(payload) {
+        let url = `${resource}`;
         let config = {
             headers: {
             },
             params: payload
         };
-        return Client.get(url, config);
+        return Client.post(url, config);
     },
 };
