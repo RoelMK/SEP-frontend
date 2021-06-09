@@ -1,38 +1,55 @@
 <template>
     <div class="table">
         <!-- <p class="filterTitle">Filters:</p> -->
-        <tr>
-            <td class="border">
-                <div class="filterElement">
-                    <span class="filterText">Start Date</span>
-                    <v-select :items="items" class="pt-0 pb-0 selector"></v-select>
-                </div>
-            </td>
-            <td class="border">
-                <div class="filterElement">
-                    <span class="filterText">End Date</span>
-                    <v-select :items="items" class="pt-0 pb-0 selector"></v-select>
-                </div>
-            </td>
-            <td class="border">
-                <div class="filterElement">
-                    <span class="filterText">Start Time</span>
-                    <v-select :items="items" class="pt-0 pb-0 selector"></v-select>
-                </div>
-            </td>
-            <td class="border">
-                <div class="filterElement">
-                    <span class="filterText">End Time</span>
-                    <v-select :items="items" class="pt-0 pb-0 selector"></v-select>
-                </div>
-            </td>
-            <td class="border">
-                <div class="filterElement">
-                    <span class="filterText">Calories (kcal)</span>
-                    <v-select :items="items" class="pt-0 pb-0 selector"></v-select>
-                </div>
-            </td>
-        </tr>
+        <div>
+            <tr>
+                <td class="border">
+                    <div class="filterElement">
+                        <span class="filterText">Start Date</span>
+                        <v-select
+                            :items="items"
+                            class="pt-0 pb-0 selector"
+                        ></v-select>
+                    </div>
+                </td>
+                <td class="border">
+                    <div class="filterElement">
+                        <span class="filterText">End Date</span>
+                        <v-select
+                            :items="items"
+                            class="pt-0 pb-0 selector"
+                        ></v-select>
+                    </div>
+                </td>
+                <td class="border">
+                    <div class="filterElement">
+                        <span class="filterText">Start Time</span>
+                        <v-select
+                            :items="items"
+                            class="pt-0 pb-0 selector"
+                        ></v-select>
+                    </div>
+                </td>
+                <td class="border">
+                    <div class="filterElement">
+                        <span class="filterText">End Time</span>
+                        <v-select
+                            :items="items"
+                            class="pt-0 pb-0 selector"
+                        ></v-select>
+                    </div>
+                </td>
+                <td class="border">
+                    <div class="filterElement">
+                        <span class="filterText">Calories (kcal)</span>
+                        <v-select
+                            :items="items"
+                            class="pt-0 pb-0 selector"
+                        ></v-select>
+                    </div>
+                </td>
+            </tr>
+        </div>
 
         <v-data-table
             :headers="headers"
