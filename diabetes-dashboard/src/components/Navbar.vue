@@ -102,7 +102,11 @@ export default {
             this.$router.push('/profile');
         },
         logoutClicked: function () {
-            this.$toasted.show('Logout Clicked');
+            this.$toaster.showMessage({
+                message: 'Logout Clicked',
+                color: 'dark',
+                btnColor: 'pink'
+            });
         },
         historyClicked: function () {
             this.$router.push('/history');

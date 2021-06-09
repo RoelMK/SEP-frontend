@@ -4,7 +4,7 @@ import vuetify from '@/plugins/vuetify';
 import router from './router/router.js';
 import store from './store/store.js';
 import VCalendar from 'v-calendar';
-import Toasted from 'vue-toasted';
+import snackbarPlugin from './plugins/toaster.js';
 import ECharts from 'vue-echarts';
 import { use } from 'echarts/core';
 import VueCompositionAPI from '@vue/composition-api';
@@ -43,7 +43,7 @@ use([
 Vue.use(VueCookies);
 Vue.use(VueCompositionAPI);
 Vue.use(VCalendar, { componentPrefix: 'vc' });
-Vue.use(Toasted, {theme: 'bubble', position: 'top-center', duration: '2000'});
+Vue.use(snackbarPlugin, { store });
 
 Vue.component('v-chart', ECharts);
 
