@@ -4,7 +4,6 @@
             :headers="headers"
             :items="getEmotions"
             elevation="0"
-            :search="search"
         >
             <template v-slot:[`body.prepend`]>
                 <tr>
@@ -265,7 +264,6 @@ export default {
                     sortable: false,
                 },
             ],
-            search: "",
             date: "",
             time: "",
             dialog: false,

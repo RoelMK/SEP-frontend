@@ -3,7 +3,6 @@
         <v-data-table
             :headers="headers"
             :items="desserts"
-            :search="search"
             elevation="0"
             @click:row="selectFood"
         >
@@ -290,7 +289,6 @@ export default {
                     glycemicIndex: 1,
                 },
             ],
-            search: "",
             name: "",
             type: "",
             time: "",
