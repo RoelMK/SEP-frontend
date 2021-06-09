@@ -8,10 +8,6 @@
                     <span>{{ avgBG }} {{ unitBG }}</span>
                 </li>
                 <li>
-                    Jitter in BG:
-                    <span>{{ jitterBG }} {{ unitBG }}</span>
-                </li>
-                <li>
                     Max BG:
                     <span>{{ maxBG }} {{ unitBG }}</span>
                 </li>
@@ -41,7 +37,6 @@ export default {
     data() {
         return {
             avgBG: 0,
-            jitterBG: 0,
             minBG: 0,
             maxBG: 0,
             unitBG: "mmol/L",

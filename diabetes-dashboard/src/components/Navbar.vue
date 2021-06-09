@@ -65,25 +65,30 @@
                 </v-badge>
 
                 <v-btn class="no-background__hover" icon :ripple="false">
-                    <v-icon size="20">mdi-menu</v-icon>
+                    <v-icon size="20" @click="showQueryMenu = !showQueryMenu">mdi-menu</v-icon>
                 </v-btn>
             </v-toolbar>
         </v-card>
+        <QueryMenu :show="showQueryMenu" />
     </div>
 </template>
 
 <script>
+import QueryMenu from "@/components/QueryMenu.vue";
 export default {
     name: "Navbar",
     props: {
         msg: String,
     },
+    components: {
+        QueryMenu,
+    },
     data: () => ({
         drawer: false,
         group: null,
         notifications: true,
+        showQueryMenu: false,
     }),
-
     watch: {
         group() {
             this.drawer = false;

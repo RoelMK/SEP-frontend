@@ -51,7 +51,6 @@ const store = new Vuex.Store({
         getUsers: state => state.users,
         getHealthSettings: state => state.healthSettings,
     },
-
     actions: {
         showMessage({ commit }, toast) {
             commit('SHOW_MESSAGE', toast);
