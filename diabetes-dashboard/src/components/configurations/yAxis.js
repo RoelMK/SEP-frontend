@@ -4,7 +4,7 @@ export default [
         name: 'Glucose',
         nameTextStyle: {
             fontSize: 14,
-            padding: [0, 0, 35, 0],
+            padding: [0, 0, 25, 0],
         },
         nameLocation: 'center',
         nameGap: 5,
@@ -16,7 +16,7 @@ export default [
         name: 'Emotions',
         nameTextStyle: {
             fontSize: 14,
-            padding: [0, 0, 35, 0],
+            padding: [0, 0, 25, 0],
         },
         nameLocation: 'center',
         nameGap: 5,
@@ -34,7 +34,7 @@ export default [
         name: 'Insulin',
         nameTextStyle: {
             fontSize: 14,
-            padding: [0, 0, 35, 0],
+            padding: [0, 0, 25, 0],
         },
         nameLocation: 'center',
         nameGap: 5,
@@ -52,7 +52,7 @@ export default [
         name: 'Carbs',
         nameTextStyle: {
             fontSize: 14,
-            padding: [0, 0, 35, 0],
+            padding: [0, 0, 25, 0],
         },
         nameLocation: 'center',
         nameGap: 5,
@@ -70,7 +70,7 @@ export default [
         name: 'Exercises',
         nameTextStyle: {
             fontSize: 14,
-            padding: [0, 0, 35, 0],
+            padding: [0, 0, 25, 0],
         },
         nameLocation: 'center',
         nameGap: 5,
