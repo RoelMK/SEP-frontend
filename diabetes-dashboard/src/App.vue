@@ -1,14 +1,18 @@
 <template>
     <v-app id="app">
         <router-view/>
+        <Toast/>
     </v-app>
 </template>
 
 <script>
+import Toast from '@/components/Toast.vue';
+
 export default {
     name: 'App',
     components: {
-    }
+        Toast
+    },
 };
 </script>
 

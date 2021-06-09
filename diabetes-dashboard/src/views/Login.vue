@@ -36,7 +36,6 @@
 </template>
 
 <script>
-import axios from "axios";
 import Auth from "../repositories/Auth.js";
 export default {
     name: "login",
