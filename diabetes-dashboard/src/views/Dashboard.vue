@@ -69,10 +69,6 @@ export default {
     data() {
         return {
             data: null,
-            tab: null,
-            items: ['insulin', 'food', 'activities'],
-            chosenFood: { },
-            chosenActivity: { activity: null, now: null },
             rendered: false
         };
     },
