@@ -23,6 +23,7 @@
                 </v-row>
                 <Query
                     v-for="(property, index) in properties"
+                    :reload="reload"
                     :key="index"
                     :property="property"
                     v-on:change="updateParameters"
@@ -30,7 +31,7 @@
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="green darken-1" text @click="$store.dispatch('showFilter', { show: false })">
+                <v-btn color="green darken-1" text @click="cancelFiltering">
                     Cancel
                 </v-btn>
                 <v-btn color="green darken-1" text @click="$store.dispatch('showFilter', { show: false })">
@@ -62,6 +63,7 @@ export default {
                 food: null,
             },
             properties: properties,
+            reload: false,
         };
     },
     computed: {
@@ -75,6 +77,13 @@ export default {
     methods: {
         updateParameters(index, value) {
             this.parameters[index] = value;
+        },
+        cancelFiltering() {
+            for (let element in this.parameters) {
+                this.parameters[element] = null;
+            }
+            this.reload = !this.reload;
+            this.$store.dispatch('showFilter', { show: false });
         },
         capitalizeFirstLetter(str) {
             return str.charAt(0).toUpperCase() + str.slice(1);

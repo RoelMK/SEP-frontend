@@ -51,6 +51,12 @@
 import moment from 'moment';
 
 export default {
+    props: {
+        reload: {
+            type: Boolean,
+            default: null
+        }
+    },
     data() {
         return {
             timeMenu: false,
@@ -59,6 +65,11 @@ export default {
                 end: null,
             },
         };
+    },
+    watch: {
+        reload: function() {
+            this.timeRange = { start: null, end: null };
+        }
     },
     computed: {
         timeRangeText() {

@@ -50,6 +50,12 @@
 import moment from 'moment';
 
 export default {
+    props: {
+        reload: {
+            type: Boolean,
+            default: null
+        }
+    },
     data() {
         return {
             dateMenu: false,
@@ -58,6 +64,11 @@ export default {
                 end: null,
             },
         };
+    },
+    watch: {
+        reload: function() {
+            this.dateRange = { start: null, end: null };
+        }
     },
     computed: {
         dateRangeText() {
@@ -73,7 +84,7 @@ export default {
     },
     methods: {
         clear() {
-            this.dateRange = [];
+            this.dateRange = { start: null, end: null };
             this.$emit('dateUpdated', null);
         }
     }
