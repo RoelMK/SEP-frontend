@@ -6,7 +6,6 @@ export default {
         let url = `${resource}login`;
         let config = {
             headers: {
-                "ijsco": "ijsco"
             },
             params: payload
         };
