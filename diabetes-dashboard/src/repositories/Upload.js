@@ -4,11 +4,9 @@ const resource = '/upload';
 export default {
     upload(payload) {
         let url = `${resource}`;
-        let config = {
-            headers: {
-            },
-            params: payload
+        let headers = {
+            "ijsco": "ijsco"
         };
-        return Client.post(url, config);
+        return Client.post(url, payload, headers);
     },
 };

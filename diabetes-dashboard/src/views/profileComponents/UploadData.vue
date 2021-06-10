@@ -89,8 +89,21 @@ export default {
 
             Upload.upload( formData )
                 .then(
-                    (resp) => { console.log(resp); },
-                    (error) => { console.log(error); }
+                    (resp) => {
+                        this.$toaster.showMessage({
+                            message: 'File uploaded successfully!',
+                            color: 'green',
+                            btnColor: 'pink'
+                        });
+                    },
+                    (error) => {
+                        console.log(error);
+                        this.$toaster.showMessage({
+                            message: 'Something went wrong',
+                            color: 'dark',
+                            btnColor: 'pink'
+                        });
+                    }
                 );
         }
     },
