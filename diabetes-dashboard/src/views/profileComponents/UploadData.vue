@@ -56,6 +56,7 @@
                         color="primary"
                         style="margin-top: auto; margin-bottom: auto;"
                         :disabled="!nightscoutValid"
+                        @click="connectNightscout"
                     >
                         Connect
                     </v-btn>
@@ -71,6 +72,9 @@
 import Upload from '../../repositories/Upload';
 export default {
     name: "UploadData",
+    created() {
+        this.nightscoutUrl = localStorage.getItem("nightscout_url") || "";
+    },
     data() {
         return {
             items: ['Food diary', 'Eetmeter', 'Abbott'],
@@ -97,7 +101,6 @@ export default {
                         });
                     },
                     (error) => {
-                        console.log(error);
                         this.$toaster.showMessage({
                             message: 'Something went wrong',
                             color: 'dark',
@@ -105,6 +108,9 @@ export default {
                         });
                     }
                 );
+        },
+        connectNightscout() {
+            localStorage.setItem("nightscout_url", this.nightscoutUrl);
         }
     },
     computed: {
