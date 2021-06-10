@@ -1,12 +1,12 @@
 <template>
     <div class="table">
-        <!-- <p class="filterTitle">Filters:</p> -->
         <div>
             <tr>
                 <td class="border">
                     <div class="filterElement">
                         <span class="filterText">Start Date</span>
                         <v-select
+                            v-model="startDateFilter"
                             :items="items"
                             class="pt-0 pb-0 selector"
                         ></v-select>
@@ -16,6 +16,7 @@
                     <div class="filterElement">
                         <span class="filterText">End Date</span>
                         <v-select
+                            v-model="endDateFilter"
                             :items="items"
                             class="pt-0 pb-0 selector"
                         ></v-select>
@@ -25,6 +26,7 @@
                     <div class="filterElement">
                         <span class="filterText">Start Time</span>
                         <v-select
+                            v-model="startTimeFilter"
                             :items="items"
                             class="pt-0 pb-0 selector"
                         ></v-select>
@@ -34,6 +36,7 @@
                     <div class="filterElement">
                         <span class="filterText">End Time</span>
                         <v-select
+                            v-model="endTimeFilter"
                             :items="items"
                             class="pt-0 pb-0 selector"
                         ></v-select>
@@ -43,6 +46,7 @@
                     <div class="filterElement">
                         <span class="filterText">Calories (kcal)</span>
                         <v-select
+                            v-model="caloriesFilter"
                             :items="items"
                             class="pt-0 pb-0 selector"
                         ></v-select>
@@ -56,7 +60,7 @@
             :items="activities"
             elevation="0"
             @click:row="selectActivity"
-            class="activitySection"
+            class="tableSection"
         >
             <template v-slot:[`body.prepend`]>
                 <tr>
@@ -145,10 +149,22 @@ export default {
                     sortable: false,
                     filter: (value) => {
                         if (!this.startDate) return true;
-                        return (
-                            moment(value).format("L") <=
-                            moment(this.startDate).format("L")
-                        );
+                        if (this.startDateFilter === "<=") {
+                            return (
+                                moment(value).format("L") <=
+                                moment(this.startDate).format("L")
+                            );
+                        } else if (this.startDateFilter === ">=") {
+                            return (
+                                moment(value).format("L") >=
+                                moment(this.startDate).format("L")
+                            );
+                        } else {
+                            return (
+                                moment(value).format("L") ==
+                                moment(this.startDate).format("L")
+                            );
+                        }
                     },
                 },
                 {
@@ -157,10 +173,22 @@ export default {
                     sortable: false,
                     filter: (value) => {
                         if (!this.endDate) return true;
-                        return (
-                            moment(value).format("L") <=
-                            moment(this.endDate).format("L")
-                        );
+                        if (this.endDateFilter === "<=") {
+                            return (
+                                moment(value).format("L") <=
+                                moment(this.endDate).format("L")
+                            );
+                        } else if (this.endDateFilter === ">=") {
+                            return (
+                                moment(value).format("L") >=
+                                moment(this.endDate).format("L")
+                            );
+                        } else {
+                            return (
+                                moment(value).format("L") ===
+                                moment(this.endDate).format("L")
+                            );
+                        }
                     },
                 },
                 {
@@ -169,10 +197,22 @@ export default {
                     sortable: false,
                     filter: (value) => {
                         if (!this.startTime) return true;
-                        return (
-                            moment(value, "HH:mm").format("HH:mm") <=
-                            moment(this.startTime, "HH:mm").format("HH:mm")
-                        );
+                        if (this.startTimeFilter === "<=") {
+                            return (
+                                moment(value, "HH:mm").format("HH:mm") <=
+                                moment(this.startTime, "HH:mm").format("HH:mm")
+                            );
+                        } else if (this.startTimeFilter === ">=") {
+                            return (
+                                moment(value, "HH:mm").format("HH:mm") >=
+                                moment(this.startTime, "HH:mm").format("HH:mm")
+                            );
+                        } else {
+                            return (
+                                moment(value, "HH:mm").format("HH:mm") ==
+                                moment(this.startTime, "HH:mm").format("HH:mm")
+                            );
+                        }
                     },
                 },
                 {
@@ -181,10 +221,22 @@ export default {
                     sortable: false,
                     filter: (value) => {
                         if (!this.endTime) return true;
-                        return (
-                            moment(value, "HH:mm").format("HH:mm") <=
-                            moment(this.endTime, "HH:mm").format("HH:mm")
-                        );
+                        if (this.endTimeFilter === "<=") {
+                            return (
+                                moment(value, "HH:mm").format("HH:mm") <=
+                                moment(this.endTime, "HH:mm").format("HH:mm")
+                            );
+                        } else if (this.endTimeFilter === ">=") {
+                            return (
+                                moment(value, "HH:mm").format("HH:mm") >=
+                                moment(this.endTime, "HH:mm").format("HH:mm")
+                            );
+                        } else {
+                            return (
+                                moment(value, "HH:mm").format("HH:mm") ==
+                                moment(this.endTime, "HH:mm").format("HH:mm")
+                            );
+                        }
                     },
                 },
                 {
@@ -193,7 +245,13 @@ export default {
                     sortable: false,
                     filter: (value) => {
                         if (!this.calories) return true;
-                        return value <= this.calories;
+                        if (this.caloriesFilter === "<=") {
+                            return value <= this.calories;
+                        } else if (this.caloriesFilter === ">=") {
+                            return value >= this.calories;
+                        } else {
+                            return value == this.calories;
+                        }
                     },
                 },
             ],
@@ -204,6 +262,11 @@ export default {
             startTime: "",
             endTime: "",
             calories: "",
+            startDateFilter: "",
+            endDateFilter: "",
+            startTimeFilter: "",
+            endTimeFilter: "",
+            caloriesFilter: "",
 
             activities: [
                 {
@@ -216,7 +279,6 @@ export default {
                         .subtract(23, "hours")
                         .subtract(10, "minutes")
                         .format("HH:mm"),
-                    //duration: 50,
                     calories: 159,
                 },
                 {
@@ -421,30 +483,10 @@ export default {
     width: 100%;
     overflow: auto;
 }
-
 .mdi-plus {
     border-radius: 50%;
     padding: 0.2rem;
     background: rgba(0, 0, 0, 0.15);
-}
-/* .filterTitle {
-    margin-bottom: 2%;
-    font-weight: bold;
-    color: rgba(0, 0, 0, 0.6);
-} */
-.filterText {
-    font-size: 0.75rem;
-    color: rgba(0, 0, 0, 0.6);
-    font-weight: bold;
-}
-.filterElement {
-    margin: 0 10% 0 10%;
-}
-.border {
-    border-bottom: 1px solid gray;
-}
-.activitySection {
-    margin-top: 2%;
 }
 .selector {
     width: 7.5rem;

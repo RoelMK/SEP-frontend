@@ -1,32 +1,81 @@
 <template>
     <div class="table">
-        <v-data-table
-            :headers="headers"
-            :items="getEmotions"
-            elevation="0"
-        >
+        <div>
+            <tr>
+                <td class="border">
+                    <div class="filterElement">
+                        <span class="filterText">Date</span>
+                        <v-select
+                            v-model="dateFilter"
+                            :items="items"
+                            class="pt-0 pb-0 selector"
+                        ></v-select>
+                    </div>
+                </td>
+                <td class="border">
+                    <div class="filterElement">
+                        <span class="filterText">Time</span>
+                        <v-select
+                            v-model="timeFilter"
+                            :items="items"
+                            class="pt-0 pb-0 selector"
+                        ></v-select>
+                    </div>
+                </td>
+            </tr>
+        </div>
+
+        <v-data-table :headers="headers" :items="getEmotions" elevation="0">
             <template v-slot:[`body.prepend`]>
                 <tr>
-                    <td> </td>
-                    <td> </td>
+                    <td>
+                        <v-select
+                            v-model="happinessFilter"
+                            :items="emotionValues"
+                        >
+                            <template v-slot:selection="slotProps">
+                                <v-icon size="25" color="blue darken-1">
+                                    {{ displayHappiness(slotProps.item) }}
+                                </v-icon>
+                            </template>
+                            <template v-slot:item="slotProps">
+                                <v-icon size="25" color="blue darken-1">
+                                    {{ displayHappiness(slotProps.item) }}
+                                </v-icon>
+                            </template>
+                        </v-select>
+                    </td>
+                    <td>
+                        <v-select
+                            v-model="excitementFilter"
+                            :items="emotionValues"
+                        >
+                            <template v-slot:selection="slotProps">
+                                <v-icon size="25" color="blue darken-1">
+                                    {{ displayExcitement(slotProps.item) }}
+                                </v-icon>
+                            </template>
+                            <template v-slot:item="slotProps">
+                                <v-icon size="25" color="blue darken-1">
+                                    {{ displayExcitement(slotProps.item) }}
+                                </v-icon>
+                            </template>
+                        </v-select>
+                    </td>
                     <td>
                         <v-text-field
                             v-model="date"
                             type="string"
-                            label="<="
                         ></v-text-field>
                     </td>
                     <td>
                         <v-text-field
                             v-model="time"
                             type="string"
-                            label="<="
                         ></v-text-field>
                     </td>
                     <td>
-                        <v-icon @click="dialog = true">
-                            mdi-plus
-                        </v-icon>
+                        <v-icon @click="dialog = true"> mdi-plus </v-icon>
                     </td>
                 </tr>
             </template>
@@ -34,18 +83,12 @@
             <template v-slot:item="{ item }">
                 <tr @click="selectEmotion(item)">
                     <td width="10%">
-                        <v-icon
-                            size="25"
-                            color="blue darken-1"
-                        >
+                        <v-icon size="25" color="blue darken-1">
                             {{ displayHappiness(item.happiness) }}
                         </v-icon>
                     </td>
                     <td width="10%">
-                        <v-icon
-                            size="25"
-                            color="blue darken-1"
-                        >
+                        <v-icon size="25" color="blue darken-1">
                             {{ displayExcitement(item.excitement) }}
                         </v-icon>
                     </td>
@@ -70,8 +113,7 @@
                 <v-dialog v-model="dialog" max-width="500px">
                     <v-card>
                         <v-card-title>
-                            <span class="headline">{{formTitle}}
-                            </span>
+                            <span class="headline">{{ formTitle }} </span>
                         </v-card-title>
                         <v-card-text>
                             <v-container>
@@ -193,13 +235,15 @@
                             <v-btn
                                 color="blue darken-1"
                                 text
-                                @click="closeDelete">
+                                @click="closeDelete"
+                            >
                                 Cancel
                             </v-btn>
                             <v-btn
                                 color="blue darken-1"
                                 text
-                                @click="deleteItemConfirm">
+                                @click="deleteItemConfirm"
+                            >
                                 OK
                             </v-btn>
                             <v-spacer></v-spacer>
@@ -207,7 +251,6 @@
                     </v-card>
                 </v-dialog>
             </template>
-
         </v-data-table>
     </div>
 </template>
@@ -222,17 +265,27 @@ export default {
     // must match data values from json
     data() {
         return {
+            items: ["<=", ">=", "="],
+            emotionValues: ["", 0, 1, 2],
             // must be modified when we use real data
             headers: [
                 {
                     text: "Happiness",
                     value: "happiness",
                     sortable: false,
+                    filter: (value) => {
+                        if (this.happinessFilter === "") return true;
+                        return value === this.happinessFilter;
+                    },
                 },
                 {
                     text: "Excitement",
                     value: "excitement",
                     sortable: false,
+                    filter: (value) => {
+                        if (this.excitementFilter === "") return true;
+                        return value === this.excitementFilter;
+                    },
                 },
                 {
                     text: "Date",
@@ -240,10 +293,22 @@ export default {
                     sortable: false,
                     filter: (value) => {
                         if (!this.date) return true;
-                        return (
-                            moment(value).format("L") <=
-                            moment(this.date).format("L")
-                        );
+                        if (this.dateFilter === "<=") {
+                            return (
+                                moment(value).format("L") <=
+                                moment(this.date).format("L")
+                            );
+                        } else if (this.dateFilter === ">=") {
+                            return (
+                                moment(value).format("L") >=
+                                moment(this.date).format("L")
+                            );
+                        } else {
+                            return (
+                                moment(value).format("L") ===
+                                moment(this.date).format("L")
+                            );
+                        }
                     },
                 },
                 {
@@ -252,10 +317,22 @@ export default {
                     sortable: false,
                     filter: (value) => {
                         if (!this.time) return true;
-                        return (
-                            moment(value, "HH:mm").format("HH:mm") <=
-                            moment(this.time, "HH:mm").format("HH:mm")
-                        );
+                        if (this.timeFilter === "<=") {
+                            return (
+                                moment(value, "HH:mm").format("HH:mm") <=
+                                moment(this.time, "HH:mm").format("HH:mm")
+                            );
+                        } else if (this.timeFilter === ">=") {
+                            return (
+                                moment(value, "HH:mm").format("HH:mm") >=
+                                moment(this.time, "HH:mm").format("HH:mm")
+                            );
+                        } else {
+                            return (
+                                moment(value, "HH:mm").format("HH:mm") ==
+                                moment(this.time, "HH:mm").format("HH:mm")
+                            );
+                        }
                     },
                 },
                 {
@@ -281,6 +358,10 @@ export default {
                 date: "",
                 time: "",
             },
+            timeFilter: "",
+            dateFilter: "",
+            happinessFilter: "",
+            excitementFilter: "",
         };
     },
     // state getters you need to use
@@ -302,8 +383,10 @@ export default {
                 return "fas fa-angry";
             } else if (happiness === 1) {
                 return "fas fa-smile-beam";
-            } else {
+            } else if (happiness === 2) {
                 return "fas fa-laugh-beam";
+            } else {
+                return "";
             }
         },
         displayExcitement(excitement) {
@@ -311,8 +394,10 @@ export default {
                 return "fas fa-tired";
             } else if (excitement === 1) {
                 return "fas fa-smile-beam";
-            } else {
+            } else if (excitement === 2) {
                 return "fas fa-grin-stars";
+            } else {
+                return "";
             }
         },
 
@@ -378,5 +463,8 @@ export default {
 }
 .icon {
     margin-left: 15px;
+}
+.selector {
+    width: 18rem;
 }
 </style>

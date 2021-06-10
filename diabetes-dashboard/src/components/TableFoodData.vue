@@ -1,10 +1,56 @@
 <template>
     <div class="table">
+        <div>
+            <tr>
+                <td class="border">
+                    <div class="filterElement">
+                        <span class="filterText">Time</span>
+                        <v-select
+                            v-model="timeFilter"
+                            :items="items"
+                            class="pt-0 pb-0 selector"
+                        ></v-select>
+                    </div>
+                </td>
+                <td class="border">
+                    <div class="filterElement">
+                        <span class="filterText">Date</span>
+                        <v-select
+                            v-model="dateFilter"
+                            :items="items"
+                            class="pt-0 pb-0 selector"
+                        ></v-select>
+                    </div>
+                </td>
+                <td class="border">
+                    <div class="filterElement">
+                        <span class="filterText">Carbs (g)</span>
+                        <v-select
+                            v-model="carbsFilter"
+                            :items="items"
+                            class="pt-0 pb-0 selector"
+                        ></v-select>
+                    </div>
+                </td>
+                <td class="border">
+                    <div class="filterElement">
+                        <span class="filterText">Calories (kcal)</span>
+                        <v-select
+                            v-model="caloriesFilter"
+                            :items="items"
+                            class="pt-0 pb-0 selector"
+                        ></v-select>
+                    </div>
+                </td>
+            </tr>
+        </div>
+
         <v-data-table
             :headers="headers"
             :items="desserts"
             elevation="0"
             @click:row="selectFood"
+            class="tableSection"
         >
             <template v-slot:[`body.prepend`]>
                 <tr>
@@ -24,35 +70,30 @@
                         <v-text-field
                             v-model="time"
                             type="string"
-                            label="<="
                         ></v-text-field>
                     </td>
                     <td>
                         <v-text-field
                             v-model="date"
                             type="string"
-                            label="<="
                         ></v-text-field>
                     </td>
                     <td>
                         <v-text-field
                             v-model="carbs"
                             type="string"
-                            label="<="
                         ></v-text-field>
                     </td>
                     <td>
                         <v-text-field
                             v-model="calories"
                             type="string"
-                            label="<="
                         ></v-text-field>
                     </td>
                     <!-- <td>
                         <v-text-field
                             v-model="glycemicIndex"
                             type="string"
-                            label="<="
                         ></v-text-field>
                     </td> -->
                 </tr>
@@ -70,6 +111,7 @@ export default {
     name: "TableFoodData",
     data() {
         return {
+            items: ["<=", ">=", "="],
             headers: [
                 {
                     text: "Name",
@@ -97,10 +139,22 @@ export default {
                     sortable: false,
                     filter: (value) => {
                         if (!this.time) return true;
-                        return (
-                            moment(value, "HH:mm").format("HH:mm") <=
-                            moment(this.time, "HH:mm").format("HH:mm")
-                        );
+                        if (this.timeFilter === "<=") {
+                            return (
+                                moment(value, "HH:mm").format("HH:mm") <=
+                                moment(this.time, "HH:mm").format("HH:mm")
+                            );
+                        } else if (this.timeFilter === ">=") {
+                            return (
+                                moment(value, "HH:mm").format("HH:mm") >=
+                                moment(this.time, "HH:mm").format("HH:mm")
+                            );
+                        } else {
+                            return (
+                                moment(value, "HH:mm").format("HH:mm") ==
+                                moment(this.time, "HH:mm").format("HH:mm")
+                            );
+                        }
                     },
                 },
                 {
@@ -109,10 +163,22 @@ export default {
                     sortable: false,
                     filter: (value) => {
                         if (!this.date) return true;
-                        return (
-                            moment(value).format("L") <=
-                            moment(this.date).format("L")
-                        );
+                        if (this.dateFilter === "<=") {
+                            return (
+                                moment(value).format("L") <=
+                                moment(this.date).format("L")
+                            );
+                        } else if (this.dateFilter === ">=") {
+                            return (
+                                moment(value).format("L") >=
+                                moment(this.date).format("L")
+                            );
+                        } else {
+                            return (
+                                moment(value).format("L") ===
+                                moment(this.date).format("L")
+                            );
+                        }
                     },
                 },
                 {
@@ -121,7 +187,13 @@ export default {
                     sortable: false,
                     filter: (value) => {
                         if (!this.carbs) return true;
-                        return value <= this.carbs;
+                        if (this.carbsFilter === "<=") {
+                            return value <= this.carbs;
+                        } else if (this.carbsFilter === ">=") {
+                            return value >= this.carbs;
+                        } else {
+                            return value == this.carbs;
+                        }
                     },
                 },
                 {
@@ -130,7 +202,13 @@ export default {
                     sortable: false,
                     filter: (value) => {
                         if (!this.calories) return true;
-                        return value <= this.calories;
+                        if (this.caloriesFilter === "<=") {
+                            return value <= this.calories;
+                        } else if (this.caloriesFilter === ">=") {
+                            return value >= this.calories;
+                        } else {
+                            return value == this.calories;
+                        }
                     },
                 },
                 // {
@@ -295,7 +373,11 @@ export default {
             date: "",
             carbs: "",
             calories: "",
-            glycemicIndex: "",
+            //glycemicIndex: "",
+            timeFilter: "",
+            dateFilter: "",
+            carbsFilter: "",
+            caloriesFilter: "",
         };
     },
     computed: {},
@@ -320,5 +402,9 @@ export default {
     border-radius: 50%;
     padding: 0.2rem;
     background: rgba(0, 0, 0, 0.15);
+}
+
+.selector {
+    width: 9.3rem;
 }
 </style>

@@ -182,4 +182,18 @@ export default {
   margin-top: 2%;
   margin-bottom: 2%;
 }
+.filterText {
+    font-size: 0.75rem;
+    color: rgba(0, 0, 0, 0.6);
+    font-weight: bold;
+}
+.border {
+    border-bottom: 1px solid gray;
+}
+.tableSection {
+    margin-top: 2%;
+}
+.filterElement {
+    margin: 0 10% 0 10%;
+}
 </style>
