@@ -34,9 +34,9 @@ const routes = [
         }
     },
     {
-        path: '/emotions',
-        component: () => import('@/views/Emotions.vue'),
-        name: "emotions",
+        path: '/history',
+        component: () => import('@/views/History.vue'),
+        name: "history",
         beforeEnter: (to, from, next) => {
             auth(to, from, next);
         }
