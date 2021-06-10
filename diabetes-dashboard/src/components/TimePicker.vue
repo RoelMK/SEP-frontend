@@ -11,11 +11,13 @@
         <template v-slot:activator="{ on, attrs }">
             <v-text-field
                 v-model="timeRangeText"
-                label="Select Start and End Time"
                 outlined
                 dense
                 readonly
                 v-bind="attrs"
+                append-icon="mdi-close"
+                @click:append="clear"
+                prepend-inner-icon="mdi-clock-outline"
                 v-on="on"
             ></v-text-field>
         </template>
@@ -53,19 +55,28 @@ export default {
         return {
             timeMenu: false,
             timeRange: {
-                start: moment.utc("00:00", "HH:mm"),
-                end: moment.utc("23:00", "HH:mm"),
+                start: null,
+                end: null,
             },
         };
     },
     computed: {
         timeRangeText() {
-            return (
-                moment.utc(this.timeRange.start).format("HH:mm") +
-                " - " +
-                moment.utc(this.timeRange.end).format("HH:mm")
-            );
+            if (this.timeRange.start && this.timeRange.end)
+                return (
+                    moment.utc(this.timeRange.start).format("HH:mm") +
+                    " - " +
+                    moment.utc(this.timeRange.end).format("HH:mm")
+                );
+            else
+                return 'Select Time Range';
         },
+    },
+    methods: {
+        clear() {
+            this.timeRange = { start: null, end: null };
+            this.$emit('timeUpdated', null);
+        }
     }
 };
 </script>
@@ -73,5 +84,8 @@ export default {
 <style scoped>
 .timePicker {
     border: none;
+}
+.timePickerContainer {
+    background-color: white;
 }
 </style>

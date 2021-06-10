@@ -5,16 +5,28 @@
             <v-card-text class="pb-0">
                 <v-row align="center" class="mx-0">
                     <v-col class="pl-0">
-                        <p v-if="instances.length <= 0" class="mt-5">No filters applied</p>
-                    </v-col>
-                    <v-col class="text-right pr-0">
-                        <v-btn v-on:click="addInstance(instances.length)" text tile plain>
-                            Add filter
-                            <v-icon size="18" class="ml-2">mdi-plus</v-icon>
-                        </v-btn>
+                        <p v-if="selectedParameters.length <= 0" class="mt-5">No filters applied</p>
+                        <div class="mb-3" v-else>
+                            <v-chip
+                                v-for="(param, index) in selectedParameters"
+                                :key="index"
+                                color="indigo"
+                                class="mr-2"
+                                label
+                                filter
+                                outlined
+                            >
+                                {{ capitalizeFirstLetter(param) }}
+                            </v-chip>
+                        </div>
                     </v-col>
                 </v-row>
-                <Query v-for="(instance, index) in instances" :key="index" :idx="index" v-on:removeInstance="removeInstance" />
+                <Query
+                    v-for="(property, index) in properties"
+                    :key="index"
+                    :property="property"
+                    v-on:change="updateParameters"
+                />
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
@@ -31,6 +43,7 @@
 
 <script>
 import Query from '@/components/Query.vue';
+import properties from '@/components/configurations/queryProperties.js';
 import { mapState } from 'vuex';
 
 export default {
@@ -39,25 +52,32 @@ export default {
     },
     data() {
         return {
-            instances: [],
+            parameters: {
+                date: null,
+                time: null,
+                glucose: null,
+                activity: null,
+                arousal: null,
+                valence: null,
+                food: null,
+            },
+            properties: properties,
         };
     },
     computed: {
-        ...mapState(['filter'])
+        ...mapState(['filter']),
+        selectedParameters() {
+            return Object.entries(this.parameters)
+                .filter(f => f[1] !== null)
+                .map(d => d[0]);
+        }
     },
     methods: {
-        addInstance(count) {
-            if (count < 5)
-                this.instances.push(Query);
-            else
-                this.$toaster.showMessage({
-                    message: 'Maximum number of query filters exceeded',
-                    color: 'dark',
-                    btnColor: 'pink'
-                });
+        updateParameters(index, value) {
+            this.parameters[index] = value;
         },
-        removeInstance(idx) {
-            this.instances.splice(idx, 1);
+        capitalizeFirstLetter(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
         }
     }
 };

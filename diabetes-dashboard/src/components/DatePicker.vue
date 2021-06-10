@@ -11,21 +11,26 @@
         <template v-slot:activator="{ on, attrs }">
             <v-text-field
                 v-model="dateRangeText"
-                label="Select Start and End Date"
                 readonly
                 outlined
                 dense
+                append-icon="mdi-close"
+                @click:append="clear"
                 v-bind="attrs"
+                prepend-inner-icon="mdi-calendar-text"
                 v-on="on"
             ></v-text-field>
         </template>
-        <v-date-picker
-            range
-            v-model="dateRange"
-            no-title
-            scrollable
-            show-adjacent-months
-        >
+        <v-container class="datePickerContainer">
+            <vc-date-picker
+                v-model="dateRange"
+                mode="date"
+                is-expanded
+                is-required
+                is-range
+                is24hr
+                class="datePicker"
+            />
             <v-spacer></v-spacer>
             <v-btn text color="primary" @click="dateMenu = false">
                 Cancel
@@ -37,22 +42,50 @@
             >
                 OK
             </v-btn>
-        </v-date-picker>
+        </v-container>
     </v-menu>
 </template>
 
 <script>
+import moment from 'moment';
+
 export default {
     data() {
         return {
             dateMenu: false,
-            dateRange: [new Date().toISOString().substr(0, 10)],
+            dateRange: {
+                start: null,
+                end: null,
+            },
         };
     },
     computed: {
         dateRangeText() {
-            return this.dateRange.join(" - ");
+            if (this.dateRange.start && this.dateRange.end)
+                return (
+                    moment(this.dateRange.start).format("DD/MM/YYYY") +
+                    " - " +
+                    moment(this.dateRange.end).format("DD/MM/YYYY")
+                );
+            else
+                return 'Select Date Range';
         },
     },
+    methods: {
+        clear() {
+            this.dateRange = [];
+            this.$emit('dateUpdated', null);
+        }
+    }
 };
 </script>
+
+<style scoped>
+.datePickerContainer {
+    background-color: white;
+}
+
+.datePicker {
+    border: none;
+}
+</style>
