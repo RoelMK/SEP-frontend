@@ -13,6 +13,7 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
     state: {
         toast: { message: '', color: '', btnColor: '' },
+        filter: { show: false },
         activities: [
         ],
         emotions: [
@@ -54,6 +55,9 @@ const store = new Vuex.Store({
     actions: {
         showMessage({ commit }, toast) {
             commit('SHOW_MESSAGE', toast);
+        },
+        showFilter({ commit }, filter) {
+            commit('SHOW_FILTER', filter);
         },
         async fetchInsulinData({ commit }) {
             const response = await wrapper.get(
@@ -97,6 +101,9 @@ const store = new Vuex.Store({
             state.toast.message = toast.message;
             state.toast.color = toast.color;
             state.toast.btnColor = toast.btnColor;
+        },
+        SHOW_FILTER(state, filter) {
+            state.filter.show = filter.show;
         },
         SET_ACTIVITIES: (state, newActivities) => {
             return state.activities = newActivities;
