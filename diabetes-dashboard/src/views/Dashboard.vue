@@ -87,7 +87,7 @@ export default {
         if (nightscoutUrl) {
             Upload.connectNightscout({ host: nightscoutUrl })
                 .then(
-                    (resp) => { console.log(resp); },
+                    (resp) => { },
                     (err) => { console.log(err); }
                 );
         }
