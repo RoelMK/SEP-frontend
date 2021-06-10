@@ -30,11 +30,39 @@
             <v-btn
                 color="primary"
                 @click="fileUpload"
-                :disabled="!isDisabled"
+                :disabled="!uploadDisabled"
             >
                 Upload
             </v-btn>
         </v-form>
+        <v-divider class="mt-3 mb-3"></v-divider>
+        <h4>Connect Nightscout API</h4>
+        <v-form
+            lazy-validation
+            v-model="nightscoutValid"
+        >
+            <v-row class="mt-2">
+                <v-col cols="9">
+                    <v-text-field
+                        v-model="nightscoutUrl"
+                        required
+                        label="Enter Nightscout URL"
+                        :rules="[v => !!v || 'Required']"
+                    >
+                    </v-text-field>
+                </v-col>
+                <v-col cols="3">
+                    <v-btn
+                        color="primary"
+                        style="margin-top: auto; margin-bottom: auto;"
+                        :disabled="!nightscoutValid"
+                    >
+                        Connect
+                    </v-btn>
+                </v-col>
+            </v-row>
+        </v-form>
+
 
     </div>
 </template>
@@ -49,6 +77,8 @@ export default {
             file: null,
             value: null,
             valid: false,
+            nightscoutUrl: "",
+            nightscoutValid: false,
         };
     },
     methods: {
@@ -65,7 +95,7 @@ export default {
         }
     },
     computed: {
-        isDisabled() {
+        uploadDisabled() {
             return this.value && this.file;
         }
     }
