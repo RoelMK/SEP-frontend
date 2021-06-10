@@ -197,17 +197,6 @@ export default {
         };
     },
     methods: {
-        check() {
-            this.$refs.hello.dispatchAction({
-                type: 'selectDataRange',
-                visualMapIndex: 0,
-                selected: {
-                    0: false,
-                    1: false,
-                    2: false
-                }
-            });
-        },
         /**
          * Scale value to a certain range
          * @param  { int }      value Value to be scaled
