@@ -2,19 +2,19 @@
     <v-app id="app">
         <router-view/>
         <Toast/>
-        <CustomQuery/>
+        <QueryMenu/>
     </v-app>
 </template>
 
 <script>
 import Toast from '@/components/Toast.vue';
-import CustomQuery from '@/components/CustomQuery.vue';
+import QueryMenu from '@/components/QueryMenu.vue';
 
 export default {
     name: 'App',
     components: {
         Toast,
-        CustomQuery
+        QueryMenu
     },
 };
 </script>
