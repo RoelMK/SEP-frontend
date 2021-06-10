@@ -51,6 +51,8 @@ import Navbar from '@/components/Navbar.vue';
 import { AxiosWrapper } from '@/helpers/wrapper.js';
 import Cards from '@/components/Cards.vue';
 
+import Upload from "../repositories/Upload";
+
 const wrapper = new AxiosWrapper();
 
 // These URL's will be removed in the future
@@ -69,10 +71,6 @@ export default {
     data() {
         return {
             data: null,
-            tab: null,
-            items: ['insulin', 'food', 'activities'],
-            chosenFood: { },
-            chosenActivity: { activity: null, now: null },
             rendered: false
         };
     },
@@ -81,6 +79,14 @@ export default {
             this.data = data;
             this.rendered = true;
         });
+        let nightscoutUrl = localStorage.getItem("nightscout_url");
+        if (nightscoutUrl) {
+            Upload.connectNightscout({ host: nightscoutUrl })
+                .then(
+                    (resp) => { },
+                    (err) => { console.log(err); }
+                );
+        }
     }
 };
 </script>

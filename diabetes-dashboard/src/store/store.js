@@ -17,6 +17,72 @@ const store = new Vuex.Store({
         activities: [
         ],
         emotions: [
+            {
+                happiness: 1,
+                excitement: 1,
+                date: '07/30/2021',
+                time: '16:00'
+            },
+            {
+                happiness: 2,
+                excitement: 2,
+                date: '07/07/2011',
+                time: '18:00'
+            },
+            {
+                happiness: 0,
+                excitement: 0,
+                date: '07/07/2017',
+                time: '16:00'
+            },
+            {
+                happiness: 0,
+                excitement: 1,
+                date: '07/07/2018',
+                time: '18:00'
+            },
+            {
+                happiness: 0,
+                excitement: 2,
+                date: '08/22/2020',
+                time: '18:00'
+            },
+            {
+                happiness: 1,
+                excitement: 0,
+                date: '06/12/2019',
+                time: '16:00'
+            },
+            {
+                happiness: 1,
+                excitement: 1,
+                date: '07/07/2014',
+                time: '18:00'
+            },
+            {
+                happiness: 1,
+                excitement: 2,
+                date: '07/07/2015',
+                time: '18:00'
+            },
+            {
+                happiness: 2,
+                excitement: 0,
+                date: '07/07/2019',
+                time: '16:00'
+            },
+            {
+                happiness: 2,
+                excitement: 1,
+                date: '06/07/2020',
+                time: '18:00'
+            },
+            {
+                happiness: 2,
+                excitement: 2,
+                date: '06/06/2020',
+                time: '18:00'
+            },
         ],
         foodItems: [
         ],
@@ -67,7 +133,7 @@ const store = new Vuex.Store({
 
             commit('SET_INSULIN_DATA', response);
         },
-        async addInsulinInput({ commit }, {id, title, userId}) {
+        async addInsulinInput({ commit }, { id, title, userId }) {
             const response = await wrapper.post(
                 'https://jsonplaceholder.typicode.com/albums',
                 { userId, id, title, completed: false },
@@ -82,7 +148,8 @@ const store = new Vuex.Store({
             );
             commit('REMOVE_INSULIN_VALUE', id);
         },
-        async updateInsulinInput({ commit }, {originalId, userId, id, title}) {
+        async updateInsulinInput({ commit },
+            { originalId, userId, id, title }) {
             const response = await wrapper.put(
                 `https://jsonplaceholder.typicode.com/albums/${originalId}`,
                 { userId, id, title, completed: false },
@@ -91,7 +158,7 @@ const store = new Vuex.Store({
 
             commit(
                 'UPDATE_INSULIN_VALUE',
-                {originalId: originalId, updatedInsulinValue: response}
+                { originalId: originalId, updatedInsulinValue: response }
             );
         },
     },

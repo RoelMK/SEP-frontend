@@ -3,11 +3,22 @@ import VueRouter from 'vue-router';
 
 Vue.use(VueRouter);
 
+function auth(to, from, next) {
+    let jwt = Vue.$cookies.get("JWT");
+    if (jwt) {
+        return next();
+    }
+    return next("/login");
+}
+
 const routes = [
     {
         path: '/',
         component: () => import('@/views/Dashboard.vue'),
-        name: "dashboard"
+        name: "dashboard",
+        beforeEnter: (to, from, next) => {
+            auth(to, from, next);
+        }
     },
     {
         path: '/login',
@@ -17,12 +28,18 @@ const routes = [
     {
         path: '/profile',
         component: () => import('@/views/UserProfile.vue'),
-        name: "profile"
+        name: "profile",
+        beforeEnter: (to, from, next) => {
+            auth(to, from, next);
+        }
     },
     {
-        path: '/emotions',
-        component: () => import('@/views/Emotions.vue'),
-        name: "emotions"
+        path: '/history',
+        component: () => import('@/views/History.vue'),
+        name: "history",
+        beforeEnter: (to, from, next) => {
+            auth(to, from, next);
+        }
     },
 ];
 

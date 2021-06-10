@@ -54,7 +54,7 @@
                 <v-divider inset vertical />
 
                 <v-btn class="no-background__hover" icon :ripple="false">
-                    <v-icon size="20" color="dark-gray">mdi-file-table</v-icon>
+                    <v-icon size="20" color="dark-gray" v-on:click="historyClicked">mdi-file-table</v-icon>
                 </v-btn>
 
                 <v-badge bordered dot offset-x="20" offset-y="20"
@@ -90,6 +90,9 @@ export default {
                 color: 'dark',
                 btnColor: 'pink'
             });
+        },
+        historyClicked: function () {
+            this.$router.push('/history');
         }
     }
 };
