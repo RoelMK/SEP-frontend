@@ -113,9 +113,7 @@
 </template>
 
 <script>
-import Moment from "moment";
-import { extendMoment } from "moment-range";
-const moment = extendMoment(Moment);
+import moment from "moment";
 
 export default {
     name: "TableActivitiesData",

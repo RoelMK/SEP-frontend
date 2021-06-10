@@ -257,9 +257,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import Moment from "moment";
-import { extendMoment } from "moment-range";
-const moment = extendMoment(Moment);
+import moment from "moment";
 export default {
     name: "EmotionTable",
     // must match data values from json
