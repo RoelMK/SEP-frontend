@@ -122,9 +122,9 @@
                                     <v-icon
                                         class="icon"
                                         size="25"
-                                        v-on:click="editedItem.happiness = 2"
+                                        v-on:click="editedItem.happiness = 3"
                                         v-bind:color="
-                                            editedItem.happiness === 2
+                                            editedItem.happiness === 3
                                                 ? 'blue darken-2'
                                                 : 'gray'
                                         "
@@ -134,9 +134,9 @@
                                     <v-icon
                                         class="icon"
                                         size="25"
-                                        v-on:click="editedItem.happiness = 1"
+                                        v-on:click="editedItem.happiness = 2"
                                         v-bind:color="
-                                            editedItem.happiness === 1
+                                            editedItem.happiness === 2
                                                 ? 'blue darken-2'
                                                 : 'gray'
                                         "
@@ -146,9 +146,9 @@
                                     <v-icon
                                         class="icon"
                                         size="25"
-                                        v-on:click="editedItem.happiness = 0"
+                                        v-on:click="editedItem.happiness = 1"
                                         v-bind:color="
-                                            editedItem.happiness === 0
+                                            editedItem.happiness === 1
                                                 ? 'blue darken-2'
                                                 : 'gray'
                                         "
@@ -161,9 +161,9 @@
                                     <v-icon
                                         class="icon"
                                         size="25"
-                                        v-on:click="editedItem.excitement = 2"
+                                        v-on:click="editedItem.excitement = 3"
                                         v-bind:color="
-                                            editedItem.excitement === 2
+                                            editedItem.excitement === 3
                                                 ? 'blue darken-2'
                                                 : 'gray'
                                         "
@@ -173,9 +173,9 @@
                                     <v-icon
                                         class="icon"
                                         size="25"
-                                        v-on:click="editedItem.excitement = 1"
+                                        v-on:click="editedItem.excitement = 2"
                                         v-bind:color="
-                                            editedItem.excitement === 1
+                                            editedItem.excitement === 2
                                                 ? 'blue darken-2'
                                                 : 'gray'
                                         "
@@ -185,9 +185,9 @@
                                     <v-icon
                                         class="icon"
                                         size="25"
-                                        v-on:click="editedItem.excitement = 0"
+                                        v-on:click="editedItem.excitement = 1"
                                         v-bind:color="
-                                            editedItem.excitement === 0
+                                            editedItem.excitement === 1
                                                 ? 'blue darken-2'
                                                 : 'gray'
                                         "
@@ -258,13 +258,16 @@
 <script>
 import { mapGetters } from "vuex";
 import moment from "moment";
+import { emotionMixin } from "@/helpers/emotionMixin.js";
+
 export default {
     name: "EmotionTable",
+    mixins: [emotionMixin],
     // must match data values from json
     data() {
         return {
             items: ["<=", ">=", "="],
-            emotionValues: ["", 0, 1, 2],
+            emotionValues: ["", 1, 2, 3],
             // must be modified when we use real data
             headers: [
                 {
@@ -345,14 +348,14 @@ export default {
             dialogDelete: false,
             editing: false,
             editedItem: {
-                happiness: -1,
-                excitement: -1,
+                happiness: 0,
+                excitement: 0,
                 date: "",
                 time: "",
             },
             defaultItem: {
-                happiness: -1,
-                excitement: -1,
+                happiness: 0,
+                excitement: 0,
                 date: "",
                 time: "",
             },
@@ -377,29 +380,52 @@ export default {
             this.$emit("selectedEmotion", emotion);
         },
         displayHappiness(happiness) {
-            if (happiness === 0) {
+            if (happiness === 1) {
                 return "fas fa-angry";
-            } else if (happiness === 1) {
-                return "fas fa-smile-beam";
             } else if (happiness === 2) {
+                return "fas fa-smile-beam";
+            } else if (happiness === 3) {
                 return "fas fa-laugh-beam";
             } else {
                 return "";
             }
         },
         displayExcitement(excitement) {
-            if (excitement === 0) {
+            if (excitement === 1) {
                 return "fas fa-tired";
-            } else if (excitement === 1) {
-                return "fas fa-smile-beam";
             } else if (excitement === 2) {
+                return "fas fa-smile-beam";
+            } else if (excitement === 3) {
                 return "fas fa-grin-stars";
             } else {
                 return "";
             }
         },
-
-        ///
+        checkEmotionInput() {
+            if (
+                this.editedItem.happiness === 0 ||
+                this.editedItem.excitement === 0 ||
+                this.editedItem.date === "" ||
+                this.editedItem.time === ""
+            ) {
+                this.$toaster.showMessage({
+                    message: "Enter all options!",
+                    color: "dark",
+                    btnColor: "pink",
+                });
+            } else {
+                let parameters = {
+                    timestamp: moment(
+                        moment(
+                            this.editedItem.date + " " + this.editedItem.time
+                        ).format("MM-DD-YYYY HH:mm")
+                    ).format('x'),
+                    arousal: this.editedItem.excitement,
+                    valence: this.editedItem.happiness,
+                };
+                this.postEmotion(parameters);
+            }
+        },
         editItem(item) {
             this.editedItem = Object.assign({}, item);
             //this.editedItem.originalId = item.id;
@@ -418,7 +444,7 @@ export default {
             if (this.editing) {
                 this.close();
             } else {
-                this.close();
+                this.checkEmotionInput();
             }
             this.close();
         },

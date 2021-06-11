@@ -18,38 +18,38 @@ const store = new Vuex.Store({
         ],
         emotions: [
             {
-                happiness: 1,
-                excitement: 1,
+                happiness: 2,
+                excitement: 2,
                 date: '07/30/2021',
                 time: '16:00'
             },
             {
-                happiness: 2,
-                excitement: 2,
+                happiness: 3,
+                excitement: 3,
                 date: '07/07/2011',
                 time: '18:00'
             },
             {
-                happiness: 0,
-                excitement: 0,
+                happiness: 1,
+                excitement: 1,
                 date: '07/07/2017',
                 time: '16:00'
             },
             {
-                happiness: 0,
-                excitement: 1,
+                happiness: 1,
+                excitement: 2,
                 date: '07/07/2018',
                 time: '18:00'
             },
             {
-                happiness: 0,
-                excitement: 2,
+                happiness: 1,
+                excitement: 3,
                 date: '08/22/2020',
                 time: '18:00'
             },
             {
-                happiness: 1,
-                excitement: 0,
+                happiness: 2,
+                excitement: 1,
                 date: '06/12/2019',
                 time: '16:00'
             },
@@ -67,7 +67,7 @@ const store = new Vuex.Store({
             },
             {
                 happiness: 2,
-                excitement: 0,
+                excitement: 1,
                 date: '07/07/2019',
                 time: '16:00'
             },
