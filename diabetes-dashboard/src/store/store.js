@@ -39,6 +39,9 @@ const store = new Vuex.Store({
             ppRangeThreshold: 10.0,
             goalA1C: 7,
         },
+        user: {
+            email: "alexandranikolova99@gmail.com"
+        }
     },
 
     getters: {
