@@ -90,13 +90,18 @@ export default {
         };
     },
     created() {
-        if(this.$cookies.get("FIRST_ACCESS")) {
+        // when there is no cookie and the user wants to be reminded
+        // display reminder and set cookie
+        if (
+            this.$cookies.get("EMOTION_REMINDER") === null &&
+            this.$store.getters.getEmotionReminderStatus
+        ) {
             this.$toaster.showMessage({
-                message: 'Reminder: Enter Emotion Status!',
-                color: 'blue',
-                btnColor: 'white'
+                message: "Reminder: Enter Emotion Status!",
+                color: "blue",
+                btnColor: "white",
             });
-            this.$cookies.remove("FIRST_ACCESS");
+            this.$cookies.set("EMOTION_REMINDER", true, "1d");
         }
 
         wrapper

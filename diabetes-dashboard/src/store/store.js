@@ -106,6 +106,7 @@ const store = new Vuex.Store({
             ppRangeThreshold: 10.0,
             goalA1C: 7,
         },
+        emotionReminderStatus: false,
     },
 
     getters: {
@@ -116,10 +117,14 @@ const store = new Vuex.Store({
         getInsulinData: state => state.insulinData,
         getUsers: state => state.users,
         getHealthSettings: state => state.healthSettings,
+        getEmotionReminderStatus: state => state.emotionReminderStatus,
     },
     actions: {
         showMessage({ commit }, toast) {
             commit('SHOW_MESSAGE', toast);
+        },
+        setEmotionReminderStatus({ commit }, newStatus) {
+            commit('SET_REMINDER_STATUS', newStatus);
         },
         async fetchInsulinData({ commit }) {
             const response = await wrapper.get(
@@ -268,6 +273,9 @@ const store = new Vuex.Store({
         },
         SET_HEALTH_SETTINGS: (state, newHealthSettings) => {
             state.healthSettings = newHealthSettings;
+        },
+        SET_REMINDER_STATUS: (state, newEmotionReminderStatus) => {
+            state.emotionReminderStatus = newEmotionReminderStatus;
         },
     },
 });

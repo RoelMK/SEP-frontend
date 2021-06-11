@@ -53,8 +53,6 @@ export default {
                     (resp) => {
                         this.$cookies.set("LOGIN_TOKEN",
                             resp.data.loginToken, resp.data.expires);
-                        this.$cookies.set("FIRST_ACCESS",
-                            true, resp.data.expires);
                         window.open('https://app3.gamebus.eu/nav/settings/data', '_blank').focus();
                         this.enteredEmail = true;
                     },
