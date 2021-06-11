@@ -1,7 +1,7 @@
 <template>
     <v-card>
         <v-row class="mx-2">
-            <v-col cols="8" class="gTitle">Supervisors</v-col>
+            <v-col cols="8" class="gTitle">Supervisor</v-col>
             <v-col cols="4" class="rightAligned">
                 <v-icon @click="addMore" color="#1B98E0">mdi-plus-circle-outline</v-icon>
             </v-col>
@@ -17,11 +17,6 @@
                 </div>
             </v-col>
         </v-row>
-        <!-- <v-row class="mx-2" align="center">
-            <v-col cols="12" class="centerAligned">
-                <v-icon @click="loadMore" color="#1B98E0">mdi-chevron-down</v-icon>
-            </v-col>
-        </v-row> -->
     </v-card>
 </template>
 
