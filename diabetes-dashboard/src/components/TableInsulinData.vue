@@ -226,20 +226,12 @@ export default {
                     .utc(this.editedItem.time)
                     .format("HH:mm")
                     .toString();
-                let type = "";
-                if (this.editedItem.type === "Rapid") {
-                    type = 0;
-                } else {
-                    type = 1;
-                }
-
                 let parameters = {
                     timestamp: moment(
                         moment(date + " " + time).format("MM-DD-YYYY HH:mm")
                     ).format("x"),
-                    insulinType: type,
-                    insulinAmount: parseInt(this.editedItem.amount),
-                    activityId: 1,
+                    insulinType: this.editedItem.type.toLowerCase(),
+                    insulinAmount: parseInt(this.editedItem.amount)
                 };
                 this.postInsulin(parameters);
             }
