@@ -81,6 +81,7 @@ export default {
         };
     },
     created() {
+        // TODO: Needs to be replaced after we get more data in the backend
         Data.testFetch().then(
             (res) => {
                 this.dataInit = res.data;

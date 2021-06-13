@@ -51,6 +51,7 @@
                     :label="prop.label"
                     v-on:change="update('change', prop.index, $event)"
                     type="number"
+                    min="0"
                     clearable
                     dense
                     outlined

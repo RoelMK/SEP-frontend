@@ -6,7 +6,7 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
     state: {
-        toast: { message: '', color: '', btnColor: '' },
+        toast: { message: '', color: '', btnColor: '', timeout: 5000 },
         filter: { show: false },
         data: [],
         healthSettings: {

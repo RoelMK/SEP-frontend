@@ -88,68 +88,89 @@ export default {
             return Object.entries(this.parameters)
                 .filter(f => f[1] !== null)
                 .map(d => d[0]);
+        },
+        validation() {
+            if (this.parameters.insulinMax < this.parameters.insulinMin)
+                return false;
+            if (this.parameters.date && this.parameters.time)
+                if (this.parameters.date.start !== this.parameters.date.end)
+                    return false;
+            return true;
         }
     },
     methods: {
         async applyFiltering() {
+            // TODO: Remove options once we get more data in the backend
             var options = {
                 parameters: this.setupParameters(this.parameters),
                 token: this.$cookies.get("JWT")
             };
-            Data.testFetch().then(res => {
-                const data = res.data;
-                // TODO remove 10-04-2027
-                const date = (this.parameters.date)
-                    ? this.parameters.date.start
-                    : moment('10-04-2027', 'DD-MM-YYYY').format('DD-MM-YYYY');
-                const selection = this.checkSelection({
-                    time: this.parameters.time,
-                    insulin: {
-                        max: this.parameters.insulinMax,
-                        min: this.parameters.insulinMin
-                    },
-                    glucose: this.parameters.glucose,
-                    emotion: {
-                        arousal: this.emotionMap
-                            .arousal[this.parameters.arousal],
-                        valence: this.emotionMap
-                            .valence[this.parameters.valence]
+            if (this.validation) {
+                Data.testFetch().then(res => {
+                    const data = res.data;
+                    // TODO remove 10-04-2027
+                    const date = (this.parameters.date)
+                        ? this.parameters.date.start
+                        : moment('10-04-2027', 'DD-MM-YYYY')
+                            .format('DD-MM-YYYY');
+                    const selection = this.checkSelection({
+                        time: this.parameters.time,
+                        insulin: {
+                            max: this.parameters.insulinMax,
+                            min: this.parameters.insulinMin
+                        },
+                        glucose: this.parameters.glucose,
+                        emotion: {
+                            arousal: this.emotionMap
+                                .arousal[this.parameters.arousal],
+                            valence: this.emotionMap
+                                .valence[this.parameters.valence]
+                        }
+                    });
+                    const selectionKeys = Object.keys(selection);
+                    for (let item in data) {
+                        if (selectionKeys.includes('insulin'))
+                            data[item].insulinAmount = filterHelpers['insulin'](
+                                data[item].insulinAmount,
+                                ...selection['insulin']
+                            );
+                        if (selectionKeys.includes('time')) {
+                            data[item].timestamp = filterHelpers['time'](
+                                data[item].timestamp,
+                                date,
+                                ...selection['time']
+                            );
+                        }
+                        if (selectionKeys.includes('glucose')) {
+                            data[item].glucoseLevel = filterHelpers['glucose'](
+                                data[item].glucoseLevel,
+                                selection['glucose']
+                            );
+                        }
+                        if (selectionKeys.includes('emotion')) {
+                            data[item].arousal = filterHelpers['emotion'](
+                                data[item].arousal,
+                                selection['emotion'][0],
+                            );
+                            data[item].valence = filterHelpers['emotion'](
+                                data[item].valence,
+                                selection['emotion'][1],
+                            );
+                        }
                     }
+                    this.$store.commit('UPDATE_DATA', data);
+                }, err => console.log(err));
+                this.$store.dispatch('showFilter', { show: false });
+            } else {
+                this.$toaster.showMessage({
+                    message: `Error occured. Please, check whether mininum
+                    insulin value is less than maximum number and/or selected
+                    date is not a range when filtering on time attribute.`,
+                    color: 'dark',
+                    btnColor: 'pink',
+                    timeout: 6500
                 });
-                const selectionKeys = Object.keys(selection);
-                for (let item in data) {
-                    if (selectionKeys.includes('insulin'))
-                        data[item].insulinAmount = filterHelpers['insulin'](
-                            data[item].insulinAmount,
-                            ...selection['insulin']
-                        );
-                    if (selectionKeys.includes('time')) {
-                        data[item].timestamp = filterHelpers['time'](
-                            data[item].timestamp,
-                            date,
-                            ...selection['time']
-                        );
-                    }
-                    if (selectionKeys.includes('glucose')) {
-                        data[item].glucoseLevel = filterHelpers['glucose'](
-                            data[item].glucoseLevel,
-                            ...selection['glucose']
-                        );
-                    }
-                    if (selectionKeys.includes('emotion')) {
-                        data[item].arousal = filterHelpers['emotion'](
-                            data[item].arousal,
-                            selection['emotion'][0],
-                        );
-                        data[item].valence = filterHelpers['emotion'](
-                            data[item].valence,
-                            selection['emotion'][1],
-                        );
-                    }
-                }
-                this.$store.commit('UPDATE_DATA', data);
-            }, err => console.log(err));
-            this.$store.dispatch('showFilter', { show: false });
+            }
         },
         resetSelection() {
             for (let element in this.parameters) {

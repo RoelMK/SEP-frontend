@@ -18,6 +18,7 @@ export default {
             show: false,
             message: '',
             color: '',
+            timeout: 5000,
         };
     },
     computed: {
@@ -28,6 +29,7 @@ export default {
             if (mutation.type === 'SHOW_MESSAGE') {
                 this.message = state.toast.message;
                 this.color = state.toast.color;
+                this.timeout = state.toast.timeout;
                 this.show = true;
             }
         });
