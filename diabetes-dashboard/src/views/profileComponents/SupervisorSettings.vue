@@ -61,11 +61,11 @@
     <v-col cols="8" class="gTitle">Awaiting approval</v-col>
     <v-row class="mx-2 temporaryPadding" align="center" v-for="supervisor in requestedSupervisors" :key="supervisor.supervisor_email">
         <v-col
-            cols="9"
+            cols="7"
         >
           <v-text class="fSize14">{{ supervisor.supervisor_email }}</v-text>
         </v-col>
-        <v-col cols="3">
+        <v-col cols="5">
           <v-btn
             @click="approve(supervisor)"
             class="white--text"
@@ -95,6 +95,11 @@ export default {
   created() {
       this.getRequested();
       this.getApproved();
+      Supervisor.getRole({ email: this.$store.state.user.email })
+        .then(
+          (resp) => console.log(resp),
+          (err) => console.log(err)
+        );
   },
   data() {
     return {

@@ -48,7 +48,17 @@ export default {
           params: payload
       };
       return Client.get(url, config);
-    }
+    },
+    getRole(payload) {
+        let url = `${resource}role`;
+        let config = {
+            headers: {
+            },
+            params: payload
+        };
+        return Client.get(url, config);
+    },
+
 
 
 };

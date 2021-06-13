@@ -40,7 +40,8 @@ const store = new Vuex.Store({
             goalA1C: 7,
         },
         user: {
-            email: "alexandranikolova99@gmail.com"
+            email: "jfmgijsbers@gmail.com",
+            supervisor: true
         }
     },
 

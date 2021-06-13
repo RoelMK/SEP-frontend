@@ -53,7 +53,7 @@
             <v-col cols="12">
                 <div class="customCol">
                     <v-text-area id="personalProperty">Email</v-text-area>
-                    <v-text-area id="personalValue">c.simp@email.com</v-text-area>
+                    <v-text-area id="personalValue">{{ this.$store.state.user.email }}</v-text-area>
                 </div>
             </v-col>
         </v-row>
