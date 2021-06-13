@@ -22,9 +22,6 @@ export default [
         axisLabel: {
             show: false
         },
-        splitArea: {
-            show: true
-        },
     },
     {
         show: true,
@@ -35,9 +32,6 @@ export default [
         },
         axisLabel: {
             show: false
-        },
-        splitArea: {
-            show: true
         },
     },
     {
@@ -50,9 +44,6 @@ export default [
         axisLabel: {
             show: false
         },
-        splitArea: {
-            show: true
-        },
     },
     {
         show: true,
@@ -63,9 +54,6 @@ export default [
         },
         axisLabel: {
             show: false
-        },
-        splitArea: {
-            show: true
         },
     },
 ];
