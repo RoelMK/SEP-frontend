@@ -3,7 +3,7 @@
         ref="dateMenu"
         v-model="dateMenu"
         :close-on-content-click="false"
-        :return-value.sync="date"
+        :return-value.sync="insulinDate"
         transition="scale-transition"
         offset-y
         min-width="auto"
@@ -20,7 +20,7 @@
         </template>
         <v-container class="datePickerContainer">
             <vc-date-picker
-                v-model="date"
+                v-model="insulinDate"
                 mode="date"
                 is-required
                 is24hr
@@ -33,7 +33,10 @@
             <v-btn
                 text
                 color="primary"
-                @click="$refs.dateMenu.save(date); emitDate()"
+                @click="
+                    $refs.dateMenu.save(insulinDate);
+                    emitDate();
+                "
             >
                 OK
             </v-btn>
@@ -42,27 +45,36 @@
 </template>
 
 <script>
-import moment from 'moment';
+import moment from "moment";
 export default {
     name: "TableDateFilter",
+    props: ["date"],
     data() {
         return {
             dateMenu: false,
-            date: ""
+            insulinDate: "",
         };
     },
     computed: {
         convertDate() {
-            if (this.date)
-                return moment(this.date).format("DD/MM/YYYY").toString();
+            if (this.insulinDate)
+                return moment(this.insulinDate).format("DD/MM/YYYY").toString();
             else return "Select Date";
         },
     },
     methods: {
         emitDate() {
-            this.$emit("selectedDate", this.date);
+            this.$emit("selectedDate", this.insulinDate);
         },
-    }
+    },
+    watch: {
+        date: {
+            handler(after) {
+                this.insulinDate = after;
+            },
+            immediate: true,
+        },
+    },
 };
 </script>
 

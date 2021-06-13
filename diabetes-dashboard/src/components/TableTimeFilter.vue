@@ -3,7 +3,7 @@
         ref="timeMenu"
         v-model="timeMenu"
         :close-on-content-click="false"
-        :return-value.sync="time"
+        :return-value.sync="insulinTime"
         transition="scale-transition"
         offset-y
         min-width="auto"
@@ -20,7 +20,7 @@
         </template>
         <v-container class="timePickerContainer">
             <vc-date-picker
-                v-model="time"
+                v-model="insulinTime"
                 mode="time"
                 :timezone="'utc'"
                 is-required
@@ -34,7 +34,10 @@
             <v-btn
                 text
                 color="primary"
-                @click="$refs.timeMenu.save(time); emitTime()"
+                @click="
+                    $refs.timeMenu.save(insulinTime);
+                    emitTime();
+                "
             >
                 OK
             </v-btn>
@@ -43,27 +46,39 @@
 </template>
 
 <script>
-import moment from 'moment';
+import moment from "moment";
 export default {
     name: "TableTimeFilter",
+    props: ["time"],
     data() {
         return {
             timeMenu: false,
-            time: ""
+            insulinTime: "",
         };
     },
     computed: {
         convertTime() {
-            if (this.time)
-                return moment.utc(this.time).format("HH:mm").toString();
+            if (this.insulinTime)
+                return moment
+                    .utc(this.insulinTime, "HH:mm")
+                    .format("HH:mm")
+                    .toString();
             else return "Select Time";
         },
     },
     methods: {
         emitTime() {
-            this.$emit("selectedTime", this.time);
+            this.$emit("selectedTime", this.insulinTime);
         },
-    }
+    },
+    watch: {
+        time: {
+            handler(after) {
+                this.insulinTime = after;
+            },
+            immediate: true,
+        },
+    },
 };
 </script>
 

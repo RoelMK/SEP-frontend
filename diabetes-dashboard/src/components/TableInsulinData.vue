@@ -1,33 +1,76 @@
 <template>
     <div class="table">
+        <div>
+            <tr>
+                <td class="border">
+                    <div class="filterElement">
+                        <span class="filterText">Amount</span>
+                        <v-select
+                            v-model="amountFilter"
+                            :items="items"
+                            class="pt-0 pb-0 selector"
+                        ></v-select>
+                    </div>
+                </td>
+                <td class="border">
+                    <div class="filterElement">
+                        <span class="filterText">Date</span>
+                        <v-select
+                            v-model="dateFilter"
+                            :items="items"
+                            class="pt-0 pb-0 selector"
+                        ></v-select>
+                    </div>
+                </td>
+                <td class="border">
+                    <div class="filterElement">
+                        <span class="filterText">Time</span>
+                        <v-select
+                            v-model="timeFilter"
+                            :items="items"
+                            class="pt-0 pb-0 selector"
+                        ></v-select>
+                    </div>
+                </td>
+            </tr>
+        </div>
+
         <v-data-table
             :headers="headers"
             :items="getInsulinData"
-            :search="search"
             elevation="0"
             @click:row="selectInsulin"
         >
+            <template v-slot:[`body.prepend`]>
+                <tr>
+                    <td>
+                        <v-text-field
+                            v-model="amount"
+                            type="string"
+                        ></v-text-field>
+                    </td>
+                    <td>
+                        <v-select v-model="typeFilter" :items="typeFilterItems">
+                        </v-select>
+                    </td>
+                    <td>
+                        <v-text-field
+                            v-model="date"
+                            type="string"
+                        ></v-text-field>
+                    </td>
+                    <td>
+                        <v-text-field
+                            v-model="time"
+                            type="string"
+                        ></v-text-field>
+                    </td>
+                    <td>
+                        <v-icon @click="dialog = true"> mdi-plus </v-icon>
+                    </td>
+                </tr>
+            </template>
             <template v-slot:top>
-                <v-container>
-                    <v-row>
-                        <v-col xs="10" sm="10" md="10" lg="10">
-                            <v-text-field
-                                v-model="search"
-                                label="Search"
-                            ></v-text-field>
-                        </v-col>
-                        <v-col>
-                            <v-dialog v-model="dialog" max-width="500px">
-                                <template v-slot:activator="{ on, attrs }">
-                                    <v-icon v-bind="attrs" v-on="on">
-                                        mdi-plus
-                                    </v-icon>
-                                </template>
-                            </v-dialog>
-                        </v-col>
-                    </v-row>
-                </v-container>
-
                 <v-dialog v-model="dialog" max-width="500px">
                     <v-card>
                         <v-card-title>
@@ -53,11 +96,13 @@
                                 <v-row>
                                     <TableDateFilter
                                         @selectedDate="getSelectedDate"
+                                        :date="editedItem.date"
                                     />
                                 </v-row>
                                 <v-row>
                                     <TableTimeFilter
                                         @selectedTime="getSelectedTime"
+                                        :time="editedItem.time"
                                     />
                                 </v-row>
                             </v-container>
@@ -75,7 +120,7 @@
                     </v-card>
                 </v-dialog>
 
-                <v-dialog v-model="dialogDelete" max-width="500px">
+                <!-- <v-dialog v-model="dialogDelete" max-width="500px">
                     <v-card>
                         <v-card-title class="headline">
                             <p style="font-size: 18px">
@@ -102,12 +147,12 @@
                             <v-spacer></v-spacer>
                         </v-card-actions>
                     </v-card>
-                </v-dialog>
+                </v-dialog> -->
             </template>
 
             <template v-slot:[`item.actions`]="{ item }">
                 <v-icon small @click="editItem(item)"> mdi-pencil </v-icon>
-                <v-icon small @click="deleteItem(item.id)"> mdi-minus </v-icon>
+                <!-- <v-icon small @click="deleteItem(item.id)"> mdi-minus </v-icon> -->
             </template>
         </v-data-table>
     </div>
@@ -129,22 +174,80 @@ export default {
     // must match data values from json
     data() {
         return {
+            items: ["<=", ">=", "="],
             // must be modified when we use real data
             headers: [
                 {
-                    text: "Value",
-                    value: "userId",
+                    text: "Amount",
+                    value: "amount",
                     sortable: false,
+                    filter: (value) => {
+                        if (!this.amount) return true;
+                        if (this.amountFilter === "<=") {
+                            return value <= this.amount;
+                        } else if (this.amountFilter === ">=") {
+                            return value >= this.amount;
+                        } else {
+                            return value == this.amount;
+                        }
+                    },
                 },
                 {
                     text: "Type",
-                    value: "id",
+                    value: "type",
                     sortable: false,
+                    filter: (value) => {
+                        if (this.typeFilter === "") return true;
+                        return value === this.typeFilter;
+                    },
                 },
                 {
                     text: "Date",
-                    value: "title",
+                    value: "date",
                     sortable: false,
+                    filter: (value) => {
+                        if (!this.date) return true;
+                        if (this.dateFilter === "<=") {
+                            return (
+                                moment(value).format("L") <=
+                                moment(this.date).format("L")
+                            );
+                        } else if (this.dateFilter === ">=") {
+                            return (
+                                moment(value).format("L") >=
+                                moment(this.date).format("L")
+                            );
+                        } else {
+                            return (
+                                moment(value).format("L") ===
+                                moment(this.date).format("L")
+                            );
+                        }
+                    },
+                },
+                {
+                    text: "Time",
+                    value: "time",
+                    sortable: false,
+                    filter: (value) => {
+                        if (!this.time) return true;
+                        if (this.timeFilter === "<=") {
+                            return (
+                                moment(value, "HH:mm").format("HH:mm") <=
+                                moment(this.time, "HH:mm").format("HH:mm")
+                            );
+                        } else if (this.timeFilter === ">=") {
+                            return (
+                                moment(value, "HH:mm").format("HH:mm") >=
+                                moment(this.time, "HH:mm").format("HH:mm")
+                            );
+                        } else {
+                            return (
+                                moment(value, "HH:mm").format("HH:mm") ==
+                                moment(this.time, "HH:mm").format("HH:mm")
+                            );
+                        }
+                    },
                 },
                 {
                     text: "Actions",
@@ -154,29 +257,35 @@ export default {
             ],
             editing: false,
             dialog: false,
-            dialogDelete: false,
+            //dialogDelete: false,
             editedItem: {
                 amount: 0,
                 type: "",
                 date: "",
                 time: "",
+                id: -1,
             },
             defaultItem: {
                 amount: "",
                 type: "",
                 date: "",
                 time: "",
+                id: -1,
             },
-            search: "",
             types: ["Rapid", "Long"],
+            timeFilter: "",
+            dateFilter: "",
+            typeFilterItems: ["", "Rapid", "Long"],
+            amountFilter: "",
+            amount: "",
+            typeFilter: "",
+            date: "",
+            time: "",
         };
     },
     methods: {
         ...mapActions([
-            "fetchInsulinData",
-            "addInsulinInput",
-            "deleteInsulinInput",
-            "updateInsulinInput",
+            //"fetchInsulinData",
         ]),
 
         getSelectedDate(date) {
@@ -206,7 +315,7 @@ export default {
             );
         },
 
-        checkInsulinInput() {
+        checkInsulinInput(editing) {
             if (
                 this.editedItem.amount === "" ||
                 this.editedItem.type === "" ||
@@ -220,10 +329,10 @@ export default {
                 });
             } else {
                 let date = moment(this.editedItem.date)
-                    .format("DD/MM/YYYY")
+                    .format("MM/DD/YYYY")
                     .toString();
                 let time = moment
-                    .utc(this.editedItem.time)
+                    .utc(this.editedItem.time, "HH:mm")
                     .format("HH:mm")
                     .toString();
                 let parameters = {
@@ -231,15 +340,18 @@ export default {
                         moment(date + " " + time).format("MM-DD-YYYY HH:mm")
                     ).format("x"),
                     insulinType: this.editedItem.type.toLowerCase(),
-                    insulinAmount: parseInt(this.editedItem.amount)
+                    insulinAmount: parseInt(this.editedItem.amount),
                 };
+                if (editing) {
+                    parameters["activityId"] = this.editedItem.id;
+                    parameters["modify"] = true;
+                }
                 this.postInsulin(parameters);
             }
         },
 
         editItem(item) {
             this.editedItem = Object.assign({}, item);
-            this.editedItem.originalId = item.id;
             this.dialog = true;
             this.editing = true;
         },
@@ -252,32 +364,23 @@ export default {
             });
         },
         save() {
-            if (this.editing) {
-                this.updateInsulinInput({
-                    originalId: this.editedItem.originalId,
-                    userId: this.editedItem.userId,
-                    id: this.editedItem.id,
-                    title: this.editedItem.title,
-                });
-            } else {
-                this.checkInsulinInput();
-            }
+            this.checkInsulinInput(this.editing);
             this.close();
         },
-        deleteItem(id) {
-            this.editedItem.originalId = id;
-            this.dialogDelete = true;
-        },
-        deleteItemConfirm() {
-            this.deleteInsulinInput(this.editedItem.originalId);
-            this.closeDelete();
-        },
-        closeDelete() {
-            this.dialogDelete = false;
-            this.$nextTick(() => {
-                this.editedItem = Object.assign({}, this.defaultItem);
-            });
-        },
+        // deleteItem(id) {
+        //     this.editedItem.originalId = id;
+        //     this.dialogDelete = true;
+        // },
+        // deleteItemConfirm() {
+        //     //TODO:
+        //     this.closeDelete();
+        // },
+        // closeDelete() {
+        //     this.dialogDelete = false;
+        //     this.$nextTick(() => {
+        //         this.editedItem = Object.assign({}, this.defaultItem);
+        //     });
+        // },
     },
     // state getters you need to use
     computed: {
@@ -291,7 +394,7 @@ export default {
     },
     // when a component is created call actions
     created() {
-        this.fetchInsulinData();
+        //this.fetchInsulinData();
     },
 };
 </script>
@@ -304,7 +407,7 @@ export default {
     width: 100%;
     overflow: auto;
 }
-.mdi-minus {
+.mdi-pencil {
     border-radius: 50%;
     padding: 0.2rem;
     background: rgba(0, 0, 0, 0.15);
@@ -314,5 +417,8 @@ export default {
     border-radius: 50%;
     padding: 0.2rem;
     background: rgba(0, 0, 0, 0.15);
+}
+.selector {
+    width: 12.3rem;
 }
 </style>

@@ -88,6 +88,84 @@ const store = new Vuex.Store({
         glucoseData: [
         ],
         insulinData: [
+            {
+                amount: 1,
+                type: "Long",
+                date: '05/30/2021',
+                time: '16:00',
+                id: 0
+            },
+            {
+                amount: 1,
+                type: "Long",
+                date: '05/30/2021',
+                time: '16:00',
+                id: 1
+            },
+            {
+                amount: 1,
+                type: "Long",
+                date: '05/30/2021',
+                time: '16:00',
+                id: 2
+            },
+            {
+                amount: 1,
+                type: "Long",
+                date: '05/30/2021',
+                time: '16:00',
+                id: 3
+            },
+            {
+                amount: 1,
+                type: "Long",
+                date: '05/30/2021',
+                time: '16:00',
+                id: 4
+            },
+            {
+                amount: 1,
+                type: "Long",
+                date: '05/30/2021',
+                time: '16:00',
+                id: 5
+            },
+
+            {
+                amount: 1,
+                type: "Rapid",
+                date: '05/30/2021',
+                time: '16:00',
+                id: 6
+            },
+            {
+                amount: 1,
+                type: "Rapid",
+                date: '05/30/2021',
+                time: '16:00',
+                id: 7
+            },
+            {
+                amount: 1,
+                type: "Rapid",
+                date: '05/30/2021',
+                time: '16:00',
+                id: 8
+            },
+            {
+                amount: 1,
+                type: "Rapid",
+                date: '05/30/2021',
+                time: '16:00',
+                id: 9
+            },
+            {
+                amount: 1,
+                type: "Rapid",
+                date: '05/30/2021',
+                time: '16:00',
+                id: 10
+            },
         ],
         users: [
         ],
