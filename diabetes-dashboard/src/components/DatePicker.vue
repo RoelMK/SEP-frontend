@@ -38,7 +38,7 @@
             <v-btn
                 text
                 color="primary"
-                @click="$refs.dateMenu.save(dateRange); $emit('dateUpdated', dateRange)"
+                @click="update"
             >
                 OK
             </v-btn>
@@ -83,6 +83,14 @@ export default {
         },
     },
     methods: {
+        update() {
+            var format = 'DD-MM-YYYY';
+            this.$refs.dateMenu.save(this.dateRange);
+            this.$emit('dateUpdated', {
+                start: moment(this.dateRange.start).format(format),
+                end: moment(this.dateRange.end).format(format)
+            });
+        },
         clear() {
             this.dateRange = { start: null, end: null };
             this.$emit('dateUpdated', null);
