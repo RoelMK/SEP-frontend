@@ -102,9 +102,9 @@
                         <v-icon small @click="editItem(item)">
                             mdi-pencil
                         </v-icon>
-                        <v-icon small @click="deleteItem(item.id)">
+                        <!-- <v-icon small @click="deleteItem(item.id)">
                             mdi-minus
-                        </v-icon>
+                        </v-icon> -->
                     </td>
                 </tr>
             </template>
@@ -212,114 +212,16 @@
                                     </p>
                                 </v-row>
                                 <v-row>
-                                    <v-menu
-                                        ref="dateMenu"
-                                        v-model="dateMenu"
-                                        :close-on-content-click="false"
-                                        :return-value.sync="editedItem.date"
-                                        transition="scale-transition"
-                                        offset-y
-                                        min-width="auto"
-                                    >
-                                        <template
-                                            v-slot:activator="{ on, attrs }"
-                                        >
-                                            <v-text-field
-                                                v-model="convertDate"
-                                                label="Select date"
-                                                prepend-icon="mdi-calendar"
-                                                readonly
-                                                v-bind="attrs"
-                                                v-on="on"
-                                            ></v-text-field>
-                                        </template>
-                                        <v-container
-                                            class="datePickerContainer"
-                                        >
-                                            <vc-date-picker
-                                                v-model="editedItem.date"
-                                                mode="date"
-                                                is-required
-                                                is24hr
-                                                :max-date="new Date()"
-                                                class="datePicker"
-                                            />
-                                            <v-spacer></v-spacer>
-                                            <v-btn
-                                                text
-                                                color="primary"
-                                                @click="dateMenu = false"
-                                            >
-                                                Cancel
-                                            </v-btn>
-                                            <v-btn
-                                                text
-                                                color="primary"
-                                                @click="
-                                                    $refs.dateMenu.save(
-                                                        editedItem.date
-                                                    )
-                                                "
-                                            >
-                                                OK
-                                            </v-btn>
-                                        </v-container>
-                                    </v-menu>
+                                    <HistoryDatePicker
+                                        @selectedDate="getSelectedDate"
+                                        :date="editedItem.date"
+                                    />
                                 </v-row>
                                 <v-row>
-                                    <v-menu
-                                        ref="timeMenu"
-                                        v-model="timeMenu"
-                                        :close-on-content-click="false"
-                                        :return-value.sync="editedItem.time"
-                                        transition="scale-transition"
-                                        offset-y
-                                        min-width="auto"
-                                    >
-                                        <template
-                                            v-slot:activator="{ on, attrs }"
-                                        >
-                                            <v-text-field
-                                                v-model="convertTime"
-                                                label="Select time"
-                                                prepend-icon="mdi-clock"
-                                                readonly
-                                                v-bind="attrs"
-                                                v-on="on"
-                                            ></v-text-field>
-                                        </template>
-                                        <v-container
-                                            class="timePickerContainer"
-                                        >
-                                            <vc-date-picker
-                                                v-model="editedItem.time"
-                                                mode="time"
-                                                :timezone="'utc'"
-                                                is-required
-                                                is24hr
-                                                class="timePicker"
-                                            />
-                                            <v-spacer></v-spacer>
-                                            <v-btn
-                                                text
-                                                color="primary"
-                                                @click="timeMenu = false"
-                                            >
-                                                Cancel
-                                            </v-btn>
-                                            <v-btn
-                                                text
-                                                color="primary"
-                                                @click="
-                                                    $refs.timeMenu.save(
-                                                        editedItem.time
-                                                    )
-                                                "
-                                            >
-                                                OK
-                                            </v-btn>
-                                        </v-container>
-                                    </v-menu>
+                                    <HistoryTimePicker
+                                        @selectedTime="getSelectedTime"
+                                        :time="editedItem.time"
+                                    />
                                 </v-row>
                             </v-container>
                         </v-card-text>
@@ -336,7 +238,7 @@
                     </v-card>
                 </v-dialog>
 
-                <v-dialog v-model="dialogDelete" max-width="500px">
+                <!-- <v-dialog v-model="dialogDelete" max-width="500px">
                     <v-card>
                         <v-card-title class="headline">
                             <p style="font-size: 18px">
@@ -363,7 +265,7 @@
                             <v-spacer></v-spacer>
                         </v-card-actions>
                     </v-card>
-                </v-dialog>
+                </v-dialog> -->
             </template>
         </v-data-table>
     </div>
@@ -373,11 +275,16 @@
 import { mapGetters } from "vuex";
 import moment from "moment";
 import { emotionMixin } from "@/helpers/emotionMixin.js";
+import HistoryDatePicker from "@/components/HistoryDatePicker.vue";
+import HistoryTimePicker from "@/components/HistoryTimePicker.vue";
 
 export default {
     name: "EmotionTable",
     mixins: [emotionMixin],
-    // must match data values from json
+    components: {
+        HistoryDatePicker,
+        HistoryTimePicker,
+    },
     data() {
         return {
             items: ["<=", ">=", "="],
@@ -461,7 +368,7 @@ export default {
             date: "",
             time: "",
             dialog: false,
-            dialogDelete: false,
+            //dialogDelete: false,
             editing: false,
             editedItem: {
                 happiness: 0,
@@ -506,6 +413,12 @@ export default {
         },
     },
     methods: {
+        getSelectedDate(date) {
+            this.editedItem.date = date;
+        },
+        getSelectedTime(time) {
+            this.editedItem.time = time;
+        },
         selectEmotion(emotion) {
             this.$emit("selectedEmotion", emotion);
         },
@@ -546,7 +459,7 @@ export default {
                 });
             } else {
                 let date = moment(this.editedItem.date)
-                    .format("DD/MM/YYYY")
+                    .format("MM/DD/YYYY")
                     .toString();
                 let time = moment
                     .utc(this.editedItem.time, "HH:mm")
@@ -585,19 +498,19 @@ export default {
             this.checkEmotionInput(this.editing);
             this.close();
         },
-        deleteItem(id) {
-            //this.editedItem.originalId = id;
-            this.dialogDelete = true;
-        },
-        deleteItemConfirm() {
-            this.closeDelete();
-        },
-        closeDelete() {
-            this.dialogDelete = false;
-            this.$nextTick(() => {
-                this.editedItem = Object.assign({}, this.defaultItem);
-            });
-        },
+        // deleteItem(id) {
+        //     //this.editedItem.originalId = id;
+        //     this.dialogDelete = true;
+        // },
+        // deleteItemConfirm() {
+        //     this.closeDelete();
+        // },
+        // closeDelete() {
+        //     this.dialogDelete = false;
+        //     this.$nextTick(() => {
+        //         this.editedItem = Object.assign({}, this.defaultItem);
+        //     });
+        // },
     },
 };
 </script>
@@ -616,7 +529,7 @@ export default {
     margin-left: 12px;
     background: rgba(0, 0, 0, 0.15);
 }
-.mdi-minus {
+.mdi-pencil {
     border-radius: 50%;
     padding: 0.2rem;
     background: rgba(0, 0, 0, 0.15);
@@ -627,26 +540,5 @@ export default {
 }
 .selector {
     width: 18rem;
-}
-.datePickerContainer {
-    background-color: white;
-}
-.datePicker {
-    border: none;
-}
-.timePicker .vc-month {
-    display: none;
-}
-.timePicker .vc-year {
-    display: none;
-}
-.timePicker .vc-day {
-    display: none;
-}
-.timePicker .vc-weekday {
-    display: none;
-}
-.timePickerContainer {
-    background-color: white;
 }
 </style>
