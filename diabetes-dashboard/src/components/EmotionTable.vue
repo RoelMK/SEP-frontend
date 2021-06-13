@@ -241,6 +241,7 @@
                                                 mode="date"
                                                 is-required
                                                 is24hr
+                                                :max-date="new Date()"
                                                 class="datePicker"
                                             />
                                             <v-spacer></v-spacer>
@@ -467,12 +468,14 @@ export default {
                 excitement: 0,
                 date: "",
                 time: "",
+                id: -1,
             },
             defaultItem: {
                 happiness: 0,
                 excitement: 0,
                 date: "",
                 time: "",
+                id: -1,
             },
             timeFilter: "",
             dateFilter: "",
@@ -495,9 +498,11 @@ export default {
             else return "Select Date";
         },
         convertTime() {
-            if (this.editedItem.time)
-                return moment.utc(this.editedItem.time).format("HH:mm");
-            else return "Select Time";
+            if (this.editedItem.time) {
+                return moment
+                    .utc(this.editedItem.time, "HH:mm")
+                    .format("HH:mm");
+            } else return "Select Time";
         },
     },
     methods: {
@@ -526,7 +531,8 @@ export default {
                 return "";
             }
         },
-        checkEmotionInput() {
+        checkEmotionInput(editing) {
+            // no need to check id here
             if (
                 this.editedItem.happiness === 0 ||
                 this.editedItem.excitement === 0 ||
@@ -543,10 +549,9 @@ export default {
                     .format("DD/MM/YYYY")
                     .toString();
                 let time = moment
-                    .utc(this.editedItem.time)
+                    .utc(this.editedItem.time, "HH:mm")
                     .format("HH:mm")
                     .toString();
-
                 let parameters = {
                     timestamp: moment(
                         moment(date + " " + time).format("MM-DD-YYYY HH:mm")
@@ -555,6 +560,10 @@ export default {
                     valence: this.editedItem.happiness,
                 };
 
+                if (editing) {
+                    parameters["activityId"] = this.editedItem.id;
+                    parameters["modify"] = true;
+                }
                 this.postEmotion(parameters);
             }
         },
@@ -573,11 +582,7 @@ export default {
             });
         },
         save() {
-            if (this.editing) {
-                this.close();
-            } else {
-                this.checkEmotionInput();
-            }
+            this.checkEmotionInput(this.editing);
             this.close();
         },
         deleteItem(id) {
