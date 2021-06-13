@@ -158,7 +158,7 @@ export default {
                             );
                         }
                     }
-                    this.$store.commit('UPDATE_DATA', data);
+                    this.$store.dispatch('setData', data);
                 }, err => console.log(err));
                 this.$store.dispatch('showFilter', { show: false });
             } else {

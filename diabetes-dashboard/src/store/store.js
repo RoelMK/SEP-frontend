@@ -1,6 +1,5 @@
 import Vuex from 'vuex';
 import Vue from 'vue';
-import Data from '@/repositories/Data.js';
 
 Vue.use(Vuex);
 
@@ -34,16 +33,6 @@ const store = new Vuex.Store({
         },
         showFilter({ commit }, filter) {
             commit('SHOW_FILTER', filter);
-        },
-        async retrieveData({ commit }, options) {
-            // Data.fetch(options.parameters, options.token)
-            Data.testFetch().then(
-                (res) =>  {
-                    const data = res.data;
-                    commit('UPDATE_DATA', data);
-                },
-                (err) => console.log(err)
-            );
         },
         setData({ commit }, data) {
             commit('UPDATE_DATA', data);
