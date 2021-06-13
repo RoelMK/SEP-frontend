@@ -48,7 +48,7 @@
 <script>
 import moment from "moment";
 export default {
-    name: "TableTimeFilter",
+    name: "HistoryTimePicker",
     props: ["time"],
     data() {
         return {

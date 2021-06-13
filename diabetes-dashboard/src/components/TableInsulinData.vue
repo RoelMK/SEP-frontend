@@ -94,13 +94,13 @@
                                     ></v-select>
                                 </v-row>
                                 <v-row>
-                                    <TableDateFilter
+                                    <HistoryDatePicker
                                         @selectedDate="getSelectedDate"
                                         :date="editedItem.date"
                                     />
                                 </v-row>
                                 <v-row>
-                                    <TableTimeFilter
+                                    <HistoryTimePicker
                                         @selectedTime="getSelectedTime"
                                         :time="editedItem.time"
                                     />
@@ -161,15 +161,15 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import moment from "moment";
-import TableDateFilter from "@/components/TableDateFilter.vue";
-import TableTimeFilter from "@/components/TableTimeFilter.vue";
+import HistoryDatePicker from "@/components/HistoryDatePicker.vue";
+import HistoryTimePicker from "@/components/HistoryTimePicker.vue";
 import Insulin from "@/repositories/Insulin.js";
 
 export default {
     name: "TableInsulinData",
     components: {
-        TableDateFilter,
-        TableTimeFilter,
+        HistoryDatePicker,
+        HistoryTimePicker,
     },
     // must match data values from json
     data() {

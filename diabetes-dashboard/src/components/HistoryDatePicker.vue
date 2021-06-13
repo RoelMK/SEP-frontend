@@ -24,6 +24,7 @@
                 mode="date"
                 is-required
                 is24hr
+                :max-date="new Date()"
                 class="datePicker"
             />
             <v-spacer></v-spacer>
@@ -47,7 +48,7 @@
 <script>
 import moment from "moment";
 export default {
-    name: "TableDateFilter",
+    name: "HistoryDatePicker",
     props: ["date"],
     data() {
         return {
