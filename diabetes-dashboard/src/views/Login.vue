@@ -57,8 +57,12 @@ export default {
                         this.enteredEmail = true;
                     },
                     (error) => {
-                        this.$toasted.error("Something went wrong: "
-                        + error.response.status);
+                        this.$toaster.showMessage({
+                            message: 'Something went wrong: '
+                            + error.response.status,
+                            color: 'dark',
+                            btnColor: 'pink',
+                        });
                     });
 
         },
@@ -70,8 +74,12 @@ export default {
                         this.$router.push("/");
                     },
                     (error) => {
-                        this.$toasted.error("Something went wrong: "
-                        + error.response.status);
+                        this.$toaster.showMessage({
+                            message: 'Something went wrong: '
+                            + error.response.status,
+                            color: 'dark',
+                            btnColor: 'pink',
+                        });
                     });
 
         },
