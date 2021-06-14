@@ -20,8 +20,9 @@
                     </v-card>
                 </v-col>
                 <v-col cols="3">
-                    <v-card class="full-height" elevation="2">
-                        <Statistics :data="dataInit" />
+                    <v-card class="full-height statistics" elevation="2">
+                        <v-progress-circular indeterminate color="primary" size="50" v-if="!rendered" />
+                        <Statistics :data="dataInit" v-if="rendered" />
                     </v-card>
                 </v-col>
             </v-row>
@@ -115,6 +116,7 @@ export default {
     height: 700px;
 }
 #overview-chart-container .v-progress-circular,
+.statistics .v-progress-circular,
 .legend-container .v-progress-circular {
     left: 50%;
     top: 45%;
