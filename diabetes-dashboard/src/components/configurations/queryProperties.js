@@ -11,6 +11,7 @@ export default [
                 isIcon: false,
                 isMultiple: false,
                 isSearchable: false,
+                isNumber: false,
                 properties: []
             },
             {
@@ -21,6 +22,7 @@ export default [
                 isIcon: false,
                 isMultiple: false,
                 isSearchable: false,
+                isNumber: false,
                 properties: [],
             }
         ],
@@ -35,9 +37,38 @@ export default [
                 isDate: false,
                 isTime: false,
                 isIcon: false,
+                isMultiple: true,
+                isSearchable: false,
+                isNumber: false,
+                properties: ['Hypos', 'Normal', 'Hypers'],
+            }
+        ]
+    },
+    {
+        heading: 'Insulin Range',
+        label: 'Insulin',
+        properties: [
+            {
+                index: 'insulinMin',
+                label: 'Min',
+                isDate: false,
+                isTime: false,
+                isIcon: false,
                 isMultiple: false,
                 isSearchable: false,
-                properties: ['Hypos', 'Normal', 'Hypers'],
+                isNumber: true,
+                properties: [],
+            },
+            {
+                index: 'insulinMax',
+                label: 'Max',
+                isDate: false,
+                isTime: false,
+                isIcon: false,
+                isMultiple: false,
+                isSearchable: false,
+                isNumber: true,
+                properties: [],
             }
         ]
     },
@@ -53,6 +84,7 @@ export default [
                 isIcon: false,
                 isMultiple: true,
                 isSearchable: false,
+                isNumber: false,
                 properties: [
                     "Walk",
                     "Run",
@@ -100,13 +132,14 @@ export default [
         label: 'Emotion Status',
         properties: [
             {
-                index: 'arousal',
+                index: 'valence',
                 label: 'Happiness',
                 isDate: false,
                 isTime: false,
                 isIcon: true,
                 isMultiple: false,
                 isSearchable: false,
+                isNumber: false,
                 properties: [
                     'fas fa-angry',
                     'fas fa-smile-beam',
@@ -114,35 +147,20 @@ export default [
                 ],
             },
             {
-                index: 'valence',
+                index: 'arousal',
                 label: 'Excitement',
                 isDate: false,
                 isTime: false,
                 isIcon: true,
                 isMultiple: false,
                 isSearchable: false,
+                isNumber: false,
                 properties: [
                     'fas fa-tired',
                     'fas fa-smile-beam',
                     'fas fa-grin-stars'
                 ],
-            }
-        ],
-    },
-    {
-        heading: 'Food Parameters',
-        label: 'Food Name',
-        properties: [
-            {
-                index: 'food',
-                label: 'Food',
-                isDate: false,
-                isTime: false,
-                isIcon: false,
-                isMultiple: false,
-                isSearchable: true,
-                properties: [],
-            }
+            },
         ],
     },
 ];

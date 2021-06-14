@@ -16,12 +16,12 @@
                 <v-col class="wide-chart" cols="9">
                     <v-card id="overview-chart-container" elevation="2">
                         <v-progress-circular indeterminate color="primary" size="50" v-if="!rendered" />
-                        <OverviewChart ref="overview" v-if="rendered" :data="data" />
+                        <OverviewChart ref="overview" :data="dataInit" v-if="rendered" />
                     </v-card>
                 </v-col>
                 <v-col cols="3">
                     <v-card class="full-height" elevation="2">
-                        <Statistics :data="data" />
+                        <Statistics :data="dataInit" />
                     </v-card>
                 </v-col>
             </v-row>
@@ -48,15 +48,10 @@ import Statistics from '@/components/Statistics.vue';
 import EmotionsComponent from '@/components/EmotionsComponent.vue';
 import Legend from '@/components/Legend.vue';
 import Navbar from '@/components/Navbar.vue';
-import { AxiosWrapper } from '@/helpers/wrapper.js';
 import Cards from '@/components/Cards.vue';
-
 import Upload from "../repositories/Upload";
-
-const wrapper = new AxiosWrapper();
-
-// These URL's will be removed in the future
-const URL = 'https://gist.githubusercontent.com/nbalasovs/e212107367c65915668cf26e75d2ccfa/raw/14fde6559649d3fc5c6e2bd7d002e0000e50a54f/dummy.json';
+import { mapState } from 'vuex';
+import Data from '@/repositories/Data.js';
 
 export default {
     name: 'Dashboard',
@@ -68,17 +63,25 @@ export default {
         Legend,
         Cards
     },
+    computed: {
+        ...mapState(['data'])
+    },
+    watch: {
+        data: function(newData) {
+            this.dataInit = newData;
+        }
+    },
     data() {
         return {
-            data: null,
+            dataInit: null,
+            tab: null,
+            items: ['insulin', 'food', 'activities'],
+            chosenFood: { },
+            chosenActivity: { activity: null, now: null },
             rendered: false
         };
     },
     created() {
-        wrapper.get(URL, dataPromise => dataPromise).then(data => {
-            this.data = data;
-            this.rendered = true;
-        });
         let nightscoutUrl = localStorage.getItem("nightscout_url");
         if (nightscoutUrl) {
             Upload.connectNightscout({ host: nightscoutUrl })
@@ -87,6 +90,14 @@ export default {
                     (err) => { console.log(err); }
                 );
         }
+        // TODO: Needs to be replaced after we get more data in the backend
+        Data.testFetch().then(
+            (res) => {
+                this.dataInit = res.data;
+                this.rendered = true;
+            },
+            (err) => console.log(err)
+        );
     }
 };
 </script>

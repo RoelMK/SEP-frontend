@@ -25,7 +25,6 @@
             <vc-date-picker
                 v-model="timeRange"
                 mode="time"
-                :timezone="'utc'"
                 is-expanded
                 is-required
                 is-range
@@ -39,7 +38,7 @@
             <v-btn
                 text
                 color="primary"
-                @click="$refs.timeMenu.save(timeRange); $emit('timeUpdated', timeRange)"
+                @click="update"
             >
                 OK
             </v-btn>
@@ -75,15 +74,23 @@ export default {
         timeRangeText() {
             if (this.timeRange.start && this.timeRange.end)
                 return (
-                    moment.utc(this.timeRange.start).format("HH:mm") +
+                    moment(this.timeRange.start).format("HH:mm") +
                     " - " +
-                    moment.utc(this.timeRange.end).format("HH:mm")
+                    moment(this.timeRange.end).format("HH:mm")
                 );
             else
                 return 'Select Time Range';
         },
     },
     methods: {
+        update() {
+            var format = 'HH:mm';
+            this.$refs.timeMenu.save(this.timeRange);
+            this.$emit('timeUpdated', {
+                start: moment(this.timeRange.start).format(format),
+                end: moment(this.timeRange.end).format(format)
+            });
+        },
         clear() {
             this.timeRange = { start: null, end: null };
             this.$emit('timeUpdated', null);

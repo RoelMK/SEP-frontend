@@ -15,7 +15,7 @@
                 />
                 <v-text-field
                     v-else-if="prop.isSearchable"
-                    v-model="model1"
+                    v-model="model[index]"
                     :label="prop.label"
                     v-on:change="update('change', prop.index, $event)"
                     clearable
@@ -24,7 +24,7 @@
                 ></v-text-field>
                 <v-select
                     v-else-if="prop.isIcon"
-                    :v-model="`model${index + 1}`"
+                    v-model="model[index]"
                     :items="prop.properties"
                     :label="prop.label"
                     v-on:change="update('change', prop.index, $event)"
@@ -45,9 +45,20 @@
                         </p>
                     </template>
                 </v-select>
+                <v-text-field
+                    v-else-if="prop.isNumber"
+                    v-model="model[index]"
+                    :label="prop.label"
+                    v-on:change="update('change', prop.index, $event)"
+                    type="number"
+                    min="0"
+                    clearable
+                    dense
+                    outlined
+                ></v-text-field>
                 <v-select
                     v-else
-                    v-model="model1"
+                    v-model="model[index]"
                     :multiple="prop.isMultiple"
                     :items="prop.properties"
                     :label="prop.label"
@@ -81,15 +92,13 @@ export default {
         },
     },
     watch: {
-        reload: function() {
-            this.model1 = null;
-            this.model2 = null;
+        reload() {
+            this.model = [];
         }
     },
     data() {
         return {
-            model1: null,
-            model2: null,
+            model: [],
         };
     },
     methods: {
