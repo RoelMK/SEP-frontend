@@ -1,5 +1,5 @@
 <template>
-    <v-chart :option="options" />
+    <v-chart ref="stacked" :option="options" />
 </template>
 
 <script>
@@ -16,12 +16,13 @@ export default {
     },
     watch: {
         data: function() {
-            this.$refs.overview.setOption(this.options);
+            this.$refs.stacked.setOption(this.options);
         }
     },
     computed: {
         computeTimeDistribution() {
-            const total = this.data.length;
+            const total = this.data
+                .filter(f => f.glucoseLevel !== null).length;
             var [vLow, low, normal, high, vHigh] = [[], [], [], [], []];
 
             for (let i = 0; i < this.data.length - 2; i++) {
@@ -52,8 +53,7 @@ export default {
             };
 
             const calcPercentage = function(arr, total) {
-                console.log(arr, total);
-                return Math.round((arr.length / total) * 1000) / 100;
+                return Math.round((arr.length / total) * 10000) / 100;
             };
             return [
                 [calcPercentage(vLow, total), toHours(sumArray(vLow))],
@@ -86,7 +86,7 @@ export default {
                 xAxis: {
                     type: 'category',
                     show: false,
-                    data: ['Glucose Time Distribution'],
+                    data: ['Time Distribution'],
                 },
                 yAxis: {
                     show: false,
@@ -101,7 +101,17 @@ export default {
                         itemStyle: {
                             color: legend.sections[0].properties[0].color
                         },
-                        data: [this.computeTimeDistribution[0][0]]
+                        data: [[
+                            0,
+                            this.computeTimeDistribution[0][0],
+                            `${this.computeTimeDistribution[0][0]}%`,
+                            `${this.computeTimeDistribution[0][1]} min`
+                        ]],
+                        encode: {
+                            x: 0,
+                            y: 1,
+                            tooltip: [2, 3]
+                        },
                     },
                     {
                         name: 'Low',
@@ -111,7 +121,17 @@ export default {
                         itemStyle: {
                             color: legend.sections[0].properties[1].color
                         },
-                        data: [this.computeTimeDistribution[1][0]]
+                        data: [[
+                            0,
+                            this.computeTimeDistribution[1][0],
+                            `${this.computeTimeDistribution[1][0]}%`,
+                            `${this.computeTimeDistribution[1][1]} min`
+                        ]],
+                        encode: {
+                            x: 0,
+                            y: 1,
+                            tooltip: [2, 3]
+                        },
                     },
                     {
                         name: 'Normal',
@@ -119,9 +139,19 @@ export default {
                         stack: 'init',
                         barWidth: 50,
                         itemStyle: {
-                            color: legend.sections[0].properties[2].color
+                            color: legend.sections[0].properties[2].color,
                         },
-                        data: [this.computeTimeDistribution[2][0]]
+                        data: [[
+                            0,
+                            this.computeTimeDistribution[2][0],
+                            `${this.computeTimeDistribution[2][0]}%`,
+                            `${this.computeTimeDistribution[2][1]} min`
+                        ]],
+                        encode: {
+                            x: 0,
+                            y: 1,
+                            tooltip: [2, 3]
+                        },
                     },
                     {
                         name: 'High',
@@ -131,7 +161,17 @@ export default {
                         itemStyle: {
                             color: legend.sections[0].properties[3].color
                         },
-                        data: [this.computeTimeDistribution[3][0]]
+                        data: [[
+                            0,
+                            this.computeTimeDistribution[3][0],
+                            `${this.computeTimeDistribution[3][0]}%`,
+                            `${this.computeTimeDistribution[3][1]} min`
+                        ]],
+                        encode: {
+                            x: 0,
+                            y: 1,
+                            tooltip: [2, 3]
+                        },
                     },
                     {
                         name: 'Very High',
@@ -141,7 +181,17 @@ export default {
                         itemStyle: {
                             color: legend.sections[0].properties[4].color
                         },
-                        data: [this.computeTimeDistribution[4][0]]
+                        data: [[
+                            0,
+                            this.computeTimeDistribution[4][0],
+                            `${this.computeTimeDistribution[4][0]}%`,
+                            `${this.computeTimeDistribution[4][1]} min`
+                        ]],
+                        encode: {
+                            x: 0,
+                            y: 1,
+                            tooltip: [2, 3]
+                        },
                     }
                 ],
             };
