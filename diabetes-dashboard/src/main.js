@@ -20,7 +20,8 @@ import {
     LegendComponent,
     TimelineComponent,
     VisualMapComponent,
-    DataZoomComponent
+    DataZoomComponent,
+    ToolboxComponent,
 } from 'echarts/components';
 import i18n from './i18n';
 
@@ -34,6 +35,7 @@ use([
     VisualMapComponent,
     DataZoomComponent,
     LegendComponent,
+    ToolboxComponent,
     ScatterChart,
     LineChart,
     BarChart,

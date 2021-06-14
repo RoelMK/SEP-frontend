@@ -1,5 +1,5 @@
 <template>
-    <v-chart :option="options" autoresize />
+    <v-chart ref="overview" :option="options" autoresize />
 </template>
 
 <script>
@@ -18,11 +18,39 @@ export default {
             default: null
         }
     },
-    data() {
-        return {
-            options: {
+    watch: {
+        data: function() {
+            this.$refs.overview.setOption(this.options);
+        }
+    },
+    computed: {
+        options() {
+            return {
                 legend: {
                     show: false
+                },
+                toolbox: {
+                    top: '1%',
+                    right: '2%',
+                    feature: {
+                        saveAsImage: {
+                            title: 'Save'
+                        },
+                        restore: {
+                            title: 'Reset'
+                        },
+                        myFilter: {
+                            show: true,
+                            title: 'Add filters',
+                            icon: 'path://M12 12V19.88C12.04 20.18 11.94 20.5 11.71 20.71C11.32 21.1 10.69 21.1 10.3 20.71L8.29 18.7C8.06 18.47 7.96 18.16 8 17.87V12H7.97L2.21 4.62C1.87 4.19 1.95 3.56 2.38 3.22C2.57 3.08 2.78 3 3 3H17C17.22 3 17.43 3.08 17.62 3.22C18.05 3.56 18.13 4.19 17.79 4.62L12.03 12H12M15 17H18V14H20V17H23V19H20V22H18V19H15V17Z',
+                            onclick: () => {
+                                this.$store.dispatch(
+                                    'showFilter',
+                                    { show: true }
+                                );
+                            }
+                        }
+                    }
                 },
                 tooltip: {
                     trigger: 'axis',
@@ -57,7 +85,11 @@ export default {
                             color: '#3F7CAC',
                             opacity: 0.2,
                         },
-                        data: this.prepareData(this.data, 'ts', 'value'),
+                        data: this.prepareData(
+                            this.data,
+                            'timestamp',
+                            'glucoseLevel'
+                        ),
                     },
                     {
                         xAxisIndex: 1,
@@ -76,7 +108,7 @@ export default {
                         },
                         data: this.prepareData(
                             this.data,
-                            'ts',
+                            'timestamp',
                             'valence',
                             'arousal'
                         ).map(d => {
@@ -105,7 +137,11 @@ export default {
                         },
                         barWidth: 3,
                         type: 'bar',
-                        data: this.prepareData(this.data, 'ts', 'insulin'),
+                        data: this.prepareData(
+                            this.data,
+                            'timestamp',
+                            'insulinAmount'
+                        ),
                     },
                     {
                         xAxisIndex: 3,
@@ -117,10 +153,10 @@ export default {
                         symbol: 'none',
                         data: this.prepareData(
                             this.data,
-                            'ts',
-                            'carbs',
-                            'carbs',
-                            'gi'
+                            'timestamp',
+                            'carbohydrates',
+                            'carbohydrates',
+                            'glycemic_index'
                         ),
                     },
                     {
@@ -133,7 +169,11 @@ export default {
                         },
                         symbolSize: 5,
                         z: 1,
-                        data: this.prepareData(this.data, 'ts', 'heartbeat')
+                        data: this.prepareData(
+                            this.data,
+                            'timestamp',
+                            'heartbeat'
+                        )
                     },
                     {
                         xAxisIndex: 4,
@@ -145,7 +185,7 @@ export default {
                             borderWidth: 2,
                         },
                         data: this.prepareData(
-                            this.data, 'ts', 'intensity', 'duration'
+                            this.data, 'timestamp', 'intensity', 'duration'
                         ).map(d => {
                             if (d[1] === null)
                                 return [d[0], null];
@@ -158,33 +198,26 @@ export default {
                         renderItem:  this.renderInterval,
                     },
                 ],
-            },
+            };
+        }
+    },
+    data() {
+        return {
             emotions: {
                 Valence: {
-                    1: '<i class="fas fa-laugh-beam"></i>',
+                    1: '<i class="fas fa-angry"></i>',
                     2: '<i class="fas fa-smile-beam"></i>',
-                    3: '<i class="fas fa-angry"></i>'
+                    3: '<i class="fas fa-laugh-beam"></i>'
                 },
                 Arousal: {
-                    1: '<i class="fas fa-grin-stars"></i>',
+                    1: '<i class="fas fa-tired"></i>',
                     2: '<i class="fas fa-smile-beam"></i>',
-                    3: '<i class="fas fa-tired"></i>'
+                    3: '<i class="fas fa-grin-stars"></i>'
                 }
             },
         };
     },
     methods: {
-        check() {
-            this.$refs.hello.dispatchAction({
-                type: 'selectDataRange',
-                visualMapIndex: 0,
-                selected: {
-                    0: false,
-                    1: false,
-                    2: false
-                }
-            });
-        },
         /**
          * Scale value to a certain range
          * @param  { int }      value Value to be scaled

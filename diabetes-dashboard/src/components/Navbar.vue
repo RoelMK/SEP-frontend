@@ -63,37 +63,20 @@
                         <v-icon size="20" color="#FFCD00">mdi-bell</v-icon>
                     </v-btn>
                 </v-badge>
-
-                <v-btn class="no-background__hover" icon :ripple="false">
-                    <v-icon size="20" @click="showQueryMenu = !showQueryMenu">mdi-menu</v-icon>
-                </v-btn>
             </v-toolbar>
         </v-card>
-        <QueryMenu :show="showQueryMenu" />
     </div>
 </template>
 
 <script>
-import QueryMenu from "@/components/QueryMenu.vue";
 export default {
     name: "Navbar",
     props: {
         msg: String,
     },
-    components: {
-        QueryMenu,
-    },
     data: () => ({
-        drawer: false,
-        group: null,
         notifications: true,
-        showQueryMenu: false,
     }),
-    watch: {
-        group() {
-            this.drawer = false;
-        },
-    },
     methods: {
         logoClicked: function () {
             this.$router.push('/');

@@ -102,9 +102,9 @@
                         <v-icon small @click="editItem(item)">
                             mdi-pencil
                         </v-icon>
-                        <v-icon small @click="deleteItem(item.id)">
+                        <!-- <v-icon small @click="deleteItem(item.id)">
                             mdi-minus
-                        </v-icon>
+                        </v-icon> -->
                     </td>
                 </tr>
             </template>
@@ -117,95 +117,111 @@
                         </v-card-title>
                         <v-card-text>
                             <v-container>
-                                <p class="ml-0 pl-0">
-                                    Happiness:
-                                    <v-icon
-                                        class="icon"
-                                        size="25"
-                                        v-on:click="editedItem.happiness = 2"
-                                        v-bind:color="
-                                            editedItem.happiness === 2
-                                                ? 'blue darken-2'
-                                                : 'gray'
-                                        "
-                                    >
-                                        fas fa-laugh-beam
-                                    </v-icon>
-                                    <v-icon
-                                        class="icon"
-                                        size="25"
-                                        v-on:click="editedItem.happiness = 1"
-                                        v-bind:color="
-                                            editedItem.happiness === 1
-                                                ? 'blue darken-2'
-                                                : 'gray'
-                                        "
-                                    >
-                                        fas fa-smile-beam
-                                    </v-icon>
-                                    <v-icon
-                                        class="icon"
-                                        size="25"
-                                        v-on:click="editedItem.happiness = 0"
-                                        v-bind:color="
-                                            editedItem.happiness === 0
-                                                ? 'blue darken-2'
-                                                : 'gray'
-                                        "
-                                    >
-                                        fas fa-angry
-                                    </v-icon>
-                                </p>
-                                <p class="ml-0 pl-0">
-                                    Excitement:
-                                    <v-icon
-                                        class="icon"
-                                        size="25"
-                                        v-on:click="editedItem.excitement = 2"
-                                        v-bind:color="
-                                            editedItem.excitement === 2
-                                                ? 'blue darken-2'
-                                                : 'gray'
-                                        "
-                                    >
-                                        fas fa-grin-stars
-                                    </v-icon>
-                                    <v-icon
-                                        class="icon"
-                                        size="25"
-                                        v-on:click="editedItem.excitement = 1"
-                                        v-bind:color="
-                                            editedItem.excitement === 1
-                                                ? 'blue darken-2'
-                                                : 'gray'
-                                        "
-                                    >
-                                        fas fa-smile-beam
-                                    </v-icon>
-                                    <v-icon
-                                        class="icon"
-                                        size="25"
-                                        v-on:click="editedItem.excitement = 0"
-                                        v-bind:color="
-                                            editedItem.excitement === 0
-                                                ? 'blue darken-2'
-                                                : 'gray'
-                                        "
-                                    >
-                                        fas fa-tired
-                                    </v-icon>
-                                </p>
                                 <v-row>
-                                    <v-text-field
-                                        v-model="editedItem.date"
-                                        label="Date"
-                                    ></v-text-field>
+                                    <p class="ml-0 pl-0">
+                                        Happiness:
+                                        <v-icon
+                                            class="icon"
+                                            size="25"
+                                            v-on:click="
+                                                editedItem.happiness = 3
+                                            "
+                                            v-bind:color="
+                                                editedItem.happiness === 3
+                                                    ? 'blue darken-2'
+                                                    : 'gray'
+                                            "
+                                        >
+                                            fas fa-laugh-beam
+                                        </v-icon>
+                                        <v-icon
+                                            class="icon"
+                                            size="25"
+                                            v-on:click="
+                                                editedItem.happiness = 2
+                                            "
+                                            v-bind:color="
+                                                editedItem.happiness === 2
+                                                    ? 'blue darken-2'
+                                                    : 'gray'
+                                            "
+                                        >
+                                            fas fa-smile-beam
+                                        </v-icon>
+                                        <v-icon
+                                            class="icon"
+                                            size="25"
+                                            v-on:click="
+                                                editedItem.happiness = 1
+                                            "
+                                            v-bind:color="
+                                                editedItem.happiness === 1
+                                                    ? 'blue darken-2'
+                                                    : 'gray'
+                                            "
+                                        >
+                                            fas fa-angry
+                                        </v-icon>
+                                    </p>
                                 </v-row>
                                 <v-row>
-                                    <v-text-field
-                                        v-model="editedItem.time"
-                                        label="Time"
-                                    ></v-text-field>
+                                    <p class="ml-0 pl-0">
+                                        Excitement:
+                                        <v-icon
+                                            class="icon"
+                                            size="25"
+                                            v-on:click="
+                                                editedItem.excitement = 3
+                                            "
+                                            v-bind:color="
+                                                editedItem.excitement === 3
+                                                    ? 'blue darken-2'
+                                                    : 'gray'
+                                            "
+                                        >
+                                            fas fa-grin-stars
+                                        </v-icon>
+                                        <v-icon
+                                            class="icon"
+                                            size="25"
+                                            v-on:click="
+                                                editedItem.excitement = 2
+                                            "
+                                            v-bind:color="
+                                                editedItem.excitement === 2
+                                                    ? 'blue darken-2'
+                                                    : 'gray'
+                                            "
+                                        >
+                                            fas fa-smile-beam
+                                        </v-icon>
+                                        <v-icon
+                                            class="icon"
+                                            size="25"
+                                            v-on:click="
+                                                editedItem.excitement = 1
+                                            "
+                                            v-bind:color="
+                                                editedItem.excitement === 1
+                                                    ? 'blue darken-2'
+                                                    : 'gray'
+                                            "
+                                        >
+                                            fas fa-tired
+                                        </v-icon>
+                                    </p>
+                                </v-row>
+                                <v-row>
+                                    <HistoryDatePicker
+                                        @selectedDate="getSelectedDate"
+                                        :date="editedItem.date"
+                                    />
+                                </v-row>
+                                <v-row>
+                                    <HistoryTimePicker
+                                        @selectedTime="getSelectedTime"
+                                        :time="editedItem.time"
+                                    />
                                 </v-row>
                             </v-container>
                         </v-card-text>
@@ -222,7 +238,7 @@
                     </v-card>
                 </v-dialog>
 
-                <v-dialog v-model="dialogDelete" max-width="500px">
+                <!-- <v-dialog v-model="dialogDelete" max-width="500px">
                     <v-card>
                         <v-card-title class="headline">
                             <p style="font-size: 18px">
@@ -249,7 +265,7 @@
                             <v-spacer></v-spacer>
                         </v-card-actions>
                     </v-card>
-                </v-dialog>
+                </v-dialog> -->
             </template>
         </v-data-table>
     </div>
@@ -258,13 +274,23 @@
 <script>
 import { mapGetters } from "vuex";
 import moment from "moment";
+import { emotionMixin } from "@/helpers/emotionMixin.js";
+import HistoryDatePicker from "@/components/HistoryDatePicker.vue";
+import HistoryTimePicker from "@/components/HistoryTimePicker.vue";
+
 export default {
     name: "EmotionTable",
-    // must match data values from json
+    mixins: [emotionMixin],
+    components: {
+        HistoryDatePicker,
+        HistoryTimePicker,
+    },
     data() {
         return {
             items: ["<=", ">=", "="],
-            emotionValues: ["", 0, 1, 2],
+            emotionValues: ["", 1, 2, 3],
+            dateMenu: false,
+            timeMenu: false,
             // must be modified when we use real data
             headers: [
                 {
@@ -342,19 +368,21 @@ export default {
             date: "",
             time: "",
             dialog: false,
-            dialogDelete: false,
+            //dialogDelete: false,
             editing: false,
             editedItem: {
-                happiness: -1,
-                excitement: -1,
+                happiness: 0,
+                excitement: 0,
                 date: "",
                 time: "",
+                id: -1,
             },
             defaultItem: {
-                happiness: -1,
-                excitement: -1,
+                happiness: 0,
+                excitement: 0,
                 date: "",
                 time: "",
+                id: -1,
             },
             timeFilter: "",
             dateFilter: "",
@@ -371,35 +399,87 @@ export default {
                 ? "New Emotion Input"
                 : "Edit Emotion Input";
         },
+        convertDate() {
+            if (this.editedItem.date)
+                return moment(this.editedItem.date).format("DD/MM/YYYY");
+            else return "Select Date";
+        },
+        convertTime() {
+            if (this.editedItem.time) {
+                return moment
+                    .utc(this.editedItem.time, "HH:mm")
+                    .format("HH:mm");
+            } else return "Select Time";
+        },
     },
     methods: {
+        getSelectedDate(date) {
+            this.editedItem.date = date;
+        },
+        getSelectedTime(time) {
+            this.editedItem.time = time;
+        },
         selectEmotion(emotion) {
             this.$emit("selectedEmotion", emotion);
         },
         displayHappiness(happiness) {
-            if (happiness === 0) {
+            if (happiness === 1) {
                 return "fas fa-angry";
-            } else if (happiness === 1) {
-                return "fas fa-smile-beam";
             } else if (happiness === 2) {
+                return "fas fa-smile-beam";
+            } else if (happiness === 3) {
                 return "fas fa-laugh-beam";
             } else {
                 return "";
             }
         },
         displayExcitement(excitement) {
-            if (excitement === 0) {
+            if (excitement === 1) {
                 return "fas fa-tired";
-            } else if (excitement === 1) {
-                return "fas fa-smile-beam";
             } else if (excitement === 2) {
+                return "fas fa-smile-beam";
+            } else if (excitement === 3) {
                 return "fas fa-grin-stars";
             } else {
                 return "";
             }
         },
+        checkEmotionInput(editing) {
+            // no need to check id here
+            if (
+                this.editedItem.happiness === 0 ||
+                this.editedItem.excitement === 0 ||
+                this.editedItem.date === "" ||
+                this.editedItem.time === ""
+            ) {
+                this.$toaster.showMessage({
+                    message: "Enter all options!",
+                    color: "dark",
+                    btnColor: "pink",
+                });
+            } else {
+                let date = moment(this.editedItem.date)
+                    .format("MM/DD/YYYY")
+                    .toString();
+                let time = moment
+                    .utc(this.editedItem.time, "HH:mm")
+                    .format("HH:mm")
+                    .toString();
+                let parameters = {
+                    timestamp: moment(
+                        moment(date + " " + time).format("MM-DD-YYYY HH:mm")
+                    ).format("x"),
+                    arousal: this.editedItem.excitement,
+                    valence: this.editedItem.happiness,
+                };
 
-        ///
+                if (editing) {
+                    parameters["activityId"] = this.editedItem.id;
+                    parameters["modify"] = true;
+                }
+                this.postEmotion(parameters);
+            }
+        },
         editItem(item) {
             this.editedItem = Object.assign({}, item);
             //this.editedItem.originalId = item.id;
@@ -415,26 +495,22 @@ export default {
             });
         },
         save() {
-            if (this.editing) {
-                this.close();
-            } else {
-                this.close();
-            }
+            this.checkEmotionInput(this.editing);
             this.close();
         },
-        deleteItem(id) {
-            //this.editedItem.originalId = id;
-            this.dialogDelete = true;
-        },
-        deleteItemConfirm() {
-            this.closeDelete();
-        },
-        closeDelete() {
-            this.dialogDelete = false;
-            this.$nextTick(() => {
-                this.editedItem = Object.assign({}, this.defaultItem);
-            });
-        },
+        // deleteItem(id) {
+        //     //this.editedItem.originalId = id;
+        //     this.dialogDelete = true;
+        // },
+        // deleteItemConfirm() {
+        //     this.closeDelete();
+        // },
+        // closeDelete() {
+        //     this.dialogDelete = false;
+        //     this.$nextTick(() => {
+        //         this.editedItem = Object.assign({}, this.defaultItem);
+        //     });
+        // },
     },
 };
 </script>
@@ -453,7 +529,7 @@ export default {
     margin-left: 12px;
     background: rgba(0, 0, 0, 0.15);
 }
-.mdi-minus {
+.mdi-pencil {
     border-radius: 50%;
     padding: 0.2rem;
     background: rgba(0, 0, 0, 0.15);

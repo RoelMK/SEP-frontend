@@ -1,426 +1,232 @@
 <template>
-    <v-navigation-drawer
-        width="25%"
-        v-model="showQueryMenu"
-        app
-        temporary
-        absolute
-        right
-    >
-        <v-container>
-            <p class="title">Query Menu</p>
-
-            <v-container class="section">
-                <p>Specify Time Frame:</p>
-                <v-menu
-                    ref="dateMenu"
-                    v-model="dateMenu"
-                    :close-on-content-click="false"
-                    :return-value.sync="dates"
-                    transition="scale-transition"
-                    offset-y
-                    min-width="auto"
-                >
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-text-field
-                            v-model="dateRangeText"
-                            label="Select start and end date"
-                            prepend-icon="mdi-calendar"
-                            readonly
-                            v-bind="attrs"
-                            v-on="on"
-                        ></v-text-field>
-                    </template>
-                    <v-date-picker
-                        range
-                        v-model="dates"
-                        no-title
-                        scrollable
-                        show-adjacent-months
-                    >
-                        <v-spacer></v-spacer>
-                        <v-btn text color="primary" @click="dateMenu = false">
-                            Cancel
-                        </v-btn>
-                        <v-btn
-                            text
-                            color="primary"
-                            @click="$refs.dateMenu.save(dates)"
-                        >
-                            OK
-                        </v-btn>
-                    </v-date-picker>
-                </v-menu>
-                <v-menu
-                    ref="timeMenu"
-                    v-model="timeMenu"
-                    :close-on-content-click="false"
-                    :return-value.sync="timeRange"
-                    transition="scale-transition"
-                    offset-y
-                    min-width="auto"
-                >
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-text-field
-                            v-model="timeRangeText"
-                            label="Select start and end time"
-                            prepend-icon="mdi-clock"
-                            readonly
-                            v-bind="attrs"
-                            v-on="on"
-                        ></v-text-field>
-                    </template>
-                    <v-container class="timePickerContainer">
-                        <vc-date-picker
-                            v-model="timeRange"
-                            mode="time"
-                            :timezone="'utc'"
-                            is-expanded
-                            is-required
-                            is-range
-                            is24hr
-                            class="timePicker"
-                        />
-                        <v-spacer></v-spacer>
-                        <v-btn text color="primary" @click="timeMenu = false">
-                            Cancel
-                        </v-btn>
-                        <v-btn
-                            text
-                            color="primary"
-                            @click="$refs.timeMenu.save(timeRange)"
-                        >
-                            OK
-                        </v-btn>
-                    </v-container>
-                </v-menu>
-            </v-container>
-
-            <v-container class="section">
-                <p>Specify Glucose:</p>
-                <v-row class="glucoseOptions">
-                    <v-col>
-                        <v-checkbox
-                            v-model="glucoseFilter.hypoGlucoseCheckbox"
-                            :label="`Hypos`"
-                            hide-details
-                            class="mt-0 pt-0"
-                        ></v-checkbox>
-                    </v-col>
-                    <v-col>
-                        <v-checkbox
-                            v-model="glucoseFilter.normalGlucoseCheckbox"
-                            :label="`Normal`"
-                            hide-details
-                            class="mt-0 pt-0"
-                        ></v-checkbox>
-                    </v-col>
-                    <v-col>
-                        <v-checkbox
-                            v-model="glucoseFilter.hyperGlucoseCheckbox"
-                            :label="`Hypers`"
-                            hide-details
-                            class="mt-0 pt-0"
-                        ></v-checkbox>
+    <v-dialog v-model="filter.show" max-width="800" persistent>
+        <v-card>
+            <v-card-title>Querying options</v-card-title>
+            <v-card-text class="pb-0">
+                <v-row align="center" class="mx-0">
+                    <v-col class="pl-0">
+                        <p v-if="selectedParameters.length <= 0" class="mt-5">No filters applied</p>
+                        <div class="mb-3" v-else>
+                            <v-chip
+                                v-for="(param, index) in selectedParameters"
+                                :key="index"
+                                color="indigo"
+                                class="mr-2"
+                                label
+                                filter
+                                outlined
+                            >
+                                {{ formatLabel(param) }}
+                            </v-chip>
+                        </div>
                     </v-col>
                 </v-row>
-            </v-container>
-
-            <v-container class="section">
-                <p>Specify Activities:</p>
-                <v-select
-                    v-model="selectedActivities"
-                    :items="activities"
-                    label="Select activities"
-                    multiple
-                    chips
-                    class="mt-0 pt-0"
-                ></v-select>
-            </v-container>
-
-            <v-container class="section">
-                <p>Specify Emotion:</p>
-                <p class="text">
-                    Happiness:
-                    <v-icon
-                        class="icon"
-                        size="25"
-                        v-on:click="selectHappiness('laugh', 2)"
-                        v-bind:color="
-                            selectedButtonHappiness === 'laugh'
-                                ? 'blue darken-2'
-                                : 'gray'
-                        "
-                    >
-                        fas fa-laugh-beam
-                    </v-icon>
-                    <v-icon
-                        class="icon"
-                        size="25"
-                        v-on:click="selectHappiness('smile', 1)"
-                        v-bind:color="
-                            selectedButtonHappiness === 'smile'
-                                ? 'blue darken-2'
-                                : 'gray'
-                        "
-                    >
-                        fas fa-smile-beam
-                    </v-icon>
-                    <v-icon
-                        class="icon"
-                        size="25"
-                        v-on:click="selectHappiness('angry', 0)"
-                        v-bind:color="
-                            selectedButtonHappiness === 'angry'
-                                ? 'blue darken-2'
-                                : 'gray'
-                        "
-                    >
-                        fas fa-angry
-                    </v-icon>
-                </p>
-                <p class="text">
-                    Excitement:
-                    <v-icon
-                        class="icon"
-                        size="25"
-                        v-on:click="selectExcitement('excited', 2)"
-                        v-bind:color="
-                            selectedButtonExcitement === 'excited'
-                                ? 'blue darken-2'
-                                : 'gray'
-                        "
-                    >
-                        fas fa-grin-stars
-                    </v-icon>
-                    <v-icon
-                        class="icon"
-                        size="25"
-                        v-on:click="selectExcitement('smile-2', 1)"
-                        v-bind:color="
-                            selectedButtonExcitement === 'smile-2'
-                                ? 'blue darken-2'
-                                : 'gray'
-                        "
-                    >
-                        fas fa-smile-beam
-                    </v-icon>
-                    <v-icon
-                        class="icon"
-                        size="25"
-                        v-on:click="selectExcitement('tired', 0)"
-                        v-bind:color="
-                            selectedButtonExcitement === 'tired'
-                                ? 'blue darken-2'
-                                : 'gray'
-                        "
-                    >
-                        fas fa-tired
-                    </v-icon>
-                </p>
-            </v-container>
-
-            <v-container class="section">
-                <p>Specify Food:</p>
-                <v-text-field
-                    v-model="foodFilter.foodName"
-                    label="Enter Food Name"
-                    required
-                    class="mt-0 pt-0"
-                ></v-text-field>
-                <v-checkbox
-                    v-model="foodFilter.breakfast"
-                    :label="`Breakfast`"
-                    hide-details
-                    class="mt-0 pt-0"
-                ></v-checkbox>
-                <v-checkbox
-                    v-model="foodFilter.lunch"
-                    :label="`Lunch`"
-                    hide-details
-                ></v-checkbox>
-                <v-checkbox
-                    v-model="foodFilter.dinner"
-                    :label="`Dinner`"
-                    hide-details
-                ></v-checkbox>
-                <v-checkbox
-                    v-model="foodFilter.snack"
-                    :label="`Snack`"
-                    hide-details
-                ></v-checkbox>
-            </v-container>
-
-            <v-btn color="primary" class="bttn" @click="sendQuery"> Filter </v-btn>
-        </v-container>
-    </v-navigation-drawer>
+                <Query
+                    v-for="(property, index) in properties"
+                    :reload="reload"
+                    :key="index"
+                    :property="property"
+                    v-on:change="updateParameters"
+                />
+            </v-card-text>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="green darken-1" text @click="cancelFiltering">
+                    Cancel
+                </v-btn>
+                <v-btn color="green darken-1" text @click="applyFiltering">
+                    Apply Filters
+                </v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
 </template>
 
 <script>
-import moment from "moment";
-
+import Query from '@/components/Query.vue';
+import properties from '@/components/configurations/queryProperties.js';
+import filterHelpers from '@/helpers/filter.js';
+import Data from '@/repositories/Data.js';
+import moment from 'moment';
+import { mapState } from 'vuex';
 export default {
-    name: "Navbar",
-    props: {
-        show: Boolean,
+    components: {
+        Query
     },
-    data: () => ({
-        showQueryMenu: false,
-        dateMenu: false,
-        timeMenu: false,
-        dates: [new Date().toISOString().substr(0, 10)],
-        timeRange: {
-            start: moment.utc("00:00", "HH:mm"),
-            end: moment.utc("23:00", "HH:mm"),
-        },
-        selectedButtonHappiness: null,
-        selectedButtonExcitement: null,
-        glucoseFilter: {
-            hypoGlucoseCheckbox: false,
-            normalGlucoseCheckbox: false,
-            hyperGlucoseCheckbox: false,
-        },
-        selectedActivities: [],
-        emotionFilter: {
-            happiness: null,
-            excitment: null,
-        },
-        foodFilter: {
-            foodName: "",
-            breakfast: false,
-            lunch: false,
-            dinner: false,
-            snack: false,
-        },
-        activities: [
-            "Walk",
-            "Run",
-            "Bike",
-            "Soccer",
-            "Basketball",
-            "Volleyball",
-            "Rugby",
-            "Baseball",
-            "Horse riding",
-            "Athletics",
-            "Swimming",
-            "Water polo",
-            "Surfing",
-            "Golf",
-            "Lacrosse",
-            "Tennis",
-            "Squash",
-            "Badminton",
-            "Table tennis",
-            "Skiing",
-            "Ice hockey",
-            "Field hockey",
-            "Ice skating",
-            "Roller skating",
-            "Fitness",
-            "Yoga",
-            "Aerobics",
-            "Martial arts",
-            "Dance",
-            "Pool",
-            "Darts",
-            "Air hockey",
-            "Bowling",
-            "Chess",
-            "Gymnastics",
-            "Hike",
-            "Mountainbike",
-        ],
-    }),
+    data() {
+        return {
+            parameters: {
+                insulinMin: null,
+                insulinMax: null,
+                date: null,
+                time: null,
+                glucose: null,
+                activity: null,
+                arousal: null,
+                valence: null,
+            },
+            properties: properties,
+            reload: false,
+            emotionMap: {
+                valence: {
+                    'fas fa-angry': 1,
+                    'fas fa-smile-beam': 2,
+                    'fas fas fa-laugh-beam': 3
+                },
+                arousal: {
+                    'fas fa-tired': 1,
+                    'fas fa-smile-beam': 2,
+                    'fas fa-grin-stars': 3
+                },
+            }
+        };
+    },
     computed: {
-        // join the outermost dates in a string
-        dateRangeText() {
-            return this.dates.join(" ~ ");
+        ...mapState(['filter']),
+        selectedParameters() {
+            return Object.entries(this.parameters)
+                .filter(f => f[1] !== null)
+                .map(d => d[0]);
         },
-        // join the start and end times in a string
-        timeRangeText() {
-            return (
-                moment.utc(this.timeRange.start).format("HH:mm") +
-                "~" +
-                moment.utc(this.timeRange.end).format("HH:mm")
-            );
-        },
+        validation() {
+            if (this.parameters.insulinMax < this.parameters.insulinMin)
+                return false;
+            if (this.parameters.date && this.parameters.time)
+                if (this.parameters.date.start !== this.parameters.date.end)
+                    return false;
+            return true;
+        }
     },
     methods: {
-        /**
-         * Set happiness level for the query and
-         *  set the appropriate happiness emoji
-         * @param  { String }   label name of the emoji
-         * @param  { Integer }   value level of happiness
-         * @return
-         */
-        selectHappiness(label, value) {
-            this.selectedButtonHappiness = label;
-            this.emotionFilter.happiness = value;
+        async applyFiltering() {
+            // TODO: Remove options once we get more data in the backend
+            var options = {
+                parameters: this.setupParameters(this.parameters),
+                token: this.$cookies.get("JWT")
+            };
+            if (this.validation) {
+                Data.testFetch().then(res => {
+                    const data = res.data;
+                    // TODO remove 10-04-2027
+                    const date = (this.parameters.date)
+                        ? this.parameters.date.start
+                        : moment('10-04-2027', 'DD-MM-YYYY')
+                            .format('DD-MM-YYYY');
+                    const selection = this.checkSelection({
+                        time: this.parameters.time,
+                        insulin: {
+                            max: this.parameters.insulinMax,
+                            min: this.parameters.insulinMin
+                        },
+                        glucose: this.parameters.glucose,
+                        emotion: {
+                            arousal: this.emotionMap
+                                .arousal[this.parameters.arousal],
+                            valence: this.emotionMap
+                                .valence[this.parameters.valence]
+                        }
+                    });
+                    const selectionKeys = Object.keys(selection);
+                    for (let item in data) {
+                        if (selectionKeys.includes('insulin'))
+                            data[item].insulinAmount = filterHelpers['insulin'](
+                                data[item].insulinAmount,
+                                ...selection['insulin']
+                            );
+                        if (selectionKeys.includes('time')) {
+                            data[item].timestamp = filterHelpers['time'](
+                                data[item].timestamp,
+                                date,
+                                ...selection['time']
+                            );
+                        }
+                        if (selectionKeys.includes('glucose')) {
+                            data[item].glucoseLevel = filterHelpers['glucose'](
+                                data[item].glucoseLevel,
+                                selection['glucose']
+                            );
+                        }
+                        if (selectionKeys.includes('emotion')) {
+                            data[item].arousal = filterHelpers['emotion'](
+                                data[item].arousal,
+                                selection['emotion'][0],
+                            );
+                            data[item].valence = filterHelpers['emotion'](
+                                data[item].valence,
+                                selection['emotion'][1],
+                            );
+                        }
+                    }
+                    this.$store.dispatch('setData', data);
+                }, err => console.log(err));
+                this.$store.dispatch('showFilter', { show: false });
+            } else {
+                this.$toaster.showMessage({
+                    message: `Error occured. Please, check whether mininum
+                    insulin value is less than maximum number and/or selected
+                    date is not a range when filtering on time attribute.`,
+                    color: 'dark',
+                    btnColor: 'pink',
+                    timeout: 6500
+                });
+            }
         },
-        /**
-         * Set excitement level for the query and
-         *  set the appropriate excitement emoji
-         * @param  { String }   label name of the emoji
-         * @param  { Integer }   value level of excitement
-         * @return
-         */
-        selectExcitement(label, value) {
-            this.selectedButtonExcitement = label;
-            this.emotionFilter.excitement = value;
+        resetSelection() {
+            for (let element in this.parameters) {
+                this.parameters[element] = null;
+            }
+            this.reload = !this.reload;
         },
-        /**
-         * Method to send query to backend
-         *  currently only closes the query menu
-         * @return
-         */
-        sendQuery() {
-            this.showQueryMenu = !this.showQueryMenu;
+        updateParameters(index, value) {
+            this.parameters[index] = value;
         },
-    },
-    // listen for changes in show prop to toggle the query menu
-    watch: {
-        show: function() {
-            this.showQueryMenu = !this.showQueryMenu;
+        cancelFiltering() {
+            this.$store.dispatch('showFilter', { show: false });
+            this.resetSelection();
+        },
+        formatLabel(str) {
+            var isCapital =  str.match(/[A-Z]/);
+            if (isCapital) {
+                str = str.slice(0, isCapital.index)
+                    + " " + str.slice(isCapital.index);
+            }
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        },
+        setupParameters(parameters) {
+            // TODO: Remove 10-04-2027
+            if (!parameters.date)
+                var now = moment('10-04-2027', 'DD-MM-YYYY')
+                    .format('DD-MM-YYYY');
+            return {
+                startDate: (parameters.date) ? parameters.date.start : now,
+                endDate: (parameters.date) ? parameters.date.end : now,
+                exerciseTypes: (parameters.activity)
+                    ? parameters.activity.map(d => d.toUpperCase()).join(',')
+                    : ''
+            };
+        },
+        checkSelection(parameters) {
+            const output = {};
+            for (let param in parameters) {
+                var member = parameters[param];
+                var isObject = typeof member === "object" && member !== null;
+                if (isObject && !Array.isArray(member)) {
+                    for (let sub in member) {
+                        if (member[sub] !== null) {
+                            output[param] = Object.values(member);
+                            break;
+                        }
+                    }
+                } else {
+                    if (member !== null)
+                        if (Array.isArray(member))
+                            output[param] = member;
+                        else
+                            output[param] = [member];
+                }
+            }
+            return output;
         }
     }
 };
 </script>
-
-<style>
-.title {
-    text-align: center;
-}
-.section {
-    font-size: 17px;
-    padding-top: 1rem;
-}
-.text {
-    color: gray;
-}
-.bttn {
-    margin-top: 2rem;
-    display: block;
-}
-.glucoseOptions {
-    margin-bottom: 0.3rem;
-}
-.timePicker .vc-month {
-    display: none;
-}
-.timePicker .vc-year {
-    display: none;
-}
-.timePicker .vc-day {
-    display: none;
-}
-.timePicker .vc-weekday {
-    display: none;
-}
-.timePickerContainer {
-    background-color: white;
-}
-.timePickerContainer button {
-    margin-top: 0.8rem;
-}
-</style>
