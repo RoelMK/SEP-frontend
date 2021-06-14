@@ -102,9 +102,11 @@ const store = new Vuex.Store({
             ppRangeThreshold: 10.0,
             goalA1C: 7,
         },
+        emotionReminderStatus: false,
     },
     getters: {
         getHealthSettings: state => state.healthSettings,
+        getEmotionReminderStatus: state => state.emotionReminderStatus,
     },
     actions: {
         showMessage({ commit }, toast) {
@@ -112,6 +114,9 @@ const store = new Vuex.Store({
         },
         showFilter({ commit }, filter) {
             commit('SHOW_FILTER', filter);
+        },
+        setEmotionReminderStatus({ commit }, newStatus) {
+            commit('SET_REMINDER_STATUS', newStatus);
         },
         setData({ commit }, data) {
             commit('UPDATE_DATA', data);
@@ -129,7 +134,10 @@ const store = new Vuex.Store({
         },
         UPDATE_DATA(state, data) {
             state.data = data;
-        }
+        },
+        SET_REMINDER_STATUS: (state, newEmotionReminderStatus) => {
+            state.emotionReminderStatus = newEmotionReminderStatus;
+        },
     },
 });
 

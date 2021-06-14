@@ -28,7 +28,12 @@
             <v-row>
                 <v-col md="9">
                     <v-card class="full-height legend-container" elevation="2">
-                        <v-progress-circular indeterminate color="primary" size="50" v-if="!rendered" />
+                        <v-progress-circular
+                            indeterminate
+                            color="primary"
+                            size="50"
+                            v-if="!rendered"
+                        />
                         <Legend v-if="rendered" />
                     </v-card>
                 </v-col>
@@ -54,14 +59,14 @@ import { mapState } from 'vuex';
 import Data from '@/repositories/Data.js';
 
 export default {
-    name: 'Dashboard',
+    name: "Dashboard",
     components: {
         Statistics,
         EmotionsComponent,
         OverviewChart,
         Navbar,
         Legend,
-        Cards
+        Cards,
     },
     computed: {
         ...mapState(['data'])
@@ -82,13 +87,28 @@ export default {
         };
     },
     created() {
+        // when there is no cookie and the user wants to be reminded
+        // display reminder and set cookie
+        if (
+            this.$cookies.get("EMOTION_REMINDER") === null &&
+            this.$store.getters.getEmotionReminderStatus
+        ) {
+            this.$toaster.showMessage({
+                message: "Reminder: Enter Emotion Status!",
+                color: "blue",
+                btnColor: "white",
+            });
+            this.$cookies.set("EMOTION_REMINDER", true, "1d");
+        }
+
         let nightscoutUrl = localStorage.getItem("nightscout_url");
         if (nightscoutUrl) {
-            Upload.connectNightscout({ host: nightscoutUrl })
-                .then(
-                    (resp) => { },
-                    (err) => { console.log(err); }
-                );
+            Upload.connectNightscout({ host: nightscoutUrl }).then(
+                (resp) => {},
+                (err) => {
+                    console.log(err);
+                }
+            );
         }
         // TODO: Needs to be replaced after we get more data in the backend
         Data.testFetch().then(
@@ -107,15 +127,15 @@ export default {
     min-height: 40vh;
 }
 .full-height {
-  height: 100%;
+    height: 100%;
 }
 .main {
-  background-color: #F4FAFD;
-  padding: 0 2% 0 2%;
+    background-color: #f4fafd;
+    padding: 0 2% 0 2%;
 }
 .clearfix {
-  height: 3vh;
-  background-color: #F4FAFD;
+    height: 3vh;
+    background-color: #f4fafd;
 }
 .rightAligned {
     text-align: right;
