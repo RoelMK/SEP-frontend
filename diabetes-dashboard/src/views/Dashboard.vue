@@ -49,6 +49,7 @@ import EmotionsComponent from '@/components/EmotionsComponent.vue';
 import Legend from '@/components/Legend.vue';
 import Navbar from '@/components/Navbar.vue';
 import Cards from '@/components/Cards.vue';
+import Upload from "../repositories/Upload";
 import { mapState } from 'vuex';
 import Data from '@/repositories/Data.js';
 
@@ -81,6 +82,14 @@ export default {
         };
     },
     created() {
+        let nightscoutUrl = localStorage.getItem("nightscout_url");
+        if (nightscoutUrl) {
+            Upload.connectNightscout({ host: nightscoutUrl })
+                .then(
+                    (resp) => { },
+                    (err) => { console.log(err); }
+                );
+        }
         // TODO: Needs to be replaced after we get more data in the backend
         Data.testFetch().then(
             (res) => {

@@ -3,10 +3,9 @@
         <v-data-table
             :headers="headers"
             :items="getInsulinData"
-            item-key="name"
             :search="search"
-            :hide-default-footer="true"
             elevation="0"
+            @click:row="selectInsulin"
         >
             <template v-slot:top>
                 <v-container>
@@ -102,14 +101,17 @@ export default {
                 {
                     text: "Value",
                     value: "userId",
+                    sortable: false,
                 },
                 {
                     text: "Type",
                     value: "id",
+                    sortable: false,
                 },
                 {
                     text: "Date",
                     value: "title",
+                    sortable: false,
                 },
                 {
                     text: "Actions",
@@ -142,6 +144,10 @@ export default {
             "deleteInsulinInput",
             "updateInsulinInput",
         ]),
+
+        selectInsulin(insulin) {
+            this.$emit("selectedInsulin", insulin);
+        },
 
         editItem(item) {
             this.editedItem = Object.assign({}, item);

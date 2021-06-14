@@ -49,7 +49,6 @@ import filterHelpers from '@/helpers/filter.js';
 import Data from '@/repositories/Data.js';
 import moment from 'moment';
 import { mapState } from 'vuex';
-
 export default {
     components: {
         Query
