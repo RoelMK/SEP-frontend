@@ -63,6 +63,16 @@
                 </v-col>
             </v-row>
         </v-form>
+        <v-divider class="mt-3 mb-3"></v-divider>
+        <h4 class="mt-2">Connect OneDrive</h4>
+        <v-btn
+            color="primary"
+            class="mt-2"
+            @click="connectOnedrive()"
+        >
+            Connect
+        </v-btn>
+
 
 
     </div>
@@ -74,6 +84,14 @@ export default {
     name: "UploadData",
     created() {
         this.nightscoutUrl = localStorage.getItem("nightscout_url") || "";
+        console.log(this.$route.query.expiresOn);
+        if (this.$route.query.accessToken && this.$route.query.homeAccountId) {
+            this.$cookies.set("od_access_token",
+                this.$route.query.accessToken,
+                this.$route.query.expiresOn);
+            this.$cookies.set("od_homeaccount_id",
+                this.$route.query.homeAccountId);
+        }
     },
     data() {
         return {
@@ -111,6 +129,9 @@ export default {
         },
         connectNightscout() {
             localStorage.setItem("nightscout_url", this.nightscoutUrl);
+        },
+        connectOnedrive() {
+            window.open('http://localhost:8080/onedrive/login');
         }
     },
     computed: {

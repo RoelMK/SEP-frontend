@@ -26,7 +26,7 @@ const routes = [
         name: "login"
     },
     {
-        path: '/profile',
+        path: '/profile:homeAccountId?:accessToken?:expiresOn?',
         component: () => import('@/views/UserProfile.vue'),
         name: "profile",
         beforeEnter: (to, from, next) => {

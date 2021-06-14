@@ -59,6 +59,10 @@ const store = new Vuex.Store({
         SET_REMINDER_STATUS: (state, newEmotionReminderStatus) => {
             state.emotionReminderStatus = newEmotionReminderStatus;
         },
+        LOGOUT(state) {
+            state.data = [];
+            state.user = [];
+        }
     },
 });
 

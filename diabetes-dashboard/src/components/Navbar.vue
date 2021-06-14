@@ -44,7 +44,7 @@
                         </v-list-item>
                         <v-divider class="mx-2"/>
                         <v-list-item>
-                            <v-list-item-title class="pointer" v-on:click="logoutClicked">
+                            <v-list-item-title class="pointer" @click="logout">
                                 Logout
                             </v-list-item-title>
                         </v-list-item>
@@ -84,15 +84,13 @@ export default {
         profileClicked: function () {
             this.$router.push('/profile');
         },
-        logoutClicked: function () {
-            this.$toaster.showMessage({
-                message: 'Logout Clicked',
-                color: 'dark',
-                btnColor: 'pink'
-            });
-        },
         historyClicked: function () {
             this.$router.push('/history');
+        },
+        logout() {
+            this.$store.commit("LOGOUT");
+            this.$cookies.remove("JWT");
+            this.$router.push('/login');
         }
     }
 };
