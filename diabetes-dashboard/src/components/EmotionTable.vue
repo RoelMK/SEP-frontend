@@ -392,15 +392,15 @@ export default {
                 {
                     happiness: 2,
                     excitement: 2,
-                    date: "07/30/2021",
-                    time: "16:00",
+                    time: "12:00",
+                    date: moment("2027-04-10").format("L"),
                     id: 0,
                 },
                 {
                     happiness: 3,
                     excitement: 3,
-                    date: "07/07/2011",
-                    time: "18:00",
+                    time: "17:00",
+                    date: moment("2027-04-10").format("L"),
                     id: 1,
                 },
                 {

@@ -34,11 +34,17 @@
                             </v-tabs>
                             <v-tabs-items v-model="tab">
                                 <v-tab-item>
-                                    <TableInsulinData/>
+                                    <TableInsulinData
+                                        @selectedInsulin="
+                                            getSelectedFoodInsulinEmotion
+                                        "
+                                    />
                                 </v-tab-item>
                                 <v-tab-item>
                                     <TableFoodData
-                                        @selectedFood="getSelectedFood"
+                                        @selectedFood="
+                                            getSelectedFoodInsulinEmotion
+                                        "
                                     />
                                 </v-tab-item>
                                 <v-tab-item>
@@ -48,7 +54,9 @@
                                 </v-tab-item>
                                 <v-tab-item>
                                     <EmotionTable
-                                        @selectedEmotion="getSelectedEmotion"
+                                        @selectedEmotion="
+                                            getSelectedFoodInsulinEmotion
+                                        "
                                     />
                                 </v-tab-item>
                             </v-tabs-items>
@@ -109,23 +117,19 @@ export default {
         ...mapState(["data"]),
     },
     methods: {
-        getSelectedFood(food) {
-            let startTime = moment(food.time, "HH:mm")
+        getSelectedFoodInsulinEmotion(item) {
+            let startTime = moment(item.time, "HH:mm")
                 .subtract(2, "hours")
                 .format("HH:mm");
-            let endTime = moment(food.time, "HH:mm")
+            let endTime = moment(item.time, "HH:mm")
                 .add(2, "hours")
                 .format("HH:mm");
             let start = moment(
-                moment(food.date + " " + startTime).format(
-                    "MM-DD-YYYY HH:mm"
-                )
-            ).format("x");
+                moment(item.date + " " + startTime).format("MM-DD-YYYY HH:mm")
+            ).format("YYYY-MM-DDTHH:mm");
             let end = moment(
-                moment(food.date + " " + endTime).format(
-                    "MM-DD-YYYY HH:mm"
-                )
-            ).format("x");
+                moment(item.date + " " + endTime).format("MM-DD-YYYY HH:mm")
+            ).format("YYYY-MM-DDTHH:mm");
 
             this.chosenItemTimeFrame = {
                 start,
@@ -138,36 +142,12 @@ export default {
                 moment(activity.startDate + " " + activity.startTime).format(
                     "MM-DD-YYYY HH:mm"
                 )
-            ).format("x");
+            ).format("YYYY-MM-DDTHH:mm");
             let end = moment(
                 moment(activity.endDate + " " + activity.endTime).format(
                     "MM-DD-YYYY HH:mm"
                 )
-            ).format("x");
-
-            this.chosenItemTimeFrame = {
-                start,
-                end,
-                now: moment(),
-            };
-        },
-        getSelectedEmotion(emotion) {
-            let startTime = moment(emotion.time, "HH:mm")
-                .subtract(2, "hours")
-                .format("HH:mm");
-            let endTime = moment(emotion.time, "HH:mm")
-                .add(2, "hours")
-                .format("HH:mm");
-            let start = moment(
-                moment(emotion.date + " " + startTime).format(
-                    "MM-DD-YYYY HH:mm"
-                )
-            ).format("x");
-            let end = moment(
-                moment(emotion.date + " " + endTime).format(
-                    "MM-DD-YYYY HH:mm"
-                )
-            ).format("x");
+            ).format("YYYY-MM-DDTHH:mm");
 
             this.chosenItemTimeFrame = {
                 start,
@@ -187,10 +167,6 @@ export default {
             items: ["insulin", "food", "activities", "emotions"],
             dataInit: null,
             rendered: false,
-            // chosenInsulin: { insulin: null, now: null },
-            // chosenFood: { food: null, now: null },
-            // chosenActivity: { activity: null, now: null },
-            // chosenEmotion: { emotion: null, now: null },
             chosenItemTimeFrame: null,
         };
     },
@@ -203,8 +179,6 @@ export default {
             },
             (err) => console.log(err)
         );
-        //console.log("Data: ");
-        //console.log(this.dataInit);
     },
 };
 </script>

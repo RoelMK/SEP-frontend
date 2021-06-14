@@ -223,8 +223,8 @@ export default {
                 {
                     name: "Frozen Yoghurt",
                     type: "Dessert",
-                    time: moment().subtract(5, "hours").format("HH:mm"),
-                    date: moment().subtract(1, "day").format("L"),
+                    time: "16:00",
+                    date: moment("2027-04-10").format("L"),
                     carbs: 24,
                     calories: 4,
                     glycemicIndex: 1,
@@ -232,8 +232,8 @@ export default {
                 {
                     name: "Ice cream sandwich",
                     type: "Dessert",
-                    time: moment().subtract(5, "hours").format("HH:mm"),
-                    date: moment().subtract(1, "day").format("L"),
+                    time: "12:00",
+                    date: moment("2027-04-10").format("L"),
                     carbs: 24,
                     calories: 4,
                     glycemicIndex: 1,
@@ -241,8 +241,8 @@ export default {
                 {
                     name: "Eclair",
                     type: "Dessert",
-                    time: moment().subtract(5, "hours").format("HH:mm"),
-                    date: moment().subtract(1, "day").format("L"),
+                    time: "19:00",
+                    date: moment("2027-04-10").format("L"),
                     carbs: 24,
                     calories: 4,
                     glycemicIndex: 1,

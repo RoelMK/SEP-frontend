@@ -31,9 +31,10 @@ export default {
             immediate: true,
             handler(newTimeFrame) {
                 if (newTimeFrame !== null) {
-                    console.log(newTimeFrame.start, newTimeFrame.end);
-                    this.options.xAxis.axisMinimum = newTimeFrame.start;
-                    this.options.xAxis.axisMaximum = newTimeFrame.end;
+                    for (var i = 0; i <= 4; i++) {
+                        this.options.xAxis[i]["min"] = newTimeFrame.start;
+                        this.options.xAxis[i]["max"] = newTimeFrame.end;
+                    }
                     this.$refs.overview.setOption(this.options);
                 }
             },
@@ -54,6 +55,15 @@ export default {
                         },
                         restore: {
                             title: "Reset",
+                            onclick: () => {
+                                for (var i = 0; i <= 4; i++) {
+                                    this.options.xAxis[i]["min"] =
+                                        null;
+                                    this.options.xAxis[i]["max"] =
+                                        null;
+                                }
+                                this.$refs.overview.setOption(this.options);
+                            },
                         },
                         myFilter: {
                             show: true,
