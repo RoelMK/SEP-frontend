@@ -19,7 +19,7 @@
                         <OverviewChart
                             ref="overview"
                             v-if="rendered"
-                            :data="data"
+                            :data="dataInit"
                         />
                     </v-card>
                 </div>
@@ -83,6 +83,8 @@ import EmotionTable from "@/components/EmotionTable.vue";
 import Moment from "moment";
 import { extendMoment } from "moment-range";
 import { AxiosWrapper } from "@/helpers/wrapper.js";
+import Data from '@/repositories/Data.js';
+import { mapState } from 'vuex';
 
 const moment = extendMoment(Moment);
 const wrapper = new AxiosWrapper();
@@ -102,6 +104,9 @@ export default {
         OverviewChart,
         Legend,
     },
+    computed: {
+        ...mapState(['data'])
+    },
     methods: {
         getSelectedInsulin(insulin) {
             this.chosenInsulin = { insulin: insulin, now: moment() };
@@ -116,11 +121,16 @@ export default {
             this.chosenEmotion = { emotion: emotion, now: moment() };
         },
     },
+    watch: {
+        data: function(newData) {
+            this.dataInit = newData;
+        }
+    },
     data() {
         return {
             tab: null,
             items: ["insulin", "food", "activities", "emotions"],
-            data: null,
+            dataInit: null,
             rendered: false,
             chosenInsulin: { insulin: null, now: null },
             chosenFood: { food: null, now: null },
@@ -129,12 +139,14 @@ export default {
         };
     },
     created() {
-        wrapper
-            .get(URL, (dataPromise) => dataPromise)
-            .then((data) => {
-                this.data = data;
+        // TODO: Needs to be replaced after we get more data in the backend
+        Data.testFetch().then(
+            (res) => {
+                this.dataInit = res.data;
                 this.rendered = true;
-            });
+            },
+            (err) => console.log(err)
+        );
     },
 };
 </script>

@@ -25,7 +25,7 @@
             </tr>
         </div>
 
-        <v-data-table :headers="headers" :items="getEmotions" elevation="0">
+        <v-data-table :headers="headers" :items="emotions" elevation="0">
             <template v-slot:[`body.prepend`]>
                 <tr>
                     <td>
@@ -272,7 +272,6 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import moment from "moment";
 import { emotionMixin } from "@/helpers/emotionMixin.js";
 import HistoryDatePicker from "@/components/HistoryDatePicker.vue";
@@ -388,12 +387,90 @@ export default {
             dateFilter: "",
             happinessFilter: "",
             excitementFilter: "",
+
+            emotions: [
+                {
+                    happiness: 2,
+                    excitement: 2,
+                    date: "07/30/2021",
+                    time: "16:00",
+                    id: 0,
+                },
+                {
+                    happiness: 3,
+                    excitement: 3,
+                    date: "07/07/2011",
+                    time: "18:00",
+                    id: 1,
+                },
+                {
+                    happiness: 1,
+                    excitement: 1,
+                    date: "07/07/2017",
+                    time: "16:00",
+                    id: 2,
+                },
+                {
+                    happiness: 1,
+                    excitement: 2,
+                    date: "07/07/2018",
+                    time: "18:00",
+                    id: 3,
+                },
+                {
+                    happiness: 1,
+                    excitement: 3,
+                    date: "08/22/2020",
+                    time: "18:00",
+                    id: 4,
+                },
+                {
+                    happiness: 2,
+                    excitement: 1,
+                    date: "06/12/2019",
+                    time: "16:00",
+                    id: 5,
+                },
+                {
+                    happiness: 1,
+                    excitement: 1,
+                    date: "07/07/2014",
+                    time: "18:00",
+                    id: 6,
+                },
+                {
+                    happiness: 1,
+                    excitement: 2,
+                    date: "07/07/2015",
+                    time: "18:00",
+                    id: 7,
+                },
+                {
+                    happiness: 2,
+                    excitement: 1,
+                    date: "07/07/2019",
+                    time: "16:00",
+                    id: 8,
+                },
+                {
+                    happiness: 2,
+                    excitement: 1,
+                    date: "06/07/2020",
+                    time: "18:00",
+                    id: 9,
+                },
+                {
+                    happiness: 2,
+                    excitement: 2,
+                    date: "06/06/2020",
+                    time: "18:00",
+                    id: 10,
+                },
+            ],
         };
     },
     // state getters you need to use
     computed: {
-        ...mapGetters(["getEmotions"]),
-
         formTitle() {
             return this.editing === false
                 ? "New Emotion Input"
