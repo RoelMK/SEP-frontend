@@ -11,8 +11,8 @@
                 <v-spacer></v-spacer>
 
                 <div class="personalInfo">
-                    <v-text-area id="name">Cody Simpson</v-text-area>
-                    <v-text-area id="role">User</v-text-area>
+                    <p class="mb-0" id="name">Cody Simpson</p>
+                    <p class="mb-0" id="role">User</p>
                 </div>
 
                 <v-badge bottom overlap offset-x="11" offset-y="15" color="transparent">

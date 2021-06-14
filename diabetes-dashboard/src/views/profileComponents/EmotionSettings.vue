@@ -8,7 +8,7 @@
                 Remind me about my emotional status?
             </v-col>
             <v-col cols="3" class="my-0 py-0">
-                <v-switch  v-model="boolAsk"></v-switch>
+                <v-switch v-model="boolAsk"></v-switch>
             </v-col>
         </v-row>
     </v-card>

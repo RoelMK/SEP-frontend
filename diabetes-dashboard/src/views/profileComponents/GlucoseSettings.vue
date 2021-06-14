@@ -10,16 +10,17 @@
             <v-col cols="12" class="customCol">
                 <v-text class="fSize14">Very High</v-text>
                 <div class="mx-2">
-                    <v-range-slider
+                    <v-slider
                         thumb-label
                         hide-details
                         max="14"
                         min="0"
                         step="0.1"
-                        v-model="healthSettings.veryHighRange"
-                        :color="colors.veryHigh"
-                        :track-color="colors.trackColor"
-                    ></v-range-slider>
+                        v-model="healthSettings.veryHighValue"
+                        :color="colors.trackColor"
+                        :track-color="colors.veryHigh"
+                        :thumb-color="colors.veryHigh"
+                    ></v-slider>
                 </div>
             </v-col>
         </v-row>
@@ -78,16 +79,16 @@
             <v-col cols="12" class="customCol">
                 <v-text class="fSize14">Very Low</v-text>
                 <div class="mx-2">
-                    <v-range-slider
+                    <v-slider
                         thumb-label
                         hide-details
                         max="14"
                         min="0"
                         step="0.1"
-                        v-model="healthSettings.veryLowRange"
+                        v-model="healthSettings.veryLowValue"
                         :color="colors.veryLow"
                         :track-color="colors.trackColor"
-                    ></v-range-slider>
+                    ></v-slider>
                 </div>
             </v-col>
         </v-row>
@@ -124,11 +125,11 @@ export default {
             },
             healthSettings: {
                 unit: "mmol/L",
-                veryHighRange: [13.0, 13.9],
+                veryHighValue: 13.0,
                 highRange: [10.0, 13.0],
                 normalRange: [3.9, 10.0],
                 lowRange: [3.0, 3.9],
-                veryLowRange: [1.5, 3.0],
+                veryLowValue: 3.0,
                 goalA1C: 7,
                 valueHypoglycemia: 6,
                 valueHyperglycemia: 10

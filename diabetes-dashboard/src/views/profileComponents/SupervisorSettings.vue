@@ -2,11 +2,25 @@
     <v-card>
         <v-row class="mx-2">
             <v-col cols="8" class="gTitle">Supervisor</v-col>
-            <v-col cols="4" class="rightAligned">
+            <v-col cols="2" class="rightAligned">
+                <v-icon @click="loadMore" color="#1B98E0">mdi-chevron-down</v-icon>
+            </v-col>
+            <v-col cols="2">
                 <v-icon @click="addMore" color="#1B98E0">mdi-plus-circle-outline</v-icon>
             </v-col>
         </v-row>
-        <v-row class="mx-2 temporaryPadding" align="center">
+        <v-row class="mx-2 customPadding" align="center" v-if="supervisorsHidden">
+            <v-col cols="12">
+                <div class="customRow">
+                    <v-text class="fSize14">{{this.supervisors[0]}}</v-text>
+                    <v-btn @click="removeSupervisor" class="white--text" color="red" small>
+                        <v-icon left>mdi-delete</v-icon>
+                        Remove
+                    </v-btn>
+                </div>
+            </v-col>
+        </v-row>
+        <v-row class="mx-2 customPadding" align="center" v-if="!supervisorsHidden">
             <v-col cols="12" v-for="supervisor in supervisors" :key="supervisor">
                 <div class="customRow">
                     <v-text class="fSize14">{{supervisor}}</v-text>
@@ -26,7 +40,8 @@ export default {
     data() {
         return {
             boolAsk: true,
-            supervisors: ["Samuel Ivanovich"]
+            supervisors: ["Samuel Ivanovich", "Georgi Simeonov"],
+            supervisorsHidden: true
         };
     },
     computed() {
@@ -38,7 +53,8 @@ export default {
     },
     methods: {
         loadMore() {
-            this.$toasted.show('No more supervisors');
+            //this.$toasted.show('No more supervisors');
+            this.supervisorsHidden = !this.supervisorsHidden;
         },
         addMore() {
             this.$toasted.show('Adding more supervisors');
@@ -74,7 +90,7 @@ export default {
     justify-content: space-between;
 }
 
-.temporaryPadding {
+.customPadding {
     padding-top: 14px;
 }
 </style>
