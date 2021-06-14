@@ -32,6 +32,9 @@ export default {
             handler(newTimeFrame) {
                 if (newTimeFrame !== null) {
                     console.log(newTimeFrame.start, newTimeFrame.end);
+                    this.options.xAxis.axisMinimum = newTimeFrame.start;
+                    this.options.xAxis.axisMaximum = newTimeFrame.end;
+                    this.$refs.overview.setOption(this.options);
                 }
             },
         },

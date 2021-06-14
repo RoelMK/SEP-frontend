@@ -270,25 +270,19 @@ export default {
                 {
                     name: "Run",
                     type: "Physical",
-                    startDate: moment().subtract(1, "day").format("L"),
-                    endDate: moment().subtract(1, "day").format("L"),
-                    startTime: moment().subtract(24, "hours").format("HH:mm"),
-                    endTime: moment()
-                        .subtract(23, "hours")
-                        .subtract(10, "minutes")
-                        .format("HH:mm"),
+                    startDate: moment("2027-04-10").format("L"),
+                    endDate: moment("2027-04-10").format("L"),
+                    startTime: moment("08:15", "HH:mm").format("HH:mm"),
+                    endTime: moment("18:10", "HH:mm").format("HH:mm"),
                     calories: 159,
                 },
                 {
                     name: "Walk",
                     type: "Physical",
-                    startDate: moment().subtract(1, "day").format("L"),
-                    endDate: moment().subtract(1, "day").format("L"),
-                    startTime: moment().subtract(24, "hours").format("HH:mm"),
-                    endTime: moment()
-                        .subtract(23, "hours")
-                        .subtract(10, "minutes")
-                        .format("HH:mm"),
+                    startDate: moment("2027-04-10").format("L"),
+                    endDate: moment("2027-04-10").format("L"),
+                    startTime: moment("12:15", "HH:mm").format("HH:mm"),
+                    endTime: moment("16:10", "HH:mm").format("HH:mm"),
                     //duration: 50,
                     calories: 159,
                 },
