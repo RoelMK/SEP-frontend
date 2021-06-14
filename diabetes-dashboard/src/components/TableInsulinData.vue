@@ -39,7 +39,6 @@
             :headers="headers"
             :items="insulinData"
             elevation="0"
-            @click:row="selectInsulin"
         >
             <template v-slot:[`body.prepend`]>
                 <tr>
@@ -370,10 +369,6 @@ export default {
 
         getSelectedTime(time) {
             this.editedItem.time = time;
-        },
-
-        selectInsulin(insulin) {
-            this.$emit("selectedInsulin", insulin);
         },
 
         async postInsulin(parameters) {

@@ -3,69 +3,81 @@
 </template>
 
 <script>
-import grid from '@/components/configurations/grid.js';
-import xAxis from '@/components/configurations/xAxis.js';
-import yAxis from '@/components/configurations/yAxis.js';
-import visualMap from '@/components/configurations/visualMap.js';
-import legend from '@/components/configurations/legend.js';
-import moment from 'moment';
+import grid from "@/components/configurations/grid.js";
+import xAxis from "@/components/configurations/xAxis.js";
+import yAxis from "@/components/configurations/yAxis.js";
+import visualMap from "@/components/configurations/visualMap.js";
+import legend from "@/components/configurations/legend.js";
+import moment from "moment";
 
 export default {
-    name: 'overviewChart',
+    name: "overviewChart",
     props: {
         data: {
             type: Array,
-            default: null
-        }
+            default: null,
+        },
+        itemTimeFrame: {
+            type: Object,
+            default: null,
+        },
     },
     watch: {
-        data: function() {
+        data: function () {
             this.$refs.overview.setOption(this.options);
-        }
+        },
+        itemTimeFrame: {
+            deep: true,
+            immediate: true,
+            handler(newTimeFrame) {
+                if (newTimeFrame !== null) {
+                    console.log(newTimeFrame.start, newTimeFrame.end);
+                }
+            },
+        },
     },
     computed: {
         options() {
             return {
                 legend: {
-                    show: false
+                    show: false,
                 },
                 toolbox: {
-                    top: '1%',
-                    right: '2%',
+                    top: "1%",
+                    right: "2%",
                     feature: {
                         saveAsImage: {
-                            title: 'Save'
+                            title: "Save",
                         },
                         restore: {
-                            title: 'Reset'
+                            title: "Reset",
                         },
                         myFilter: {
                             show: true,
-                            title: 'Add filters',
-                            icon: 'path://M12 12V19.88C12.04 20.18 11.94 20.5 11.71 20.71C11.32 21.1 10.69 21.1 10.3 20.71L8.29 18.7C8.06 18.47 7.96 18.16 8 17.87V12H7.97L2.21 4.62C1.87 4.19 1.95 3.56 2.38 3.22C2.57 3.08 2.78 3 3 3H17C17.22 3 17.43 3.08 17.62 3.22C18.05 3.56 18.13 4.19 17.79 4.62L12.03 12H12M15 17H18V14H20V17H23V19H20V22H18V19H15V17Z',
+                            title: "Add filters",
+                            icon: "path://M12 12V19.88C12.04 20.18 11.94 20.5 11.71 20.71C11.32 21.1 10.69 21.1 10.3 20.71L8.29 18.7C8.06 18.47 7.96 18.16 8 17.87V12H7.97L2.21 4.62C1.87 4.19 1.95 3.56 2.38 3.22C2.57 3.08 2.78 3 3 3H17C17.22 3 17.43 3.08 17.62 3.22C18.05 3.56 18.13 4.19 17.79 4.62L12.03 12H12M15 17H18V14H20V17H23V19H20V22H18V19H15V17Z",
                             onclick: () => {
-                                this.$store.dispatch(
-                                    'showFilter',
-                                    { show: true }
-                                );
-                            }
-                        }
-                    }
+                                this.$store.dispatch("showFilter", {
+                                    show: true,
+                                });
+                            },
+                        },
+                    },
                 },
                 tooltip: {
-                    trigger: 'axis',
-                    formatter: this.prepareTooltip
+                    trigger: "axis",
+                    formatter: this.prepareTooltip,
                 },
                 axisPointer: {
                     link: {
-                        xAxisIndex: 'all'
+                        xAxisIndex: "all",
                     },
                 },
                 dataZoom: {
                     show: true,
                     showDetail: false,
                     xAxisIndex: [0, 1, 2, 3, 4],
-                    bottom: '4%',
+                    bottom: "4%",
                 },
                 grid: grid,
                 xAxis: xAxis,
@@ -75,95 +87,95 @@ export default {
                     {
                         xAxisIndex: 0,
                         yAxisIndex: 0,
-                        name: 'Glucose',
-                        type: 'line',
-                        symbol: 'none',
+                        name: "Glucose",
+                        type: "line",
+                        symbol: "none",
                         lineStyle: {
                             width: 3,
                         },
                         areaStyle: {
-                            color: '#3F7CAC',
+                            color: "#3F7CAC",
                             opacity: 0.2,
                         },
                         data: this.prepareData(
                             this.data,
-                            'timestamp',
-                            'glucoseLevel'
+                            "timestamp",
+                            "glucoseLevel"
                         ),
                     },
                     {
                         xAxisIndex: 1,
                         yAxisIndex: 1,
-                        name: 'Emotions',
-                        type: 'scatter',
+                        name: "Emotions",
+                        type: "scatter",
                         symbolSize: 20,
                         label: {
                             show: true,
-                            formatter: 'M'
+                            formatter: "M",
                         },
                         itemStyle: {
-                            color: '#fff',
+                            color: "#fff",
                             borderWidth: 1,
-                            borderColor: legend.sections[1].properties[0].color
+                            borderColor: legend.sections[1].properties[0].color,
                         },
                         data: this.prepareData(
                             this.data,
-                            'timestamp',
-                            'valence',
-                            'arousal'
-                        ).map(d => {
+                            "timestamp",
+                            "valence",
+                            "arousal"
+                        ).map((d) => {
                             if (d[1] === null || d[2] === null)
                                 return [d[0], null];
                             return [
                                 d[0],
                                 (d[1] + d[2]) / 2,
                                 {
-                                    type: 'Valence',
-                                    value: d[1]
+                                    type: "Valence",
+                                    value: d[1],
                                 },
                                 {
-                                    type: 'Arousal',
-                                    value: d[2]
-                                }
+                                    type: "Arousal",
+                                    value: d[2],
+                                },
                             ];
                         }),
                     },
                     {
                         xAxisIndex: 2,
                         yAxisIndex: 2,
-                        name: 'Insulin',
+                        name: "Insulin",
                         itemStyle: {
                             color: legend.sections[2].properties[0].color,
                         },
                         barWidth: 3,
-                        type: 'bar',
+                        type: "bar",
                         data: this.prepareData(
                             this.data,
-                            'timestamp',
-                            'insulinAmount'
+                            "timestamp",
+                            "insulinAmount"
                         ),
                     },
                     {
                         xAxisIndex: 3,
                         yAxisIndex: 3,
-                        name: 'Carbs',
-                        type: 'bar',
+                        name: "Carbs",
+                        type: "bar",
                         barWidth: 5,
                         connectNulls: true,
-                        symbol: 'none',
+                        symbol: "none",
                         data: this.prepareData(
                             this.data,
-                            'timestamp',
-                            'carbohydrates',
-                            'carbohydrates',
-                            'glycemic_index'
+                            "timestamp",
+                            "carbohydrates",
+                            "carbohydrates",
+                            "glycemic_index"
                         ),
                     },
                     {
                         xAxisIndex: 4,
                         yAxisIndex: 4,
-                        name: 'Heartbeat',
-                        type: 'scatter',
+                        name: "Heartbeat",
+                        type: "scatter",
                         itemStyle: {
                             color: legend.sections[4].properties[0].color,
                         },
@@ -171,35 +183,37 @@ export default {
                         z: 1,
                         data: this.prepareData(
                             this.data,
-                            'timestamp',
-                            'heartbeat'
-                        )
+                            "timestamp",
+                            "heartbeat"
+                        ),
                     },
                     {
                         xAxisIndex: 4,
                         yAxisIndex: 4,
-                        name: 'Exercises',
-                        type: 'custom',
+                        name: "Exercises",
+                        type: "custom",
                         itemStyle: {
                             color: legend.sections[4].properties[1].color,
                             borderWidth: 2,
                         },
                         data: this.prepareData(
-                            this.data, 'timestamp', 'intensity', 'duration'
-                        ).map(d => {
-                            if (d[1] === null)
-                                return [d[0], null];
+                            this.data,
+                            "timestamp",
+                            "intensity",
+                            "duration"
+                        ).map((d) => {
+                            if (d[1] === null) return [d[0], null];
                             return [
                                 d[0],
                                 this.scaleValue(d[1], [1, 5], [0, 200]),
-                                d[1]
+                                d[1],
                             ];
                         }),
-                        renderItem:  this.renderInterval,
+                        renderItem: this.renderInterval,
                     },
                 ],
             };
-        }
+        },
     },
     data() {
         return {
@@ -207,13 +221,13 @@ export default {
                 Valence: {
                     1: '<i class="fas fa-angry"></i>',
                     2: '<i class="fas fa-smile-beam"></i>',
-                    3: '<i class="fas fa-laugh-beam"></i>'
+                    3: '<i class="fas fa-laugh-beam"></i>',
                 },
                 Arousal: {
                     1: '<i class="fas fa-tired"></i>',
                     2: '<i class="fas fa-smile-beam"></i>',
-                    3: '<i class="fas fa-grin-stars"></i>'
-                }
+                    3: '<i class="fas fa-grin-stars"></i>',
+                },
             },
         };
     },
@@ -237,7 +251,7 @@ export default {
          * @return
          */
         prepareData(data, ...properties) {
-            return data.map(d => properties.map(prop => d[prop]));
+            return data.map((d) => properties.map((prop) => d[prop]));
         },
         /**
          * Create tooltip body
@@ -265,14 +279,16 @@ export default {
                 ${params[0].axisValueLabel}</span>`;
             for (let param of params) {
                 var name = param.seriesName;
-                var value = (param.value.length > 2) ?
-                    param.value[2] : param.value[1];
-                var color = (typeof param.borderColor === 'undefined') ?
-                    param.color : param.borderColor;
+                var value =
+                    param.value.length > 2 ? param.value[2] : param.value[1];
+                var color =
+                    typeof param.borderColor === "undefined"
+                        ? param.color
+                        : param.borderColor;
                 var marker = param.marker.replace(/#.{3,};/i, `${color};`);
 
                 if (value !== null) {
-                    if (typeof value === 'object') {
+                    if (typeof value === "object") {
                         for (let prop of param.value.slice(2)) {
                             tooltip += this.createTooltipBody(
                                 marker,
@@ -294,16 +310,14 @@ export default {
          * @return
          */
         renderInterval(params, api) {
-            var start = api.coord(
-                [api.value(0), api.value(1)]
-            );
+            var start = api.coord([api.value(0), api.value(1)]);
             var endDate = moment(api.value(0))
                 .add(api.value(2))
                 .format("YYYY-MM-DDTHH:MM");
             var end = api.coord([endDate, api.value(1)]);
 
             return {
-                type: 'group',
+                type: "group",
                 children: [
                     {
                         type: "line",
@@ -314,7 +328,7 @@ export default {
                             y2: end[1],
                         },
                         style: {
-                            stroke: api.visual('color'),
+                            stroke: api.visual("color"),
                             lineWidth: 2,
                         },
                     },
@@ -334,11 +348,11 @@ export default {
                             cy: end[1],
                             r: 2,
                         },
-                        style: api.visual()
-                    }
-                ]
+                        style: api.visual(),
+                    },
+                ],
             };
-        }
-    }
+        },
+    },
 };
 </script>

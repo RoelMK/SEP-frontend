@@ -20,6 +20,7 @@
                             ref="overview"
                             v-if="rendered"
                             :data="dataInit"
+                            :itemTimeFrame="chosenItemTimeFrame"
                         />
                     </v-card>
                 </div>
@@ -33,7 +34,7 @@
                             </v-tabs>
                             <v-tabs-items v-model="tab">
                                 <v-tab-item>
-                                    <TableInsulinData @selectedInsulin="getSelectedInsulin"/>
+                                    <TableInsulinData/>
                                 </v-tab-item>
                                 <v-tab-item>
                                     <TableFoodData
@@ -83,8 +84,8 @@ import EmotionTable from "@/components/EmotionTable.vue";
 import Moment from "moment";
 import { extendMoment } from "moment-range";
 import { AxiosWrapper } from "@/helpers/wrapper.js";
-import Data from '@/repositories/Data.js';
-import { mapState } from 'vuex';
+import Data from "@/repositories/Data.js";
+import { mapState } from "vuex";
 
 const moment = extendMoment(Moment);
 const wrapper = new AxiosWrapper();
@@ -105,26 +106,80 @@ export default {
         Legend,
     },
     computed: {
-        ...mapState(['data'])
+        ...mapState(["data"]),
     },
     methods: {
-        getSelectedInsulin(insulin) {
-            this.chosenInsulin = { insulin: insulin, now: moment() };
-        },
         getSelectedFood(food) {
-            this.chosenFood = { food: food, now: moment() };
+            let startTime = moment(food.time, "HH:mm")
+                .subtract(2, "hours")
+                .format("HH:mm");
+            let endTime = moment(food.time, "HH:mm")
+                .add(2, "hours")
+                .format("HH:mm");
+            let start = moment(
+                moment(food.date + " " + startTime).format(
+                    "MM-DD-YYYY HH:mm"
+                )
+            ).format("x");
+            let end = moment(
+                moment(food.date + " " + endTime).format(
+                    "MM-DD-YYYY HH:mm"
+                )
+            ).format("x");
+
+            this.chosenItemTimeFrame = {
+                start,
+                end,
+                now: moment(),
+            };
         },
         getSelectedActivity(activity) {
-            this.chosenActivity = { activity: activity, now: moment() };
+            let start = moment(
+                moment(activity.startDate + " " + activity.startTime).format(
+                    "MM-DD-YYYY HH:mm"
+                )
+            ).format("x");
+            let end = moment(
+                moment(activity.endDate + " " + activity.endTime).format(
+                    "MM-DD-YYYY HH:mm"
+                )
+            ).format("x");
+
+            this.chosenItemTimeFrame = {
+                start,
+                end,
+                now: moment(),
+            };
         },
         getSelectedEmotion(emotion) {
-            this.chosenEmotion = { emotion: emotion, now: moment() };
+            let startTime = moment(emotion.time, "HH:mm")
+                .subtract(2, "hours")
+                .format("HH:mm");
+            let endTime = moment(emotion.time, "HH:mm")
+                .add(2, "hours")
+                .format("HH:mm");
+            let start = moment(
+                moment(emotion.date + " " + startTime).format(
+                    "MM-DD-YYYY HH:mm"
+                )
+            ).format("x");
+            let end = moment(
+                moment(emotion.date + " " + endTime).format(
+                    "MM-DD-YYYY HH:mm"
+                )
+            ).format("x");
+
+            this.chosenItemTimeFrame = {
+                start,
+                end,
+                now: moment(),
+            };
         },
     },
     watch: {
-        data: function(newData) {
+        data: function (newData) {
             this.dataInit = newData;
-        }
+        },
     },
     data() {
         return {
@@ -132,10 +187,11 @@ export default {
             items: ["insulin", "food", "activities", "emotions"],
             dataInit: null,
             rendered: false,
-            chosenInsulin: { insulin: null, now: null },
-            chosenFood: { food: null, now: null },
-            chosenActivity: { activity: null, now: null },
-            chosenEmotion: { emotion: null, now: null },
+            // chosenInsulin: { insulin: null, now: null },
+            // chosenFood: { food: null, now: null },
+            // chosenActivity: { activity: null, now: null },
+            // chosenEmotion: { emotion: null, now: null },
+            chosenItemTimeFrame: null,
         };
     },
     created() {
@@ -147,6 +203,8 @@ export default {
             },
             (err) => console.log(err)
         );
+        //console.log("Data: ");
+        //console.log(this.dataInit);
     },
 };
 </script>
@@ -172,27 +230,27 @@ export default {
     top: 45%;
 }
 .leftColumn {
-  float: left;
-  width: 56%;
-  margin-right: 1%;
-  margin-top: 1%;
+    float: left;
+    width: 56%;
+    margin-right: 1%;
+    margin-top: 1%;
 }
 .rightColumn {
-  float: left;
-  width: 42%;
-  margin-left: 1%;
-  margin-top: 1%;
+    float: left;
+    width: 42%;
+    margin-left: 1%;
+    margin-top: 1%;
 }
 .row:after {
-  content: "";
-  display: table;
-  clear: both;
+    content: "";
+    display: table;
+    clear: both;
 }
 .legend {
-  float: left;
-  width: 100%;
-  margin-top: 2%;
-  margin-bottom: 2%;
+    float: left;
+    width: 100%;
+    margin-top: 2%;
+    margin-bottom: 2%;
 }
 .filterText {
     font-size: 0.75rem;
