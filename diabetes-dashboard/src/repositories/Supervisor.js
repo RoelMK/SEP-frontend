@@ -41,13 +41,13 @@ export default {
         return Client.post(url, payload, headers);
     },
     getApproved(payload) {
-      let url = `${resource}getApproved`;
-      let config = {
-          headers: {
-          },
-          params: payload
-      };
-      return Client.get(url, config);
+        let url = `${resource}getApproved`;
+        let config = {
+            headers: {
+            },
+            params: payload
+        };
+        return Client.get(url, config);
     },
     getRole(payload) {
         let url = `${resource}role`;
