@@ -82,6 +82,7 @@ export default {
         };
     },
     created() {
+        console.log("token: " + this.$cookies.get("JWT"));
         Auth.getProfile(this.$cookies.get("JWT")).then(
             (resp) => {
                 this.$store.commit("SET_USER", resp.data);
@@ -123,7 +124,7 @@ export default {
             },
             (err) => console.log(err)
         );
-    }
+    },
 };
 </script>
 

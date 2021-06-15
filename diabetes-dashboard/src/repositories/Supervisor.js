@@ -58,6 +58,14 @@ export default {
         };
         return Client.get(url, config);
     },
+    getToken(payload) {
+        let url = `${resource}getToken`;
+        let config = {
+            headers: {},
+            params: payload
+        };
+        return Client.get(url, config);
+    }
 
 
 
