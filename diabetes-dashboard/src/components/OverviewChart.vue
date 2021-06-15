@@ -22,8 +22,8 @@ export default {
 
         newTimeFrame: function (value) {
             if (value !== null) {
-                let newOptions = this.options(this.data);
-                for (var i = 0; i <= 4; i++) {
+                var newOptions = this.$refs.overview.getOption();
+                for (var i = 0; i <= grid.length - 1; i++) {
                     newOptions.xAxis[i]["min"] = value.start;
                     newOptions.xAxis[i]["max"] = value.end;
                 }
