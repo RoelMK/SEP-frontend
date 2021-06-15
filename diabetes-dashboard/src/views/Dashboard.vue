@@ -59,6 +59,8 @@ import Upload from "../repositories/Upload";
 import { mapState } from 'vuex';
 import Data from '@/repositories/Data.js';
 
+import Auth from "../repositories/Auth";
+
 export default {
     name: "Dashboard",
     components: {
@@ -88,8 +90,12 @@ export default {
         };
     },
     created() {
-        // when there is no cookie and the user wants to be reminded
-        // display reminder and set cookie
+        Auth.getProfile(this.$cookies.get("JWT")).then(
+            (resp) => {
+                this.$store.commit("SET_USER", resp.data);
+            },
+            (error) => { console.log(error); }
+        );
         if (
             this.$cookies.get("EMOTION_REMINDER") === null &&
             this.$store.getters.getEmotionReminderStatus
@@ -112,7 +118,7 @@ export default {
             );
         }
         // TODO: Needs to be replaced after we get more data in the backend
-        Data.testFetch().then(
+        Data.fetch({}, this.$cookies.get("JWT")).then(
             (res) => {
                 this.dataInit = res.data;
                 this.rendered = true;

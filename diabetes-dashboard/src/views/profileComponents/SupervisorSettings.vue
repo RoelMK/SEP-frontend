@@ -120,6 +120,17 @@ export default {
             childEmail: "",
         };
     },
+    watch: {
+        "$store.state.user.email": function() {
+            this.getRequested();
+            this.getApproved();
+            Supervisor.getRole({ email: this.$store.state.user.email }).then(
+                (resp) => console.log(resp),
+                (err) => console.log(err)
+            );
+
+        }
+    },
     methods: {
         request() {
             Supervisor.request({
