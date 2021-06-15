@@ -11,4 +11,9 @@ export default {
         };
         return Client.get(url, config);
     },
+    uploadToken(payload) {
+        let url = `${resource}supervisor/logToken`;
+        let headers = {};
+        return Client.post(url, payload, headers);
+    }
 };

@@ -5,7 +5,6 @@ export default {
     upload(payload) {
         let url = `${resource}upload`;
         let headers = {
-            "ijsco": "ijsco"
         };
         return Client.post(url, payload, headers);
     },
