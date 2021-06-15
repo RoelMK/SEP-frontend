@@ -8,7 +8,7 @@
             </v-tabs>
             <v-tabs-items v-model="tab">
                 <v-tab-item>
-                    <BloodGlucoseStatistics :data="data" />
+                    <BloodGlucoseStatistics />
                 </v-tab-item>
                 <v-tab-item>
                     <CumulativeStatistics />
@@ -27,12 +27,6 @@ export default {
     components: {
         BloodGlucoseStatistics,
         CumulativeStatistics,
-    },
-    props: {
-        data: {
-            type: Array,
-            default: null
-        }
     },
     data() {
         return {

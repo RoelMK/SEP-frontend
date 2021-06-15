@@ -1,7 +1,7 @@
 <template>
     <v-card flat>
         <v-card-text class="statistics-container">
-            <StackedBarChart :data="data" />
+            <StackedBarChart />
             <ul>
                 <li>
                     Average BG:

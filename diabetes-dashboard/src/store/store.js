@@ -9,6 +9,7 @@ const store = new Vuex.Store({
         filter: { show: false },
         user: {},
         data: [],
+        filteredData: [],
         healthSettings: {
             unit: "mmol/L",
             veryHighThreshold: 13.9,
@@ -42,6 +43,9 @@ const store = new Vuex.Store({
         },
         setData({ commit }, data) {
             commit('UPDATE_DATA', data);
+        },
+        setFilteredData({ commit }, data) {
+            commit('UPDATE_FILTERED_DATA', data);
         }
     },
 
@@ -56,6 +60,9 @@ const store = new Vuex.Store({
         },
         UPDATE_DATA(state, data) {
             state.data = data;
+        },
+        UPDATE_FILTERED_DATA(state, data) {
+            state.filteredData = data;
         },
         SET_REMINDER_STATUS: (state, newEmotionReminderStatus) => {
             state.emotionReminderStatus = newEmotionReminderStatus;
