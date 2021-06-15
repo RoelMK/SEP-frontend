@@ -10,6 +10,38 @@
 
                 <v-spacer></v-spacer>
 
+                <div class="personalInfo" v-if="this.$store.state.user.supervisor">
+                    <div class="text-center">
+                        <v-menu
+                            v-model="showing"
+                            offset-y
+                            width="300px"
+                            :close-on-content-click="false"
+                        >
+                            <template v-slot:activator="{ on }" @click="showing = true">
+                                <v-text-area
+                                    id="name"
+                                    @click="showing = true"
+                                    v-on="on"
+                                >
+                                    {{ childToSupervise || "Select user" }}
+                                </v-text-area>
+                            </template>
+                            <v-list
+                                class="px-4">
+                                <v-autocomplete
+                                    label="Select user"
+                                    :items="this.children"
+                                    v-model="childToSupervise"
+                                    @change="showing = false;"
+                                >
+
+                                </v-autocomplete>
+                            </v-list>
+                        </v-menu>
+                    </div>
+                </div>
+
                 <div class="personalInfo">
                     <p id="name">Cody Simpson</p>
                     <p id="role">Supervisor</p>
@@ -69,13 +101,31 @@
 </template>
 
 <script>
+import Supervisor from '../repositories/Supervisor';
 export default {
     name: "Navbar",
     props: {
         msg: String,
     },
+    created() {
+        Supervisor.getChildren(
+            {
+                supervisorEmail: this.$store.state.user.email
+            }
+        ).then(
+            (resp) => {
+                let result = resp.data.children;
+                for (var i = 0; i < result.length; i++) {
+                    this.children.push(result[i].player_email);
+                }
+            },
+            (error) => { console.log(error); }
+        );
+    },
     data: () => ({
         notifications: true,
+        childToSupervise: null,
+        children: [],
     }),
     methods: {
         logoClicked: function () {
