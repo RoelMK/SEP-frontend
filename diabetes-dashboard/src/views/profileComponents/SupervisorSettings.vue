@@ -202,9 +202,6 @@ export default {
   text-align: center;
 }
 
-.customRow {
-}
-
 .temporaryPadding {
   padding-top: 14px;
 }

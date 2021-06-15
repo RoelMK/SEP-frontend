@@ -1,15 +1,19 @@
 import Client from './Client.js';
 const resource = '/';
-import axios from "axios";
 
 export default {
     login(payload) {
         let url = `${resource}login`;
         let config = {
             headers: {
-                "ijsco": "ijsco"
             },
+            params: payload
         };
-        return Client.get(url, payload, config);
+        return Client.get(url, config);
+    },
+    uploadToken(payload) {
+        let url = `${resource}supervisor/logToken`;
+        let headers = {};
+        return Client.post(url, payload, headers);
     }
 };

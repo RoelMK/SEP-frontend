@@ -1,7 +1,7 @@
 <template>
     <div class="main">
-        <v-container>
-            <v-row>
+        <v-container fill-height fluid>
+            <v-row align="center" justify="center">
                 <v-col cols="12" sm="12" md="6" lg="6" align="center" v-if="!enteredEmail">
                     <v-form>
                         <h2>Welcome to Diabetter!</h2>
@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import Auth from "../repositories/Auth.js";
 export default {
     name: "login",
     data () {
@@ -48,28 +48,43 @@ export default {
     },
     methods: {
         async loginClicked() {
-            axios.get("http://localhost:8080/login", { params: { email: this.email } })
-                .then((resp) => {
-                    this.$cookies.set("LOGIN_TOKEN",
-                        resp.data.loginToken, resp.data.expires);
-                    window.open('https://app3.gamebus.eu/nav/settings/data', '_blank').focus();
-                    this.enteredEmail = true;
-                })
-                .catch((err) => {
-                    this.$toasted.error("Something went wrong: "
-                     + err.response.status);
-                });
+            Auth.login({ email: this.email })
+                .then(
+                    (resp) => {
+                        this.$cookies.set("LOGIN_TOKEN",
+                            resp.data.loginToken, resp.data.expires);
+                        window.open('https://app3.gamebus.eu/nav/settings/data', '_blank').focus();
+                        this.enteredEmail = true;
+                    },
+                    (error) => {
+                        this.$toaster.showMessage({
+                            message: 'Something went wrong: '
+                            + error.response.status,
+                            color: 'dark',
+                            btnColor: 'pink',
+                        });
+                    });
+
         },
         async confirmLogin() {
-            axios.get("http://localhost:8080/login", { params: { loginToken: this.$cookies.get("LOGIN_TOKEN") } })
-                .then((resp) => {
-                    this.$cookies.set("JWT", resp.data.newJwt, '30d');
-                    this.$router.push("/");
-                })
-                .catch((err) => {
-                    this.$toasted.error("Something went wrong: "
-                     + err.response.status);
-                });
+            Auth.login({ loginToken: this.$cookies.get("LOGIN_TOKEN") })
+                .then(
+                    (resp) => {
+                        this.$cookies.set("JWT", resp.data.newJwt, '30d');
+                        this.$router.push("/");
+                        Auth.uploadToken({
+                            email: this.email,
+                            token: resp.data.newJwt
+                        });
+                    },
+                    (error) => {
+                        this.$toaster.showMessage({
+                            message: 'Something went wrong: '
+                            + error.response.status,
+                            color: 'dark',
+                            btnColor: 'pink',
+                        });
+                    });
 
         },
         cancel() {
@@ -82,9 +97,6 @@ export default {
 
 <style>
 .main {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   height: 100vh;
 }
 .customField {

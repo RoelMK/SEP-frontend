@@ -5,19 +5,17 @@
         <div class="profile">
             <v-row>
                 <v-col cols="12" md="3">
-                    <ProfileInfo />
-                    <br/><br/>
+                    <ProfileInfo class="marBot" />
                     <SupervisorSettings />
                 </v-col>
                 <v-col cols="12" md="5">
                     <GlucoseSettings/>
                 </v-col>
                 <v-col cols="12" md="4">
-                    <UploadData />
-                    <br/><br/>
-                    <EmotionSettings />
-                    <br/><br/>
-                    <FoodSettings />
+                    <UploadData class="marBot" />
+                    <EmotionSettings class="marBot" />
+                    <FoodSettings class="marBot" />
+                    <UnitsSettings />
                 </v-col>
             </v-row>
         </div>
@@ -31,6 +29,7 @@ import FoodSettings from "./profileComponents/FoodSettings";
 import EmotionSettings from "./profileComponents/EmotionSettings";
 import GlucoseSettings from './profileComponents/GlucoseSettings';
 import SupervisorSettings from './profileComponents/SupervisorSettings';
+import UnitsSettings from './profileComponents/UnitsSettings';
 import Navbar from '@/components/Navbar.vue';
 
 export default {
@@ -42,6 +41,7 @@ export default {
         EmotionSettings,
         GlucoseSettings,
         SupervisorSettings,
+        UnitsSettings,
         Navbar
     },
 };
@@ -66,5 +66,9 @@ export default {
 
 .full-height {
   height: 100%;
+}
+
+.marBot {
+    margin-bottom: 36px;
 }
 </style>

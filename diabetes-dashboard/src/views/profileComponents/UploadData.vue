@@ -1,70 +1,227 @@
 <template>
-    <v-card>
-        <v-row class="mx-2">
-            <v-col cols="12" class="gTitle">Upload</v-col>
+
+    <v-card class="pa-4">
+        <h4 class="">Upload</h4>
+        <v-form
+            lazy-validation
+            v-model="valid"
+        >
+            <v-row class="mt-2">
+                <v-col cols="9">
+                    <v-file-input
+                        truncate-length="15"
+                        label="Upload excel/csv file"
+                        small-chips
+                        outlined
+                        :rules="[v => !!v || 'Upload a file first', v => (v && v.size > 0) || 'File is required',]"
+                        accept=".csv, .xlsx, .xml"
+                        v-model="file"
+                    ></v-file-input>
+                </v-col>
+                <v-col cols="3">
+                    <v-select
+                        :items="items"
+                        :rules="[v => !!v || 'Required', v => (v && v.length) > 0 || 'Required']"
+                        label="Select type"
+                        outlined
+                        v-model="value"
+                    ></v-select>
+                </v-col>
+            </v-row>
+            <v-btn
+                color="primary"
+                @click="fileUpload"
+                :disabled="!uploadDisabled"
+            >
+                Upload
+            </v-btn>
+        </v-form>
+        <v-divider class="mt-3 mb-3"></v-divider>
+        <h4>Connect Nightscout API</h4>
+        <v-form
+            lazy-validation
+            v-model="nightscoutValid"
+        >
+            <v-row class="mt-2">
+                <v-col cols="9">
+                    <v-text-field
+                        v-model="nightscoutUrl"
+                        required
+                        label="Enter Nightscout URL"
+                        :rules="[v => !!v || 'Required']"
+                    >
+                    </v-text-field>
+                </v-col>
+                <v-col cols="3">
+                    <v-btn
+                        color="primary"
+                        style="margin-top: auto; margin-bottom: auto;"
+                        :disabled="!nightscoutValid"
+                        @click="connectNightscout"
+                    >
+                        Connect
+                    </v-btn>
+                </v-col>
+            </v-row>
+        </v-form>
+        <v-divider class="mt-3 mb-3"></v-divider>
+        <h4 class="mt-2">Connect OneDrive</h4>
+        <v-btn
+            v-if="onedriveSet"
+            color="primary"
+            class="mt-2"
+            @click="connectOnedrive()"
+        >
+            Connect
+        </v-btn>
+        <v-row
+            v-if="!onedriveSet"
+            class="pr-3 mt-3 pl-3"
+        >
+            <v-text-field
+                v-model="onedriveFileUrl"
+                required
+                label="Enter link to file in OneDrive"
+                :rules="[v => !!v || 'Required']"
+            >
+            </v-text-field>
+            <v-btn
+                v-if="!onedriveSet"
+                color="primary"
+                class="ml-2"
+                @click="uploadOnedrive"
+                :disabled="fileUploading"
+            >
+                Upload
+            </v-btn>
         </v-row>
-        <v-row class="mx-2">
-            <v-col cols="8">
-                <v-file-input
-                    outlined
-                    hide-details
-                    truncate-length="15"
-                    label="Upload excel/csv file"
-                    small-chips
-                    accept=".csv, .xlsx, .xml"
-                    v-model="file"
-                ></v-file-input>
-            </v-col>
-            <v-col cols="4">
-                <v-select
-                    outlined
-                    hide-details
-                    :items="items"
-                    label="Select type"
-                ></v-select>
-            </v-col>
-        </v-row>
-        <v-row class="centered">
-            <v-col cols="12">
-                <v-btn
-                    class="white--text"
-                    color="#1B98E0"
-                    @click="fileUpload"
-                >
-                    Upload
-                </v-btn>
-            </v-col>
-        </v-row>
+        <v-btn
+            v-if="!onedriveSet"
+            color="secondary"
+            class="mt-3"
+            @click="disconnectOnedrive()"
+        >
+            Disconnect OneDrive
+        </v-btn>
     </v-card>
 </template>
 
 <script>
-import axios from "axios";
+import Upload from '../../repositories/Upload';
 export default {
     name: "UploadData",
+    created() {
+        this.nightscoutUrl = localStorage.getItem("nightscout_url") || "";
+        this.onedriveFileUrl = localStorage.getItem("od_path") || "";
+        if (this.$route.query.accessToken && this.$route.query.homeAccountId) {
+            this.$cookies.set("od_access_token",
+                this.$route.query.accessToken,
+                this.$route.query.expiresOn);
+            this.$cookies.set("od_homeaccount_id",
+                this.$route.query.homeAccountId);
+        }
+    },
     data() {
         return {
-            items: ['Glucose', 'Insulin'],
+            items: ['Food diary', 'Eetmeter', 'Abbott'],
             file: null,
+            value: null,
+            valid: false,
+            nightscoutUrl: "",
+            nightscoutValid: false,
+            onedriveFileUrl: "",
+            fileUploading: false,
         };
     },
     methods: {
         fileUpload() {
             let formData = new FormData();
             formData.append('file', this.file);
+            formData.append('format', this.value);
 
-            axios.post('http://localhost:8080/upload/eetmeter', formData)
-                .then((resp) => {
-                    console.log(resp);
+            Upload.upload( formData )
+                .then(
+                    (resp) => {
+                        this.$toaster.showMessage({
+                            message: 'File uploaded successfully!',
+                            color: 'green',
+                            btnColor: 'pink'
+                        });
+                    },
+                    (error) => {
+                        this.$toaster.showMessage({
+                            message: 'Something went wrong',
+                            color: 'dark',
+                            btnColor: 'pink'
+                        });
+                    }
+                );
+        },
+        connectNightscout() {
+            localStorage.setItem("nightscout_url", this.nightscoutUrl);
+        },
+        connectOnedrive() {
+            window.open('http://localhost:8080/onedrive/login');
+        },
+        disconnectOnedrive() {
+            this.$cookies.remove('od_access_token');
+            this.$cookies.remove('od_homeaccount_id');
+        },
+        uploadOnedrive() {
+            let access_token = this.$cookies.get("od_access_token");
+            if (!access_token) {
+                access_token = Upload.fetchOnedriveToken({
+                    homeAccountId: this.$cookies.get("od_homeaccount_id")
                 })
-                .catch((err) => {
-                    console.log(err);
-                });
+                    .then(
+                        (resp) => {
+                            this.$cookies.set("od_access_token",
+                                resp.data.accessToken, resp.data.expiresOn);
+                            return resp.data.accessToken;
+                        },
+                        (error) => { console.log(error); }
+                    );
+            }
+            this.fileUploading = true;
+            Upload.uploadOnedrive({
+                oneDriveToken: access_token,
+                filePath: this.onedriveFileUrl
+            }, this.$cookies.get("JWT")).then(
+                (resp) => {
+                    localStorage.setItem("od_path", this.onedriveFileUrl);
+                    this.fileUploading = false;
+                    this.$toaster.showMessage({
+                        message: "File upload succesful!",
+                        color: "dark",
+                        btnColor: "pink",
+                    });
+                },
+                (error) => {
+                    this.$toaster.showMessage({
+                        message: "Something went wrong, " +
+                        "try again later or contact a developer",
+                        color: "dark",
+                        btnColor: "pink",
+                    });
+                    this.fileUploading = false;
+                }
+            );
+        }
+    },
+    computed: {
+        uploadDisabled() {
+            return this.value && this.file;
+        },
+        onedriveSet() {
+            try {
+                return !this.$cookies.get('od_homeaccount_id').length > 4;
+            } catch (e) {
+                return true;
+            }
         }
     }
 };
 </script>
-
 <style>
 .gTitle {
     font-size: 15px;
