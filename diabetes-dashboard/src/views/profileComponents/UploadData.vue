@@ -1,5 +1,6 @@
 <template>
-    <div>
+
+    <v-card class="pa-4">
         <h4 class="">Upload</h4>
         <v-form
             lazy-validation
@@ -66,16 +67,43 @@
         <v-divider class="mt-3 mb-3"></v-divider>
         <h4 class="mt-2">Connect OneDrive</h4>
         <v-btn
+            v-if="onedriveSet"
             color="primary"
             class="mt-2"
             @click="connectOnedrive()"
         >
             Connect
         </v-btn>
-
-
-
-    </div>
+        <v-row
+            v-if="!onedriveSet"
+            class="pr-3 mt-3 pl-3"
+        >
+            <v-text-field
+                v-model="onedriveFileUrl"
+                required
+                label="Enter link to file in OneDrive"
+                :rules="[v => !!v || 'Required']"
+            >
+            </v-text-field>
+            <v-btn
+                v-if="!onedriveSet"
+                color="primary"
+                class="ml-2"
+                @click="uploadOnedrive"
+                :disabled="fileUploading"
+            >
+                Upload
+            </v-btn>
+        </v-row>
+        <v-btn
+            v-if="!onedriveSet"
+            color="secondary"
+            class="mt-3"
+            @click="disconnectOnedrive()"
+        >
+            Disconnect OneDrive
+        </v-btn>
+    </v-card>
 </template>
 
 <script>
@@ -84,7 +112,7 @@ export default {
     name: "UploadData",
     created() {
         this.nightscoutUrl = localStorage.getItem("nightscout_url") || "";
-        console.log(this.$route.query.expiresOn);
+        this.onedriveFileUrl = localStorage.getItem("od_path") || "";
         if (this.$route.query.accessToken && this.$route.query.homeAccountId) {
             this.$cookies.set("od_access_token",
                 this.$route.query.accessToken,
@@ -101,6 +129,8 @@ export default {
             valid: false,
             nightscoutUrl: "",
             nightscoutValid: false,
+            onedriveFileUrl: "",
+            fileUploading: false,
         };
     },
     methods: {
@@ -132,11 +162,62 @@ export default {
         },
         connectOnedrive() {
             window.open('http://localhost:8080/onedrive/login');
+        },
+        disconnectOnedrive() {
+            this.$cookies.remove('od_access_token');
+            this.$cookies.remove('od_homeaccount_id');
+        },
+        uploadOnedrive() {
+            let access_token = this.$cookies.get("od_access_token");
+            if (!access_token) {
+                access_token = Upload.fetchOnedriveToken({
+                    homeAccountId: this.$cookies.get("od_homeaccount_id")
+                })
+                    .then(
+                        (resp) => {
+                            this.$cookies.set("od_access_token",
+                                resp.data.accessToken, resp.data.expiresOn);
+                            return resp.data.accessToken;
+                        },
+                        (error) => { console.log(error); }
+                    );
+            }
+            this.fileUploading = true;
+            Upload.uploadOnedrive({
+                oneDriveToken: access_token,
+                filePath: this.onedriveFileUrl
+            }, this.$cookies.get("JWT")).then(
+                (resp) => {
+                    localStorage.setItem("od_path", this.onedriveFileUrl);
+                    this.fileUploading = false;
+                    this.$toaster.showMessage({
+                        message: "File upload succesful!",
+                        color: "dark",
+                        btnColor: "pink",
+                    });
+                },
+                (error) => {
+                    this.$toaster.showMessage({
+                        message: "Something went wrong, " +
+                        "try again later or contact a developer",
+                        color: "dark",
+                        btnColor: "pink",
+                    });
+                    this.fileUploading = false;
+                }
+            );
         }
     },
     computed: {
         uploadDisabled() {
             return this.value && this.file;
+        },
+        onedriveSet() {
+            try {
+                return !this.$cookies.get('od_homeaccount_id').length > 4;
+            } catch (e) {
+                return true;
+            }
         }
     }
 };
