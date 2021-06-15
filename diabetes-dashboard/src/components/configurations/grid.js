@@ -1,6 +1,6 @@
 export default [
     {
-        top: '8%',
+        top: '10%',
         bottom: '55%',
         right: '2%',
         left: '6%',

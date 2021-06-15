@@ -11,8 +11,8 @@
                 <v-spacer></v-spacer>
 
                 <div class="personalInfo">
-                    <p class="mb-0" id="name">Cody Simpson</p>
-                    <p class="mb-0" id="role">User</p>
+                    <p id="name">Cody Simpson</p>
+                    <p id="role">Supervisor</p>
                 </div>
 
                 <v-badge bottom overlap offset-x="11" offset-y="15" color="transparent">
@@ -26,7 +26,7 @@
                     </span>
                 </v-badge>
 
-                <v-menu offset-y>
+                <v-menu offset-y left>
                     <template v-slot:activator="{ on, attrs }">
                         <v-btn class="no-background__hover"
                                v-bind="attrs"
@@ -36,17 +36,17 @@
                             <v-icon size="20">mdi-chevron-down</v-icon>
                         </v-btn>
                     </template>
-                    <v-list>
+                    <v-list class="dropdown-list">
                         <v-list-item>
-                            <v-text-area class="pointer" v-on:click="profileClicked">
+                            <v-list-item-title class="pointer" v-on:click="profileClicked">
                                 Profile
-                            </v-text-area>
+                            </v-list-item-title>
                         </v-list-item>
                         <v-divider class="mx-2"/>
                         <v-list-item>
-                            <v-text-area class="pointer" v-on:click="logoutClicked">
+                            <v-list-item-title class="pointer" @click="logout">
                                 Logout
-                            </v-text-area>
+                            </v-list-item-title>
                         </v-list-item>
                     </v-list>
                 </v-menu>
@@ -54,7 +54,7 @@
                 <v-divider inset vertical />
 
                 <v-btn class="no-background__hover" icon :ripple="false">
-                    <v-icon size="20" color="dark-gray">mdi-file-table</v-icon>
+                    <v-icon size="20" color="dark-gray" v-on:click="historyClicked">mdi-file-table</v-icon>
                 </v-btn>
 
                 <v-badge bordered dot offset-x="20" offset-y="20"
@@ -63,10 +63,6 @@
                         <v-icon size="20" color="#FFCD00">mdi-bell</v-icon>
                     </v-btn>
                 </v-badge>
-
-                <v-btn class="no-background__hover" icon :ripple="false">
-                    <v-icon size="20">mdi-menu</v-icon>
-                </v-btn>
             </v-toolbar>
         </v-card>
     </div>
@@ -79,16 +75,8 @@ export default {
         msg: String,
     },
     data: () => ({
-        drawer: false,
-        group: null,
         notifications: true,
     }),
-
-    watch: {
-        group() {
-            this.drawer = false;
-        },
-    },
     methods: {
         logoClicked: function () {
             this.$router.push('/');
@@ -96,19 +84,32 @@ export default {
         profileClicked: function () {
             this.$router.push('/profile');
         },
-        logoutClicked: function () {
-            this.$toasted.show('Logout Clicked');
+        historyClicked: function () {
+            this.$router.push('/history');
+        },
+        logout() {
+            this.$store.commit("LOGOUT");
+            this.$cookies.remove("JWT");
+            this.$router.push('/login');
         }
     }
 };
 </script>
 
 <style scoped>
+.dropdown-list div {
+    margin: 0 1.5rem;
+}
+
 .personalInfo {
     display: flex;
     flex-direction: column;
     text-align: right;
     padding-right: 10px;
+}
+
+.personalInfo p {
+    margin-bottom: 0;
 }
 
 .personalInfo #name {

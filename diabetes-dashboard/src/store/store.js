@@ -1,29 +1,13 @@
 import Vuex from 'vuex';
 import Vue from 'vue';
-import axios from 'axios';
-import { AxiosWrapper } from '@/helpers/wrapper.js';
 
-/* Create a new instance of AxiosWrapper with required headers */
-const wrapper = new AxiosWrapper();
-
-// Load Vuex
 Vue.use(Vuex);
 
-// Create store
 const store = new Vuex.Store({
     state: {
-        activities: [
-        ],
-        emotions: [
-        ],
-        foodItems: [
-        ],
-        glucoseData: [
-        ],
-        insulinData: [
-        ],
-        users: [
-        ],
+        toast: { message: '', color: '', btnColor: '', timeout: 5000 },
+        filter: { show: false },
+        data: [],
         healthSettings: {
             unit: "mmol/L",
             veryHighThreshold: 13.9,
@@ -39,161 +23,46 @@ const store = new Vuex.Store({
             ppRangeThreshold: 10.0,
             goalA1C: 7,
         },
+        emotionReminderStatus: false,
     },
-
     getters: {
-        getActivities: state => state.activities,
-        getEmotions: state => state.emotions,
-        getFoodItems: state => state.foodItems,
-        getGlucoseData: state => state.glucoseData,
-        getInsulinData: state => state.insulinData,
-        getUsers: state => state.users,
         getHealthSettings: state => state.healthSettings,
+        getEmotionReminderStatus: state => state.emotionReminderStatus,
     },
-
     actions: {
-        async fetchInsulinData({ commit }) {
-            const response = await wrapper.get(
-                'https://jsonplaceholder.typicode.com/albums',
-                dataPromise => dataPromise
-            );
-
-            commit('SET_INSULIN_DATA', response);
+        showMessage({ commit }, toast) {
+            commit('SHOW_MESSAGE', toast);
         },
-        async addInsulinInput({ commit }, {id, title, userId}) {
-            const response = await wrapper.post(
-                'https://jsonplaceholder.typicode.com/albums',
-                { userId, id, title, completed: false },
-                dataPromise => dataPromise
-            );
-
-            commit('ADD_INSULIN_VALUE', response);
+        showFilter({ commit }, filter) {
+            commit('SHOW_FILTER', filter);
         },
-        async deleteInsulinInput({ commit }, id) {
-            await axios.delete(
-                `https://jsonplaceholder.typicode.com/albums/${id}`
-            );
-            commit('REMOVE_INSULIN_VALUE', id);
+        setEmotionReminderStatus({ commit }, newStatus) {
+            commit('SET_REMINDER_STATUS', newStatus);
         },
-        async updateInsulinInput({ commit }, {originalId, userId, id, title}) {
-            const response = await wrapper.put(
-                `https://jsonplaceholder.typicode.com/albums/${originalId}`,
-                { userId, id, title, completed: false },
-                dataPromise => dataPromise
-            );
-
-            commit(
-                'UPDATE_INSULIN_VALUE',
-                {originalId: originalId, updatedInsulinValue: response}
-            );
-        },
+        setData({ commit }, data) {
+            commit('UPDATE_DATA', data);
+        }
     },
 
     mutations: {
-        SET_ACTIVITIES: (state, newActivities) => {
-            return state.activities = newActivities;
+        SHOW_MESSAGE(state, toast) {
+            state.toast.message = toast.message;
+            state.toast.color = toast.color;
+            state.toast.btnColor = toast.btnColor;
         },
-        RESET_ACTIVITIES: state => Object.assign(state.activities, []),
-        ADD_ACTIVITY: (state, newActivitiy) => state.activities
-            .unshift(newActivitiy),
-        REMOVE_ACTIVITY: (state, id) => {
-            return state.activities = state.activities
-                .filter(activity => activity.id !== id);
+        SHOW_FILTER(state, filter) {
+            state.filter.show = filter.show;
         },
-        UPDATE_ACTIVITY: (state, { originalId, updatedActivity }) => {
-            state.activities.splice(
-                state.activities
-                    .findIndex(activity => activity.id === originalId),
-                1,
-                updatedActivity
-            );
+        UPDATE_DATA(state, data) {
+            state.data = data;
         },
-
-        SET_EMOTIONS: (state, newEmotions) => state.emotions = newEmotions,
-        RESET_EMOTIONS: state => Object.assign(state.emotions, []),
-        ADD_EMOTION: (state, newEmotion) => state.emotions.unshift(newEmotion),
-        REMOVE_EMOTION: (state, id) => state.emotions = state.emotions
-            .filter(emotion => emotion.id !== id),
-        UPDATE_EMOTION: (state, { originalId, updatedEmotion }) => {
-            state.emotions.splice(
-                state.emotions.findIndex(emotion => emotion.id === originalId),
-                1,
-                updatedEmotion
-            );
+        SET_REMINDER_STATUS: (state, newEmotionReminderStatus) => {
+            state.emotionReminderStatus = newEmotionReminderStatus;
         },
-
-        SET_FOOD_ITEMS: (state, newFoodItems) => {
-            state.foodItems = newFoodItems;
-        },
-        RESET_FOOD_ITEMS: state => Object.assign(state.foodItems, []),
-        ADD_FOOD_ITEM: (state, newFoodItem) => state.foodItems
-            .unshift(newFoodItem),
-        REMOVE_FOOD_ITEM: (state, id) => state.foodItems = state.foodItems
-            .filter(foodItem => foodItem.id !== id),
-        UPDATE_FOOD_ITEM: (state, { originalId, updatedFoodItem }) => {
-            state.foodItems.splice(
-                state.foodItems
-                    .findIndex(foodItem => foodItem.id === originalId),
-                1,
-                updatedFoodItem
-            );
-        },
-
-        SET_GLUCOSE_DATA: (state, newGlucoseData) => {
-            state.glucoseData = newGlucoseData;
-        },
-        RESET_GLUCOSE_DATA: state => Object.assign(state.glucoseData, []),
-        ADD_GLUCOSE_VALUE: (state, newGlucoseValue) => state.glucoseData
-            .unshift(newGlucoseValue),
-        REMOVE_GLUCOSE_VALUE: (state, id) => {
-            state.glucoseData = state.glucoseData.filter(glucoseValue => {
-                glucoseValue.id !== id;
-            });
-        },
-        UPDATE_GLUCOSE_VALUE: (state, { originalId, updatedGlucoseValue }) => {
-            state.glucoseData.splice(
-                state.glucoseData.findIndex(glucoseValue => {
-                    return glucoseValue.id === originalId;
-                }),
-                1,
-                updatedGlucoseValue
-            );
-        },
-
-        SET_INSULIN_DATA: (state, newInsulinData) => {
-            state.insulinData = newInsulinData;
-        },
-        RESET_INSULIN_DATA: state => Object.assign(state.insulinData, []),
-        ADD_INSULIN_VALUE: (state, newInsulinValue) => state.insulinData
-            .unshift(newInsulinValue),
-        REMOVE_INSULIN_VALUE: (state, id) => {
-            state.insulinData = state.insulinData
-                .filter(insulinValue => insulinValue.id !== id);
-        },
-        UPDATE_INSULIN_VALUE: (state, { originalId, updatedInsulinValue }) => {
-            state.insulinData.splice(
-                state.insulinData
-                    .findIndex(insulinValue => insulinValue.id === originalId),
-                1,
-                updatedInsulinValue
-            );
-        },
-
-        SET_USERS: (state, newUsers) => state.users = newUsers,
-        RESET_USERS: state => Object.assign(state.users, []),
-        ADD_USER: (state, newUser) => state.users.unshift(newUser),
-        REMOVE_USER: (state, id) => state.users = state.users
-            .filter(user => user.id !== id),
-        UPDATE_USER: (state, { originalId, updatedUser }) => {
-            state.users.splice(
-                state.users.findIndex(user => user.id === originalId),
-                1,
-                updatedUser
-            );
-        },
-        SET_HEALTH_SETTINGS: (state, newHealthSettings) => {
-            state.healthSettings = newHealthSettings;
-        },
+        LOGOUT(state) {
+            state.data = [];
+            state.user = [];
+        }
     },
 });
 
