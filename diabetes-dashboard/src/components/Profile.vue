@@ -20,11 +20,6 @@
 
 <script>
 import { VueReactionEmoji, VueFeedbackReaction } from 'vue-feedback-reaction';
-import { AxiosWrapper } from '@/helpers/wrapper.js';
-
-/* Create a new instance of AxiosWrapper with required headers */
-const wrapper = new AxiosWrapper();
-
 export default {
     name: 'Profile',
     components: {
@@ -38,17 +33,11 @@ export default {
             isDisabled: false,
             height: "30px",
             title: '',
-            payload: {
-                title: 'Hello from POST request',
-                body: 'Example body',
-                userId: 1,
-            }
         };
     },
-    mounted() {
-        /* Example of POST Request, similar requests can be made for GET, PUT and DELETE */
-        wrapper.post('https://jsonplaceholder.typicode.com/posts', this.payload, dataPromise => dataPromise)
-            .then(data => this.title = data.title);
+    created() {
+        console.log("Getting created");
+        console.log(this.$route.query.expiresOn);
     },
     computed: {
     },
