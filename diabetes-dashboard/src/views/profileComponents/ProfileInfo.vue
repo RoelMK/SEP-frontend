@@ -1,5 +1,64 @@
 <template>
-    <div class="profile-info">
+    <v-card>
+        <v-row>
+            <v-col cols="12" class="rightAligned editBtn pointer pr-10">Edit</v-col>
+        </v-row>
+        <v-row>
+            <v-col cols="12" class="centerAligned">
+                <v-avatar size="120">
+                    <v-img src="https://cdn.vuetifyjs.com/images/lists/2.jpg"></v-img>
+                </v-avatar>
+            </v-col>
+        </v-row>
+        <v-row>
+            <v-col cols="12">
+                <div class="customCol centerAligned">
+                    <v-text-area id="name">Cody Simpson</v-text-area>
+                    <v-text-area id="role">User</v-text-area>
+                </div>
+            </v-col>
+        </v-row>
+        <br/>
+        <v-row class="centerAligned">
+            <v-col cols="12" md="6">
+                <div class="customCol">
+                    <v-text-area id="personalProperty">Age</v-text-area>
+                    <v-text-area id="personalValue">20</v-text-area>
+                </div>
+            </v-col>
+            <v-col cols="12" md="6">
+                <div class="customCol">
+                    <v-text-area id="personalProperty">Language</v-text-area>
+                    <v-text-area>
+                        <country-flag country='gb'/>
+                    </v-text-area>
+                </div>
+            </v-col>
+        </v-row>
+        <v-row class="centerAligned">
+            <v-col cols="12" md="6">
+                <div class="customCol">
+                    <v-text-area id="personalProperty">Height</v-text-area>
+                    <v-text-area id="personalValue">180</v-text-area>
+                </div>
+            </v-col>
+            <v-col cols="12" md="6">
+                <div class="customCol">
+                    <v-text-area id="personalProperty">Weight</v-text-area>
+                    <v-text-area id="personalValue">80</v-text-area>
+                </div>
+            </v-col>
+        </v-row>
+        <v-row class="centerAligned">
+            <v-col cols="12">
+                <div class="customCol">
+                    <v-text-area id="personalProperty">Email</v-text-area>
+                    <v-text-area id="personalValue">c.simp@email.com</v-text-area>
+                </div>
+            </v-col>
+        </v-row>
+    </v-card>
+    <!-- <div class="profile-info">
         <h3 class="">Hey {{ profileData.name }}!</h3>
 
         <h4 class="">Profile Information</h4>
@@ -109,16 +168,19 @@
             color="success">
             Save changes
         </v-btn>
-    </div>
+    </div> -->
 </template>
 
 <script>
-import VueSlider from 'vue-slider-component';
-import 'vue-slider-component/theme/default.css';
+// import VueSlider from 'vue-slider-component';
+// import 'vue-slider-component/theme/default.css';
+import CountryFlag from 'vue-country-flag';
+
 export default {
     name: "ProfileInfo",
     components: {
-        VueSlider
+        CountryFlag
+        // VueSlider
     },
     data() {
         return {
@@ -159,10 +221,51 @@ export default {
 };
 </script>
 <style>
-.profile-info {
+.rightAligned {
+  text-align: right;
+}
+
+.centerAligned {
+  text-align: center;
+}
+
+.editBtn {
+    font-size: 13px;
+    font-weight: bold;
+    height: 40px;
+}
+
+.customCol {
+    display: flex;
+    flex-direction: column;
+}
+
+.customCol #name {
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.customCol #role {
+    font-size: 13px;
+}
+
+.customCol #personalProperty {
+    font-size: 15px;
+    padding-bottom: 10px;
+}
+
+.customCol #personalValue {
+    color: #1B98E0;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+/* .profile-info {
   padding: 0 5% 0 5%;
-}
-.border {
+} */
+/* .border {
   border-style: solid;
-}
+} */
 </style>

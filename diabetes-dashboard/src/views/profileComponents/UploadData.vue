@@ -142,4 +142,12 @@ export default {
 };
 </script>
 <style>
+.gTitle {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.centered {
+    text-align: center;
+}
 </style>

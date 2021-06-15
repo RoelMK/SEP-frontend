@@ -20,7 +20,7 @@
                         <v-icon size="15" color="blue">mdi-emoticon</v-icon>
                     </span>
                     <span slot="default">
-                        <v-avatar size="35" color="red">
+                        <v-avatar size="35">
                             <v-img src="https://cdn.vuetifyjs.com/images/lists/2.jpg"></v-img>
                         </v-avatar>
                     </span>
@@ -124,6 +124,7 @@ export default {
 .pointer {
     cursor: pointer;
 }
+
 .no-background__hover::before {
    background-color: transparent !important;
 }

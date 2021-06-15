@@ -25,6 +25,10 @@ import {
 } from 'echarts/components';
 import i18n from './i18n';
 
+import CountryFlag from 'vue-country-flag';
+
+Vue.component('country-flag', CountryFlag);
+
 Vue.config.productionTip = false;
 
 use([

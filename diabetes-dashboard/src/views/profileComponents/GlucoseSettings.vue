@@ -1,214 +1,168 @@
 <template>
-    <div>
-        <h3 class="center">Modify Glucose Settings:</h3>
-        <hr />
-        <v-row>
-            <v-col> "Very High" Threshold: </v-col>
-            <v-col>
-                <form class="center">
-                    <input
-                        type="number"
-                        v-model="veryHighThreshold"
-                        placeholder="Enter value"
-                    />
-                    <input type="submit" value="Submit" class="button" />
-                </form>
+    <v-card>
+        <v-row class="mx-2">
+            <v-col cols="12" class="gTitle">Glucose Settings</v-col>
+        </v-row>
+        <v-row class="mx-2">
+            <v-col cols="12" class="gSection">Glucose Range</v-col>
+        </v-row>
+        <v-row class="mx-2">
+            <v-col cols="12" class="customCol">
+                <v-text class="fSize14">Very High</v-text>
+                <div class="mx-2">
+                    <v-range-slider
+                        thumb-label
+                        hide-details
+                        max="14"
+                        min="0"
+                        step="0.1"
+                        v-model="healthSettings.veryHighRange"
+                        :color="colors.veryHigh"
+                        :track-color="colors.trackColor"
+                    ></v-range-slider>
+                </div>
             </v-col>
         </v-row>
-        <hr />
-        <v-row>
-            <v-col> "High" Maximum: </v-col>
-            <v-col>
-                <form class="center">
-                    <input
-                        type="number"
-                        v-model="highRangeMax"
-                        placeholder="Enter value"
-                    />
-                    <input type="submit" value="Submit" class="button" />
-                </form>
+        <v-row class="mx-2">
+            <v-col cols="12" class="customCol">
+                <v-text class="fSize14">High</v-text>
+                <div class="mx-2">
+                    <v-range-slider
+                        thumb-label
+                        hide-details
+                        max="14"
+                        min="0"
+                        step="0.1"
+                        v-model="healthSettings.highRange"
+                        :color="colors.high"
+                        :track-color="colors.trackColor"
+                    ></v-range-slider>
+                </div>
             </v-col>
         </v-row>
-        <hr />
-        <v-row>
-            <v-col> "High" Minimum: </v-col>
-            <v-col>
-                <form class="center">
-                    <input
-                        type="number"
-                        v-model="highRangeMin"
-                        placeholder="Enter value"
-                    />
-                    <input type="submit" value="Submit" class="button" />
-                </form>
+        <v-row class="mx-2">
+            <v-col cols="12" class="customCol">
+                <v-text class="fSize14">Normal</v-text>
+                <div class="mx-2">
+                    <v-range-slider
+                        thumb-label
+                        hide-details
+                        max="14"
+                        min="0"
+                        step="0.1"
+                        v-model="healthSettings.normalRange"
+                        :color="colors.normal"
+                        :track-color="colors.trackColor"
+                    ></v-range-slider>
+                </div>
             </v-col>
         </v-row>
-        <hr />
-        <v-row>
-            <v-col> "Normal" Maximum: </v-col>
-            <v-col>
-                <form class="center">
-                    <input
-                        type="number"
-                        v-model="normalRangeMax"
-                        placeholder="Enter value"
-                    />
-                    <input type="submit" value="Submit" class="button" />
-                </form>
+        <v-row class="mx-2">
+            <v-col cols="12" class="customCol">
+                <v-text class="fSize14">Low</v-text>
+                <div class="mx-2">
+                    <v-range-slider
+                        thumb-label
+                        hide-details
+                        max="14"
+                        min="0"
+                        step="0.1"
+                        v-model="healthSettings.lowRange"
+                        :color="colors.low"
+                        :track-color="colors.trackColor"
+                    ></v-range-slider>
+                </div>
             </v-col>
         </v-row>
-        <hr />
-        <v-row>
-            <v-col> "Normal" Minimum: </v-col>
-            <v-col>
-                <form class="center">
-                    <input
-                        type="number"
-                        v-model="normalRangeMin"
-                        placeholder="Enter value"
-                    />
-                    <input type="submit" value="Submit" class="button" />
-                </form>
+        <v-row class="mx-2">
+            <v-col cols="12" class="customCol">
+                <v-text class="fSize14">Very Low</v-text>
+                <div class="mx-2">
+                    <v-range-slider
+                        thumb-label
+                        hide-details
+                        max="14"
+                        min="0"
+                        step="0.1"
+                        v-model="healthSettings.veryLowRange"
+                        :color="colors.veryLow"
+                        :track-color="colors.trackColor"
+                    ></v-range-slider>
+                </div>
             </v-col>
         </v-row>
-        <hr />
-        <v-row>
-            <v-col> "Low" Maximum: </v-col>
-            <v-col>
-                <form class="center">
-                    <input
-                        type="number"
-                        v-model="lowRangeMax"
-                        placeholder="Enter value"
-                    />
-                    <input type="submit" value="Submit" class="button" />
-                </form>
+        <v-row class="mx-2">
+            <v-col cols="12" class="gSection">Thresholds</v-col>
+        </v-row>
+        <v-row class="mx-2">
+            <v-col cols="12" md="4" class="customCol">
+                <v-text class="fSize14">A1C</v-text>
+                <v-text-field v-model="healthSettings.goalA1C"/>
+            </v-col>
+            <v-col cols="12" md="4" class="customCol">
+                <v-text class="fSize14">Hypoglycemia</v-text>
+                <v-text-field v-model="healthSettings.valueHypoglycemia"/>
+            </v-col>
+            <v-col cols="12" md="4" class="customCol">
+                <v-text class="fSize14">Hyperglycemia</v-text>
+                <v-text-field v-model="healthSettings.valueHyperglycemia"/>
             </v-col>
         </v-row>
-        <hr />
-        <v-row>
-            <v-col> "Low" Minimum: </v-col>
-            <v-col>
-                <form class="center">
-                    <input
-                        type="number"
-                        v-model="lowRangeMin"
-                        placeholder="Enter value"
-                    />
-                    <input type="submit" value="Submit" class="button" />
-                </form>
-            </v-col>
-        </v-row>
-        <hr />
-        <v-row>
-            <v-col> "Very Low" Threshold: </v-col>
-            <v-col>
-                <form class="center">
-                    <input
-                        type="number"
-                        v-model="veryLowThreshold"
-                        placeholder="Enter value"
-                    />
-                    <input type="submit" value="Submit" class="button" />
-                </form>
-            </v-col>
-        </v-row>
-        <hr />
-        <v-row>
-            <v-col> "Normal" fasting blood glucose Maximum: </v-col>
-            <v-col>
-                <form class="center">
-                    <input
-                        type="number"
-                        v-model="fastingRangeMax"
-                        placeholder="Enter value"
-                    />
-                    <input type="submit" value="Submit" class="button" />
-                </form>
-            </v-col>
-        </v-row>
-        <hr />
-        <v-row>
-            <v-col> "Normal" fasting blood glucose Minimum: </v-col>
-            <v-col>
-                <form class="center">
-                    <input
-                        type="number"
-                        v-model="fastingRangeMin"
-                        placeholder="Enter value"
-                    />
-                    <input type="submit" value="Submit" class="button" />
-                </form>
-            </v-col>
-        </v-row>
-        <hr />
-        <v-row>
-            <v-col> "Normal" glucose PP Threshold: </v-col>
-            <v-col>
-                <form class="center">
-                    <input
-                        type="number"
-                        v-model="ppRangeThreshold"
-                        placeholder="Enter value"
-                    />
-                    <input type="submit" value="Submit" class="button" />
-                </form>
-            </v-col>
-        </v-row>
-        <hr />
-        <v-row>
-            <v-col> A1C goal: </v-col>
-            <v-col>
-                <form class="center">
-                    <input
-                        type="number"
-                        v-model="goalA1C"
-                        placeholder="Enter value"
-                    />
-                    <input type="submit" value="Submit" class="button" />
-                </form>
-            </v-col>
-        </v-row>
-        <hr />
-        <v-row>
-            <v-col> Switch Unit: </v-col>
-            <v-col>
-                <form class="center">
-                    <select v-model="unit" style="margin:0 60px 0 60px">
-                        <option disabled value="">Select unit</option>
-                        <option>mmol/L</option>
-                        <option>mg/dL</option>
-                    </select>
-                    <input type="submit" value="Submit" class="button"/>
-                </form>
-            </v-col>
-        </v-row>
-    </div>
+    </v-card>
 </template>
 
 <script>
+import legend from '@/components/configurations/legend.js';
 export default {
     name: "glucoseSettings",
-    // store data from form
     data() {
         return {
-            unit: "",
-            veryHighThreshold: "",
-            highRangeMin: "",
-            highRangeMax: "",
-            normalRangeMin: "",
-            normalRangeMax: "",
-            lowRangeMin: "",
-            lowRangeMax: "",
-            veryLowThreshold: "",
-            fastingRangeMin: "",
-            fastingRangeMax: "",
-            ppRangeThreshold: "",
-            goalA1C: "",
+            options: {
+                process: pos => [
+                    [pos[0], pos[1]],
+                ],
+            },
+            healthSettings: {
+                unit: "mmol/L",
+                veryHighRange: [13.0, 13.9],
+                highRange: [10.0, 13.0],
+                normalRange: [3.9, 10.0],
+                lowRange: [3.0, 3.9],
+                veryLowRange: [1.5, 3.0],
+                goalA1C: 7,
+                valueHypoglycemia: 6,
+                valueHyperglycemia: 10
+            },
+            colors: {
+                veryHigh: legend.sections[0].properties[4].color,
+                high: legend.sections[0].properties[3].color,
+                normal: legend.sections[0].properties[2].color,
+                low: legend.sections[0].properties[1].color,
+                veryLow: legend.sections[0].properties[0].color,
+                trackColor: "gray"
+            }
         };
     },
 };
 </script>
 
 <style>
+.gTitle {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.gSection {
+    color: #1B98E0;
+    font-size: 14px;
+}
+
+.fSize14 {
+    font-size: 14px
+}
+
+.customCol {
+    display: flex;
+    flex-direction: column;
+}
 </style>

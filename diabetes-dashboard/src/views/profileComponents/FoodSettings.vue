@@ -1,23 +1,19 @@
 <template>
-    <div>
-        <h4 class="">Modify Food Settings:</h4>
-        <v-row>
-            <v-text-field
-                class="input mt-5"
-                label="Consumed calories goal"
-                v-model="goalConsumedCalories"
-                hint="Enter value"
-            />
+    <v-card>
+        <v-row class="mx-2">
+            <v-col cols="12" class="gTitle">Food Settings</v-col>
         </v-row>
-        <v-row>
-            <v-text-field
-                class="input"
-                label="Burnt calories goal"
-                v-model="goalBurntCalories"
-                hint="Enter value"
-            />
+        <v-row class="mx-2">
+            <v-col cols="12" md="6" class="customCol">
+                <v-text class="fSize14">Consumed Calories Goal</v-text>
+                <v-text-field value="1800"/>
+            </v-col>
+            <v-col cols="12" md="6" class="customCol">
+                <v-text class="fSize14">Burned Calories Goal</v-text>
+                <v-text-field value="2000"/>
+            </v-col>
         </v-row>
-    </div>
+    </v-card>
 </template>
 
 <script>
@@ -33,10 +29,24 @@ export default {
 </script>
 
 <style>
-.button {
+.gTitle {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.fSize14 {
+    font-size: 14px
+}
+
+.customCol {
+    display: flex;
+    flex-direction: column;
+}
+
+/* .button {
   background-color: #008cba;
   border-radius: 12px;
   padding: 6px 18px;
   color: white;
-}
+} */
 </style>
