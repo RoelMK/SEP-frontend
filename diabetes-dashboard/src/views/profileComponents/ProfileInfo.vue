@@ -1,7 +1,13 @@
 <template>
     <v-card>
         <v-row>
-            <v-col cols="12" class="rightAligned editBtn pointer pr-10">Edit</v-col>
+            <!-- <v-col cols="9" class="rightAligned editBtn pointer pr-8">
+                <p @click="editInfo">{{tIsEdit}}</p>
+            </v-col> -->
+            <v-col cols="12" class="cRow rightAligned editBtn pointer pr-8">
+                <p @click="editInfo">{{tIsEdit}}</p>
+                <p @click="onCancel" id="cancel" class="pr-3" v-if="editing">Cancel</p>
+            </v-col>
         </v-row>
         <v-row>
             <v-col cols="12" class="centerAligned">
@@ -10,185 +16,139 @@
                 </v-avatar>
             </v-col>
         </v-row>
-        <v-row>
+
+        <!-- Not editing -->
+        <v-row v-if="!editing">
             <v-col cols="12">
                 <div class="customCol centerAligned">
-                    <v-text-area id="name">Cody Simpson</v-text-area>
-                    <v-text-area id="role">User</v-text-area>
+                    <p class="mb-0" id="name">Cody Simpson</p>
+                    <p class="mb-0" id="role">User</p>
                 </div>
             </v-col>
         </v-row>
-        <br/>
-        <v-row class="centerAligned">
+        <br v-if="!editing"/>
+        <v-row class="centerAligned" v-if="!editing">
             <v-col cols="12" md="6">
                 <div class="customCol">
-                    <v-text-area id="personalProperty">Age</v-text-area>
-                    <v-text-area id="personalValue">20</v-text-area>
+                    <p class="mb-0" id="personalProperty">Age</p>
+                    <p class="mb-0" id="personalValue">20</p>
                 </div>
             </v-col>
             <v-col cols="12" md="6">
                 <div class="customCol">
-                    <v-text-area id="personalProperty">Language</v-text-area>
-                    <v-text-area>
+                    <p class="mb-0" id="personalProperty">Language</p>
+                    <p class="mb-0">
                         <country-flag country='gb'/>
-                    </v-text-area>
+                    </p>
                 </div>
             </v-col>
         </v-row>
-        <v-row class="centerAligned">
+        <v-row class="centerAligned" v-if="!editing">
             <v-col cols="12" md="6">
                 <div class="customCol">
-                    <v-text-area id="personalProperty">Height</v-text-area>
-                    <v-text-area id="personalValue">180</v-text-area>
+                    <p class="mb-0" id="personalProperty">Height</p>
+                    <p class="mb-0" id="personalValue">180</p>
                 </div>
             </v-col>
             <v-col cols="12" md="6">
                 <div class="customCol">
-                    <v-text-area id="personalProperty">Weight</v-text-area>
-                    <v-text-area id="personalValue">80</v-text-area>
+                    <p class="mb-0" id="personalProperty">Weight</p>
+                    <p class="mb-0" id="personalValue">80</p>
                 </div>
             </v-col>
         </v-row>
-        <v-row class="centerAligned">
+        <v-row class="centerAligned" v-if="!editing">
             <v-col cols="12">
                 <div class="customCol">
-                    <v-text-area id="personalProperty">Email</v-text-area>
-                    <v-text-area id="personalValue">c.simp@email.com</v-text-area>
+                    <p class="mb-0" id="personalProperty">Email</p>
+                    <p class="mb-0" id="personalValue">c.simp@email.com</p>
+                </div>
+            </v-col>
+        </v-row>
+
+        <!-- Editing -->
+        <v-row v-if="editing">
+            <v-col cols="12">
+                <div class="customCol centerAligned">
+                    <v-text-field class="centered-input mb-0 mx-10" id="name" value="Cody Simpson" />
+                    <p class="mb-0" id="role">User</p>
+                </div>
+            </v-col>
+        </v-row>
+        <br v-if="!editing"/>
+        <v-row class="centerAligned" v-if="editing">
+            <v-col cols="12" md="6">
+                <div class="customCol">
+                    <p class="mb-0" id="personalProperty">Age</p>
+                    <v-text-field class="centered-input my-0 mx-10" id="personalValue" value="20" />
+                </div>
+            </v-col>
+            <v-col cols="12" md="6">
+                <div class="customCol">
+                    <p class="mb-0" id="personalProperty">Language</p>
+                    <p class="mb-0">
+                        <country-flag country='gb'/>
+                    </p>
+                </div>
+            </v-col>
+        </v-row>
+        <v-row class="centerAligned" v-if="editing">
+            <v-col cols="12" md="6">
+                <div class="customCol">
+                    <p class="mb-0" id="personalProperty">Height</p>
+                    <v-text-field class="centered-input my-0 mx-10" id="personalValue" value="180" />
+                </div>
+            </v-col>
+            <v-col cols="12" md="6">
+                <div class="customCol">
+                    <p class="mb-0" id="personalProperty">Weight</p>
+                    <v-text-field class="centered-input my-0 mx-10" id="personalValue" value="80" />
+                </div>
+            </v-col>
+        </v-row>
+        <v-row class="centerAligned" v-if="editing">
+            <v-col cols="12">
+                <div class="customCol">
+                    <p class="mb-0" id="personalProperty">Email</p>
+                    <v-text-field class="centered-input my-0 mx-10" id="personalValue" value="c.simp@email.com" />
                 </div>
             </v-col>
         </v-row>
     </v-card>
-    <!-- <div class="profile-info">
-        <h3 class="">Hey {{ profileData.name }}!</h3>
-
-        <h4 class="">Profile Information</h4>
-        <p class=""> Age: {{ profileData.age }} </p>
-        <p class=""> Height: {{ profileData.height }} cm</p>
-        <p class=""> Weight: {{ profileData.weight }} kg</p>
-        <p class=""> E-mail: {{ profileData.email }} </p>
-
-        <h4 class="">Glucose Settings</h4>
-
-        <v-row>
-            <v-text-field
-                class="input"
-                label="'Very high' treshold"
-                v-model="healthSettings.veryHighThreshold"
-                hint="in mmol/L"
-            />
-        </v-row>
-        <v-row class="mt-3">
-            <v-text>High glucose range</v-text>
-            <vue-slider
-                class="price_slider"
-                :width="'100%'"
-                :min="range[0]"
-                :max="range[1]"
-                ref="slider"
-                v-model="healthSettings.highRange"
-                v-bind="options"
-                :interval="0.1"
-            ></vue-slider>
-
-        </v-row>
-        <v-row class="mt-5">
-            <v-text>Normal glucose range</v-text>
-            <vue-slider
-                class="price_slider"
-                :width="'100%'"
-                :min="range[0]"
-                :max="range[1]"
-                ref="slider"
-                v-model="healthSettings.normalRange"
-                v-bind="options"
-                :interval="0.1"
-            ></vue-slider>
-        </v-row>
-        <v-row class="mt-5">
-            <v-text>Low glucose range</v-text>
-            <vue-slider
-                class="price_slider"
-                :width="'100%'"
-                :min="range[0]"
-                :max="range[1]"
-                ref="slider"
-                v-model="healthSettings.lowRange"
-                v-bind="options"
-                :interval="0.1"
-            ></vue-slider>
-        </v-row>
-        <v-row class="mt-5">
-            <v-text>Normal glucose range when fasting</v-text>
-            <vue-slider
-                class="price_slider"
-                :width="'100%'"
-                :min="range[0]"
-                :max="range[1]"
-                ref="slider"
-                v-model="healthSettings.fastingRange"
-                v-bind="options"
-                :interval="0.1"
-            ></vue-slider>
-        </v-row>
-        <v-row>
-            <v-text-field
-                class="input"
-                label="A1C goal"
-                v-model="healthSettings.goalA1C"
-                hint="Below x, in mmol/L"
-            />
-        </v-row>
-        <v-row>
-            <v-text-field
-                class="input"
-                label="Normal blood glucose PP threshold"
-                v-model="healthSettings.ppRangeThreshold"
-                hint=""
-            />
-        </v-row>
-
-        <h4 class="">Food Settings</h4>
-        <v-row>
-            <v-text-field
-                class="input"
-                label="Consumed calories goal"
-                v-model="foodSettings.goalConsumedCalories"
-                hint=""
-            />
-        </v-row>
-        <v-row>
-            <v-text-field
-                class="input"
-                label="Burnt calories goal"
-                v-model="foodSettings.goalBurntCalories"
-                hint=""
-            />
-        </v-row>
-        <v-btn
-            color="success">
-            Save changes
-        </v-btn>
-    </div> -->
 </template>
 
 <script>
-// import VueSlider from 'vue-slider-component';
-// import 'vue-slider-component/theme/default.css';
 import CountryFlag from 'vue-country-flag';
 
 export default {
     name: "ProfileInfo",
     components: {
         CountryFlag
-        // VueSlider
+    },
+    methods: {
+        editInfo() {
+            this.editing = !this.editing;
+            if (this.editing) {
+                this.tIsEdit = "Done";
+            }
+            else {
+                this.tIsEdit = "Edit";
+            }
+        },
+        onCancel() {
+            this.editing = false;
+            this.tIsEdit = "Edit";
+            // No changes are made
+        }
     },
     data() {
         return {
+            editing: false,
+            tIsEdit: "Edit",
             options: {
                 process: pos => [
                     [pos[0], pos[1]],
                 ],
-                //enableCross: true
             },
             profileData: {
                 name: "Peter",
@@ -221,6 +181,10 @@ export default {
 };
 </script>
 <style>
+.centered-input input {
+  text-align: center
+}
+
 .rightAligned {
   text-align: right;
 }
@@ -233,6 +197,16 @@ export default {
     font-size: 13px;
     font-weight: bold;
     height: 40px;
+}
+
+.editBtn #cancel {
+    color: red;
+}
+
+.cRow {
+    display: flex;
+    flex-direction: row;
+    direction: rtl;
 }
 
 .customCol {
@@ -261,11 +235,4 @@ export default {
 .pointer {
     cursor: pointer;
 }
-
-/* .profile-info {
-  padding: 0 5% 0 5%;
-} */
-/* .border {
-  border-style: solid;
-} */
 </style>
