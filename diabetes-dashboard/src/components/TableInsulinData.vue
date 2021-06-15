@@ -285,29 +285,29 @@ export default {
                 {
                     amount: 1,
                     type: "Long",
-                    date: "05/30/2021",
+                    date: "04/10/2027",
                     time: "16:00",
                     id: 0,
                 },
                 {
                     amount: 1,
                     type: "Long",
-                    date: "05/30/2021",
-                    time: "16:00",
+                    date: "04/10/2027",
+                    time: "12:00",
                     id: 1,
                 },
                 {
                     amount: 1,
                     type: "Long",
-                    date: "05/30/2021",
-                    time: "16:00",
+                    date: "04/10/2027",
+                    time: "10:00",
                     id: 2,
                 },
                 {
                     amount: 1,
                     type: "Long",
-                    date: "05/30/2021",
-                    time: "16:00",
+                    date: "04/10/2027",
+                    time: "19:00",
                     id: 3,
                 },
                 {
@@ -364,16 +364,16 @@ export default {
         };
     },
     methods: {
+        selectInsulin(insulin) {
+            this.$emit("selectedInsulin", insulin);
+        },
+
         getSelectedDate(date) {
             this.editedItem.date = date;
         },
 
         getSelectedTime(time) {
             this.editedItem.time = time;
-        },
-
-        selectInsulin(insulin) {
-            this.$emit("selectedInsulin", insulin);
         },
 
         async postInsulin(parameters) {

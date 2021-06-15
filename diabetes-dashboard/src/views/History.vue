@@ -20,6 +20,7 @@
                             ref="overview"
                             v-if="rendered"
                             :data="dataInit"
+                            :itemTimeFrame="chosenItemTimeFrame"
                         />
                     </v-card>
                 </div>
@@ -33,11 +34,17 @@
                             </v-tabs>
                             <v-tabs-items v-model="tab">
                                 <v-tab-item>
-                                    <TableInsulinData @selectedInsulin="getSelectedInsulin"/>
+                                    <TableInsulinData
+                                        @selectedInsulin="
+                                            getSelectedFoodInsulinEmotion
+                                        "
+                                    />
                                 </v-tab-item>
                                 <v-tab-item>
                                     <TableFoodData
-                                        @selectedFood="getSelectedFood"
+                                        @selectedFood="
+                                            getSelectedFoodInsulinEmotion
+                                        "
                                     />
                                 </v-tab-item>
                                 <v-tab-item>
@@ -47,7 +54,9 @@
                                 </v-tab-item>
                                 <v-tab-item>
                                     <EmotionTable
-                                        @selectedEmotion="getSelectedEmotion"
+                                        @selectedEmotion="
+                                            getSelectedFoodInsulinEmotion
+                                        "
                                     />
                                 </v-tab-item>
                             </v-tabs-items>
@@ -83,8 +92,8 @@ import EmotionTable from "@/components/EmotionTable.vue";
 import Moment from "moment";
 import { extendMoment } from "moment-range";
 import { AxiosWrapper } from "@/helpers/wrapper.js";
-import Data from '@/repositories/Data.js';
-import { mapState } from 'vuex';
+import Data from "@/repositories/Data.js";
+import { mapState } from "vuex";
 
 const moment = extendMoment(Moment);
 const wrapper = new AxiosWrapper();
@@ -105,26 +114,52 @@ export default {
         Legend,
     },
     computed: {
-        ...mapState(['data'])
+        ...mapState(["data"]),
     },
     methods: {
-        getSelectedInsulin(insulin) {
-            this.chosenInsulin = { insulin: insulin, now: moment() };
-        },
-        getSelectedFood(food) {
-            this.chosenFood = { food: food, now: moment() };
+        getSelectedFoodInsulinEmotion(item) {
+            let startTime = moment(item.time, "HH:mm")
+                .subtract(2, "hours")
+                .format("HH:mm");
+            let endTime = moment(item.time, "HH:mm")
+                .add(2, "hours")
+                .format("HH:mm");
+            let start = moment(
+                moment(item.date + " " + startTime).format("MM-DD-YYYY HH:mm")
+            ).format("YYYY-MM-DDTHH:mm");
+            let end = moment(
+                moment(item.date + " " + endTime).format("MM-DD-YYYY HH:mm")
+            ).format("YYYY-MM-DDTHH:mm");
+
+            this.chosenItemTimeFrame = {
+                start,
+                end,
+                now: moment(),
+            };
         },
         getSelectedActivity(activity) {
-            this.chosenActivity = { activity: activity, now: moment() };
-        },
-        getSelectedEmotion(emotion) {
-            this.chosenEmotion = { emotion: emotion, now: moment() };
+            let start = moment(
+                moment(activity.startDate + " " + activity.startTime).format(
+                    "MM-DD-YYYY HH:mm"
+                )
+            ).format("YYYY-MM-DDTHH:mm");
+            let end = moment(
+                moment(activity.endDate + " " + activity.endTime).format(
+                    "MM-DD-YYYY HH:mm"
+                )
+            ).format("YYYY-MM-DDTHH:mm");
+
+            this.chosenItemTimeFrame = {
+                start,
+                end,
+                now: moment(),
+            };
         },
     },
     watch: {
-        data: function(newData) {
+        data: function (newData) {
             this.dataInit = newData;
-        }
+        },
     },
     data() {
         return {
@@ -132,10 +167,7 @@ export default {
             items: ["insulin", "food", "activities", "emotions"],
             dataInit: null,
             rendered: false,
-            chosenInsulin: { insulin: null, now: null },
-            chosenFood: { food: null, now: null },
-            chosenActivity: { activity: null, now: null },
-            chosenEmotion: { emotion: null, now: null },
+            chosenItemTimeFrame: null,
         };
     },
     created() {
@@ -172,27 +204,27 @@ export default {
     top: 45%;
 }
 .leftColumn {
-  float: left;
-  width: 56%;
-  margin-right: 1%;
-  margin-top: 1%;
+    float: left;
+    width: 56%;
+    margin-right: 1%;
+    margin-top: 1%;
 }
 .rightColumn {
-  float: left;
-  width: 42%;
-  margin-left: 1%;
-  margin-top: 1%;
+    float: left;
+    width: 42%;
+    margin-left: 1%;
+    margin-top: 1%;
 }
 .row:after {
-  content: "";
-  display: table;
-  clear: both;
+    content: "";
+    display: table;
+    clear: both;
 }
 .legend {
-  float: left;
-  width: 100%;
-  margin-top: 2%;
-  margin-bottom: 2%;
+    float: left;
+    width: 100%;
+    margin-top: 2%;
+    margin-bottom: 2%;
 }
 .filterText {
     font-size: 0.75rem;
