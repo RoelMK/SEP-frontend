@@ -32,7 +32,6 @@ const store = new Vuex.Store({
     getters: {
         getHealthSettings: state => state.healthSettings,
         getEmotionReminderStatus: state => state.emotionReminderStatus,
-        //getNewTimeFrame: state => state.newTimeFrame
     },
     actions: {
         showMessage({ commit }, toast) {

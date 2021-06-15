@@ -14,16 +14,13 @@ import moment from "moment";
 export default {
     name: "overviewChart",
     watch: {
-        filteredData: function (value) {
-            if (value.length <= 0) {
-                this.$refs.overview.setOption(this.options(this.data));
-            } else {
+        filteredData: function(value) {
+            if (value.length > 0) {
                 this.$refs.overview.setOption(this.options(value));
             }
         },
 
         newTimeFrame: function (value) {
-            console.log(value);
             if (value !== null) {
                 let newOptions = this.options(this.data);
                 for (var i = 0; i <= 4; i++) {
