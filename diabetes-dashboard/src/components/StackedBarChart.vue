@@ -1,69 +1,29 @@
 <template>
-    <v-chart ref="stacked" :option="options" />
+    <v-chart ref="stacked" :option="options(data)" />
 </template>
 
 <script>
 import legend from '@/components/configurations/legend.js';
+import { mapState } from 'vuex';
 import moment from 'moment';
 
 export default {
     name: "stackedBarChart",
-    props: {
-        data: {
-            type: Array,
-            default: null
-        }
-    },
     watch: {
-        data: function() {
-            this.$refs.stacked.setOption(this.options);
-        }
+        filteredData: function(value) {
+            if (value.length <= 0) {
+                this.$refs.stacked.setOption(this.options(this.data));
+            }
+            else {
+                this.$refs.stacked.setOption(this.options(value));
+            }
+        },
     },
     computed: {
-        computeTimeDistribution() {
-            const total = this.data
-                .filter(f => f.glucoseLevel !== null).length;
-            var [vLow, low, normal, high, vHigh] = [[], [], [], [], []];
-
-            for (let i = 0; i < this.data.length - 2; i++) {
-                var i1 = this.data[i];
-                var i2 = this.data[i + 1];
-
-                if (0 < i1.glucoseLevel && i1.glucoseLevel < 2.9)
-                    vLow.push(i2.timestamp - i1.timestamp);
-                else if (3.0 < i1.glucoseLevel && i1.glucoseLevel < 3.8)
-                    low.push(i2.timestamp - i1.timestamp);
-                else if (3.9 < i1.glucoseLevel && i1.glucoseLevel < 10.0)
-                    normal.push(i2.timestamp - i1.timestamp);
-                else if (10.1 < i1.glucoseLevel && i1.glucoseLevel < 13.9)
-                    high.push(i2.timestamp - i1.timestamp);
-                else if (14 < i1.glucoseLevel)
-                    vHigh.push(i2.timestamp - i1.timestamp);
-            }
-
-            const toHours = function(time) {
-                var temp = moment.duration(time);
-                return temp.hours() + temp.minutes();
-            };
-
-            const sumArray = function(arr) {
-                if (arr.length > 0)
-                    return arr.reduce((a, b) => a + b);
-                return 0;
-            };
-
-            const calcPercentage = function(arr, total) {
-                return Math.round((arr.length / total) * 10000) / 100;
-            };
-            return [
-                [calcPercentage(vLow, total), toHours(sumArray(vLow))],
-                [calcPercentage(low, total), toHours(sumArray(low))],
-                [calcPercentage(normal, total), toHours(sumArray(normal))],
-                [calcPercentage(high, total), toHours(sumArray(high))],
-                [calcPercentage(vHigh, total), toHours(sumArray(vHigh))]
-            ];
-        },
-        options() {
+        ...mapState(['filteredData', 'data']),
+    },
+    methods: {
+        options(data) {
             return {
                 tooltip: {
                     trigger: 'item',
@@ -104,9 +64,9 @@ export default {
                         },
                         data: [[
                             0,
-                            this.computeTimeDistribution[0][0],
-                            `${this.computeTimeDistribution[0][0]}%`,
-                            `${this.computeTimeDistribution[0][1]} min`
+                            this.computeTimeDistribution(data)[0][0],
+                            `${this.computeTimeDistribution(data)[0][0]}%`,
+                            `${this.computeTimeDistribution(data)[0][1]} min`
                         ]],
                         encode: {
                             x: 0,
@@ -124,9 +84,9 @@ export default {
                         },
                         data: [[
                             0,
-                            this.computeTimeDistribution[1][0],
-                            `${this.computeTimeDistribution[1][0]}%`,
-                            `${this.computeTimeDistribution[1][1]} min`
+                            this.computeTimeDistribution(data)[1][0],
+                            `${this.computeTimeDistribution(data)[1][0]}%`,
+                            `${this.computeTimeDistribution(data)[1][1]} min`
                         ]],
                         encode: {
                             x: 0,
@@ -144,9 +104,9 @@ export default {
                         },
                         data: [[
                             0,
-                            this.computeTimeDistribution[2][0],
-                            `${this.computeTimeDistribution[2][0]}%`,
-                            `${this.computeTimeDistribution[2][1]} min`
+                            this.computeTimeDistribution(data)[2][0],
+                            `${this.computeTimeDistribution(data)[2][0]}%`,
+                            `${this.computeTimeDistribution(data)[2][1]} min`
                         ]],
                         encode: {
                             x: 0,
@@ -164,9 +124,9 @@ export default {
                         },
                         data: [[
                             0,
-                            this.computeTimeDistribution[3][0],
-                            `${this.computeTimeDistribution[3][0]}%`,
-                            `${this.computeTimeDistribution[3][1]} min`
+                            this.computeTimeDistribution(data)[3][0],
+                            `${this.computeTimeDistribution(data)[3][0]}%`,
+                            `${this.computeTimeDistribution(data)[3][1]} min`
                         ]],
                         encode: {
                             x: 0,
@@ -184,9 +144,9 @@ export default {
                         },
                         data: [[
                             0,
-                            this.computeTimeDistribution[4][0],
-                            `${this.computeTimeDistribution[4][0]}%`,
-                            `${this.computeTimeDistribution[4][1]} min`
+                            this.computeTimeDistribution(data)[4][0],
+                            `${this.computeTimeDistribution(data)[4][0]}%`,
+                            `${this.computeTimeDistribution(data)[4][1]} min`
                         ]],
                         encode: {
                             x: 0,
@@ -196,8 +156,51 @@ export default {
                     }
                 ],
             };
-        }
-    },
+        },
+        computeTimeDistribution(data) {
+            const total = data
+                .filter(f => f.glucoseLevel !== null).length;
+            var [vLow, low, normal, high, vHigh] = [[], [], [], [], []];
+
+            for (let i = 0; i < data.length - 2; i++) {
+                var i1 = data[i];
+                var i2 = data[i + 1];
+
+                if (0 < i1.glucoseLevel && i1.glucoseLevel < 2.9)
+                    vLow.push(i2.timestamp - i1.timestamp);
+                else if (3.0 < i1.glucoseLevel && i1.glucoseLevel < 3.8)
+                    low.push(i2.timestamp - i1.timestamp);
+                else if (3.9 < i1.glucoseLevel && i1.glucoseLevel < 10.0)
+                    normal.push(i2.timestamp - i1.timestamp);
+                else if (10.1 < i1.glucoseLevel && i1.glucoseLevel < 13.9)
+                    high.push(i2.timestamp - i1.timestamp);
+                else if (14 < i1.glucoseLevel)
+                    vHigh.push(i2.timestamp - i1.timestamp);
+            }
+
+            const toHours = function(time) {
+                var temp = moment.duration(time);
+                return temp.hours() + temp.minutes();
+            };
+
+            const sumArray = function(arr) {
+                if (arr.length > 0)
+                    return arr.reduce((a, b) => a + b);
+                return 0;
+            };
+
+            const calcPercentage = function(arr, total) {
+                return Math.round((arr.length / total) * 10000) / 100;
+            };
+            return [
+                [calcPercentage(vLow, total), toHours(sumArray(vLow))],
+                [calcPercentage(low, total), toHours(sumArray(low))],
+                [calcPercentage(normal, total), toHours(sumArray(normal))],
+                [calcPercentage(high, total), toHours(sumArray(high))],
+                [calcPercentage(vHigh, total), toHours(sumArray(vHigh))]
+            ];
+        },
+    }
 };
 </script>
 

@@ -19,7 +19,6 @@
                         <OverviewChart
                             ref="overview"
                             v-if="rendered"
-                            :data="dataInit"
                             :itemTimeFrame="chosenItemTimeFrame"
                         />
                     </v-card>
@@ -60,6 +59,7 @@
                                     />
                                 </v-tab-item>
                             </v-tabs-items>
+                            <p>{{ chosenItemTimeFrame }}</p>
                         </v-card>
                     </v-card>
                 </div>
@@ -89,18 +89,10 @@ import TableFoodData from "@/components/TableFoodData.vue";
 import TableActivitiesData from "@/components/TableActivitiesData.vue";
 import TableInsulinData from "@/components/TableInsulinData.vue";
 import EmotionTable from "@/components/EmotionTable.vue";
-import Moment from "moment";
-import { extendMoment } from "moment-range";
-import { AxiosWrapper } from "@/helpers/wrapper.js";
-import Data from "@/repositories/Data.js";
+import Data from '@/repositories/Data.js';
+import activities from '@/components/configurations/queryProperties.js';
+import moment from 'moment';
 import { mapState } from "vuex";
-
-const moment = extendMoment(Moment);
-const wrapper = new AxiosWrapper();
-
-// These URL's will be removed in the future
-const URL =
-    "https://gist.githubusercontent.com/nbalasovs/e212107367c65915668cf26e75d2ccfa/raw/14fde6559649d3fc5c6e2bd7d002e0000e50a54f/dummy.json";
 
 export default {
     name: "History",
@@ -115,6 +107,29 @@ export default {
     },
     computed: {
         ...mapState(["data"]),
+    },
+    data() {
+        return {
+            tab: null,
+            items: ["insulin", "food", "activities", "emotions"],
+            rendered: false,
+            chosenItemTimeFrame: null,
+        };
+    },
+    created() {
+        const config = {
+            startDate: moment('2021-06-17').format('DD-MM-YYYY'),
+            endDate: moment('2021-06-17').format('DD-MM-YYYY'),
+            exerciseTypes: activities[3].properties[0].properties
+                .map(d => d.toUpperCase()).join(','),
+        };
+        Data.fetch(config, this.$cookies.get("JWT")).then(
+            async (res) => {
+                await this.$store.dispatch('setData', res.data);
+                this.rendered = true;
+            },
+            (err) => console.log(err)
+        );
     },
     methods: {
         getSelectedFoodInsulinEmotion(item) {
@@ -155,30 +170,6 @@ export default {
                 now: moment(),
             };
         },
-    },
-    watch: {
-        data: function (newData) {
-            this.dataInit = newData;
-        },
-    },
-    data() {
-        return {
-            tab: null,
-            items: ["insulin", "food", "activities", "emotions"],
-            dataInit: null,
-            rendered: false,
-            chosenItemTimeFrame: null,
-        };
-    },
-    created() {
-        // TODO: Needs to be replaced after we get more data in the backend
-        Data.testFetch().then(
-            (res) => {
-                this.dataInit = res.data;
-                this.rendered = true;
-            },
-            (err) => console.log(err)
-        );
     },
 };
 </script>

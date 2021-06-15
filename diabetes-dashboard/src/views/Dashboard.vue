@@ -16,13 +16,13 @@
                 <v-col class="wide-chart" cols="9">
                     <v-card id="overview-chart-container" elevation="2">
                         <v-progress-circular indeterminate color="primary" size="50" v-if="!rendered" />
-                        <OverviewChart ref="overview" :data="dataInit" v-if="rendered" />
+                        <OverviewChart ref="overview" v-if="rendered" />
                     </v-card>
                 </v-col>
                 <v-col cols="3">
                     <v-card class="full-height statistics" elevation="2">
                         <v-progress-circular indeterminate color="primary" size="50" v-if="!rendered" />
-                        <Statistics :data="dataInit" v-if="rendered" />
+                        <Statistics v-if="rendered" />
                     </v-card>
                 </v-col>
             </v-row>
@@ -55,9 +55,10 @@ import EmotionsComponent from '@/components/EmotionsComponent.vue';
 import Legend from '@/components/Legend.vue';
 import Navbar from '@/components/Navbar.vue';
 import Cards from '@/components/Cards.vue';
-import Upload from "../repositories/Upload";
-import { mapState } from 'vuex';
+import Upload from "@/repositories/Upload";
 import Data from '@/repositories/Data.js';
+import activities from '@/components/configurations/queryProperties.js';
+import moment from 'moment';
 
 export default {
     name: "Dashboard",
@@ -69,17 +70,8 @@ export default {
         Legend,
         Cards,
     },
-    computed: {
-        ...mapState(['data'])
-    },
-    watch: {
-        data: function(newData) {
-            this.dataInit = newData;
-        }
-    },
     data() {
         return {
-            dataInit: null,
             tab: null,
             items: ['insulin', 'food', 'activities'],
             chosenFood: { },
@@ -111,10 +103,16 @@ export default {
                 }
             );
         }
+        const config = {
+            startDate: moment().format('DD-MM-YYYY'),
+            endDate: moment().format('DD-MM-YYYY'),
+            exerciseTypes: activities[3].properties[0].properties
+                .map(d => d.toUpperCase()).join(','),
+        };
         // TODO: Needs to be replaced after we get more data in the backend
-        Data.testFetch().then(
-            (res) => {
-                this.dataInit = res.data;
+        Data.fetch(config, this.$cookies.get("JWT")).then(
+            async (res) => {
+                await this.$store.dispatch('setData', res.data);
                 this.rendered = true;
             },
             (err) => console.log(err)
