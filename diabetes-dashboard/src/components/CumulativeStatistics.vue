@@ -3,40 +3,50 @@
         <v-card-text class="statistics-container">
             <ul>
                 <li>
-                    Cumulative Long Insulin:
+                    A1C Est. <i class="text-caption">(last 3 months)</i>:
+                    <span>{{ a1c }} {{ unitBG }}</span>
+                </li>
+                <li>
+                    A1C Goal <i class="text-caption">(last 3 months)</i>:
+                    <span>{{ a1cGoal }} {{ unitBG }}</span>
+                </li>
+                <li>
+                    Long Insulin:
                     <span>{{ cumLongInsulin }} mg</span>
                 </li>
                 <li>
-                    Cumulative Short Insulin:
+                    Short Insulin:
                     <span>{{ cumShortInsulin }} mg</span>
                 </li>
                 <li>
-                    Cumulative Carbs:
+                    Carbs:
                     <span>{{ cumCarbs }} g</span>
                 </li>
                 <li>
-                    Cumulative Consumed Calories:
+                    Calories:
                     <span>{{ cumConsumedCarbs }} kcal</span>
                 </li>
                 <li>
-                    Cumulative Burnt Calories:
+                    Calories Goal <i class="text-caption">(daily)</i>:
+                    <span>{{ consumedCaloriesGoal }} kcal</span>
+                </li>
+                <li>
+                    Burnt Calories:
                     <span>{{ cumBurntCarbs }} kcal</span>
                 </li>
                 <li>
-                    Cumulative Steps:
+                    Burnt Calories Goal <i class="text-caption">(daily)</i>:
+                    <span>{{ burntCaloriesGoal }} kcal</span>
+                </li>
+                <li>
+                    Steps:
                     <span>{{ cumSteps }}</span>
                 </li>
                 <li>
-                    Cumulative Average Heartbeat:
+                    Average Heartbeat:
                     <span>{{ avgHeartbeat }} bpm</span>
                 </li>
             </ul>
-            <v-data-table
-                :headers="headers"
-                :items="metrics"
-                :hide-default-footer="true"
-                class="elevation-0 pt-5"
-            ></v-data-table>
         </v-card-text>
     </v-card>
 </template>
@@ -53,36 +63,11 @@ export default {
             cumBurntCarbs: 0,
             cumSteps: 0,
             avgHeartbeat: 0,
+            a1c: 0,
+            a1cGoal: 0,
+            consumedCaloriesGoal: 0,
+            burntCaloriesGoal: 0,
             unitBG: "mmol/L",
-
-            headers: [
-                {
-                    text: "Metric",
-                    align: "start",
-                    sortable: false,
-                    value: "name",
-                },
-                { text: "Q1", value: "q1" },
-                { text: "Q2", value: "q2" },
-                { text: "Q3", value: "q3" },
-                { text: "Q4", value: "q4" },
-            ],
-            metrics: [
-                {
-                    name: "Avg. BG",
-                    q1: 159,
-                    q2: 6.0,
-                    q3: 24,
-                    q4: 4.0,
-                },
-                {
-                    name: "A1C",
-                    q1: 159,
-                    q2: 6.0,
-                    q3: 24,
-                    q4: 4.0,
-                },
-            ],
         };
     },
 };

@@ -1,15 +1,14 @@
 import Client from './Client.js';
 const resource = '/';
-import axios from "axios";
 
 export default {
     login(payload) {
         let url = `${resource}login`;
         let config = {
             headers: {
-                "ijsco": "ijsco"
             },
+            params: payload
         };
-        return Client.get(url, payload, config);
-    }
+        return Client.get(url, config);
+    },
 };
