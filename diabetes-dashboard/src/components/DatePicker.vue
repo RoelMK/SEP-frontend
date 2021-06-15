@@ -24,6 +24,7 @@
         <v-container class="datePickerContainer">
             <vc-date-picker
                 v-model="dateRange"
+                :attributes="attrs"
                 mode="date"
                 is-expanded
                 is-required
@@ -63,6 +64,16 @@ export default {
                 start: null,
                 end: null,
             },
+            attrs: [
+                {
+                    key: 'today',
+                    highlight: {
+                        color: 'blue',
+                        fillMode: 'solid',
+                    },
+                    dates: new Date(),
+                },
+            ]
         };
     },
     watch: {
