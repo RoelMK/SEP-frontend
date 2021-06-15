@@ -3,7 +3,7 @@
         <v-row class="mx-2">
             <v-col cols="12" class="gTitle">Units</v-col>
         </v-row>
-        <v-row class="mx-5 my-0" align="center">
+        <v-row class="mx-5" align="center">
             <v-radio-group row v-model="active">
                 <label class="mr-5">Glucose units</label>
                 <v-radio name="active" label="mmol/L" :value="0" color="#1B98E0"></v-radio>

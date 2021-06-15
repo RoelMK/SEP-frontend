@@ -2,10 +2,8 @@
     <v-card>
         <v-row class="mx-2">
             <v-col cols="8" class="gTitle">Supervisor</v-col>
-            <v-col cols="2" class="rightAligned">
-                <v-icon @click="loadMore" color="#1B98E0">mdi-chevron-down</v-icon>
-            </v-col>
-            <v-col cols="2">
+            <v-col cols="4" class="rightAligned">
+                <v-icon class="pr-3" @click="loadMore" color="#1B98E0">{{supSettIcon}}</v-icon>
                 <v-icon @click="addMore" color="#1B98E0">mdi-plus-circle-outline</v-icon>
             </v-col>
         </v-row>
@@ -41,20 +39,19 @@ export default {
         return {
             boolAsk: true,
             supervisors: ["Samuel Ivanovich", "Georgi Simeonov"],
-            supervisorsHidden: true
-        };
-    },
-    computed() {
-        return {
-            visibleSupervisors: function() {
-                return this.supervisors[0];
-            }
+            supervisorsHidden: true,
+            supSettIcon: "mdi-chevron-down"
         };
     },
     methods: {
         loadMore() {
-            //this.$toasted.show('No more supervisors');
             this.supervisorsHidden = !this.supervisorsHidden;
+            if (!this.supervisorsHidden) {
+                this.supSettIcon = "mdi-chevron-up";
+            }
+            else {
+                this.supSettIcon = "mdi-chevron-down";
+            }
         },
         addMore() {
             this.$toasted.show('Adding more supervisors');
@@ -78,10 +75,6 @@ export default {
 
 .rightAligned {
     text-align: right;
-}
-
-.centerAligned {
-    text-align: center;
 }
 
 .customRow {

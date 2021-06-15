@@ -1,7 +1,13 @@
 <template>
     <v-card>
         <v-row>
-            <v-col cols="12" class="rightAligned editBtn pointer pr-10">Edit</v-col>
+            <!-- <v-col cols="9" class="rightAligned editBtn pointer pr-8">
+                <p @click="editInfo">{{tIsEdit}}</p>
+            </v-col> -->
+            <v-col cols="12" class="cRow rightAligned editBtn pointer pr-8">
+                <p @click="editInfo">{{tIsEdit}}</p>
+                <p @click="onCancel" id="cancel" class="pr-3" v-if="editing">Cancel</p>
+            </v-col>
         </v-row>
         <v-row>
             <v-col cols="12" class="centerAligned">
@@ -10,7 +16,9 @@
                 </v-avatar>
             </v-col>
         </v-row>
-        <v-row>
+
+        <!-- Not editing -->
+        <v-row v-if="!editing">
             <v-col cols="12">
                 <div class="customCol centerAligned">
                     <p class="mb-0" id="name">Cody Simpson</p>
@@ -18,8 +26,8 @@
                 </div>
             </v-col>
         </v-row>
-        <br/>
-        <v-row class="centerAligned">
+        <br v-if="!editing"/>
+        <v-row class="centerAligned" v-if="!editing">
             <v-col cols="12" md="6">
                 <div class="customCol">
                     <p class="mb-0" id="personalProperty">Age</p>
@@ -35,7 +43,7 @@
                 </div>
             </v-col>
         </v-row>
-        <v-row class="centerAligned">
+        <v-row class="centerAligned" v-if="!editing">
             <v-col cols="12" md="6">
                 <div class="customCol">
                     <p class="mb-0" id="personalProperty">Height</p>
@@ -49,11 +57,60 @@
                 </div>
             </v-col>
         </v-row>
-        <v-row class="centerAligned">
+        <v-row class="centerAligned" v-if="!editing">
             <v-col cols="12">
                 <div class="customCol">
                     <p class="mb-0" id="personalProperty">Email</p>
                     <p class="mb-0" id="personalValue">c.simp@email.com</p>
+                </div>
+            </v-col>
+        </v-row>
+
+        <!-- Editing -->
+        <v-row v-if="editing">
+            <v-col cols="12">
+                <div class="customCol centerAligned">
+                    <v-text-field class="centered-input mb-0 mx-10" id="name" value="Cody Simpson" />
+                    <p class="mb-0" id="role">User</p>
+                </div>
+            </v-col>
+        </v-row>
+        <br v-if="!editing"/>
+        <v-row class="centerAligned" v-if="editing">
+            <v-col cols="12" md="6">
+                <div class="customCol">
+                    <p class="mb-0" id="personalProperty">Age</p>
+                    <v-text-field class="centered-input my-0 mx-10" id="personalValue" value="20" />
+                </div>
+            </v-col>
+            <v-col cols="12" md="6">
+                <div class="customCol">
+                    <p class="mb-0" id="personalProperty">Language</p>
+                    <p class="mb-0">
+                        <country-flag country='gb'/>
+                    </p>
+                </div>
+            </v-col>
+        </v-row>
+        <v-row class="centerAligned" v-if="editing">
+            <v-col cols="12" md="6">
+                <div class="customCol">
+                    <p class="mb-0" id="personalProperty">Height</p>
+                    <v-text-field class="centered-input my-0 mx-10" id="personalValue" value="180" />
+                </div>
+            </v-col>
+            <v-col cols="12" md="6">
+                <div class="customCol">
+                    <p class="mb-0" id="personalProperty">Weight</p>
+                    <v-text-field class="centered-input my-0 mx-10" id="personalValue" value="80" />
+                </div>
+            </v-col>
+        </v-row>
+        <v-row class="centerAligned" v-if="editing">
+            <v-col cols="12">
+                <div class="customCol">
+                    <p class="mb-0" id="personalProperty">Email</p>
+                    <v-text-field class="centered-input my-0 mx-10" id="personalValue" value="c.simp@email.com" />
                 </div>
             </v-col>
         </v-row>
@@ -68,8 +125,26 @@ export default {
     components: {
         CountryFlag
     },
+    methods: {
+        editInfo() {
+            this.editing = !this.editing;
+            if (this.editing) {
+                this.tIsEdit = "Done";
+            }
+            else {
+                this.tIsEdit = "Edit";
+            }
+        },
+        onCancel() {
+            this.editing = false;
+            this.tIsEdit = "Edit";
+            // No changes are made
+        }
+    },
     data() {
         return {
+            editing: false,
+            tIsEdit: "Edit",
             options: {
                 process: pos => [
                     [pos[0], pos[1]],
@@ -106,6 +181,10 @@ export default {
 };
 </script>
 <style>
+.centered-input input {
+  text-align: center
+}
+
 .rightAligned {
   text-align: right;
 }
@@ -118,6 +197,16 @@ export default {
     font-size: 13px;
     font-weight: bold;
     height: 40px;
+}
+
+.editBtn #cancel {
+    color: red;
+}
+
+.cRow {
+    display: flex;
+    flex-direction: row;
+    direction: rtl;
 }
 
 .customCol {

@@ -1,7 +1,11 @@
 <template>
     <v-card>
         <v-row class="mx-2">
-            <v-col cols="12" class="gTitle">Glucose Settings</v-col>
+            <v-col cols="8" class="gTitle">Glucose Settings</v-col>
+            <v-col cols="4" class="cRow editBtn pointer pr-3" v-if="editing">
+                <p @click="onDone">Done</p>
+                <p @click="onCancel" id="cancel" class="pr-3">Cancel</p>
+            </v-col>
         </v-row>
         <v-row class="mx-2">
             <v-col cols="12" class="gSection">Glucose Range</v-col>
@@ -20,6 +24,7 @@
                         :color="colors.trackColor"
                         :track-color="colors.veryHigh"
                         :thumb-color="colors.veryHigh"
+                        @change="onClick"
                     ></v-slider>
                 </div>
             </v-col>
@@ -37,6 +42,7 @@
                         v-model="healthSettings.highRange"
                         :color="colors.high"
                         :track-color="colors.trackColor"
+                        @change="onClick"
                     ></v-range-slider>
                 </div>
             </v-col>
@@ -54,6 +60,7 @@
                         v-model="healthSettings.normalRange"
                         :color="colors.normal"
                         :track-color="colors.trackColor"
+                        @change="onClick"
                     ></v-range-slider>
                 </div>
             </v-col>
@@ -71,6 +78,7 @@
                         v-model="healthSettings.lowRange"
                         :color="colors.low"
                         :track-color="colors.trackColor"
+                        @change="onClick"
                     ></v-range-slider>
                 </div>
             </v-col>
@@ -88,6 +96,7 @@
                         v-model="healthSettings.veryLowValue"
                         :color="colors.veryLow"
                         :track-color="colors.trackColor"
+                        @click="onClick"
                     ></v-slider>
                 </div>
             </v-col>
@@ -95,18 +104,18 @@
         <v-row class="mx-2">
             <v-col cols="12" class="gSection">Thresholds</v-col>
         </v-row>
-        <v-row class="mx-2">
+        <v-row class="mx-2 pb-3">
             <v-col cols="12" md="4" class="customCol">
                 <v-text class="fSize14">A1C</v-text>
-                <v-text-field v-model="healthSettings.goalA1C"/>
+                <v-text-field v-model="healthSettings.goalA1C" @click="onClick"/>
             </v-col>
             <v-col cols="12" md="4" class="customCol">
                 <v-text class="fSize14">Hypoglycemia</v-text>
-                <v-text-field v-model="healthSettings.valueHypoglycemia"/>
+                <v-text-field v-model="healthSettings.valueHypoglycemia" @click="onClick"/>
             </v-col>
             <v-col cols="12" md="4" class="customCol">
                 <v-text class="fSize14">Hyperglycemia</v-text>
-                <v-text-field v-model="healthSettings.valueHyperglycemia"/>
+                <v-text-field v-model="healthSettings.valueHyperglycemia" @click="onClick"/>
             </v-col>
         </v-row>
     </v-card>
@@ -118,6 +127,7 @@ export default {
     name: "glucoseSettings",
     data() {
         return {
+            editing: false,
             options: {
                 process: pos => [
                     [pos[0], pos[1]],
@@ -144,6 +154,21 @@ export default {
             }
         };
     },
+    methods: {
+        onClick() {
+            if (!this.editing) {
+                this.editing = !this.editing;
+            }
+        },
+        onCancel() {
+            this.editing = false;
+            // No changes are made
+        },
+        onDone() {
+            this.editing = false;
+            // Post request to Gamebus to make the changes
+        }
+    }
 };
 </script>
 
@@ -165,5 +190,25 @@ export default {
 .customCol {
     display: flex;
     flex-direction: column;
+}
+
+.editBtn {
+    font-size: 13px;
+    font-weight: bold;
+    height: 40px;
+}
+
+.editBtn #cancel {
+    color: red;
+}
+
+.cRow {
+    display: flex;
+    flex-direction: row;
+    direction: rtl;
+}
+
+.rightAligned {
+  text-align: right;
 }
 </style>
