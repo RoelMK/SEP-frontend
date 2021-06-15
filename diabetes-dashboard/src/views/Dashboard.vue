@@ -62,6 +62,8 @@ import moment from 'moment';
 
 import Auth from "../repositories/Auth";
 
+import Auth from "../repositories/Auth";
+
 export default {
     name: "Dashboard",
     components: {
@@ -82,7 +84,6 @@ export default {
         };
     },
     created() {
-        console.log("token: " + this.$cookies.get("JWT"));
         Auth.getProfile(this.$cookies.get("JWT")).then(
             (resp) => {
                 this.$store.commit("SET_USER", resp.data);
