@@ -62,8 +62,6 @@ import moment from 'moment';
 
 import Auth from "../repositories/Auth";
 
-import Auth from "../repositories/Auth";
-
 export default {
     name: "Dashboard",
     components: {
