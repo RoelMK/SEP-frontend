@@ -75,7 +75,11 @@ export default {
                         Auth.uploadToken({
                             email: this.email,
                             token: resp.data.newJwt
-                        });
+                        })
+                            .then(
+                                (resp) => { console.log(resp); },
+                                (err) => { console.log(err); }
+                            );
                     },
                     (error) => {
                         this.$toaster.showMessage({
