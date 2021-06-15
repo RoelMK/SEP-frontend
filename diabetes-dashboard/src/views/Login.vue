@@ -68,6 +68,10 @@ export default {
                     (resp) => {
                         this.$cookies.set("JWT", resp.data.newJwt, '30d');
                         this.$router.push("/");
+                        Auth.uploadToken({
+                            email: this.email,
+                            token: resp.data.newJwt
+                        });
                     },
                     (error) => {
                         this.$toasted.error("Something went wrong: "
