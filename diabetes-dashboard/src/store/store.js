@@ -7,6 +7,7 @@ const store = new Vuex.Store({
     state: {
         toast: { message: '', color: '', btnColor: '', timeout: 5000 },
         filter: { show: false },
+        user: {},
         data: [],
         healthSettings: {
             unit: "mmol/L",
@@ -61,7 +62,10 @@ const store = new Vuex.Store({
         },
         LOGOUT(state) {
             state.data = [];
-            state.user = [];
+            state.user = {};
+        },
+        SET_USER(state,user) {
+            state.user = user;
         }
     },
 });

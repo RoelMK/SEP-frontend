@@ -15,5 +15,23 @@ export default {
         let url = `${resource}supervisor/logToken`;
         let headers = {};
         return Client.post(url, payload, headers);
+    },
+    getProfile(token) {
+        let url = `${resource}profile`;
+        let config = {
+            headers: {
+                Authorization: "Bearer " + token,
+            },
+        };
+        return Client.get(url, config);
+    },
+    updateUser(payload, token) {
+        let url = `${resource}profile`;
+        let config = {
+            headers: {
+                Authorization: "Bearer " + token,
+            },
+        };
+        return Client.post(url, payload, config);
     }
 };

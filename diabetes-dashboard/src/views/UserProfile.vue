@@ -32,6 +32,7 @@ import SupervisorSettings from './profileComponents/SupervisorSettings';
 import UnitsSettings from './profileComponents/UnitsSettings';
 import Navbar from '@/components/Navbar.vue';
 
+import Auth from "../repositories/Auth";
 export default {
     name: "Dashboard",
     components: {
@@ -44,6 +45,17 @@ export default {
         UnitsSettings,
         Navbar
     },
+    created() {
+        console.log("fetching profile");
+        Auth.getProfile(this.$cookies.get("JWT")).then(
+            (resp) => {
+                this.$store.commit("SET_USER", resp.data);
+                console.log("store set");
+                console.log(this.$store.state.user);
+            },
+            (error) => { console.log(error); }
+        );
+    }
 };
 </script>
 

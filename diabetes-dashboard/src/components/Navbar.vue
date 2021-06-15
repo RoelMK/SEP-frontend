@@ -43,7 +43,7 @@
                 </div>
 
                 <div class="personalInfo">
-                    <p id="name">Cody Simpson</p>
+                    <p id="name">{{ this.profileData.name }}</p>
                     <p id="role">Supervisor</p>
                 </div>
 
@@ -108,6 +108,14 @@ export default {
         msg: String,
     },
     created() {
+        this.refreshUser();
+    },
+    data: () => ({
+        notifications: true,
+        profileData: {
+            name: ""
+        },
+        supervisor: false,
         Supervisor.getChildren(
             {
                 supervisorEmail: this.$store.state.user.email
@@ -121,11 +129,6 @@ export default {
             },
             (error) => { console.log(error); }
         );
-    },
-    data: () => ({
-        notifications: true,
-        childToSupervise: null,
-        children: [],
     }),
     methods: {
         logoClicked: function () {
@@ -141,7 +144,19 @@ export default {
             this.$store.commit("LOGOUT");
             this.$cookies.remove("JWT");
             this.$router.push('/login');
+        },
+        refreshUser() {
+            this.profileData = {
+                name: this.$store.state.user.firstName +
+                    " " +
+                    this.$store.state.user.lastName || "-"
+            };
         }
+    },
+    watch: {
+        '$store.state.user': function() {
+            this.refreshUser();
+        },
     }
 };
 </script>
