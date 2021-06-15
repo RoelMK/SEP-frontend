@@ -10,7 +10,9 @@
 
                 <v-spacer></v-spacer>
 
-                <div class="personalInfo" v-if="this.$store.state.user.supervisor">
+                <!-- <div class="personalInfo" v-if="this.$store.state.user.supervisor"> -->
+                <div class="personalInfo">
+
                     <div class="text-center">
                         <v-menu
                             v-model="showing"
@@ -109,13 +111,6 @@ export default {
     },
     created() {
         this.refreshUser();
-    },
-    data: () => ({
-        notifications: true,
-        profileData: {
-            name: ""
-        },
-        supervisor: false,
         Supervisor.getChildren(
             {
                 supervisorEmail: this.$store.state.user.email
@@ -129,6 +124,14 @@ export default {
             },
             (error) => { console.log(error); }
         );
+    },
+    data: () => ({
+        notifications: true,
+        profileData: {
+            name: ""
+        },
+        supervisor: false,
+        children: [],
     }),
     methods: {
         logoClicked: function () {
@@ -156,6 +159,20 @@ export default {
     watch: {
         '$store.state.user': function() {
             this.refreshUser();
+            Supervisor.getChildren(
+                {
+                    supervisorEmail: this.$store.state.user.email
+                }
+            ).then(
+                (resp) => {
+                    let result = resp.data.children;
+                    for (var i = 0; i < result.length; i++) {
+                        this.children.push(result[i].player_email);
+                    }
+                    console.log(result);
+                },
+                (error) => { console.log(error); }
+            );
         },
     }
 };
