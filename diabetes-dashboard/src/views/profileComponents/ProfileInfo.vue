@@ -21,7 +21,7 @@
         <v-row v-if="!editing">
             <v-col cols="12">
                 <div class="customCol centerAligned">
-                    <p class="mb-0" id="name">Cody Simpson</p>
+                    <p class="mb-0" id="name">{{ this.profileData.name }}</p>
                     <p class="mb-0" id="role">User</p>
                 </div>
             </v-col>
@@ -31,7 +31,7 @@
             <v-col cols="12" md="6">
                 <div class="customCol">
                     <p class="mb-0" id="personalProperty">Age</p>
-                    <p class="mb-0" id="personalValue">20</p>
+                    <p class="mb-0" id="personalValue">{{ this.profileData.age }}</p>
                 </div>
             </v-col>
             <v-col cols="12" md="6">
@@ -47,13 +47,13 @@
             <v-col cols="12" md="6">
                 <div class="customCol">
                     <p class="mb-0" id="personalProperty">Height</p>
-                    <p class="mb-0" id="personalValue">180</p>
+                    <p class="mb-0" id="personalValue">{{ this.profileData.height || "-" }}</p>
                 </div>
             </v-col>
             <v-col cols="12" md="6">
                 <div class="customCol">
                     <p class="mb-0" id="personalProperty">Weight</p>
-                    <p class="mb-0" id="personalValue">80</p>
+                    <p class="mb-0" id="personalValue">{{ this.profileData.weight || "-" }}</p>
                 </div>
             </v-col>
         </v-row>
@@ -61,7 +61,7 @@
             <v-col cols="12">
                 <div class="customCol">
                     <p class="mb-0" id="personalProperty">Email</p>
-                    <p class="mb-0" id="personalValue">c.simp@email.com</p>
+                    <p class="mb-0" id="personalValue">{{ this.profileData.email || "-" }}</p>
                 </div>
             </v-col>
         </v-row>
@@ -70,7 +70,7 @@
         <v-row v-if="editing">
             <v-col cols="12">
                 <div class="customCol centerAligned">
-                    <v-text-field class="centered-input mb-0 mx-10" id="name" value="Cody Simpson" />
+                    <v-text-field class="centered-input mb-0 mx-10" id="name" v-model="editedData.name" />
                     <p class="mb-0" id="role">User</p>
                 </div>
             </v-col>
@@ -80,7 +80,7 @@
             <v-col cols="12" md="6">
                 <div class="customCol">
                     <p class="mb-0" id="personalProperty">Age</p>
-                    <v-text-field class="centered-input my-0 mx-10" id="personalValue" value="20" />
+                    <v-text-field class="centered-input my-0 mx-10" id="personalValue" v-model="editedData.age" />
                 </div>
             </v-col>
             <v-col cols="12" md="6">
@@ -96,13 +96,13 @@
             <v-col cols="12" md="6">
                 <div class="customCol">
                     <p class="mb-0" id="personalProperty">Height</p>
-                    <v-text-field class="centered-input my-0 mx-10" id="personalValue" value="180" />
+                    <v-text-field class="centered-input my-0 mx-10" id="personalValue" v-model="editedData.length" />
                 </div>
             </v-col>
             <v-col cols="12" md="6">
                 <div class="customCol">
                     <p class="mb-0" id="personalProperty">Weight</p>
-                    <v-text-field class="centered-input my-0 mx-10" id="personalValue" value="80" />
+                    <v-text-field class="centered-input my-0 mx-10" id="personalValue" v-model="editedData.weight" />
                 </div>
             </v-col>
         </v-row>
@@ -110,7 +110,7 @@
             <v-col cols="12">
                 <div class="customCol">
                     <p class="mb-0" id="personalProperty">Email</p>
-                    <v-text-field class="centered-input my-0 mx-10" id="personalValue" value="c.simp@email.com" />
+                    <p class="mb-0" id="personalValue">{{ this.profileData.email || "-" }}</p>
                 </div>
             </v-col>
         </v-row>
@@ -118,12 +118,16 @@
 </template>
 
 <script>
+import Auth from "../../repositories/Auth";
 import CountryFlag from 'vue-country-flag';
 
 export default {
     name: "ProfileInfo",
     components: {
         CountryFlag
+    },
+    created() {
+        this.refreshUser();
     },
     methods: {
         editInfo() {
@@ -133,12 +137,28 @@ export default {
             }
             else {
                 this.tIsEdit = "Edit";
+                Auth.updateUser(this.editedData, this.$cookies.get("JWT")).then(
+                    (resp) => { console.log(resp); },
+                    (err) => { console.log(err); }
+                );
             }
         },
         onCancel() {
             this.editing = false;
             this.tIsEdit = "Edit";
             // No changes are made
+        },
+        refreshUser() {
+            this.profileData = {
+                name: this.$store.state.user.firstName +
+                    " " +
+                    this.$store.state.user.lastName || "-",
+                age: this.$store.state.user.age || "-",
+                weight: this.$store.state.user.weight || "-",
+                height: this.$store.state.user.length || "-",
+                email: this.$store.state.user.email || "-",
+            };
+            this.editedData = this.profileData;
         }
     },
     data() {
@@ -178,6 +198,11 @@ export default {
             },
         };
     },
+    watch: {
+        '$store.state.user': function() {
+            this.refreshUser();
+        },
+    }
 };
 </script>
 <style>
