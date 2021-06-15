@@ -153,6 +153,7 @@ export default {
                 }
                 this.$store.dispatch('setFilteredData', items);
                 this.$store.dispatch('showFilter', { show: false });
+                this.resetSelection();
             } else {
                 this.$toaster.showMessage({
                     message: `Error occured. Please, check whether mininum

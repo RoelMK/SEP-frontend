@@ -10,15 +10,8 @@
                         id="overview-chart-container"
                         elevation="2"
                     >
-                        <v-progress-circular
-                            indeterminate
-                            color="primary"
-                            size="50"
-                            v-if="!rendered"
-                        />
                         <OverviewChart
                             ref="overview"
-                            v-if="rendered"
                             :itemTimeFrame="chosenItemTimeFrame"
                         />
                     </v-card>
@@ -67,13 +60,7 @@
             <div class="row">
                 <div class="legend">
                     <v-card class="full-height legend-container" elevation="2">
-                        <v-progress-circular
-                            indeterminate
-                            color="primary"
-                            size="50"
-                            v-if="!rendered"
-                        />
-                        <Legend v-if="rendered" />
+                        <Legend />
                     </v-card>
                 </div>
             </div>
@@ -89,8 +76,6 @@ import TableFoodData from "@/components/TableFoodData.vue";
 import TableActivitiesData from "@/components/TableActivitiesData.vue";
 import TableInsulinData from "@/components/TableInsulinData.vue";
 import EmotionTable from "@/components/EmotionTable.vue";
-import Data from '@/repositories/Data.js';
-import activities from '@/components/configurations/queryProperties.js';
 import moment from 'moment';
 import { mapState } from "vuex";
 
@@ -112,24 +97,12 @@ export default {
         return {
             tab: null,
             items: ["insulin", "food", "activities", "emotions"],
-            rendered: false,
             chosenItemTimeFrame: null,
         };
     },
     created() {
-        const config = {
-            startDate: moment('2021-06-17').format('DD-MM-YYYY'),
-            endDate: moment('2021-06-17').format('DD-MM-YYYY'),
-            exerciseTypes: activities[3].properties[0].properties
-                .map(d => d.toUpperCase()).join(','),
-        };
-        Data.fetch(config, this.$cookies.get("JWT")).then(
-            async (res) => {
-                await this.$store.dispatch('setData', res.data);
-                this.rendered = true;
-            },
-            (err) => console.log(err)
-        );
+        if (this.data.length <= 0)
+            this.$router.push("/");
     },
     methods: {
         getSelectedFoodInsulinEmotion(item) {
