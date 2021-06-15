@@ -8,6 +8,7 @@ const store = new Vuex.Store({
         toast: { message: '', color: '', btnColor: '', timeout: 5000 },
         filter: { show: false },
         user: {},
+        supervising: {},
         data: [],
         filteredData: [],
         healthSettings: {
@@ -75,12 +76,16 @@ const store = new Vuex.Store({
         LOGOUT(state) {
             state.data = [];
             state.user = {};
+            state.supervising = {};
         },
         SET_USER(state,user) {
             state.user = user;
         },
         UPDATE_TIME_FRAME(state, timeFrame) {
             state.newTimeFrame = timeFrame;
+        },
+        SUPERVISING(state, data) {
+            state.supervising = data;
         }
     },
 });

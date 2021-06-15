@@ -10,7 +10,9 @@
 
                 <v-spacer></v-spacer>
 
-                <div class="personalInfo" v-if="this.$store.state.user.supervisor">
+                <!-- <div class="personalInfo" v-if="this.$store.state.user.supervisor"> -->
+                <div class="personalInfo">
+
                     <div class="text-center">
                         <v-menu
                             v-model="showing"
@@ -101,7 +103,11 @@
 </template>
 
 <script>
+import activities from '@/components/configurations/queryProperties.js';
 import Supervisor from '../repositories/Supervisor';
+import Auth from "../repositories/Auth";
+import Data from "../repositories/Data";
+import moment from 'moment';
 export default {
     name: "Navbar",
     props: {
@@ -109,13 +115,6 @@ export default {
     },
     created() {
         this.refreshUser();
-    },
-    data: () => ({
-        notifications: true,
-        profileData: {
-            name: ""
-        },
-        supervisor: false,
         Supervisor.getChildren(
             {
                 supervisorEmail: this.$store.state.user.email
@@ -129,6 +128,15 @@ export default {
             },
             (error) => { console.log(error); }
         );
+    },
+    data: () => ({
+        notifications: true,
+        profileData: {
+            name: ""
+        },
+        supervisor: false,
+        children: [],
+        childToSupervise: null,
     }),
     methods: {
         logoClicked: function () {
@@ -156,7 +164,52 @@ export default {
     watch: {
         '$store.state.user': function() {
             this.refreshUser();
+            Supervisor.getChildren(
+                {
+                    supervisorEmail: this.$store.state.user.email
+                }
+            ).then(
+                (resp) => {
+                    let result = resp.data.children;
+                    for (var i = 0; i < result.length; i++) {
+                        this.children.push(result[i].player_email);
+                    }
+                    console.log(result);
+                },
+                (error) => { console.log(error); }
+            );
         },
+        childToSupervise: async function() {
+            let token = await Supervisor.getToken({
+                childEmail: this.childToSupervise,
+                supervisorEmail: this.$store.state.user.email
+            }).then(
+                (resp) => {
+                    this.$store.commit("SUPERVISING",
+                        {
+                            email: this.childToSupervise,
+                            token: resp.data.token.player_token
+                        });
+                    return resp.data.token.player_token;
+                },
+                (error) => { console.log(error); }
+            );
+            const config = {
+                startDate: moment().format('DD-MM-YYYY'),
+                endDate: moment().format('DD-MM-YYYY'),
+                exerciseTypes: activities[3].properties[0].properties
+                    .map(d => d.toUpperCase()).join(','),
+            };
+            console.log(token);
+            Data.fetch(config, token).then(
+                async (res) => {
+                    console.log(res.data);
+                    await this.$store.dispatch('setData', res.data);
+                },
+                (err) => console.log(err)
+            );
+        }
+
     }
 };
 </script>

@@ -46,12 +46,9 @@ export default {
         Navbar
     },
     created() {
-        console.log("fetching profile");
         Auth.getProfile(this.$cookies.get("JWT")).then(
             (resp) => {
                 this.$store.commit("SET_USER", resp.data);
-                console.log("store set");
-                console.log(this.$store.state.user);
             },
             (error) => { console.log(error); }
         );
