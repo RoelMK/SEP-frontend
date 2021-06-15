@@ -22,18 +22,16 @@ export default {
             }
         },
 
-        newTimeFrame: {
-            deep: true,
-            handler(timeFrame) {
-                console.log(timeFrame);
-                if (timeFrame !== null) {
-                    for (var i = 0; i <= 4; i++) {
-                        this.options.xAxis[i]["min"] = timeFrame.start;
-                        this.options.xAxis[i]["max"] = timeFrame.end;
-                    }
-                    this.$refs.overview.setOption(this.options);
+        newTimeFrame: function (value) {
+            console.log(value);
+            if (value !== null) {
+                let newOptions = this.options(this.data);
+                for (var i = 0; i <= 4; i++) {
+                    newOptions.xAxis[i]["min"] = value.start;
+                    newOptions.xAxis[i]["max"] = value.end;
                 }
-            },
+                this.$refs.overview.setOption(newOptions);
+            }
         },
     },
     computed: {

@@ -393,14 +393,14 @@ export default {
                     happiness: 2,
                     excitement: 2,
                     time: "12:00",
-                    date: moment("2027-04-10").format("L"),
+                    date: moment("06/15/2021").format("L"),
                     id: 0,
                 },
                 {
                     happiness: 3,
                     excitement: 3,
                     time: "17:00",
-                    date: moment("2027-04-10").format("L"),
+                    date: moment("06/15/2021").format("L"),
                     id: 1,
                 },
                 {
@@ -497,7 +497,25 @@ export default {
             this.editedItem.time = time;
         },
         selectEmotion(emotion) {
-            this.$emit("selectedEmotion", emotion);
+            let startTime = moment(emotion.time, "HH:mm")
+                .subtract(2, "hours")
+                .format("HH:mm");
+            let endTime = moment(emotion.time, "HH:mm")
+                .add(2, "hours")
+                .format("HH:mm");
+            let start = moment(
+                moment(emotion.date + " " + startTime).format(
+                    "MM-DD-YYYY HH:mm"
+                )
+            ).format("YYYY-MM-DDTHH:mm");
+            let end = moment(
+                moment(emotion.date + " " + endTime).format("MM-DD-YYYY HH:mm")
+            ).format("YYYY-MM-DDTHH:mm");
+            this.$store.dispatch("setNewTimeFrame", {
+                start,
+                end,
+                now: moment(),
+            });
         },
         displayHappiness(happiness) {
             if (happiness === 1) {
