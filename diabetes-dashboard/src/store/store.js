@@ -26,10 +26,12 @@ const store = new Vuex.Store({
             goalA1C: 7,
         },
         emotionReminderStatus: false,
+        newTimeFrame: null
     },
     getters: {
         getHealthSettings: state => state.healthSettings,
         getEmotionReminderStatus: state => state.emotionReminderStatus,
+        //getNewTimeFrame: state => state.newTimeFrame
     },
     actions: {
         showMessage({ commit }, toast) {
@@ -46,6 +48,9 @@ const store = new Vuex.Store({
         },
         setFilteredData({ commit }, data) {
             commit('UPDATE_FILTERED_DATA', data);
+        },
+        setNewTimeFrame({ commit }, timeFrame) {
+            commit('UPDATE_TIME_FRAME', timeFrame);
         }
     },
 
@@ -73,6 +78,9 @@ const store = new Vuex.Store({
         },
         SET_USER(state,user) {
             state.user = user;
+        },
+        UPDATE_TIME_FRAME(state, timeFrame) {
+            state.newTimeFrame = timeFrame;
         }
     },
 });

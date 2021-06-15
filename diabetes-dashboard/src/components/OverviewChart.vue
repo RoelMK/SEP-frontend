@@ -22,14 +22,15 @@ export default {
                 this.$refs.overview.setOption(this.options(value));
             }
         },
-        itemTimeFrame: {
+        
+        newTimeFrame: {
             deep: true,
-            handler(newTimeFrame) {
-                console.log(newTimeFrame);
-                if (newTimeFrame !== null) {
+            handler(timeFrame) {
+                console.log(timeFrame);
+                if (timeFrame !== null) {
                     for (var i = 0; i <= 4; i++) {
-                        this.options.xAxis[i]["min"] = newTimeFrame.start;
-                        this.options.xAxis[i]["max"] = newTimeFrame.end;
+                        this.options.xAxis[i]["min"] = timeFrame.start;
+                        this.options.xAxis[i]["max"] = timeFrame.end;
                     }
                     this.$refs.overview.setOption(this.options);
                 }
@@ -37,7 +38,7 @@ export default {
         },
     },
     computed: {
-        ...mapState(['filteredData', 'data']),
+        ...mapState(['filteredData', 'data', 'newTimeFrame']),
     },
     data() {
         return {

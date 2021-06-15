@@ -365,7 +365,28 @@ export default {
     },
     methods: {
         selectInsulin(insulin) {
-            this.$emit("selectedInsulin", insulin);
+            //this.$emit("selectedInsulin", insulin);
+            let startTime = moment(insulin.time, "HH:mm")
+                .subtract(2, "hours")
+                .format("HH:mm");
+            let endTime = moment(insulin.time, "HH:mm")
+                .add(2, "hours")
+                .format("HH:mm");
+            let start = moment(
+                moment(insulin.date + " " + startTime).format("MM-DD-YYYY HH:mm")
+            ).format("YYYY-MM-DDTHH:mm");
+            let end = moment(
+                moment(insulin.date + " " + endTime).format("MM-DD-YYYY HH:mm")
+            ).format("YYYY-MM-DDTHH:mm");
+
+            this.$store.dispatch('setNewTimeFrame', {start, end, now: moment()});
+
+            // this.chosenItemTimeFrame = {
+            //     start,
+            //     end,
+            //     now: moment(),
+            // };
+
         },
 
         getSelectedDate(date) {
