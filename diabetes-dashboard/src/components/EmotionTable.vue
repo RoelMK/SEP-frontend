@@ -291,7 +291,7 @@ export default {
             if (value.length > 0) {
                 this.emotions = value.emotions;
             } else {
-                this.emotions = data.emotions;
+                this.emotions = this.data.emotions;
             }
         },
     },
@@ -399,86 +399,6 @@ export default {
             dateFilter: "",
             happinessFilter: "",
             excitementFilter: "",
-
-            emotions: [
-                {
-                    happiness: 2,
-                    excitement: 2,
-                    time: "12:00",
-                    date: moment("2027-04-10").format("L"),
-                    id: 11,
-                },
-                {
-                    happiness: 3,
-                    excitement: 3,
-                    time: "17:00",
-                    date: moment("2027-04-10").format("L"),
-                    id: 1,
-                },
-                {
-                    happiness: 1,
-                    excitement: 1,
-                    date: "07/07/2017",
-                    time: "16:00",
-                    id: 2,
-                },
-                {
-                    happiness: 1,
-                    excitement: 2,
-                    date: "07/07/2018",
-                    time: "18:00",
-                    id: 3,
-                },
-                {
-                    happiness: 1,
-                    excitement: 3,
-                    date: "08/22/2020",
-                    time: "18:00",
-                    id: 4,
-                },
-                {
-                    happiness: 2,
-                    excitement: 1,
-                    date: "06/12/2019",
-                    time: "16:00",
-                    id: 5,
-                },
-                {
-                    happiness: 1,
-                    excitement: 1,
-                    date: "07/07/2014",
-                    time: "18:00",
-                    id: 6,
-                },
-                {
-                    happiness: 1,
-                    excitement: 2,
-                    date: "07/07/2015",
-                    time: "18:00",
-                    id: 7,
-                },
-                {
-                    happiness: 2,
-                    excitement: 1,
-                    date: "07/07/2019",
-                    time: "16:00",
-                    id: 8,
-                },
-                {
-                    happiness: 2,
-                    excitement: 1,
-                    date: "06/07/2020",
-                    time: "18:00",
-                    id: 9,
-                },
-                {
-                    happiness: 2,
-                    excitement: 2,
-                    date: "06/06/2020",
-                    time: "18:00",
-                    id: 10,
-                },
-            ],
         };
     },
     // state getters you need to use
