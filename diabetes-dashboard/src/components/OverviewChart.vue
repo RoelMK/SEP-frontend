@@ -15,16 +15,14 @@ export default {
     name: 'overviewChart',
     watch: {
         filteredData: function(value) {
-            if (value.length <= 0) {
-                this.$refs.overview.setOption(this.options(this.data));
-            }
-            else {
+            if (value.length > 0) {
                 this.$refs.overview.setOption(this.options(value));
             }
         },
         itemTimeFrame: {
             deep: true,
             handler(newTimeFrame) {
+                console.log(newTimeFrame);
                 if (newTimeFrame !== null) {
                     for (var i = 0; i <= 4; i++) {
                         this.options.xAxis[i]["min"] = newTimeFrame.start;
@@ -190,14 +188,11 @@ export default {
                         },
                         myRestore: {
                             title: 'Reset',
-                            icon: 'path://M12,6V9L16,5L12,1V4A8,8 0 0,0 4,12C4,13.57 4.46,15.03 5.24,16.26L6.7,14.8C6.25,13.97 6,13 6,12A6,6 0 0,1 12,6M18.76,7.74L17.3,9.2C17.74,10.04 18,11 18,12A6,6 0 0,1 12,18V15L8,19L12,23V20A8,8 0 0,0 20,12C20,10.43 19.54,8.97 18.76,7.74Z',
-                            iconStyle: {
-                                color: '#666'
-                            },
-                            onclick: async () => {
-                                this.$store.dispatch(
-                                    'setFilteredData',
-                                    []
+                            icon: 'path://M3.8,33.4 M47,18.9h9.8V8.7 M56.3,20.1 C52.1,9,40.5,0.6,26.8,2.1C12.6,3.7,1.6,16.2,2.1,30.6 M13,41.1H3.1v10.2 M3.7,39.9c4.2,11.1,15.8,19.5,29.5,18 c14.2-1.6,25.2-14.1,24.7-28.5',
+                            onclick: () => {
+                                this.$store.dispatch('setFilteredData', []);
+                                this.$refs.overview.setOption(
+                                    this.options(this.data)
                                 );
                             }
                         },

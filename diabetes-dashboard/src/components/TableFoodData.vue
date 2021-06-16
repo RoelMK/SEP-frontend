@@ -90,12 +90,6 @@
                             type="string"
                         ></v-text-field>
                     </td>
-                    <!-- <td>
-                        <v-text-field
-                            v-model="glycemicIndex"
-                            type="string"
-                        ></v-text-field>
-                    </td> -->
                 </tr>
             </template>
         </v-data-table>

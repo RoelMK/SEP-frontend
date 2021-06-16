@@ -2,11 +2,14 @@ import Client from './Client.js';
 const resource = '/';
 
 export default {
-    upload(payload) {
+    upload(data, token) {
         let url = `${resource}upload`;
         let headers = {
+            'Content-Type': 'multipart/form-data',
+            "Authorization": "Bearer " + token,
+            "ijsco": "ijsco"
         };
-        return Client.post(url, payload, headers);
+        return Client.post(url, data, headers);
     },
     fetchOnedriveToken(payload) {
         let url = `${resource}onedrive/login`;

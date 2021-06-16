@@ -13,17 +13,6 @@ export default [
                 isSearchable: false,
                 isNumber: false,
                 properties: []
-            },
-            {
-                index: 'time',
-                label: null,
-                isDate: false,
-                isTime: true,
-                isIcon: false,
-                isMultiple: false,
-                isSearchable: false,
-                isNumber: false,
-                properties: [],
             }
         ],
     },

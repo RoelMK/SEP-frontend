@@ -47,6 +47,8 @@ import Query from '@/components/Query.vue';
 import properties from '@/components/configurations/queryProperties.js';
 import filterHelpers from '@/helpers/filter.js';
 import moment from 'moment';
+import Data from '@/repositories/Data.js';
+import activities from '@/components/configurations/queryProperties.js';
 import { mapState } from 'vuex';
 export default {
     components: {
@@ -58,7 +60,6 @@ export default {
                 insulinMin: null,
                 insulinMax: null,
                 date: null,
-                time: null,
                 glucose: null,
                 activity: null,
                 arousal: null,
@@ -81,33 +82,26 @@ export default {
         };
     },
     computed: {
-        ...mapState(['filter', 'data']),
+        ...mapState(['filter', 'data', 'date', 'filteredData']),
         selectedParameters() {
             return Object.entries(this.parameters)
                 .filter(f => f[1] !== null)
                 .map(d => d[0]);
         },
         validation() {
-            if (this.parameters.insulinMax < this.parameters.insulinMin)
+            if (this.parameters.insulinMax < this.parameters.insulinMin
+                && this.parameters.insulinMax !== null)
                 return false;
-            if (this.parameters.date && this.parameters.time)
-                if (this.parameters.date.start !== this.parameters.date.end)
-                    return false;
             return true;
         }
     },
     methods: {
-        applyFiltering() {
-            // TODO: Remove options once we get more data in the backend
+        async applyFiltering() {
             if (this.validation) {
-                const items = JSON.parse(JSON.stringify(this.data));
-                // TODO remove 10-04-2027
-                const date = (this.parameters.date)
-                    ? this.parameters.date.start
-                    : moment('10-04-2027', 'DD-MM-YYYY')
-                        .format('DD-MM-YYYY');
+                var items = [];
                 const selection = this.checkSelection({
-                    time: this.parameters.time,
+                    date: this.parameters.date,
+                    activity: this.parameters.activity,
                     insulin: {
                         max: this.parameters.insulinMax,
                         min: this.parameters.insulinMin
@@ -120,27 +114,50 @@ export default {
                             .valence[this.parameters.valence]
                     }
                 });
-                const selectionKeys = Object.keys(selection);
+                const keys = Object.keys(selection);
+                if (keys.includes('date') || keys.includes('activity')) {
+                    const config = {
+                        startDate: (this.parameters.date)
+                            ? selection['date'][0]
+                            : this.date.start.format('DD-MM-YYYY'),
+                        endDate: (this.parameters.date)
+                            ? selection['date'][1]
+                            : this.date.end.format('DD-MM-YYYY'),
+                        exerciseTypes: (this.parameters.activity)
+                            ? selection['activity']
+                                .map(d => d.toUpperCase())
+                                .join(',')
+                            : activities[3].properties[0].properties
+                                .map(d => d.toUpperCase())
+                                .join(',')
+                    };
+                    this.$store.dispatch('setDate', {
+                        start: selection['date'][0],
+                        end: selection['date'][1]
+                    });
+                    await Data.fetch(config, this.$cookies.get('JWT')).then(
+                        (dataPromise) => dataPromise,
+                        (err) => console.log(err))
+                        .then(data => {
+                            items = data.data;
+                            this.$store.dispatch('setData', items);
+                        });
+                } else {
+                    items = JSON.parse(JSON.stringify(this.data));
+                }
                 for (let item in this.data) {
-                    if (selectionKeys.includes('insulin'))
+                    if (keys.includes('insulin'))
                         items[item].insulinAmount = filterHelpers['insulin'](
                             this.data[item].insulinAmount,
                             ...selection['insulin']
                         );
-                    if (selectionKeys.includes('time')) {
-                        items[item].timestamp = filterHelpers['time'](
-                            this.data[item].timestamp,
-                            date,
-                            ...selection['time']
-                        );
-                    }
-                    if (selectionKeys.includes('glucose')) {
+                    if (keys.includes('glucose')) {
                         items[item].glucoseLevel = filterHelpers['glucose'](
                             this.data[item].glucoseLevel,
                             selection['glucose']
                         );
                     }
-                    if (selectionKeys.includes('emotion')) {
+                    if (keys.includes('emotion')) {
                         items[item].arousal = filterHelpers['emotion'](
                             this.data[item].arousal,
                             selection['emotion'][0],
@@ -153,11 +170,11 @@ export default {
                 }
                 this.$store.dispatch('setFilteredData', items);
                 this.$store.dispatch('showFilter', { show: false });
+                this.resetSelection();
             } else {
                 this.$toaster.showMessage({
                     message: `Error occured. Please, check whether mininum
-                    insulin value is less than maximum number and/or selected
-                    date is not a range when filtering on time attribute.`,
+                    insulin value is less than maximum number.`,
                     color: 'dark',
                     btnColor: 'pink',
                     timeout: 6500

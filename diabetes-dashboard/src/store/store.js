@@ -10,6 +10,10 @@ const store = new Vuex.Store({
         user: {},
         supervising: {},
         data: [],
+        date: {
+            start: '',
+            end: '',
+        },
         filteredData: [],
         healthSettings: {
             unit: "mmol/L",
@@ -45,6 +49,9 @@ const store = new Vuex.Store({
         setData({ commit }, data) {
             commit('UPDATE_DATA', data);
         },
+        setDate({ commit }, data) {
+            commit('SET_DATE', data);
+        },
         setFilteredData({ commit }, data) {
             commit('UPDATE_FILTERED_DATA', data);
         }
@@ -64,6 +71,9 @@ const store = new Vuex.Store({
         },
         UPDATE_FILTERED_DATA(state, data) {
             state.filteredData = data;
+        },
+        SET_DATE(state, data) {
+            state.date = data;
         },
         SET_REMINDER_STATUS: (state, newEmotionReminderStatus) => {
             state.emotionReminderStatus = newEmotionReminderStatus;

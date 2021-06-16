@@ -169,6 +169,11 @@ export default {
                         this.requestedSupervisors.indexOf(supervisor),
                         1
                     );
+                    this.$toaster.showMessage({
+                        message: "Successfully approved!",
+                        color: "blue",
+                        btnColor: "white",
+                    });
                 },
                 (error) => {
                     console.log(error);
@@ -218,16 +223,6 @@ export default {
                     console.log(error);
                 }
             );
-        },
-
-        loadMore() {
-            this.$toasted.show("No more supervisors");
-        },
-        addMore() {
-            this.$toasted.show("Adding more supervisors");
-        },
-        removeSupervisor() {
-            this.$toasted.show("Removing Supervisor");
         },
     },
 };
