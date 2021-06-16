@@ -47,7 +47,7 @@
             <v-col cols="12" md="6">
                 <div class="customCol">
                     <p class="mb-0" id="personalProperty">Height</p>
-                    <p class="mb-0" id="personalValue">{{ this.profileData.height || "-" }}</p>
+                    <p class="mb-0" id="personalValue">{{ this.profileData.length || "-" }}</p>
                 </div>
             </v-col>
             <v-col cols="12" md="6">
@@ -126,9 +126,6 @@ export default {
     components: {
         CountryFlag
     },
-    created() {
-        this.refreshUser();
-    },
     methods: {
         editInfo() {
             this.editing = !this.editing;
@@ -155,7 +152,7 @@ export default {
                     this.$store.state.user.lastName || "-",
                 age: this.$store.state.user.age || "-",
                 weight: this.$store.state.user.weight || "-",
-                height: this.$store.state.user.length || "-",
+                length: this.$store.state.user.length || "-",
                 email: this.$store.state.user.email || "-",
             };
             this.editedData = this.profileData;
@@ -171,11 +168,11 @@ export default {
                 ],
             },
             profileData: {
-                name: "Peter",
-                age: 20,
-                weight: 75,
-                height: 180,
-                email: "fake@gmail.com",
+                name: "Loading",
+                age: 0,
+                weight: 0,
+                length: 0,
+                email: "loading@loading.com",
             },
             range: [2.0, 20.0],
             healthSettings: {

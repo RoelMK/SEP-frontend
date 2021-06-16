@@ -15,9 +15,9 @@
                 <v-text class="fSize14">Very High</v-text>
                 <div class="mx-2">
                     <v-slider
-                        thumb-label
+                        thumb-label="always"
                         hide-details
-                        max="14"
+                        max="20"
                         min="0"
                         step="0.1"
                         v-model="healthSettings.veryHighValue"
@@ -34,9 +34,9 @@
                 <v-text class="fSize14">High</v-text>
                 <div class="mx-2">
                     <v-range-slider
-                        thumb-label
+                        thumb-label="always"
                         hide-details
-                        max="14"
+                        max="20"
                         min="0"
                         step="0.1"
                         v-model="healthSettings.highRange"
@@ -52,9 +52,9 @@
                 <v-text class="fSize14">Normal</v-text>
                 <div class="mx-2">
                     <v-range-slider
-                        thumb-label
+                        thumb-label="always"
                         hide-details
-                        max="14"
+                        max="20"
                         min="0"
                         step="0.1"
                         v-model="healthSettings.normalRange"
@@ -70,9 +70,9 @@
                 <v-text class="fSize14">Low</v-text>
                 <div class="mx-2">
                     <v-range-slider
-                        thumb-label
+                        thumb-label="always"
                         hide-details
-                        max="14"
+                        max="20"
                         min="0"
                         step="0.1"
                         v-model="healthSettings.lowRange"
@@ -88,9 +88,9 @@
                 <v-text class="fSize14">Very Low</v-text>
                 <div class="mx-2">
                     <v-slider
-                        thumb-label
+                        thumb-label="always"
                         hide-details
-                        max="14"
+                        max="20"
                         min="0"
                         step="0.1"
                         v-model="healthSettings.veryLowValue"
@@ -135,14 +135,14 @@ export default {
             },
             healthSettings: {
                 unit: "mmol/L",
-                veryHighValue: 13.0,
-                highRange: [10.0, 13.0],
-                normalRange: [3.9, 10.0],
-                lowRange: [3.0, 3.9],
-                veryLowValue: 3.0,
-                goalA1C: 7,
-                valueHypoglycemia: 6,
-                valueHyperglycemia: 10
+                veryHighValue: 0,
+                highRange: [0, 1],
+                normalRange: [0, 1],
+                lowRange: [0, 1],
+                veryLowValue: 0,
+                goalA1C: 0,
+                valueHypoglycemia: 0,
+                valueHyperglycemia: 0
             },
             colors: {
                 veryHigh: legend.sections[0].properties[4].color,
@@ -153,6 +153,17 @@ export default {
                 trackColor: "gray"
             }
         };
+    },
+    created() {
+        for (const [key, value] of Object.entries(this.healthSettings)) {
+            let val = localStorage.getItem(key);
+            console.log(key, val);
+            if (key.includes("Range")) {
+                this.healthSettings[key] = JSON.parse(val) || [0,0];
+            } else {
+                this.healthSettings[key] = val || 0;
+            }
+        }
     },
     methods: {
         onClick() {
@@ -166,6 +177,13 @@ export default {
         },
         onDone() {
             this.editing = false;
+            for (const [key, value] of Object.entries(this.healthSettings)) {
+                if (key.includes("Range")) {
+                    localStorage.setItem(key, JSON.stringify(value));
+                } else {
+                    localStorage.setItem(key, value);
+                }
+            }
             // Post request to Gamebus to make the changes
         }
     }

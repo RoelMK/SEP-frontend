@@ -108,6 +108,7 @@
 
 <script>
 import Upload from '../../repositories/Upload';
+import axios from "axios";
 export default {
     name: "UploadData",
     created() {
@@ -120,6 +121,9 @@ export default {
             this.$cookies.set("od_homeaccount_id",
                 this.$route.query.homeAccountId);
         }
+        if (this.$cookies.get("od_access_token").length > 4) {
+            this.onedriveSet = false;
+        }
     },
     data() {
         return {
@@ -131,15 +135,38 @@ export default {
             nightscoutValid: false,
             onedriveFileUrl: "",
             fileUploading: false,
+            onedriveSet: false,
         };
     },
     methods: {
         fileUpload() {
             let formData = new FormData();
+            let format = "";
+            /** SOFTWARE TRANSFER DOCUMENT:
+             * This switch statement can be changed
+             * to STRIP blank spaces .toLowercase()
+            */
+            switch (this.value) {
+            case 'Food diary':
+                format = "fooddiary";
+                break;
+            case 'Eetmeter':
+                format = "eetmeter";
+                break;
+            case 'Abbott':
+                format = "abbott";
+                break;
+            }
             formData.append('file', this.file);
-            formData.append('format', this.value);
+            formData.append('format', format);
 
-            Upload.upload( formData )
+            axios({
+                method: "post",
+                url: "http://localhost:8080/upload",
+                data: formData,
+                headers: { "Authorization":
+                    "Bearer " + this.$cookies.get("JWT") }
+            })
                 .then(
                     (resp) => {
                         this.$toaster.showMessage({
@@ -166,6 +193,7 @@ export default {
         disconnectOnedrive() {
             this.$cookies.remove('od_access_token');
             this.$cookies.remove('od_homeaccount_id');
+            this.onedriveSet = true;
         },
         uploadOnedrive() {
             let access_token = this.$cookies.get("od_access_token");
@@ -212,14 +240,7 @@ export default {
         uploadDisabled() {
             return this.value && this.file;
         },
-        onedriveSet() {
-            try {
-                return !this.$cookies.get('od_homeaccount_id').length > 4;
-            } catch (e) {
-                return true;
-            }
-        }
-    }
+    },
 };
 </script>
 <style>
