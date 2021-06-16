@@ -277,7 +277,7 @@ import { emotionMixin } from "@/helpers/emotionMixin.js";
 import { deleteMixin } from "@/helpers/deleteMixin.js";
 import HistoryDatePicker from "@/components/HistoryDatePicker.vue";
 import HistoryTimePicker from "@/components/HistoryTimePicker.vue";
-import { mapState } from 'vuex';
+import { mapState } from "vuex";
 
 export default {
     name: "EmotionTable",
@@ -287,7 +287,7 @@ export default {
         HistoryTimePicker,
     },
     watch: {
-        filteredData: function(value) {
+        filteredData: function (value) {
             if (value.length > 0) {
                 this.emotions = this.convertEmotions(value.emotions);
             } else {
@@ -403,7 +403,7 @@ export default {
     },
     // state getters you need to use
     computed: {
-        ...mapState(['filteredData', 'data']),
+        ...mapState(["filteredData", "data"]),
         formTitle() {
             return this.editing === false
                 ? "New Emotion Input"
@@ -412,14 +412,13 @@ export default {
     },
     methods: {
         convertEmotions(data) {
-            return data
-                .map((f) => ({
-                    happiness: f.valence,
-                    excitement: f.arousal,
-                    date: moment(new Date(f.timestamp)).format("MM/DD/YY"),
-                    time: moment(new Date(f.timestamp)).format("HH:mm"),
-                    id: f.activityId
-                }));
+            return data.map((f) => ({
+                happiness: f.valence,
+                excitement: f.arousal,
+                date: moment(new Date(f.timestamp)).format("MM/DD/YY"),
+                time: moment(new Date(f.timestamp)).format("HH:mm"),
+                id: f.activityId,
+            }));
         },
         getSelectedDate(date) {
             this.editedItem.date = date;
@@ -510,7 +509,7 @@ export default {
             this.dialogDelete = true;
         },
         deleteItemConfirm() {
-            this.deleteItem( {activityId: this.editedItem.id,} );
+            this.deleteItem({ activityId: this.editedItem.id });
             this.closeDelete();
         },
         closeDelete() {
@@ -526,6 +525,7 @@ export default {
         } else {
             this.emotions = this.convertEmotions(this.data.emotions);
         }
+        console.log(this.data);
     },
 };
 </script>
@@ -548,7 +548,7 @@ export default {
     border-radius: 50%;
     padding: 0.2rem;
     background: rgba(0, 0, 0, 0.15);
-    margin-left:15px;
+    margin-left: 15px;
 }
 .mdi-pencil {
     border-radius: 50%;
