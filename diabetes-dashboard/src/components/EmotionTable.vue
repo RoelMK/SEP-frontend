@@ -84,12 +84,12 @@
                 <tr>
                     <td width="10%" @click="selectEmotion(item)">
                         <v-icon size="25" color="blue darken-1">
-                            {{ displayHappiness(item.happiness) }}
+                            {{ displayHappiness(item.valence) }}
                         </v-icon>
                     </td>
                     <td width="10%" @click="selectEmotion(item)">
                         <v-icon size="25" color="blue darken-1">
-                            {{ displayExcitement(item.excitement) }}
+                            {{ displayExcitement(item.arousal) }}
                         </v-icon>
                     </td>
                     <td width="10%" @click="selectEmotion(item)">
@@ -521,6 +521,13 @@ export default {
                 this.editedItem = Object.assign({}, this.defaultItem);
             });
         },
+    },
+    created() {
+        if (this.filteredData > 0) {
+            this.emotions = this.filteredData.emotions;
+        } else {
+            this.emotions = this.data.emotions;
+        }
     },
 };
 </script>
