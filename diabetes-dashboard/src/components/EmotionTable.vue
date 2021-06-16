@@ -520,12 +520,12 @@ export default {
         },
     },
     created() {
+        console.log(this.data);
         if (this.filteredData > 0) {
             this.emotions = this.convertEmotions(this.filteredData.emotions);
         } else {
             this.emotions = this.convertEmotions(this.data.emotions);
         }
-        console.log(this.data);
     },
 };
 </script>

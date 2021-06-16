@@ -184,6 +184,7 @@ import HistoryDatePicker from "@/components/HistoryDatePicker.vue";
 import HistoryTimePicker from "@/components/HistoryTimePicker.vue";
 import Insulin from "@/repositories/Insulin.js";
 import { deleteMixin } from "@/helpers/deleteMixin.js";
+import { mapState } from "vuex";
 
 export default {
     name: "TableInsulinData",
@@ -192,9 +193,19 @@ export default {
         HistoryDatePicker,
         HistoryTimePicker,
     },
+    watch: {
+        filteredData: function (value) {
+            if (value.length > 0) {
+                this.insulinData = this.convertInsulin(value.insulin);
+            } else {
+                this.insulinData = this.convertInsulin(this.data.insulin);
+            }
+        },
+    },
     // must match data values from json
     data() {
         return {
+            insulinData: [],
             items: ["<=", ">=", "="],
             // must be modified when we use real data
             headers: [
@@ -302,90 +313,19 @@ export default {
             typeFilter: "",
             date: "",
             time: "",
-
-            insulinData: [
-                {
-                    amount: 1,
-                    type: "Slow",
-                    date: "04/10/2027",
-                    time: "16:00",
-                    id: 11,
-                },
-                {
-                    amount: 1,
-                    type: "Slow",
-                    date: "04/10/2027",
-                    time: "12:00",
-                    id: 1,
-                },
-                {
-                    amount: 1,
-                    type: "Slow",
-                    date: "04/10/2027",
-                    time: "10:00",
-                    id: 2,
-                },
-                {
-                    amount: 1,
-                    type: "Slow",
-                    date: "04/10/2027",
-                    time: "19:00",
-                    id: 3,
-                },
-                {
-                    amount: 1,
-                    type: "Slow",
-                    date: "05/30/2021",
-                    time: "16:00",
-                    id: 4,
-                },
-                {
-                    amount: 1,
-                    type: "Slow",
-                    date: "05/30/2021",
-                    time: "16:00",
-                    id: 5,
-                },
-
-                {
-                    amount: 1,
-                    type: "Rapid",
-                    date: "05/30/2021",
-                    time: "16:00",
-                    id: 6,
-                },
-                {
-                    amount: 1,
-                    type: "Rapid",
-                    date: "05/30/2021",
-                    time: "16:00",
-                    id: 7,
-                },
-                {
-                    amount: 1,
-                    type: "Rapid",
-                    date: "05/30/2021",
-                    time: "16:00",
-                    id: 8,
-                },
-                {
-                    amount: 1,
-                    type: "Rapid",
-                    date: "05/30/2021",
-                    time: "16:00",
-                    id: 9,
-                },
-                {
-                    amount: 1,
-                    type: "Rapid",
-                    date: "05/30/2021",
-                    time: "16:00",
-                    id: 10,
-                },
-            ],
         };
     },
     methods: {
+        convertInsulin(data) {
+            return data.map((f) => ({
+                amount: f.insulinAmount,
+                type: f.insulinType,
+                date: moment(new Date(f.timestamp)).format("MM/DD/YY"),
+                time: moment(new Date(f.timestamp)).format("HH:mm"),
+                id: f.activityId,
+            }));
+        },
+
         selectInsulin(insulin) {
             this.$emit("selectedInsulin", insulin);
         },
@@ -482,15 +422,20 @@ export default {
     },
     // state getters you need to use
     computed: {
+        ...mapState(["filteredData", "data"]),
         formTitle() {
             return this.editing === false
                 ? "New Insulin Input"
                 : "Edit Insulin Input";
         },
     },
-    // when a component is created call actions
     created() {
-        //this.fetchInsulinData();
+        console.log(this.data);
+        if (this.filteredData > 0) {
+            this.insulinData = this.convertInsulin(this.filteredData.insulin);
+        } else {
+            this.insulinData = this.convertInsulin(this.data.insulin);
+        }
     },
 };
 </script>
