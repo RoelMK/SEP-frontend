@@ -277,6 +277,7 @@ import { emotionMixin } from "@/helpers/emotionMixin.js";
 import { deleteMixin } from "@/helpers/deleteMixin.js";
 import HistoryDatePicker from "@/components/HistoryDatePicker.vue";
 import HistoryTimePicker from "@/components/HistoryTimePicker.vue";
+import { mapState } from 'vuex';
 
 export default {
     name: "EmotionTable",
@@ -285,8 +286,18 @@ export default {
         HistoryDatePicker,
         HistoryTimePicker,
     },
+    watch: {
+        filteredData: function(value) {
+            if (value.length > 0) {
+                this.emotions = value.emotions;
+            } else {
+                this.emotions = data.emotions;
+            }
+        },
+    },
     data() {
         return {
+            emotions: [],
             items: ["<=", ">=", "="],
             emotionValues: ["", 1, 2, 3],
             dateMenu: false,
@@ -472,6 +483,7 @@ export default {
     },
     // state getters you need to use
     computed: {
+        ...mapState(['filteredData', 'data']),
         formTitle() {
             return this.editing === false
                 ? "New Emotion Input"
