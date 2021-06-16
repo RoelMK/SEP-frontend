@@ -289,9 +289,9 @@ export default {
     watch: {
         filteredData: function (value) {
             if (value.length > 0) {
-                this.emotions = this.convertEmotions(value.emotions);
+                this.emotions = this.convertEmotions(value.mood);
             } else {
-                this.emotions = this.convertEmotions(this.data.emotions);
+                this.emotions = this.convertEmotions(this.data.mood);
             }
         },
     },
@@ -522,9 +522,9 @@ export default {
     created() {
         console.log(this.data);
         if (this.filteredData > 0) {
-            this.emotions = this.convertEmotions(this.filteredData.emotions);
+            this.emotions = this.convertEmotions(this.filteredData.mood);
         } else {
-            this.emotions = this.convertEmotions(this.data.emotions);
+            this.emotions = this.convertEmotions(this.data.mood);
         }
     },
 };

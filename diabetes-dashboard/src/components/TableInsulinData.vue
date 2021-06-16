@@ -338,6 +338,14 @@ export default {
             this.editedItem.time = time;
         },
 
+        displayType(type) {
+            if (type === 0) {
+                return "Rapid";
+            } else {
+                return "Slow";
+            }
+        },
+
         async postInsulin(parameters) {
             Insulin.post(parameters, this.$cookies.get("JWT")).then(
                 () => {
@@ -427,13 +435,6 @@ export default {
             return this.editing === false
                 ? "New Insulin Input"
                 : "Edit Insulin Input";
-        },
-        displayType(type) {
-            if (type === 0) {
-                return "Rapid";
-            } else {
-                return "Slow";
-            }
         },
     },
     created() {
