@@ -84,12 +84,12 @@
                 <tr>
                     <td width="10%" @click="selectEmotion(item)">
                         <v-icon size="25" color="blue darken-1">
-                            {{ displayHappiness(item.valence) }}
+                            {{ displayHappiness(item.happiness) }}
                         </v-icon>
                     </td>
                     <td width="10%" @click="selectEmotion(item)">
                         <v-icon size="25" color="blue darken-1">
-                            {{ displayExcitement(item.arousal) }}
+                            {{ displayExcitement(item.excitement) }}
                         </v-icon>
                     </td>
                     <td width="10%" @click="selectEmotion(item)">
@@ -289,9 +289,9 @@ export default {
     watch: {
         filteredData: function(value) {
             if (value.length > 0) {
-                this.emotions = value.emotions;
+                this.emotions = this.convertEmotions(value.emotions);
             } else {
-                this.emotions = this.data.emotions;
+                this.emotions = this.convertEmotions(this.data.emotions);
             }
         },
     },
@@ -409,20 +409,18 @@ export default {
                 ? "New Emotion Input"
                 : "Edit Emotion Input";
         },
-        convertDate() {
-            if (this.editedItem.date)
-                return moment(this.editedItem.date).format("DD/MM/YYYY");
-            else return "Select Date";
-        },
-        convertTime() {
-            if (this.editedItem.time) {
-                return moment
-                    .utc(this.editedItem.time, "HH:mm")
-                    .format("HH:mm");
-            } else return "Select Time";
-        },
     },
     methods: {
+        convertEmotions(data) {
+            return data
+                .map((f) => ({
+                    happiness: f.valence,
+                    excitement: f.arousal,
+                    date: moment(new Date(f.timestamp)).format("MM/DD/YY"),
+                    time: moment(new Date(f.timestamp)).format("HH:mm"),
+                    id: f.activityId
+                }));
+        },
         getSelectedDate(date) {
             this.editedItem.date = date;
         },
@@ -524,9 +522,9 @@ export default {
     },
     created() {
         if (this.filteredData > 0) {
-            this.emotions = this.filteredData.emotions;
+            this.emotions = this.convertEmotions(this.filteredData.emotions);
         } else {
-            this.emotions = this.data.emotions;
+            this.emotions = this.convertEmotions(this.data.emotions);
         }
     },
 };
