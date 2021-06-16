@@ -10,7 +10,7 @@ export default {
             },
             params: {
                 'dataTypes': 'glucose,food,insulin,mood,exercise',
-                'union': true,
+                'union': false,
                 ...payload
             }
         };
