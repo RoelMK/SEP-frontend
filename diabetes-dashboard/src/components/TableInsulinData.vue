@@ -76,7 +76,7 @@
                         {{ item.amount }}
                     </td>
                     <td width="10%" @click="selectInsulin(item)">
-                        {{ item.type }}
+                        {{ displayType(item.type) }}
                     </td>
                     <td width="10%" @click="selectInsulin(item)">
                         {{ item.date }}
@@ -377,7 +377,7 @@ export default {
                     timestamp: moment(
                         moment(date + " " + time).format("MM-DD-YYYY HH:mm")
                     ).format("x"),
-                    insulinType: this.editedItem.type.toLowerCase(),
+                    insulinType: this.editedItem.type,
                     insulinAmount: parseInt(this.editedItem.amount),
                 };
                 if (editing) {
@@ -427,6 +427,13 @@ export default {
             return this.editing === false
                 ? "New Insulin Input"
                 : "Edit Insulin Input";
+        },
+        displayType(type) {
+            if (type === 0) {
+                return "Rapid";
+            } else {
+                return "Slow";
+            }
         },
     },
     created() {
