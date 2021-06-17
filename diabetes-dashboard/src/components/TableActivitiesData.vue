@@ -155,6 +155,7 @@ export default {
                 {
                     text: "Start Date",
                     value: "startDate",
+                    width: "17%",
                     sortable: false,
                     filter: (value) => {
                         if (!this.startDate) return true;
@@ -179,6 +180,7 @@ export default {
                 {
                     text: "End Date",
                     value: "endDate",
+                    width: "17%",
                     sortable: false,
                     filter: (value) => {
                         if (!this.endDate) return true;
@@ -264,7 +266,7 @@ export default {
                     },
                 },
                 {
-                    text: "Duration",
+                    text: "Durartion",
                     value: "duration",
                     sortable: false,
                 },

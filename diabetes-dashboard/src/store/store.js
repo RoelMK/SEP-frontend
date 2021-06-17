@@ -100,7 +100,22 @@ const store = new Vuex.Store({
             state.data.mood.splice(
                 state.data.mood.findIndex(emotion =>
                     emotion.activityId === data.activityId), 1, data);
-        }
+        },
+        ADD_INSULIN(state, data) {
+            state.data.insulin.unshift(data);
+            if(state.filteredData.insulin !== undefined) {
+                state.filteredData.insulin.unshift(data);
+            }
+        },
+        DELETE_INSULIN(state, id) {
+            state.data.insulin = state.data.insulin
+                .filter(insulinInput => insulinInput.activityId !== id);
+        },
+        UPDATE_INSULIN(state, data) {
+            state.data.insulin.splice(
+                state.data.insulin.findIndex(insulinInput =>
+                    insulinInput.activityId === data.activityId), 1, data);
+        },
     },
 });
 

@@ -499,7 +499,6 @@ export default {
                             console.log(error);
                         }
                     );
-                    console.log();
                     this.$store.commit("UPDATE_EMOTION", emotion);
                     this.updateEmotionTable();
                 } else {
@@ -545,7 +544,7 @@ export default {
             this.editedItem = Object.assign({}, item);
             this.dialogDelete = true;
         },
-        async deleteItemConfirm() {
+        deleteItemConfirm() {
             let parameters = { activityId: this.editedItem.id };
             this.deleteItem(parameters);
             this.closeDelete();

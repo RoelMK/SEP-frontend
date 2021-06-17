@@ -342,22 +342,7 @@ export default {
             }
         },
 
-        async postInsulin(parameters) {
-            Insulin.post(parameters, this.$cookies.get("JWT")).then(
-                () => {
-                    this.$toaster.showMessage({
-                        message: "Upload is successful",
-                        color: "dark",
-                        btnColor: "pink",
-                    });
-                },
-                (error) => {
-                    console.log(error);
-                }
-            );
-        },
-
-        checkInsulinInput(editing) {
+        async checkInsulinInput(editing) {
             if (
                 this.editedItem.amount === "" ||
                 this.editedItem.type === "" ||
@@ -386,8 +371,45 @@ export default {
                 };
                 if (editing) {
                     parameters["activityId"] = this.editedItem.id;
+
+                    let insulin = await Insulin.post(
+                        parameters,
+                        this.$cookies.get("JWT")
+                    ).then(
+                        (resp) => {
+                            this.$toaster.showMessage({
+                                message: "Upload is successful",
+                                color: "dark",
+                                btnColor: "pink",
+                            });
+                            return resp.data;
+                        },
+                        (error) => {
+                            console.log(error);
+                        }
+                    );
+                    this.$store.commit("UPDATE_INSULIN", insulin);
+                    this.updateInsulinTable();
+                } else {
+                    let insulin = await Insulin.post(
+                        parameters,
+                        this.$cookies.get("JWT")
+                    ).then(
+                        (resp) => {
+                            this.$toaster.showMessage({
+                                message: "Upload is successful",
+                                color: "dark",
+                                btnColor: "pink",
+                            });
+                            return resp.data;
+                        },
+                        (error) => {
+                            console.log(error);
+                        }
+                    );
+                    this.$store.commit("ADD_INSULIN", insulin);
+                    this.updateInsulinTable();
                 }
-                this.postInsulin(parameters);
             }
         },
 
@@ -413,14 +435,26 @@ export default {
             this.dialogDelete = true;
         },
         deleteItemConfirm() {
-            this.deleteItem({ activityId: this.editedItem.id });
+            let parameters = { activityId: this.editedItem.id };
+            this.deleteItem(parameters);
             this.closeDelete();
+            this.$store.commit("DELETE_INSULIN", parameters.activityId);
+            this.updateInsulinTable();
         },
         closeDelete() {
             this.dialogDelete = false;
             this.$nextTick(() => {
                 this.editedItem = Object.assign({}, this.defaultItem);
             });
+        },
+        updateInsulinTable() {
+            if (this.filteredData > 0) {
+                this.insulinData = this.convertInsulin(
+                    this.filteredData.insulin
+                );
+            } else {
+                this.insulinData = this.convertInsulin(this.data.insulin);
+            }
         },
     },
     // state getters you need to use
@@ -434,11 +468,7 @@ export default {
     },
     created() {
         console.log(this.data);
-        if (this.filteredData > 0) {
-            this.insulinData = this.convertInsulin(this.filteredData.insulin);
-        } else {
-            this.insulinData = this.convertInsulin(this.data.insulin);
-        }
+        this.updateInsulinTable();
     },
 };
 </script>
