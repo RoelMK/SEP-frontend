@@ -11,8 +11,8 @@
         </v-row>
         <v-row>
             <v-col cols="12" class="centerAligned">
-                <v-avatar size="120">
-                    <v-img src="https://cdn.vuetifyjs.com/images/lists/2.jpg"></v-img>
+                <v-avatar size="120" color="primary">
+                    <v-img  :src="this.profileData.image"></v-img>
                 </v-avatar>
             </v-col>
         </v-row>
@@ -22,7 +22,7 @@
             <v-col cols="12">
                 <div class="customCol centerAligned">
                     <p class="mb-0" id="name">{{ this.profileData.name }}</p>
-                    <p class="mb-0" id="role">User</p>
+                    <p class="mb-0" id="role">{{ this.supervisor ? "Supervisor" : "User" }}</p>
                 </div>
             </v-col>
         </v-row>
@@ -47,7 +47,7 @@
             <v-col cols="12" md="6">
                 <div class="customCol">
                     <p class="mb-0" id="personalProperty">Height</p>
-                    <p class="mb-0" id="personalValue">{{ this.profileData.height || "-" }}</p>
+                    <p class="mb-0" id="personalValue">{{ this.profileData.length || "-" }}</p>
                 </div>
             </v-col>
             <v-col cols="12" md="6">
@@ -70,8 +70,8 @@
         <v-row v-if="editing">
             <v-col cols="12">
                 <div class="customCol centerAligned">
-                    <v-text-field class="centered-input mb-0 mx-10" id="name" v-model="editedData.name" />
-                    <p class="mb-0" id="role">User</p>
+                    <p class="centered-input mb-0 mx-10" id="name">{{  profileData.name }}</p>
+                    <p class="mb-0" id="role">{{ this.supervisor ? "Supervisor" : "User" }}</p>
                 </div>
             </v-col>
         </v-row>
@@ -119,6 +119,7 @@
 
 <script>
 import Auth from "../../repositories/Auth";
+import Supervisor from "../../repositories/Supervisor";
 import CountryFlag from 'vue-country-flag';
 
 export default {
@@ -127,7 +128,9 @@ export default {
         CountryFlag
     },
     created() {
-        this.refreshUser();
+        if (this.$store.state.user.email) {
+            this.refreshUser();
+        }
     },
     methods: {
         editInfo() {
@@ -155,8 +158,9 @@ export default {
                     this.$store.state.user.lastName || "-",
                 age: this.$store.state.user.age || "-",
                 weight: this.$store.state.user.weight || "-",
-                height: this.$store.state.user.length || "-",
+                length: this.$store.state.user.length || "-",
                 email: this.$store.state.user.email || "-",
+                image: this.$store.state.user.image || "",
             };
             this.editedData = this.profileData;
         }
@@ -171,36 +175,26 @@ export default {
                 ],
             },
             profileData: {
-                name: "Peter",
-                age: 20,
-                weight: 75,
-                height: 180,
-                email: "fake@gmail.com",
+                name: "Loading",
+                age: 0,
+                weight: 0,
+                length: 0,
+                email: "loading@loading.com",
             },
-            range: [2.0, 20.0],
-            healthSettings: {
-                unit: "mmol/L",
-                veryHighThreshold: 13.9,
-                highRange: [10.0, 13.0],
-                normalRange: [3.9, 10.0],
-                lowRange: [3.0, 3.8],
-                veryLowThreshold: 3.0,
-                fastingRange: [4.4, 7.2],
-                ppRangeThreshold: 10.0,
-                goalA1C: 7,
-            },
-            foodSettings: {
-                goalConsumedCalories: 1800,
-                goalBurntCalories: 300,
-            },
-            emotionSettings: {
-                ask: true,
-            },
+            supervisor: false,
         };
     },
     watch: {
-        '$store.state.user': function() {
-            this.refreshUser();
+        '$store.state.user': async function() {
+            await this.refreshUser();
+            this.supervisor = await Supervisor.getRole({
+                email: this.$store.state.user.email
+            }).then(
+                (resp) => {
+                    return resp.data.supervisor;
+                },
+                (error) => { console.log(error); }
+            );
         },
     }
 };

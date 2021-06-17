@@ -9,12 +9,12 @@
         </v-row>
         <v-row class="mx-2">
             <v-col cols="12" md="6" class="customCol">
-                <v-text class="fSize14">Consumed Calories Goal</v-text>
-                <v-text-field value="1800" @click="onClick"/>
+                <p class="fSize14">Consumed Calories Goal</p>
+                <v-text-field v-model="settings.consume" @click="onClick"/>
             </v-col>
             <v-col cols="12" md="6" class="customCol">
-                <v-text class="fSize14">Burned Calories Goal</v-text>
-                <v-text-field value="2000" @click="onClick"/>
+                <p class="fSize14">Burned Calories Goal</p>
+                <v-text-field v-model="settings.burned" @click="onClick"/>
             </v-col>
         </v-row>
     </v-card>
@@ -28,7 +28,35 @@ export default {
             editing: false,
             goalConsumedCalories: '',
             goalBurntCalories: '',
+            settings: {
+                consume: 0,
+                burned: 0,
+            },
+            defaultSettings: {
+                consume: 1800,
+                burned: 2000,
+
+            }
         };
+    },
+    created() {
+        for (const [key, value] of Object.entries(this.settings)) {
+            let val = localStorage.getItem(key);
+            if (key.includes("Range")) {
+                if (val) {
+                    this.settings[key] = JSON.parse(val) || [0,0];
+                } else {
+                    this.settings[key] = this.defaultSettings[key];
+                }
+            } else {
+                if (val) {
+                    this.settings[key] = val;
+                } else {
+                    this.settings[key] = this.defaultSettings[key];
+                }
+            }
+        }
+
     },
     methods: {
         onClick() {
@@ -42,6 +70,14 @@ export default {
         },
         onDone() {
             this.editing = false;
+            for (const [key, value] of Object.entries(this.settings)) {
+                if (key.includes("Range")) {
+                    localStorage.setItem(key, JSON.stringify(value));
+                } else {
+                    localStorage.setItem(key, value);
+                }
+            }
+
             // Post request to Gamebus to make the changes
         }
     }

@@ -91,8 +91,8 @@ export default {
             rendered: false
         };
     },
-    created() {
-        Auth.getProfile(this.$cookies.get("JWT")).then(
+    async created() {
+        await Auth.getProfile(this.$cookies.get("JWT")).then(
             (resp) => {
                 this.$store.commit("SET_USER", resp.data);
             },
@@ -100,7 +100,8 @@ export default {
         );
         if (
             this.$cookies.get("EMOTION_REMINDER") === null &&
-            this.$store.getters.getEmotionReminderStatus
+            this.$store.getters.getEmotionReminderStatus &&
+            localStorage.getItem("emotionReminder") == "true"
         ) {
             this.$toaster.showMessage({
                 message: "Reminder: Enter Emotion Status!",
