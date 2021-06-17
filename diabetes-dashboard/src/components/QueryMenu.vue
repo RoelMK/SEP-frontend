@@ -145,27 +145,36 @@ export default {
                 } else {
                     items = JSON.parse(JSON.stringify(this.data));
                 }
-                for (let item in this.data) {
-                    if (keys.includes('insulin'))
-                        items[item].insulinAmount = filterHelpers['insulin'](
-                            this.data[item].insulinAmount,
-                            ...selection['insulin']
-                        );
-                    if (keys.includes('glucose')) {
-                        items[item].glucoseLevel = filterHelpers['glucose'](
-                            this.data[item].glucoseLevel,
-                            selection['glucose']
-                        );
+                if (keys.includes('insulin')) {
+                    for (let item in this.data['insulin']) {
+                        items['insulin'][item].insulinAmount =
+                            filterHelpers['insulin'](
+                                this.data['insulin'][item].insulinAmount,
+                                ...selection['insulin']
+                            );
                     }
-                    if (keys.includes('emotion')) {
-                        items[item].arousal = filterHelpers['emotion'](
-                            this.data[item].arousal,
-                            selection['emotion'][0],
-                        );
-                        items[item].valence = filterHelpers['emotion'](
-                            this.data[item].valence,
-                            selection['emotion'][1],
-                        );
+                }
+                if (keys.includes('glucose')) {
+                    for (let item in this.data['glucose']) {
+                        items['glucose'][item].glucoseLevel =
+                            filterHelpers['glucose'](
+                                this.data['glucose'][item].glucoseLevel,
+                                selection['glucose']
+                            );
+                    }
+                }
+                if (keys.includes('emotion')) {
+                    for (let item in this.data['mood']) {
+                        items['mood'][item].arousal =
+                            filterHelpers['emotion'](
+                                this.data['mood'][item].arousal,
+                                selection['emotion'][0],
+                            );
+                        items['mood'][item].valence =
+                            filterHelpers['emotion'](
+                                this.data['mood'][item].valence,
+                                selection['emotion'][1],
+                            );
                     }
                 }
                 this.$store.dispatch('setFilteredData', items);

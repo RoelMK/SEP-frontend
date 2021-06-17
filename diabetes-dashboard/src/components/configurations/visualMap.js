@@ -8,7 +8,7 @@ export default [
         seriesIndex: 0,
         pieces: [
             {
-
+                min: 0,
                 max: 2.9,
                 color: legend.sections[0].properties[0].color
             },
@@ -29,6 +29,7 @@ export default [
             },
             {
                 min: 14.0,
+                max: 50.0,
                 color: legend.sections[0].properties[4].color
             },
         ],
@@ -38,8 +39,10 @@ export default [
         show: false,
         splitNumber: 3,
         seriesIndex: 3,
+        dimension: 2,
         pieces: [
             {
+                min: 0,
                 max: 55,
                 color: legend.sections[3].properties[0].color
             },
@@ -50,6 +53,7 @@ export default [
             },
             {
                 min: 70,
+                max: 400,
                 color: legend.sections[3].properties[2].color
             }
         ]
