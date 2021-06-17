@@ -135,11 +135,11 @@ export default {
             },
             defaultValues: {
                 unit: "mmol/L",
-                veryHighValue: 13.9,
+                veryHighValue: 14.0,
                 highRange: [10.1, 13.9],
                 normalRange: [3.9, 10.0],
                 lowRange: [3.0, 3.8],
-                veryLowValue: 3.0,
+                veryLowValue: 2.9,
                 goalA1C: 7,
                 valueHypoglycemia: 4,
                 valueHyperglycemia: 10
