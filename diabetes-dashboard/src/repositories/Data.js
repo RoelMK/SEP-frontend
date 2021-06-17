@@ -2,7 +2,7 @@ import Client from './Client.js';
 const resource = '/';
 
 export default {
-    fetch(payload, token) {
+    async fetch(payload, token) {
         let url = `${resource}data`;
         let config = {
             headers: {

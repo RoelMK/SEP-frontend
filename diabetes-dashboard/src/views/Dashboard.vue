@@ -59,8 +59,8 @@ import Upload from "@/repositories/Upload";
 import Data from '@/repositories/Data.js';
 import activities from '@/components/configurations/queryProperties.js';
 import moment from 'moment';
-
 import Auth from "../repositories/Auth";
+import { mapState } from 'vuex';
 
 export default {
     name: "Dashboard",
@@ -71,6 +71,9 @@ export default {
         Navbar,
         Legend,
         Cards,
+    },
+    computed: {
+        ...mapState(['data'])
     },
     data() {
         return {
@@ -109,21 +112,28 @@ export default {
                 }
             );
         }
-        const config = {
-            startDate: moment().format('DD-MM-YYYY'),
-            endDate: moment().format('DD-MM-YYYY'),
-            exerciseTypes: activities[3].properties[0].properties
-                .map(d => d.toUpperCase()).join(','),
-        };
-        // TODO: Needs to be replaced after we get more data in the backend
-        Data.fetch(config, this.$cookies.get("JWT")).then(
-            async (res) => {
-                await this.$store.dispatch('setData', res.data);
-                this.rendered = true;
-            },
-            (err) => console.log(err)
-        );
-    },
+        if (this.data.length <= 0) {
+            const config = {
+                startDate: moment().format('DD-MM-YYYY'),
+                endDate: moment().format('DD-MM-YYYY'),
+                exerciseTypes: activities[3].properties[0].properties
+                    .map(d => d.toUpperCase()).join(','),
+            };
+            Data.fetch(config, this.$cookies.get("JWT")).then(
+                async (res) => {
+                    await this.$store.dispatch('setData', res.data);
+                    await this.$store.dispatch('setDate', {
+                        start: moment(),
+                        end: moment()
+                    });
+                    this.rendered = true;
+                },
+                (err) => console.log(err)
+            );
+        } else {
+            this.rendered = true;
+        }
+    }
 };
 </script>
 
