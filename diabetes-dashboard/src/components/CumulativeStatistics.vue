@@ -61,9 +61,9 @@ import moment from "moment";
 export default {
     name: "CumulativeStatistics",
     watch: {
-        filteredData: function (newValue, oldValue) {
-            if (newValue !== oldValue) {
-                this.cumulativeData = newValue;
+        filteredData: function (value) {
+            if (this.filteredData > 0) {
+                this.cumulativeData = value;
             } else {
                 this.cumulativeData = this.data;
             }
@@ -88,7 +88,7 @@ export default {
     },
     methods: {
         totalCalories() {
-            if(!this.cumulativeData.food) return 0;
+            if (!this.cumulativeData.food) return 0;
             let totalCalories = 0;
             this.cumulativeData.food.forEach((element) => {
                 totalCalories += element.calories ? element.calories : 0;
@@ -96,7 +96,7 @@ export default {
             return totalCalories;
         },
         totalCarbs() {
-            if(!this.cumulativeData.food) return 0;
+            if (!this.cumulativeData.food) return 0;
             let totalCarbs = 0;
             this.cumulativeData.food.forEach((element) => {
                 totalCarbs += element.carbohydrates ? element.carbohydrates : 0;
@@ -104,7 +104,7 @@ export default {
             return totalCarbs;
         },
         totalInsulin(insulinType) {
-            if(!this.cumulativeData.insulin) return 0;
+            if (!this.cumulativeData.insulin) return 0;
             let totalInsulin = 0;
             this.cumulativeData.insulin.forEach((element) => {
                 totalInsulin += element.insulinType == insulinType ? 1 : 0;
@@ -112,7 +112,7 @@ export default {
             return totalInsulin;
         },
         totalBurntCalories() {
-            if(!this.cumulativeData.activities) return 0;
+            if (!this.cumulativeData.activities) return 0;
             let totalBurnt = 0;
             this.cumulativeData.activities.forEach((element) => {
                 totalBurnt += element.calories;
@@ -120,7 +120,7 @@ export default {
             return totalBurnt;
         },
         averageGlucose() {
-            if(!this.cumulativeData.glucose) return 0;
+            if (!this.cumulativeData.glucose) return 0;
             let total = 0;
             let count = this.cumulativeData.glucose.length;
             this.cumulativeData.glucose.forEach((element) => {
@@ -130,7 +130,7 @@ export default {
         },
         maxGlucose() {
             // check for existence
-            if(!this.cumulativeData.glucose) return 0;
+            if (!this.cumulativeData.glucose) return 0;
             // calculate max
             let max = 0;
             this.cumulativeData.glucose.forEach((element) => {
@@ -140,8 +140,8 @@ export default {
         },
         minGlucose() {
             // check for existence and length
-            if(!this.cumulativeData.glucose
-            || this.cumulativeData.length == 0) return 0;
+            if (!this.cumulativeData.glucose || this.cumulativeData.length == 0)
+                return 0;
 
             //calculate min
             let min = this.cumulativeData.glucose[0].glucoseLevel;
@@ -151,14 +151,15 @@ export default {
             return min;
         },
         a1cCompute() {
-            if(!this.cumulativeData.glucose) return 0;
+            if (!this.cumulativeData.glucose) return 0;
             // in 13 digits
-            const a1cStart = moment().subtract(3, 'months').unix() * 1000;
-            const dataA1C = this.cumulativeData.glucose.filter(
-                function(element)
-                { return element.timestamp >= a1cStart; }
-            );
-            if(!dataA1C) return 0;
+            const a1cStart = moment().subtract(3, "months").unix() * 1000;
+            const dataA1C = this.cumulativeData.glucose.filter(function (
+                element
+            ) {
+                return element.timestamp >= a1cStart;
+            });
+            if (!dataA1C) return 0;
             let estimate = 0;
             let count = dataA1C.length;
             dataA1C.forEach((element) => {
