@@ -7,10 +7,6 @@
                     <span>{{ a1cCompute().toFixed(2) }} {{ unitBG }}</span>
                 </li>
                 <li>
-                    A1C Goal <i class="text-caption">(last 3 months)</i>:
-                    <span>{{ a1cGoal }} {{ unitBG }}</span>
-                </li>
-                <li>
                     Long Insulin:
                     <span>{{ totalInsulin(1) }} mg</span>
                 </li>
