@@ -4,7 +4,7 @@
         <div class="clearfix"></div>
         <div class="main">
             <div class="row">
-                <div class="leftColumn" height="100%">
+                <div class="leftColumn">
                     <v-card
                         height="100%"
                         id="overview-chart-container"
@@ -17,7 +17,7 @@
                     </v-card>
                 </div>
                 <div class="rightColumn">
-                    <v-card elevation="2">
+                    <v-card elevation="2" height="52rem">
                         <v-card elevation="0">
                             <v-tabs v-model="tab">
                                 <v-tab v-for="item in items" :key="item">
@@ -152,13 +152,13 @@ export default {
 }
 .leftColumn {
     float: left;
-    width: 50%;
+    width: 52%;
     margin-right: 1%;
     margin-top: 1%;
 }
 .rightColumn {
     float: left;
-    width: 48%;
+    width: 46%;
     margin-left: 1%;
     margin-top: 1%;
 }

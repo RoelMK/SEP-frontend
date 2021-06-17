@@ -266,7 +266,7 @@ export default {
                     },
                 },
                 {
-                    text: "Durartion",
+                    text: "Dur.",
                     value: "duration",
                     sortable: false,
                 },
@@ -340,6 +340,6 @@ export default {
     background: rgba(0, 0, 0, 0.15);
 }
 .selector {
-    width: 7.5rem;
+    width: 8rem;
 }
 </style>

@@ -601,6 +601,6 @@ export default {
     margin-left: 15px;
 }
 .selector {
-    width: 18rem;
+    width: 20rem;
 }
 </style>

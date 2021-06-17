@@ -84,6 +84,8 @@
                             type="string"
                         ></v-text-field>
                     </td>
+                    <td>
+                    </td>
                 </tr>
             </template>
         </v-data-table>
@@ -267,6 +269,6 @@ export default {
 }
 
 .selector {
-    width: 9.3rem;
+    width: 9.8rem;
 }
 </style>
