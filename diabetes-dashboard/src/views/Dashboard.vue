@@ -73,7 +73,14 @@ export default {
         Cards,
     },
     computed: {
-        ...mapState(['data'])
+        ...mapState(['data']),
+        checkData() {
+            for (let item in this.data) {
+                if (this.data[item].length > 0)
+                    return true;
+            }
+            return false;
+        }
     },
     data() {
         return {

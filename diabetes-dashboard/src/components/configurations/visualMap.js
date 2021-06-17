@@ -37,7 +37,7 @@ export default [
     {
         type: 'piecewise',
         show: false,
-        splitNumber: 3,
+        splitNumber: 4,
         seriesIndex: 3,
         dimension: 2,
         pieces: [
@@ -53,8 +53,13 @@ export default [
             },
             {
                 min: 70,
-                max: 400,
+                max: 100,
                 color: legend.sections[3].properties[2].color
+            },
+            {
+                min: 101,
+                max: 205,
+                color: 'grey'
             }
         ]
     }

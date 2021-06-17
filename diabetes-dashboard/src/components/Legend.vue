@@ -36,6 +36,7 @@ export default {
             this.chartInstance = getInstanceByDom(document
                 .getElementById('overview-chart-container')
                 .firstElementChild
+                .firstElementChild
             );
         },
     },
@@ -44,6 +45,7 @@ export default {
             legend: legend,
             chartInstance: getInstanceByDom(document
                 .getElementById('overview-chart-container')
+                .firstElementChild
                 .firstElementChild
             ),
         };

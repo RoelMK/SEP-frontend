@@ -205,7 +205,7 @@ export default {
                 const insulin = this.prepareData(data, 'insulin', 'timestamp',
                     'insulinAmount');
                 const carbs = this.prepareData(data, 'food', 'timestamp',
-                    'carbohydrates', 'glycemic_index');
+                    'carbohydrates', 'carbohydrates', 'glycemic_index');
                 const exercise = this.prepareData(data, 'exercise',
                     'timestamp', 'calories', 'duration');
                 var glucose = this.prepareData(data, 'glucose', 'timestamp',
@@ -340,7 +340,10 @@ export default {
                             type: "bar",
                             barWidth: 5,
                             symbol: "none",
-                            data: carbs
+                            data: carbs.map(i => {
+                                if (i[3] === null) i[3] = 200;
+                                return i;
+                            })
                         },
                         {
                             xAxisIndex: 4,
