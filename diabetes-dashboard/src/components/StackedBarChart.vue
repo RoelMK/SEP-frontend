@@ -47,7 +47,7 @@ export default {
                 xAxis: {
                     type: 'category',
                     show: false,
-                    data: ['Time Distribution'],
+                    data: ['Distribution'],
                 },
                 yAxis: {
                     show: false,
@@ -66,7 +66,7 @@ export default {
                             0,
                             this.computeTimeDistribution(data)[0][0],
                             `${this.computeTimeDistribution(data)[0][0]}%`,
-                            `${this.computeTimeDistribution(data)[0][1]} min`
+                            `${this.computeTimeDistribution(data)[0][1]} hours`
                         ]],
                         encode: {
                             x: 0,
@@ -86,7 +86,7 @@ export default {
                             0,
                             this.computeTimeDistribution(data)[1][0],
                             `${this.computeTimeDistribution(data)[1][0]}%`,
-                            `${this.computeTimeDistribution(data)[1][1]} min`
+                            `${this.computeTimeDistribution(data)[1][1]} hours`
                         ]],
                         encode: {
                             x: 0,
@@ -106,7 +106,7 @@ export default {
                             0,
                             this.computeTimeDistribution(data)[2][0],
                             `${this.computeTimeDistribution(data)[2][0]}%`,
-                            `${this.computeTimeDistribution(data)[2][1]} min`
+                            `${this.computeTimeDistribution(data)[2][1]} hours`
                         ]],
                         encode: {
                             x: 0,
@@ -126,7 +126,7 @@ export default {
                             0,
                             this.computeTimeDistribution(data)[3][0],
                             `${this.computeTimeDistribution(data)[3][0]}%`,
-                            `${this.computeTimeDistribution(data)[3][1]} min`
+                            `${this.computeTimeDistribution(data)[3][1]} hours`
                         ]],
                         encode: {
                             x: 0,
@@ -158,29 +158,43 @@ export default {
             };
         },
         computeTimeDistribution(data) {
-            const total = data
+            const total = data['glucose']
                 .filter(f => f.glucoseLevel !== null).length;
             var [vLow, low, normal, high, vHigh] = [[], [], [], [], []];
 
-            for (let i = 0; i < data.length - 2; i++) {
-                var i1 = data[i];
-                var i2 = data[i + 1];
+            for (let i = 0; i < data['glucose'].length - 2; i++) {
+                var i1 = data['glucose'][i];
+                var i2 = data['glucose'][i + 1];
 
                 if (0 < i1.glucoseLevel && i1.glucoseLevel < 2.9)
-                    vLow.push(i2.timestamp - i1.timestamp);
+                    vLow.push(moment.duration(
+                        moment(i1.timestamp)
+                            .diff(moment(i2.timestamp))).asHours()
+                    );
                 else if (3.0 < i1.glucoseLevel && i1.glucoseLevel < 3.8)
-                    low.push(i2.timestamp - i1.timestamp);
+                    low.push(moment.duration(
+                        moment(i1.timestamp)
+                            .diff(moment(i2.timestamp))).asHours()
+                    );
                 else if (3.9 < i1.glucoseLevel && i1.glucoseLevel < 10.0)
-                    normal.push(i2.timestamp - i1.timestamp);
+                    normal.push(moment.duration(
+                        moment(i1.timestamp)
+                            .diff(moment(i2.timestamp))).asHours()
+                    );
                 else if (10.1 < i1.glucoseLevel && i1.glucoseLevel < 13.9)
-                    high.push(i2.timestamp - i1.timestamp);
+                    high.push(moment.duration(
+                        moment(i1.timestamp)
+                            .diff(moment(i2.timestamp))).asHours()
+                    );
                 else if (14 < i1.glucoseLevel)
-                    vHigh.push(i2.timestamp - i1.timestamp);
+                    vHigh.push(moment.duration(
+                        moment(i1.timestamp)
+                            .diff(moment(i2.timestamp))).asHours()
+                    );
             }
 
-            const toHours = function(time) {
-                var temp = moment.duration(time);
-                return temp.hours() + temp.minutes();
+            const round = function(value) {
+                return Math.round(value * 100) / 100;
             };
 
             const sumArray = function(arr) {
@@ -193,11 +207,11 @@ export default {
                 return Math.round((arr.length / total) * 10000) / 100;
             };
             return [
-                [calcPercentage(vLow, total), toHours(sumArray(vLow))],
-                [calcPercentage(low, total), toHours(sumArray(low))],
-                [calcPercentage(normal, total), toHours(sumArray(normal))],
-                [calcPercentage(high, total), toHours(sumArray(high))],
-                [calcPercentage(vHigh, total), toHours(sumArray(vHigh))]
+                [calcPercentage(vLow, total), round(sumArray(vLow))],
+                [calcPercentage(low, total), round(sumArray(low))],
+                [calcPercentage(normal, total), round(sumArray(normal))],
+                [calcPercentage(high, total), round(sumArray(high))],
+                [calcPercentage(vHigh, total), round(sumArray(vHigh))]
             ];
         },
     }

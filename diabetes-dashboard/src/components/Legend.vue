@@ -24,9 +24,22 @@
 
 <script>
 import legend from '@/components/configurations/legend.js';
+import { mapState } from 'vuex';
 import { getInstanceByDom } from 'echarts/core';
 
 export default {
+    computed: {
+        ...mapState(['filteredData', 'data'])
+    },
+    watch: {
+        filteredData: function(newValue, oldValue) {
+            this.chartInstance = getInstanceByDom(document
+                .getElementById('overview-chart-container')
+                .firstElementChild
+                .firstElementChild
+            );
+        },
+    },
     data() {
         return {
             legend: legend,
@@ -38,6 +51,7 @@ export default {
     },
     methods: {
         toggleLegendItem(type, key) {
+            if (typeof this.chartInstance === 'undefined') return;
             if (type !== null) {
                 this.chartInstance.dispatchAction({
                     type: type,

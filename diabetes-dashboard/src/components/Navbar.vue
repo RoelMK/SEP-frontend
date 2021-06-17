@@ -133,18 +133,18 @@ export default {
     }),
     methods: {
         logoClicked: function () {
-            this.$router.push('/');
+            this.$router.push('/').catch(() => {});
         },
         profileClicked: function () {
-            this.$router.push('/profile');
+            this.$router.push('/profile').catch(() => {});
         },
         historyClicked: function () {
-            this.$router.push('/history');
+            this.$router.push('/history').catch(() => {});
         },
         logout() {
             this.$store.commit("LOGOUT");
             this.$cookies.remove("JWT");
-            this.$router.push('/login');
+            this.$router.push('/login').catch(() => {});
             localStorage.clear();
         },
         refreshUser() {
