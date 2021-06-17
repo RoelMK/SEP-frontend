@@ -20,11 +20,11 @@
                 </li>
                 <li>
                     Carbs:
-                    <span>{{ cumCarbs }} g</span>
+                    <span>{{ totalCarbs() }} g</span>
                 </li>
                 <li>
                     Calories:
-                    <span>{{ cumConsumedCarbs }} kcal</span>
+                    <span>{{ totalCalories() }} kcal</span>
                 </li>
                 <li>
                     Calories Goal <i class="text-caption">(daily)</i>:
@@ -52,10 +52,28 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
     name: "CumulativeStatistics",
+    watch: {
+        filteredData: function (value) {
+            if (value.length > 0) {
+                this.cumulativeData = value;
+            } else {
+                this.cumulativeData = this.data;
+            }
+        },
+        data: function(value) {
+            if (this.filteredData.length > 0) {
+                this.cumulativeData = this.filteredData;
+            } else {
+                this.cumulativeData = value;
+            }
+        }
+    },
     data() {
         return {
+            cumulativeData: [],
             cumLongInsulin: 0,
             cumShortInsulin: 0,
             cumCarbs: 0,
@@ -69,6 +87,32 @@ export default {
             burntCaloriesGoal: 0,
             unitBG: "mmol/L",
         };
+    },
+    methods: {
+        totalCalories() {
+            let totalCalories = 0;
+            this.cumulativeData.food.forEach((element) => {
+                totalCalories += element.calories ? element.calories : 0;
+            });
+            console.log(totalCalories);
+        },
+        totalCarbs() {
+            let totalCarbs = 0;
+            this.cumulativeData.food.forEach((element) => {
+                totalCarbs += element.carbohydrates ? element.carbohydrates : 0;
+            });
+            return totalCarbs;
+        },
+    },
+    computed: {
+        ...mapState(["filteredData", "data"]),
+    },
+    created() {
+        if (this.filteredData > 0) {
+            this.cumulativeData = this.filteredData;
+        } else {
+            this.cumulativeData = this.data;
+        }
     },
 };
 </script>
