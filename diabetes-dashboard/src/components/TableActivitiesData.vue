@@ -106,8 +106,7 @@
                             type="string"
                         ></v-text-field>
                     </td>
-                    <td>
-                    </td>
+                    <td></td>
                 </tr>
             </template>
         </v-data-table>
@@ -120,7 +119,7 @@ import { mapState } from "vuex";
 
 export default {
     name: "TableActivitiesData",
-        watch: {
+    watch: {
         filteredData: function (value) {
             if (value.length > 0) {
                 this.exercises = this.convertExercises(value.exercises);
@@ -295,13 +294,22 @@ export default {
         },
         convertExercises(data) {
             return data.map((f) => ({
-                type: f.meal_type !== null ? f.meal_type : "-",
-                carbs: f.carbohydrates,
+                name: f.name,
+                type: f.type,
+                startDate: moment(new Date(f.timestamp)).format("L"),
+                endDate: moment(
+                    moment(new Date(f.timestamp)).add(f.duration, "seconds")
+                ).format("L"),
+                startTime: moment(new Date(f.timestamp)).format("HH:mm"),
+                endTime: moment(
+                    moment(new Date(f.timestamp)).add(f.duration, "seconds")
+                ).format("HH:mm"),
                 calories: f.calories !== null ? f.calories : 0,
-                glycemicIndex: f.glycemic_index !== null ? f.glycemic_index : 0,
-                date: moment(new Date(f.timestamp)).format("L").toString(),
-                time: moment(new Date(f.timestamp)).format("HH:mm").toString(),
-                id: f.activityId,
+                activityId: f.activityId,
+                duration:
+                    f.duration !== null
+                        ? Math.round((f.duration / 3600) * 10) / 10
+                        : 0,
             }));
         },
     },
