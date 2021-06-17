@@ -43,8 +43,8 @@
                     <span>{{ cumSteps }}</span>
                 </li>
                 <li>
-                    Average Heartbeat:
-                    <span>{{ avgHeartbeat }} bpm</span>
+                    Average Glucose:
+                    <span>{{ average() }} bpm</span>
                 </li>
             </ul>
         </v-card-text>
@@ -53,23 +53,17 @@
 
 <script>
 import { mapState } from "vuex";
+import moment from "moment";
 export default {
     name: "CumulativeStatistics",
     watch: {
-        filteredData: function (value) {
-            if (value.length > 0) {
-                this.cumulativeData = value;
+        filteredData: function (newValue, oldValue) {
+            if (newValue !== oldValue) {
+                this.cumulativeData = newValue;
             } else {
                 this.cumulativeData = this.data;
             }
         },
-        data: function(value) {
-            if (this.filteredData.length > 0) {
-                this.cumulativeData = this.filteredData;
-            } else {
-                this.cumulativeData = value;
-            }
-        }
     },
     data() {
         return {
@@ -90,6 +84,7 @@ export default {
     },
     methods: {
         totalCalories() {
+            if(!this.cumulativeData.food) return 0;
             let totalCalories = 0;
             this.cumulativeData.food.forEach((element) => {
                 totalCalories += element.calories ? element.calories : 0;
@@ -97,11 +92,32 @@ export default {
             return totalCalories;
         },
         totalCarbs() {
+            if(!this.cumulativeData.food) return 0;
             let totalCarbs = 0;
             this.cumulativeData.food.forEach((element) => {
                 totalCarbs += element.carbohydrates ? element.carbohydrates : 0;
             });
             return totalCarbs;
+        },
+        average() {
+            if(!this.cumulativeData.glucose) return 0;
+            let estimate = 0;
+            let count = this.cumulativeData.glucose.length;
+            this.cumulativeData.glucose.forEach((element) => {
+                estimate += element.glucoseLevel ? element.glucoseLevel : 0;
+            });
+            return estimate / count;
+        },
+        a1cCompute() {
+            if(!this.cumulativeData.glucose) return 0;
+            const a1cStart = moment().subtract(3, 'months');
+            console.log(a1cStart);
+            let estimate = 0;
+            let count = this.cumulativeData.glucose.length;
+            this.cumulativeData.glucose.forEach((element) => {
+                estimate += element.glucoseLevel ? element.glucoseLevel : 0;
+            });
+            return estimate / count;
         },
     },
     computed: {
