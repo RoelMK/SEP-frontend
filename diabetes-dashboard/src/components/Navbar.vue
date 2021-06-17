@@ -10,7 +10,7 @@
 
                 <v-spacer></v-spacer>
 
-                <div class="personalInfo" v-if="supervisor">
+                <div class="personalInfo">
                     <div class="text-center">
                         <v-menu
                             v-model="showing"
