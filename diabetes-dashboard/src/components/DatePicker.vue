@@ -27,7 +27,6 @@
                 :attributes="attrs"
                 mode="date"
                 is-expanded
-                is-required
                 is-range
                 is24hr
                 class="datePicker"
@@ -67,10 +66,7 @@ export default {
             attrs: [
                 {
                     key: 'today',
-                    highlight: {
-                        color: 'blue',
-                        fillMode: 'solid',
-                    },
+                    dot: true,
                     dates: new Date(),
                 },
             ]

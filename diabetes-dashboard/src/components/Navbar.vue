@@ -10,7 +10,7 @@
 
                 <v-spacer></v-spacer>
 
-                <div class="personalInfo" v-if="this.$store.state.user.supervisor">
+                <div class="personalInfo" v-if="supervisor">
                     <div class="text-center">
                         <v-menu
                             v-model="showing"
@@ -133,18 +133,18 @@ export default {
     }),
     methods: {
         logoClicked: function () {
-            this.$router.push('/');
+            this.$router.push('/').catch(() => {});
         },
         profileClicked: function () {
-            this.$router.push('/profile');
+            this.$router.push('/profile').catch(() => {});
         },
         historyClicked: function () {
-            this.$router.push('/history');
+            this.$router.push('/history').catch(() => {});
         },
         logout() {
             this.$store.commit("LOGOUT");
             this.$cookies.remove("JWT");
-            this.$router.push('/login');
+            this.$router.push('/login').catch(() => {});
             localStorage.clear();
         },
         refreshUser() {
@@ -155,8 +155,8 @@ export default {
             };
             this.profileData.image = this.$store.state.user.image;
         },
-        fetchUserRole() {
-            this.supervisor = Supervisor.getRole({
+        async fetchUserRole() {
+            this.supervisor = await Supervisor.getRole({
                 email: this.$store.state.user.email
             }).then(
                 (resp) => {
@@ -167,8 +167,10 @@ export default {
         }
     },
     watch: {
-        '$store.state.user': function() {
-            this.refreshUser();
+        '$store.state.user.email': async function() {
+            await this.refreshUser();
+            await this.fetchUserRole();
+            console.log(this.supervisor);
             Supervisor.getChildren(
                 {
                     supervisorEmail: this.$store.state.user.email
@@ -206,7 +208,6 @@ export default {
             };
             Data.fetch(config, token).then(
                 async (res) => {
-                    console.log(res.data);
                     await this.$store.dispatch('setData', res.data);
                 },
                 (err) => console.log(err)
@@ -227,8 +228,6 @@ export default {
                     },
                     (error) => { console.log(error); }
                 );
-            } else {
-                console.log("not a supervisor, so no fetch");
             }
         }
 
