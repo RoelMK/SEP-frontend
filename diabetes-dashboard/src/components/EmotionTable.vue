@@ -427,7 +427,25 @@ export default {
             this.editedItem.time = time;
         },
         selectEmotion(emotion) {
-            this.$emit("selectedEmotion", emotion);
+            let startTime = moment(emotion.time, "HH:mm")
+                .subtract(2, "hours")
+                .format("HH:mm");
+            let endTime = moment(emotion.time, "HH:mm")
+                .add(2, "hours")
+                .format("HH:mm");
+            let start = moment(
+                moment(emotion.date + " " + startTime).format(
+                    "MM-DD-YYYY HH:mm"
+                )
+            ).format("YYYY-MM-DDTHH:mm");
+            let end = moment(
+                moment(emotion.date + " " + endTime).format("MM-DD-YYYY HH:mm")
+            ).format("YYYY-MM-DDTHH:mm");
+            this.$store.dispatch("setNewTimeFrame", {
+                start,
+                end,
+                now: moment(),
+            });
         },
         displayHappiness(happiness) {
             if (happiness === 1) {

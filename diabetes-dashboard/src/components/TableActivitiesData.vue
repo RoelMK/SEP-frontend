@@ -283,7 +283,6 @@ export default {
             startTimeFilter: "",
             endTimeFilter: "",
             caloriesFilter: "",
-
             exercises: [],
         };
     },
@@ -292,7 +291,21 @@ export default {
     },
     methods: {
         selectActivity(activity) {
-            this.$emit("selectedActivity", activity);
+            let start = moment(
+                moment(activity.startDate + " " + activity.startTime).format(
+                    "MM-DD-YYYY HH:mm"
+                )
+            ).format("YYYY-MM-DDTHH:mm");
+            let end = moment(
+                moment(activity.endDate + " " + activity.endTime).format(
+                    "MM-DD-YYYY HH:mm"
+                )
+            ).format("YYYY-MM-DDTHH:mm");
+            this.$store.dispatch("setNewTimeFrame", {
+                start,
+                end,
+                now: moment(),
+            });
         },
         convertExercises(data) {
             return data.map((f) => ({

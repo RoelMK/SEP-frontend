@@ -12,12 +12,12 @@
         </v-row>
         <v-row class="mx-2">
             <v-col cols="12" class="customCol">
-                <v-text class="fSize14">Very High</v-text>
+                <p class="fSize14">Very High</p>
                 <div class="mx-2">
                     <v-slider
-                        thumb-label
+                        thumb-label="always"
                         hide-details
-                        max="14"
+                        max="20"
                         min="0"
                         step="0.1"
                         v-model="healthSettings.veryHighValue"
@@ -31,12 +31,12 @@
         </v-row>
         <v-row class="mx-2">
             <v-col cols="12" class="customCol">
-                <v-text class="fSize14">High</v-text>
+                <p class="fSize14">High</p>
                 <div class="mx-2">
                     <v-range-slider
-                        thumb-label
+                        thumb-label="always"
                         hide-details
-                        max="14"
+                        max="20"
                         min="0"
                         step="0.1"
                         v-model="healthSettings.highRange"
@@ -49,12 +49,12 @@
         </v-row>
         <v-row class="mx-2">
             <v-col cols="12" class="customCol">
-                <v-text class="fSize14">Normal</v-text>
+                <p class="fSize14">Normal</p>
                 <div class="mx-2">
                     <v-range-slider
-                        thumb-label
+                        thumb-label="always"
                         hide-details
-                        max="14"
+                        max="20"
                         min="0"
                         step="0.1"
                         v-model="healthSettings.normalRange"
@@ -67,12 +67,12 @@
         </v-row>
         <v-row class="mx-2">
             <v-col cols="12" class="customCol">
-                <v-text class="fSize14">Low</v-text>
+                <p class="fSize14">Low</p>
                 <div class="mx-2">
                     <v-range-slider
-                        thumb-label
+                        thumb-label="always"
                         hide-details
-                        max="14"
+                        max="20"
                         min="0"
                         step="0.1"
                         v-model="healthSettings.lowRange"
@@ -85,12 +85,12 @@
         </v-row>
         <v-row class="mx-2">
             <v-col cols="12" class="customCol">
-                <v-text class="fSize14">Very Low</v-text>
+                <p class="fSize14">Very Low</p>
                 <div class="mx-2">
                     <v-slider
-                        thumb-label
+                        thumb-label="always"
                         hide-details
-                        max="14"
+                        max="20"
                         min="0"
                         step="0.1"
                         v-model="healthSettings.veryLowValue"
@@ -106,15 +106,15 @@
         </v-row>
         <v-row class="mx-2 pb-3">
             <v-col cols="12" md="4" class="customCol">
-                <v-text class="fSize14">A1C</v-text>
+                <p class="fSize14">A1C</p>
                 <v-text-field v-model="healthSettings.goalA1C" @click="onClick"/>
             </v-col>
             <v-col cols="12" md="4" class="customCol">
-                <v-text class="fSize14">Hypoglycemia</v-text>
+                <p class="fSize14">Hypoglycemia</p>
                 <v-text-field v-model="healthSettings.valueHypoglycemia" @click="onClick"/>
             </v-col>
             <v-col cols="12" md="4" class="customCol">
-                <v-text class="fSize14">Hyperglycemia</v-text>
+                <p class="fSize14">Hyperglycemia</p>
                 <v-text-field v-model="healthSettings.valueHyperglycemia" @click="onClick"/>
             </v-col>
         </v-row>
@@ -133,16 +133,27 @@ export default {
                     [pos[0], pos[1]],
                 ],
             },
-            healthSettings: {
+            defaultValues: {
                 unit: "mmol/L",
-                veryHighValue: 13.0,
-                highRange: [10.0, 13.0],
+                veryHighValue: 13.9,
+                highRange: [10.1, 13.9],
                 normalRange: [3.9, 10.0],
-                lowRange: [3.0, 3.9],
+                lowRange: [3.0, 3.8],
                 veryLowValue: 3.0,
                 goalA1C: 7,
-                valueHypoglycemia: 6,
+                valueHypoglycemia: 4,
                 valueHyperglycemia: 10
+            },
+            healthSettings: {
+                unit: "mmol/L",
+                veryHighValue: 0,
+                highRange: [0, 1],
+                normalRange: [0, 1],
+                lowRange: [0, 1],
+                veryLowValue: 0,
+                goalA1C: 0,
+                valueHypoglycemia: 0,
+                valueHyperglycemia: 0
             },
             colors: {
                 veryHigh: legend.sections[0].properties[4].color,
@@ -153,6 +164,24 @@ export default {
                 trackColor: "gray"
             }
         };
+    },
+    created() {
+        for (const [key, value] of Object.entries(this.healthSettings)) {
+            let val = localStorage.getItem(key);
+            if (key.includes("Range")) {
+                if (val) {
+                    this.healthSettings[key] = JSON.parse(val) || [0,0];
+                } else {
+                    this.healthSettings[key] = this.defaultValues[key];
+                }
+            } else {
+                if (val) {
+                    this.healthSettings[key] = val;
+                } else {
+                    this.healthSettings[key] = this.defaultValues[key];
+                }
+            }
+        }
     },
     methods: {
         onClick() {
@@ -166,6 +195,13 @@ export default {
         },
         onDone() {
             this.editing = false;
+            for (const [key, value] of Object.entries(this.healthSettings)) {
+                if (key.includes("Range")) {
+                    localStorage.setItem(key, JSON.stringify(value));
+                } else {
+                    localStorage.setItem(key, value);
+                }
+            }
             // Post request to Gamebus to make the changes
         }
     }

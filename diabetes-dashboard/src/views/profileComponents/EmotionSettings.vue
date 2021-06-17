@@ -22,6 +22,19 @@ export default {
             boolAsk: true,
         };
     },
+    created() {
+        let val = localStorage.getItem("emotionReminder");
+        if (val == "true") {
+            this.boolAsk = true;
+        } else {
+            this.boolAsk = false;
+        }
+    },
+    watch: {
+        boolAsk: function() {
+            localStorage.setItem("emotionReminder", this.boolAsk);
+        }
+    }
 };
 </script>
 

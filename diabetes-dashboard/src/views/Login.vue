@@ -83,8 +83,7 @@ export default {
                     },
                     (error) => {
                         this.$toaster.showMessage({
-                            message: 'Something went wrong: '
-                            + error.response.status,
+                            message: 'Something went wrong, try again later!',
                             color: 'dark',
                             btnColor: 'pink',
                         });
