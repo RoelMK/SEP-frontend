@@ -381,7 +381,6 @@ export default {
                     timestamp: moment(
                         moment(date + " " + time).format("MM-DD-YYYY HH:mm")
                     ).format("x"),
-                    //ask
                     insulinType: this.editedItem.type === "Rapid" ? 0 : 1,
                     insulinAmount: parseInt(this.editedItem.amount),
                 };

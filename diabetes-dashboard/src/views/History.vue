@@ -106,24 +106,7 @@ export default {
     },
     methods: {
         getSelectedFoodInsulinEmotion(item) {
-            let startTime = moment(item.time, "HH:mm")
-                .subtract(2, "hours")
-                .format("HH:mm");
-            let endTime = moment(item.time, "HH:mm")
-                .add(2, "hours")
-                .format("HH:mm");
-            let start = moment(
-                moment(item.date + " " + startTime).format("MM-DD-YYYY HH:mm")
-            ).format("YYYY-MM-DDTHH:mm");
-            let end = moment(
-                moment(item.date + " " + endTime).format("MM-DD-YYYY HH:mm")
-            ).format("YYYY-MM-DDTHH:mm");
-
-            this.chosenItemTimeFrame = {
-                start,
-                end,
-                now: moment(),
-            };
+            console.log(item);
         },
         getSelectedActivity(activity) {
             let start = moment(
