@@ -47,19 +47,13 @@
 
         <v-data-table
             :headers="headers"
-            :items="desserts"
+            :items="food"
             elevation="0"
             @click:row="selectFood"
             class="tableSection"
         >
             <template v-slot:[`body.prepend`]>
                 <tr>
-                    <td>
-                        <v-text-field
-                            v-model="name"
-                            type="string"
-                        ></v-text-field>
-                    </td>
                     <td>
                         <v-text-field
                             v-model="type"
@@ -98,23 +92,23 @@
 
 <script>
 import moment from "moment";
+import { mapState } from "vuex";
 
 export default {
     name: "TableFoodData",
+    watch: {
+        filteredData: function (value) {
+            if (value.length > 0) {
+                this.food = this.convertFood(value.food);
+            } else {
+                this.food = this.convertFood(this.data.food);
+            }
+        },
+    },
     data() {
         return {
             items: ["<=", ">=", "="],
             headers: [
-                {
-                    text: "Name",
-                    value: "name",
-                    sortable: false,
-                    filter: (f) => {
-                        return (f + "")
-                            .toLowerCase()
-                            .includes(this["name"].toLowerCase());
-                    },
-                },
                 {
                     text: "Type",
                     value: "type",
@@ -203,180 +197,56 @@ export default {
                         }
                     },
                 },
-                // {
-                //     text: "GI",
-                //     value: "glycemicIndex",
-                //     sortable: false,
-                //     filter: (value) => {
-                //         if (!this.glycemicIndex) return true;
-                //         return value <= this.glycemicIndex;
-                //     },
-                // },
-            ],
-            desserts: [
                 {
-                    name: "Frozen Yoghurt",
-                    type: "Dessert",
-                    time: "16:00",
-                    date: moment("2027-04-10").format("L"),
-                    carbs: 24,
-                    calories: 4,
-                    glycemicIndex: 1,
-                },
-                {
-                    name: "Ice cream sandwich",
-                    type: "Dessert",
-                    time: "12:00",
-                    date: moment("2027-04-10").format("L"),
-                    carbs: 24,
-                    calories: 4,
-                    glycemicIndex: 1,
-                },
-                {
-                    name: "Eclair",
-                    type: "Dessert",
-                    time: "19:00",
-                    date: moment("2027-04-10").format("L"),
-                    carbs: 24,
-                    calories: 4,
-                    glycemicIndex: 1,
-                },
-                {
-                    name: "Cupcake",
-                    type: "Dessert",
-                    time: moment().subtract(5, "hours").format("HH:mm"),
-                    date: moment().subtract(1, "day").format("L"),
-                    carbs: 24,
-                    calories: 4,
-                    glycemicIndex: 1,
-                },
-                {
-                    name: "Gingerbread",
-                    type: "Dessert",
-                    time: moment().subtract(5, "hours").format("HH:mm"),
-                    date: moment().subtract(1, "day").format("L"),
-                    carbs: 24,
-                    calories: 4,
-                    glycemicIndex: 1,
-                },
-                {
-                    name: "Eclair",
-                    type: "Dessert",
-                    time: moment().subtract(5, "hours").format("HH:mm"),
-                    date: moment().subtract(1, "day").format("L"),
-                    carbs: 24,
-                    calories: 4,
-                    glycemicIndex: 1,
-                },
-                {
-                    name: "Cupcake",
-                    type: "Dessert",
-                    time: moment().subtract(5, "hours").format("HH:mm"),
-                    date: moment().subtract(1, "day").format("L"),
-                    carbs: 24,
-                    calories: 4,
-                    glycemicIndex: 1,
-                },
-                {
-                    name: "Gingerbread",
-                    type: "Dessert",
-                    time: moment().subtract(5, "hours").format("HH:mm"),
-                    date: moment().subtract(1, "day").format("L"),
-                    carbs: 24,
-                    calories: 4,
-                    glycemicIndex: 1,
-                },
-                {
-                    name: "Frozen Yoghurt",
-                    type: "Dessert",
-                    time: moment().subtract(5, "hours").format("HH:mm"),
-                    date: moment().subtract(1, "day").format("L"),
-                    carbs: 24,
-                    calories: 4,
-                    glycemicIndex: 1,
-                },
-                {
-                    name: "Ice cream sandwich",
-                    type: "Dessert",
-                    time: moment().subtract(5, "hours").format("HH:mm"),
-                    date: moment().subtract(1, "day").format("L"),
-                    carbs: 24,
-                    calories: 4,
-                    glycemicIndex: 1,
-                },
-                {
-                    name: "Eclair",
-                    type: "Dessert",
-                    time: moment().subtract(5, "hours").format("HH:mm"),
-                    date: moment().subtract(1, "day").format("L"),
-                    carbs: 24,
-                    calories: 4,
-                    glycemicIndex: 1,
-                },
-                {
-                    name: "Cupcake",
-                    type: "Dessert",
-                    time: moment().subtract(5, "hours").format("HH:mm"),
-                    date: moment().subtract(1, "day").format("L"),
-                    carbs: 24,
-                    calories: 4,
-                    glycemicIndex: 1,
-                },
-                {
-                    name: "Gingerbread",
-                    type: "Dessert",
-                    time: moment().subtract(5, "hours").format("HH:mm"),
-                    date: moment().subtract(1, "day").format("L"),
-                    carbs: 24,
-                    calories: 4,
-                    glycemicIndex: 1,
-                },
-                {
-                    name: "Eclair",
-                    type: "Dessert",
-                    time: moment().subtract(5, "hours").format("HH:mm"),
-                    date: moment().subtract(1, "day").format("L"),
-                    carbs: 24,
-                    calories: 4,
-                    glycemicIndex: 1,
-                },
-                {
-                    name: "Cupcake",
-                    type: "Dessert",
-                    time: moment().subtract(5, "hours").format("HH:mm"),
-                    date: moment().subtract(1, "day").format("L"),
-                    carbs: 24,
-                    calories: 4,
-                    glycemicIndex: 1,
-                },
-                {
-                    name: "Gingerbread",
-                    type: "Dessert",
-                    time: moment().subtract(5, "hours").format("HH:mm"),
-                    date: moment().subtract(1, "day").format("L"),
-                    carbs: 24,
-                    calories: 4,
-                    glycemicIndex: 1,
+                    text: "GI",
+                    value: "glycemicIndex",
+                    sortable: false,
+                    filter: (value) => {
+                        if (!this.glycemicIndex) return true;
+                        return value <= this.glycemicIndex;
+                    },
                 },
             ],
+            food: [],
             name: "",
             type: "",
             time: "",
             date: "",
             carbs: "",
             calories: "",
-            //glycemicIndex: "",
+            glycemicIndex: "",
             timeFilter: "",
             dateFilter: "",
             carbsFilter: "",
             caloriesFilter: "",
         };
     },
-    computed: {},
+    computed: {
+        ...mapState(["filteredData", "data"]),
+    },
     methods: {
         selectFood(food) {
             this.$emit("selectedFood", food);
         },
+        convertFood(data) {
+            return data.map((f) => ({
+                type: f.meal_type !== null ? f.meal_type : "-",
+                carbs: f.carbohydrates,
+                calories: f.calories !== null ? f.calories : 0,
+                glycemicIndex: f.glycemic_index !== null ? f.glycemic_index : 0,
+                date: moment(new Date(f.timestamp)).format("L").toString(),
+                time: moment(new Date(f.timestamp)).format("HH:mm").toString(),
+                id: f.activityId,
+            }));
+        },
+    },
+    created() {
+        console.log(this.data);
+        if (this.filteredData > 0) {
+            this.food = this.convertFood(this.filteredData.food);
+        } else {
+            this.food = this.convertFood(this.data.food);
+        }
     },
 };
 </script>

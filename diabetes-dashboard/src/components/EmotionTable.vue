@@ -479,6 +479,7 @@ export default {
                     arousal: this.editedItem.excitement,
                     valence: this.editedItem.happiness,
                 };
+                // it seems like it does not matter if I pass these or not
                 if (editing) {
                     parameters["activityId"] = this.editedItem.id;
                     parameters["modify"] = true;
