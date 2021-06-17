@@ -3,18 +3,6 @@
         <v-card-text class="statistics-container">
             <StackedBarChart />
             <ul>
-                <li>
-                    Average BG:
-                    <span>{{ avgBG }} {{ unitBG }}</span>
-                </li>
-                <li>
-                    Max BG:
-                    <span>{{ maxBG }} {{ unitBG }}</span>
-                </li>
-                <li>
-                    Min BG:
-                    <span>{{ minBG }} {{ unitBG }}</span>
-                </li>
             </ul>
         </v-card-text>
     </v-card>
