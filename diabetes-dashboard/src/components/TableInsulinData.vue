@@ -35,11 +35,7 @@
             </tr>
         </div>
 
-        <v-data-table
-            :headers="headers"
-            :items="insulinData"
-            elevation="0"
-        >
+        <v-data-table :headers="headers" :items="insulinData" elevation="0">
             <template v-slot:[`body.prepend`]>
                 <tr>
                     <td>
@@ -385,7 +381,8 @@ export default {
                     timestamp: moment(
                         moment(date + " " + time).format("MM-DD-YYYY HH:mm")
                     ).format("x"),
-                    insulinType: this.editedItem.type,
+                    //ask
+                    insulinType: this.editedItem.type === "Rapid" ? 0 : 1,
                     insulinAmount: parseInt(this.editedItem.amount),
                 };
                 if (editing) {
@@ -418,7 +415,7 @@ export default {
             this.dialogDelete = true;
         },
         deleteItemConfirm() {
-            this.deleteItem( {activityId: this.editedItem.id,} );
+            this.deleteItem({ activityId: this.editedItem.id });
             this.closeDelete();
         },
         closeDelete() {
@@ -466,7 +463,7 @@ export default {
     border-radius: 50%;
     padding: 0.2rem;
     background: rgba(0, 0, 0, 0.15);
-    margin-left:15px;
+    margin-left: 15px;
 }
 .mdi-pencil {
     border-radius: 50%;

@@ -415,8 +415,8 @@ export default {
             return data.map((f) => ({
                 happiness: f.valence,
                 excitement: f.arousal,
-                date: moment(new Date(f.timestamp)).format("MM/DD/YY"),
-                time: moment(new Date(f.timestamp)).format("HH:mm"),
+                date: moment(new Date(f.timestamp)).format("L").toString(),
+                time: moment(new Date(f.timestamp)).format("HH:mm").toString(),
                 id: f.activityId,
             }));
         },
@@ -479,7 +479,6 @@ export default {
                     arousal: this.editedItem.excitement,
                     valence: this.editedItem.happiness,
                 };
-
                 if (editing) {
                     parameters["activityId"] = this.editedItem.id;
                     parameters["modify"] = true;
