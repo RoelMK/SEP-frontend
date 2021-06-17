@@ -10,7 +10,7 @@
                 <v-col cols="9">
                     <v-file-input
                         truncate-length="15"
-                        label="Upload excel/csv file"
+                        label="Upload file"
                         small-chips
                         outlined
                         :rules="[v => !!v || 'Upload a file first', v => (v && v.size > 0) || 'File is required',]"
@@ -121,8 +121,8 @@ export default {
             this.$cookies.set("od_homeaccount_id",
                 this.$route.query.homeAccountId);
         }
-        if (this.$cookies.get("od_access_token").length > 4) {
-            this.onedriveSet = false;
+        if (!this.$cookies.get("od_access_token")) {
+            this.onedriveSet = true;
         }
     },
     data() {

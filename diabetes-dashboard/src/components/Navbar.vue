@@ -10,9 +10,7 @@
 
                 <v-spacer></v-spacer>
 
-                <!-- <div class="personalInfo" v-if="this.$store.state.user.supervisor"> -->
-                <div class="personalInfo">
-
+                <div class="personalInfo" v-if="this.$store.state.user.supervisor">
                     <div class="text-center">
                         <v-menu
                             v-model="showing"
@@ -21,13 +19,13 @@
                             :close-on-content-click="false"
                         >
                             <template v-slot:activator="{ on }" @click="showing = true">
-                                <v-text-area
+                                <p
                                     id="name"
                                     @click="showing = true"
                                     v-on="on"
                                 >
                                     {{ childToSupervise || "Select user" }}
-                                </v-text-area>
+                                </p>
                             </template>
                             <v-list
                                 class="px-4">
@@ -46,7 +44,7 @@
 
                 <div class="personalInfo">
                     <p id="name">{{ this.profileData.name }}</p>
-                    <p id="role">Supervisor</p>
+                    <p id="role">{{ this.supervisor ? 'Supervisor' : "User" }}</p>
                 </div>
 
                 <v-badge bottom overlap offset-x="11" offset-y="15" color="transparent">
@@ -54,8 +52,8 @@
                         <v-icon size="15" color="blue">mdi-emoticon</v-icon>
                     </span>
                     <span slot="default">
-                        <v-avatar size="35">
-                            <v-img src="https://cdn.vuetifyjs.com/images/lists/2.jpg"></v-img>
+                        <v-avatar size="35" color="primary">
+                            <v-img :src="this.profileData.image"></v-img>
                         </v-avatar>
                     </span>
                 </v-badge>
@@ -88,15 +86,18 @@
                 <v-divider inset vertical />
 
                 <v-btn class="no-background__hover" icon :ripple="false">
-                    <v-icon size="20" color="dark-gray" v-on:click="historyClicked">mdi-file-table</v-icon>
+                    <v-tooltip bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                            <span
+                                v-bind="attrs"
+                                v-on="on"
+                            >
+                                <v-icon size="20" color="dark-gray" v-on:click="historyClicked">mdi-file-table</v-icon>
+                            </span>
+                        </template>
+                        <span>History page</span>
+                    </v-tooltip>
                 </v-btn>
-
-                <v-badge bordered dot offset-x="20" offset-y="20"
-                         color="red" :value="notifications">
-                    <v-btn class="no-background__hover" icon :ripple="false">
-                        <v-icon size="20" color="#FFCD00">mdi-bell</v-icon>
-                    </v-btn>
-                </v-badge>
             </v-toolbar>
         </v-card>
     </div>
@@ -113,30 +114,22 @@ export default {
     props: {
         msg: String,
     },
-    created() {
-        this.refreshUser();
-        Supervisor.getChildren(
-            {
-                supervisorEmail: this.$store.state.user.email
-            }
-        ).then(
-            (resp) => {
-                let result = resp.data.children;
-                for (var i = 0; i < result.length; i++) {
-                    this.children.push(result[i].player_email);
-                }
-            },
-            (error) => { console.log(error); }
-        );
+    async created() {
+        if (this.$store.state.user.email) {
+            await this.refreshUser();
+            await this.fetchUserRole();
+        }
     },
     data: () => ({
         notifications: true,
         profileData: {
-            name: ""
+            name: "",
+            image: ""
         },
         supervisor: false,
         children: [],
         childToSupervise: null,
+        showing: false
     }),
     methods: {
         logoClicked: function () {
@@ -152,6 +145,7 @@ export default {
             this.$store.commit("LOGOUT");
             this.$cookies.remove("JWT");
             this.$router.push('/login');
+            localStorage.clear();
         },
         refreshUser() {
             this.profileData = {
@@ -159,6 +153,17 @@ export default {
                     " " +
                     this.$store.state.user.lastName || "-"
             };
+            this.profileData.image = this.$store.state.user.image;
+        },
+        fetchUserRole() {
+            this.supervisor = Supervisor.getRole({
+                email: this.$store.state.user.email
+            }).then(
+                (resp) => {
+                    return resp.data.supervisor;
+                },
+                (error) => { console.log(error); }
+            );
         }
     },
     watch: {
@@ -174,7 +179,6 @@ export default {
                     for (var i = 0; i < result.length; i++) {
                         this.children.push(result[i].player_email);
                     }
-                    console.log(result);
                 },
                 (error) => { console.log(error); }
             );
@@ -200,7 +204,6 @@ export default {
                 exerciseTypes: activities[3].properties[0].properties
                     .map(d => d.toUpperCase()).join(','),
             };
-            console.log(token);
             Data.fetch(config, token).then(
                 async (res) => {
                     console.log(res.data);
@@ -208,6 +211,25 @@ export default {
                 },
                 (err) => console.log(err)
             );
+        },
+        supervisor: function() {
+            if (this.supervisor) {
+                Supervisor.getChildren(
+                    {
+                        supervisorEmail: this.$store.state.user.email
+                    }
+                ).then(
+                    (resp) => {
+                        let result = resp.data.children;
+                        for (var i = 0; i < result.length; i++) {
+                            this.children.push(result[i].player_email);
+                        }
+                    },
+                    (error) => { console.log(error); }
+                );
+            } else {
+                console.log("not a supervisor, so no fetch");
+            }
         }
 
     }

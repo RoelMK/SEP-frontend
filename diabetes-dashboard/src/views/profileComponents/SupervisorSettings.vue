@@ -53,7 +53,7 @@
             :key="supervisor.supervisor_email"
         >
             <v-col cols="9">
-                <v-text class="fSize14">{{ supervisor.supervisor_email }}</v-text>
+                <p class="fSize14">{{ supervisor.supervisor_email }}</p>
             </v-col>
             <v-col cols="3">
                 <v-btn
@@ -75,7 +75,7 @@
             :key="supervisor.supervisor_email"
         >
             <v-col cols="7">
-                <v-text class="fSize14">{{ supervisor.supervisor_email }}</v-text>
+                <p class="fSize14">{{ supervisor.supervisor_email }}</p>
             </v-col>
             <v-col cols="5">
                 <v-btn
@@ -103,32 +103,25 @@
 import Supervisor from "../../repositories/Supervisor";
 export default {
     name: "SupervisorSettings",
-    created() {
-        this.getRequested();
-        this.getApproved();
-        Supervisor.getRole({ email: this.$store.state.user.email }).then(
-            (resp) => console.log(resp),
-            (err) => console.log(err)
-        );
+    async created() {
+        if (this.$store.state.user.email) {
+            this.getRequested();
+            this.getApproved();
+        }
     },
     data() {
         return {
             boolAsk: true,
-            supervisors: ["jfmgijsbers@gmail.com"],
+            supervisors: [],
             requestedSupervisors: [],
             dialog: false,
             childEmail: "",
         };
     },
     watch: {
-        "$store.state.user.email": function() {
-            this.getRequested();
-            this.getApproved();
-            Supervisor.getRole({ email: this.$store.state.user.email }).then(
-                (resp) => console.log(resp),
-                (err) => console.log(err)
-            );
-
+        "$store.state.user.email": async function() {
+            await this.getRequested();
+            await this.getApproved();
         }
     },
     methods: {
@@ -169,6 +162,7 @@ export default {
                         this.requestedSupervisors.indexOf(supervisor),
                         1
                     );
+                    this.supervisors.push(supervisor);
                     this.$toaster.showMessage({
                         message: "Successfully approved!",
                         color: "blue",

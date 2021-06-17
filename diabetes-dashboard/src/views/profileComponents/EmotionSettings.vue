@@ -19,12 +19,11 @@ export default {
     name: "EmotionSettings",
     data() {
         return {
-            boolAsk: false,
+            boolAsk: true,
         };
     },
     created() {
         let val = localStorage.getItem("emotionReminder");
-        console.log("value: " + val);
         if (val == "true") {
             this.boolAsk = true;
         } else {
@@ -33,7 +32,6 @@ export default {
     },
     watch: {
         boolAsk: function() {
-            console.log(this.boolAsk);
             localStorage.setItem("emotionReminder", this.boolAsk);
         }
     }

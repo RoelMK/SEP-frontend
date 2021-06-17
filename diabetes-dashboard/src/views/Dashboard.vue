@@ -84,8 +84,8 @@ export default {
             rendered: false
         };
     },
-    created() {
-        Auth.getProfile(this.$cookies.get("JWT")).then(
+    async created() {
+        await Auth.getProfile(this.$cookies.get("JWT")).then(
             (resp) => {
                 this.$store.commit("SET_USER", resp.data);
             },
