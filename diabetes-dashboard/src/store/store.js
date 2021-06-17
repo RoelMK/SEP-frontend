@@ -83,11 +83,23 @@ const store = new Vuex.Store({
             state.user = {};
             state.supervising = {};
         },
-        SET_USER(state,user) {
+        SET_USER(state, user) {
             state.user = user;
         },
         SUPERVISING(state, data) {
             state.supervising = data;
+        },
+        ADD_EMOTION(state, data) {
+            state.data.mood.unshift(data);
+        },
+        DELETE_EMOTION(state, id) {
+            state.data.mood = state.data.mood
+                .filter(emotion => emotion.activityId !== id);
+        },
+        UPDATE_EMOTION(state, data) {
+            state.data.mood.splice(
+                state.data.mood.findIndex(emotion =>
+                    emotion.activityId === data.activityId), 1, data);
         }
     },
 });

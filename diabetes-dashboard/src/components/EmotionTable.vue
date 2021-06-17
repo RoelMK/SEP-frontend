@@ -273,7 +273,7 @@
 
 <script>
 import moment from "moment";
-import { emotionMixin } from "@/helpers/emotionMixin.js";
+import Emotion from "@/repositories/Emotion.js";
 import { deleteMixin } from "@/helpers/deleteMixin.js";
 import HistoryDatePicker from "@/components/HistoryDatePicker.vue";
 import HistoryTimePicker from "@/components/HistoryTimePicker.vue";
@@ -281,7 +281,7 @@ import { mapState } from "vuex";
 
 export default {
     name: "EmotionTable",
-    mixins: [emotionMixin, deleteMixin],
+    mixins: [deleteMixin],
     components: {
         HistoryDatePicker,
         HistoryTimePicker,
@@ -451,7 +451,7 @@ export default {
                 return "";
             }
         },
-        checkEmotionInput(editing) {
+        async checkEmotionInput(editing) {
             // no need to check id here
             if (
                 this.editedItem.happiness === 0 ||
@@ -479,11 +479,49 @@ export default {
                     arousal: this.editedItem.excitement,
                     valence: this.editedItem.happiness,
                 };
-                // it seems like it does not matter if I pass these or not
+
                 if (editing) {
                     parameters["activityId"] = this.editedItem.id;
+
+                    let emotion = await Emotion.post(
+                        parameters,
+                        this.$cookies.get("JWT")
+                    ).then(
+                        (resp) => {
+                            this.$toaster.showMessage({
+                                message: "Upload is successful",
+                                color: "dark",
+                                btnColor: "pink",
+                            });
+                            return resp.data;
+                        },
+                        (error) => {
+                            console.log(error);
+                        }
+                    );
+                    console.log();
+                    this.$store.commit("UPDATE_EMOTION", emotion);
+                    this.updateEmotionTable();
+                } else {
+                    let emotion = await Emotion.post(
+                        parameters,
+                        this.$cookies.get("JWT")
+                    ).then(
+                        (resp) => {
+                            this.$toaster.showMessage({
+                                message: "Upload is successful",
+                                color: "dark",
+                                btnColor: "pink",
+                            });
+                            return resp.data;
+                        },
+                        (error) => {
+                            console.log(error);
+                        }
+                    );
+                    this.$store.commit("ADD_EMOTION", emotion);
+                    this.updateEmotionTable();
                 }
-                this.postEmotion(parameters);
             }
         },
         editItem(item) {
@@ -507,9 +545,12 @@ export default {
             this.editedItem = Object.assign({}, item);
             this.dialogDelete = true;
         },
-        deleteItemConfirm() {
-            this.deleteItem({ activityId: this.editedItem.id });
+        async deleteItemConfirm() {
+            let parameters = { activityId: this.editedItem.id };
+            this.deleteItem(parameters);
             this.closeDelete();
+            this.$store.commit("DELETE_EMOTION", parameters.activityId);
+            this.updateEmotionTable();
         },
         closeDelete() {
             this.dialogDelete = false;
@@ -517,14 +558,16 @@ export default {
                 this.editedItem = Object.assign({}, this.defaultItem);
             });
         },
+        updateEmotionTable() {
+            if (this.filteredData > 0) {
+                this.emotions = this.convertEmotions(this.filteredData.mood);
+            } else {
+                this.emotions = this.convertEmotions(this.data.mood);
+            }
+        },
     },
     created() {
-        console.log(this.data);
-        if (this.filteredData > 0) {
-            this.emotions = this.convertEmotions(this.filteredData.mood);
-        } else {
-            this.emotions = this.convertEmotions(this.data.mood);
-        }
+        this.updateEmotionTable();
     },
 };
 </script>
