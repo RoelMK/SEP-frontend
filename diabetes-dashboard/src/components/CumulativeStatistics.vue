@@ -27,16 +27,8 @@
                     <span>{{ totalCalories() }} kcal</span>
                 </li>
                 <li>
-                    Calories Goal <i class="text-caption">(daily)</i>:
-                    <span>{{ consumedCaloriesGoal }} kcal</span>
-                </li>
-                <li>
                     Burnt Calories:
                     <span>{{ totalBurntCalories() }} kcal</span>
-                </li>
-                <li>
-                    Burnt Calories Goal <i class="text-caption">(daily)</i>:
-                    <span>{{ burntCaloriesGoal }} kcal</span>
                 </li>
                 <li>
                     Average Glucose:
@@ -72,17 +64,6 @@ export default {
     data() {
         return {
             cumulativeData: [],
-            cumLongInsulin: 0,
-            cumShortInsulin: 0,
-            cumCarbs: 0,
-            cumConsumedCarbs: 0,
-            cumBurntCarbs: 0,
-            cumSteps: 0,
-            avgHeartbeat: 0,
-            a1c: 0,
-            a1cGoal: 0,
-            consumedCaloriesGoal: 0,
-            burntCaloriesGoal: 0,
             unitBG: "mmol/L",
         };
     },
