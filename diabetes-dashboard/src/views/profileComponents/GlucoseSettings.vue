@@ -12,7 +12,7 @@
         </v-row>
         <v-row class="mx-2">
             <v-col cols="12" class="customCol">
-                <v-text class="fSize14">Very High</v-text>
+                <p class="fSize14">Very High</p>
                 <div class="mx-2">
                     <v-slider
                         thumb-label="always"
@@ -31,7 +31,7 @@
         </v-row>
         <v-row class="mx-2">
             <v-col cols="12" class="customCol">
-                <v-text class="fSize14">High</v-text>
+                <p class="fSize14">High</p>
                 <div class="mx-2">
                     <v-range-slider
                         thumb-label="always"
@@ -49,7 +49,7 @@
         </v-row>
         <v-row class="mx-2">
             <v-col cols="12" class="customCol">
-                <v-text class="fSize14">Normal</v-text>
+                <p class="fSize14">Normal</p>
                 <div class="mx-2">
                     <v-range-slider
                         thumb-label="always"
@@ -67,7 +67,7 @@
         </v-row>
         <v-row class="mx-2">
             <v-col cols="12" class="customCol">
-                <v-text class="fSize14">Low</v-text>
+                <p class="fSize14">Low</p>
                 <div class="mx-2">
                     <v-range-slider
                         thumb-label="always"
@@ -85,7 +85,7 @@
         </v-row>
         <v-row class="mx-2">
             <v-col cols="12" class="customCol">
-                <v-text class="fSize14">Very Low</v-text>
+                <p class="fSize14">Very Low</p>
                 <div class="mx-2">
                     <v-slider
                         thumb-label="always"
@@ -106,15 +106,15 @@
         </v-row>
         <v-row class="mx-2 pb-3">
             <v-col cols="12" md="4" class="customCol">
-                <v-text class="fSize14">A1C</v-text>
+                <p class="fSize14">A1C</p>
                 <v-text-field v-model="healthSettings.goalA1C" @click="onClick"/>
             </v-col>
             <v-col cols="12" md="4" class="customCol">
-                <v-text class="fSize14">Hypoglycemia</v-text>
+                <p class="fSize14">Hypoglycemia</p>
                 <v-text-field v-model="healthSettings.valueHypoglycemia" @click="onClick"/>
             </v-col>
             <v-col cols="12" md="4" class="customCol">
-                <v-text class="fSize14">Hyperglycemia</v-text>
+                <p class="fSize14">Hyperglycemia</p>
                 <v-text-field v-model="healthSettings.valueHyperglycemia" @click="onClick"/>
             </v-col>
         </v-row>
@@ -132,6 +132,17 @@ export default {
                 process: pos => [
                     [pos[0], pos[1]],
                 ],
+            },
+            defaultValues: {
+                unit: "mmol/L",
+                veryHighValue: 13.9,
+                highRange: [10.1, 13.9],
+                normalRange: [3.9, 10.0],
+                lowRange: [3.0, 3.8],
+                veryLowValue: 3.0,
+                goalA1C: 7,
+                valueHypoglycemia: 4,
+                valueHyperglycemia: 10
             },
             healthSettings: {
                 unit: "mmol/L",
@@ -157,11 +168,18 @@ export default {
     created() {
         for (const [key, value] of Object.entries(this.healthSettings)) {
             let val = localStorage.getItem(key);
-            console.log(key, val);
             if (key.includes("Range")) {
-                this.healthSettings[key] = JSON.parse(val) || [0,0];
+                if (val) {
+                    this.healthSettings[key] = JSON.parse(val) || [0,0];
+                } else {
+                    this.healthSettings[key] = this.defaultValues[key];
+                }
             } else {
-                this.healthSettings[key] = val || 0;
+                if (val) {
+                    this.healthSettings[key] = val;
+                } else {
+                    this.healthSettings[key] = this.defaultValues[key];
+                }
             }
         }
     },
