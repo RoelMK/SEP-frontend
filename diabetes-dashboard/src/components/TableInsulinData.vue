@@ -382,8 +382,8 @@ export default {
                     .toString();
                 let parameters = {
                     timestamp: moment(
-                        moment(date + " " + time, "MM-DD-YYYY HH:mm")
-                    ).format("x"),
+                        moment(date + " " + time, "MM/DD/YYYY HH:mm"))
+                        .format("x"),
                     insulinType: this.editedItem.type === "Rapid" ? 0 : 1,
                     insulinAmount: parseInt(this.editedItem.amount),
                 };

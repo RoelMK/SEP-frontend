@@ -492,8 +492,8 @@ export default {
                     .toString();
                 let parameters = {
                     timestamp: moment(
-                        moment(date + " " + time).format("MM-DD-YYYY HH:mm")
-                    ).format("x"),
+                        moment(date + " " + time, "MM/DD/YYYY HH:mm"))
+                        .format("x"),
                     arousal: this.editedItem.excitement,
                     valence: this.editedItem.happiness,
                 };
