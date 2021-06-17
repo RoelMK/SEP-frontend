@@ -107,11 +107,10 @@
 
 <script>
 import moment from "moment";
-import { emotionMixin } from "@/helpers/emotionMixin.js";
+import Emotion from "@/repositories/Emotion.js";
 
 export default {
     name: "EmotionComponent",
-    mixins: [emotionMixin],
     data() {
         return {
             selectedButtonHappiness: "",
@@ -124,7 +123,7 @@ export default {
         };
     },
     methods: {
-        checkEmotionInput() {
+        async checkEmotionInput() {
             if (
                 this.parameters.arousal === 0 ||
                 this.parameters.valance === 0
@@ -135,7 +134,23 @@ export default {
                     btnColor: "pink",
                 });
             } else {
-                this.postEmotion(this.parameters);
+                let emotion = await Emotion.post(
+                    this.parameters,
+                    this.$cookies.get("JWT")
+                ).then(
+                    (resp) => {
+                        this.$toaster.showMessage({
+                            message: "Upload is successful",
+                            color: "dark",
+                            btnColor: "pink",
+                        });
+                        return resp.data;
+                    },
+                    (error) => {
+                        console.log(error);
+                    }
+                );
+                this.$store.commit("ADD_EMOTION", emotion);
             }
         },
     },

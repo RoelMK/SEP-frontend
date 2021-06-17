@@ -12,12 +12,11 @@
                     >
                         <OverviewChart
                             ref="overview"
-                            :itemTimeFrame="chosenItemTimeFrame"
                         />
                     </v-card>
                 </div>
                 <div class="rightColumn">
-                    <v-card elevation="2" height="100%">
+                    <v-card elevation="2" height="52rem">
                         <v-card elevation="0">
                             <v-tabs v-model="tab">
                                 <v-tab v-for="item in items" :key="item">
@@ -27,32 +26,21 @@
                             <v-tabs-items v-model="tab">
                                 <v-tab-item>
                                     <TableInsulinData
-                                        @selectedInsulin="
-                                            getSelectedFoodInsulinEmotion
-                                        "
                                     />
                                 </v-tab-item>
                                 <v-tab-item>
                                     <TableFoodData
-                                        @selectedFood="
-                                            getSelectedFoodInsulinEmotion
-                                        "
                                     />
                                 </v-tab-item>
                                 <v-tab-item>
                                     <TableActivitiesData
-                                        @selectedActivity="getSelectedActivity"
                                     />
                                 </v-tab-item>
                                 <v-tab-item>
                                     <EmotionTable
-                                        @selectedEmotion="
-                                            getSelectedFoodInsulinEmotion
-                                        "
                                     />
                                 </v-tab-item>
                             </v-tabs-items>
-                            <p>{{ chosenItemTimeFrame }}</p>
                         </v-card>
                     </v-card>
                 </div>
@@ -76,8 +64,8 @@ import TableFoodData from "@/components/TableFoodData.vue";
 import TableActivitiesData from "@/components/TableActivitiesData.vue";
 import TableInsulinData from "@/components/TableInsulinData.vue";
 import EmotionTable from "@/components/EmotionTable.vue";
-import moment from 'moment';
 import { mapState } from "vuex";
+import moment from 'moment';
 
 export default {
     name: "History",
@@ -97,7 +85,6 @@ export default {
         return {
             tab: null,
             items: ["insulin", "food", "activities", "emotions"],
-            chosenItemTimeFrame: null,
         };
     },
     created() {
@@ -106,24 +93,7 @@ export default {
     },
     methods: {
         getSelectedFoodInsulinEmotion(item) {
-            let startTime = moment(item.time, "HH:mm")
-                .subtract(2, "hours")
-                .format("HH:mm");
-            let endTime = moment(item.time, "HH:mm")
-                .add(2, "hours")
-                .format("HH:mm");
-            let start = moment(
-                moment(item.date + " " + startTime).format("MM-DD-YYYY HH:mm")
-            ).format("YYYY-MM-DDTHH:mm");
-            let end = moment(
-                moment(item.date + " " + endTime).format("MM-DD-YYYY HH:mm")
-            ).format("YYYY-MM-DDTHH:mm");
-
-            this.chosenItemTimeFrame = {
-                start,
-                end,
-                now: moment(),
-            };
+            console.log(item);
         },
         getSelectedActivity(activity) {
             let start = moment(
@@ -169,13 +139,13 @@ export default {
 }
 .leftColumn {
     float: left;
-    width: 56%;
+    width: 52%;
     margin-right: 1%;
     margin-top: 1%;
 }
 .rightColumn {
     float: left;
-    width: 42%;
+    width: 46%;
     margin-left: 1%;
     margin-top: 1%;
 }

@@ -1,11 +1,11 @@
-import Emotion from "@/repositories/Emotion.js";
-export const emotionMixin = {
+import Delete from "@/repositories/Delete.js";
+export const deleteMixin = {
     methods: {
-        async postEmotion(parameters) {
-            Emotion.post(parameters, this.$cookies.get("JWT")).then(
+        async deleteItem(parameters) {
+            Delete.post(parameters, this.$cookies.get("JWT")).then(
                 () => {
                     this.$toaster.showMessage({
-                        message: "Upload is successful",
+                        message: "Delete is successful",
                         color: "dark",
                         btnColor: "pink",
                     });

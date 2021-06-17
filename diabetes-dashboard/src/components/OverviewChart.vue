@@ -3,16 +3,16 @@
 </template>
 
 <script>
-import grid from '@/components/configurations/grid.js';
-import xAxis from '@/components/configurations/xAxis.js';
-import yAxis from '@/components/configurations/yAxis.js';
-import visualMap from '@/components/configurations/visualMap.js';
-import legend from '@/components/configurations/legend.js';
-import { mapState } from 'vuex';
-import moment from 'moment';
+import grid from "@/components/configurations/grid.js";
+import xAxis from "@/components/configurations/xAxis.js";
+import yAxis from "@/components/configurations/yAxis.js";
+import visualMap from "@/components/configurations/visualMap.js";
+import legend from "@/components/configurations/legend.js";
+import { mapState } from "vuex";
+import moment from "moment";
 
 export default {
-    name: 'overviewChart',
+    name: "overviewChart",
     watch: {
         filteredData: function(newValue, oldValue) {
             if (newValue !== oldValue) {
@@ -23,21 +23,19 @@ export default {
                 this.$refs.overview.setOption(this.options(this.data));
             }
         },
-        itemTimeFrame: {
-            deep: true,
-            handler(newTimeFrame) {
-                if (newTimeFrame !== null) {
-                    for (var i = 0; i <= 4; i++) {
-                        this.options.xAxis[i]["min"] = newTimeFrame.start;
-                        this.options.xAxis[i]["max"] = newTimeFrame.end;
-                    }
-                    this.$refs.overview.setOption(this.options);
+        newTimeFrame: function (value) {
+            if (value !== null) {
+                var newOptions = this.$refs.overview.getOption();
+                for (var i = 0; i <= grid.length - 1; i++) {
+                    newOptions.xAxis[i]["min"] = value.start;
+                    newOptions.xAxis[i]["max"] = value.end;
                 }
-            },
+                this.$refs.overview.setOption(newOptions);
+            }
         },
     },
     computed: {
-        ...mapState(['filteredData', 'data']),
+        ...mapState(["filteredData", "data", "newTimeFrame"]),
     },
     data() {
         return {
@@ -45,13 +43,13 @@ export default {
                 Valence: {
                     1: '<i class="fas fa-angry"></i>',
                     2: '<i class="fas fa-smile-beam"></i>',
-                    3: '<i class="fas fa-laugh-beam"></i>'
+                    3: '<i class="fas fa-laugh-beam"></i>',
                 },
                 Arousal: {
                     1: '<i class="fas fa-tired"></i>',
                     2: '<i class="fas fa-smile-beam"></i>',
-                    3: '<i class="fas fa-grin-stars"></i>'
-                }
+                    3: '<i class="fas fa-grin-stars"></i>',
+                },
             },
         };
     },
@@ -103,10 +101,12 @@ export default {
                 ${params[0].axisValueLabel}</span>`;
             for (let param of params) {
                 var name = param.seriesName;
-                var value = (param.value.length > 2) ?
-                    param.value[2] : param.value[1];
-                var color = (typeof param.borderColor === 'undefined') ?
-                    param.color : param.borderColor;
+                var value =
+                    param.value.length > 2 ? param.value[2] : param.value[1];
+                var color =
+                    typeof param.borderColor === "undefined"
+                        ? param.color
+                        : param.borderColor;
                 var marker = param.marker.replace(/#.{3,};/i, `${color};`);
                 var axisValue = param.axisValue;
                 if (value !== null) {
@@ -135,16 +135,14 @@ export default {
          * @return
          */
         renderInterval(params, api) {
-            var start = api.coord(
-                [api.value(0), api.value(1)]
-            );
+            var start = api.coord([api.value(0), api.value(1)]);
             var endDate = moment(api.value(0))
                 .add(api.value(2))
                 .format("YYYY-MM-DDTHH:MM");
             var end = api.coord([endDate, api.value(1)]);
 
             return {
-                type: 'group',
+                type: "group",
                 children: [
                     {
                         type: "line",
@@ -155,7 +153,7 @@ export default {
                             y2: end[1],
                         },
                         style: {
-                            stroke: api.visual('color'),
+                            stroke: api.visual("color"),
                             lineWidth: 2,
                         },
                     },
@@ -175,9 +173,9 @@ export default {
                             cy: end[1],
                             r: 2,
                         },
-                        style: api.visual()
-                    }
-                ]
+                        style: api.visual(),
+                    },
+                ],
             };
         },
         alignGluconeData(glucose, ...data) {

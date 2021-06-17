@@ -81,30 +81,30 @@
             </template>
 
             <template v-slot:item="{ item }">
-                <tr @click="selectEmotion(item)">
-                    <td width="10%">
+                <tr>
+                    <td width="10%" @click="selectEmotion(item)">
                         <v-icon size="25" color="blue darken-1">
                             {{ displayHappiness(item.happiness) }}
                         </v-icon>
                     </td>
-                    <td width="10%">
+                    <td width="10%" @click="selectEmotion(item)">
                         <v-icon size="25" color="blue darken-1">
                             {{ displayExcitement(item.excitement) }}
                         </v-icon>
                     </td>
-                    <td width="10%">
+                    <td width="10%" @click="selectEmotion(item)">
                         {{ item.date }}
                     </td>
-                    <td width="10%">
+                    <td width="10%" @click="selectEmotion(item)">
                         {{ item.time }}
                     </td>
                     <td width="10%">
                         <v-icon small @click="editItem(item)">
                             mdi-pencil
                         </v-icon>
-                        <!-- <v-icon small @click="deleteItem(item.id)">
+                        <v-icon small @click="showDeleteDialog(item)">
                             mdi-minus
-                        </v-icon> -->
+                        </v-icon>
                     </td>
                 </tr>
             </template>
@@ -238,7 +238,7 @@
                     </v-card>
                 </v-dialog>
 
-                <!-- <v-dialog v-model="dialogDelete" max-width="500px">
+                <v-dialog v-model="dialogDelete" max-width="500px">
                     <v-card>
                         <v-card-title class="headline">
                             <p style="font-size: 18px">
@@ -265,7 +265,7 @@
                             <v-spacer></v-spacer>
                         </v-card-actions>
                     </v-card>
-                </v-dialog> -->
+                </v-dialog>
             </template>
         </v-data-table>
     </div>
@@ -273,19 +273,31 @@
 
 <script>
 import moment from "moment";
-import { emotionMixin } from "@/helpers/emotionMixin.js";
+import Emotion from "@/repositories/Emotion.js";
+import { deleteMixin } from "@/helpers/deleteMixin.js";
 import HistoryDatePicker from "@/components/HistoryDatePicker.vue";
 import HistoryTimePicker from "@/components/HistoryTimePicker.vue";
+import { mapState } from "vuex";
 
 export default {
     name: "EmotionTable",
-    mixins: [emotionMixin],
+    mixins: [deleteMixin],
     components: {
         HistoryDatePicker,
         HistoryTimePicker,
     },
+    watch: {
+        filteredData: function (value) {
+            if (value.length > 0) {
+                this.emotions = this.convertEmotions(value.mood);
+            } else {
+                this.emotions = this.convertEmotions(this.data.mood);
+            }
+        },
+    },
     data() {
         return {
+            emotions: [],
             items: ["<=", ">=", "="],
             emotionValues: ["", 1, 2, 3],
             dateMenu: false,
@@ -367,7 +379,7 @@ export default {
             date: "",
             time: "",
             dialog: false,
-            //dialogDelete: false,
+            dialogDelete: false,
             editing: false,
             editedItem: {
                 happiness: 0,
@@ -387,109 +399,27 @@ export default {
             dateFilter: "",
             happinessFilter: "",
             excitementFilter: "",
-
-            emotions: [
-                {
-                    happiness: 2,
-                    excitement: 2,
-                    time: "12:00",
-                    date: moment("2027-04-10").format("L"),
-                    id: 0,
-                },
-                {
-                    happiness: 3,
-                    excitement: 3,
-                    time: "17:00",
-                    date: moment("2027-04-10").format("L"),
-                    id: 1,
-                },
-                {
-                    happiness: 1,
-                    excitement: 1,
-                    date: "07/07/2017",
-                    time: "16:00",
-                    id: 2,
-                },
-                {
-                    happiness: 1,
-                    excitement: 2,
-                    date: "07/07/2018",
-                    time: "18:00",
-                    id: 3,
-                },
-                {
-                    happiness: 1,
-                    excitement: 3,
-                    date: "08/22/2020",
-                    time: "18:00",
-                    id: 4,
-                },
-                {
-                    happiness: 2,
-                    excitement: 1,
-                    date: "06/12/2019",
-                    time: "16:00",
-                    id: 5,
-                },
-                {
-                    happiness: 1,
-                    excitement: 1,
-                    date: "07/07/2014",
-                    time: "18:00",
-                    id: 6,
-                },
-                {
-                    happiness: 1,
-                    excitement: 2,
-                    date: "07/07/2015",
-                    time: "18:00",
-                    id: 7,
-                },
-                {
-                    happiness: 2,
-                    excitement: 1,
-                    date: "07/07/2019",
-                    time: "16:00",
-                    id: 8,
-                },
-                {
-                    happiness: 2,
-                    excitement: 1,
-                    date: "06/07/2020",
-                    time: "18:00",
-                    id: 9,
-                },
-                {
-                    happiness: 2,
-                    excitement: 2,
-                    date: "06/06/2020",
-                    time: "18:00",
-                    id: 10,
-                },
-            ],
         };
     },
     // state getters you need to use
     computed: {
+        ...mapState(["filteredData", "data"]),
         formTitle() {
             return this.editing === false
                 ? "New Emotion Input"
                 : "Edit Emotion Input";
         },
-        convertDate() {
-            if (this.editedItem.date)
-                return moment(this.editedItem.date).format("DD/MM/YYYY");
-            else return "Select Date";
-        },
-        convertTime() {
-            if (this.editedItem.time) {
-                return moment
-                    .utc(this.editedItem.time, "HH:mm")
-                    .format("HH:mm");
-            } else return "Select Time";
-        },
     },
     methods: {
+        convertEmotions(data) {
+            return data.map((f) => ({
+                happiness: f.valence,
+                excitement: f.arousal,
+                date: moment(new Date(f.timestamp)).format("L").toString(),
+                time: moment(new Date(f.timestamp)).format("HH:mm").toString(),
+                id: f.activityId,
+            }));
+        },
         getSelectedDate(date) {
             this.editedItem.date = date;
         },
@@ -497,7 +427,25 @@ export default {
             this.editedItem.time = time;
         },
         selectEmotion(emotion) {
-            this.$emit("selectedEmotion", emotion);
+            let startTime = moment(emotion.time, "HH:mm")
+                .subtract(2, "hours")
+                .format("HH:mm");
+            let endTime = moment(emotion.time, "HH:mm")
+                .add(2, "hours")
+                .format("HH:mm");
+            let start = moment(
+                moment(emotion.date + " " + startTime).format(
+                    "MM-DD-YYYY HH:mm"
+                )
+            ).format("YYYY-MM-DDTHH:mm");
+            let end = moment(
+                moment(emotion.date + " " + endTime).format("MM-DD-YYYY HH:mm")
+            ).format("YYYY-MM-DDTHH:mm");
+            this.$store.dispatch("setNewTimeFrame", {
+                start,
+                end,
+                now: moment(),
+            });
         },
         displayHappiness(happiness) {
             if (happiness === 1) {
@@ -521,7 +469,7 @@ export default {
                 return "";
             }
         },
-        checkEmotionInput(editing) {
+        async checkEmotionInput(editing) {
             // no need to check id here
             if (
                 this.editedItem.happiness === 0 ||
@@ -552,14 +500,49 @@ export default {
 
                 if (editing) {
                     parameters["activityId"] = this.editedItem.id;
-                    parameters["modify"] = true;
+
+                    let emotion = await Emotion.post(
+                        parameters,
+                        this.$cookies.get("JWT")
+                    ).then(
+                        (resp) => {
+                            this.$toaster.showMessage({
+                                message: "Upload is successful",
+                                color: "dark",
+                                btnColor: "pink",
+                            });
+                            return resp.data;
+                        },
+                        (error) => {
+                            console.log(error);
+                        }
+                    );
+                    this.$store.commit("UPDATE_EMOTION", emotion);
+                    this.updateEmotionTable();
+                } else {
+                    let emotion = await Emotion.post(
+                        parameters,
+                        this.$cookies.get("JWT")
+                    ).then(
+                        (resp) => {
+                            this.$toaster.showMessage({
+                                message: "Upload is successful",
+                                color: "dark",
+                                btnColor: "pink",
+                            });
+                            return resp.data;
+                        },
+                        (error) => {
+                            console.log(error);
+                        }
+                    );
+                    this.$store.commit("ADD_EMOTION", emotion);
+                    this.updateEmotionTable();
                 }
-                this.postEmotion(parameters);
             }
         },
         editItem(item) {
             this.editedItem = Object.assign({}, item);
-            //this.editedItem.originalId = item.id;
             this.dialog = true;
             this.editing = true;
         },
@@ -575,19 +558,33 @@ export default {
             this.checkEmotionInput(this.editing);
             this.close();
         },
-        // deleteItem(id) {
-        //     //this.editedItem.originalId = id;
-        //     this.dialogDelete = true;
-        // },
-        // deleteItemConfirm() {
-        //     this.closeDelete();
-        // },
-        // closeDelete() {
-        //     this.dialogDelete = false;
-        //     this.$nextTick(() => {
-        //         this.editedItem = Object.assign({}, this.defaultItem);
-        //     });
-        // },
+        showDeleteDialog(item) {
+            this.editedItem = Object.assign({}, item);
+            this.dialogDelete = true;
+        },
+        deleteItemConfirm() {
+            let parameters = { activityId: this.editedItem.id };
+            this.deleteItem(parameters);
+            this.closeDelete();
+            this.$store.commit("DELETE_EMOTION", parameters.activityId);
+            this.updateEmotionTable();
+        },
+        closeDelete() {
+            this.dialogDelete = false;
+            this.$nextTick(() => {
+                this.editedItem = Object.assign({}, this.defaultItem);
+            });
+        },
+        updateEmotionTable() {
+            if (this.filteredData > 0) {
+                this.emotions = this.convertEmotions(this.filteredData.mood);
+            } else {
+                this.emotions = this.convertEmotions(this.data.mood);
+            }
+        },
+    },
+    created() {
+        this.updateEmotionTable();
     },
 };
 </script>
@@ -603,8 +600,14 @@ export default {
 .mdi-plus {
     border-radius: 50%;
     padding: 0.2rem;
-    margin-left: 12px;
     background: rgba(0, 0, 0, 0.15);
+    margin-left: 27px;
+}
+.mdi-minus {
+    border-radius: 50%;
+    padding: 0.2rem;
+    background: rgba(0, 0, 0, 0.15);
+    margin-left: 15px;
 }
 .mdi-pencil {
     border-radius: 50%;
@@ -616,6 +619,6 @@ export default {
     margin-left: 15px;
 }
 .selector {
-    width: 18rem;
+    width: 20rem;
 }
 </style>
