@@ -386,7 +386,6 @@ export default {
                 };
                 if (editing) {
                     parameters["activityId"] = this.editedItem.id;
-                    parameters["modify"] = true;
                 }
                 this.postInsulin(parameters);
             }

@@ -482,7 +482,6 @@ export default {
                 // it seems like it does not matter if I pass these or not
                 if (editing) {
                     parameters["activityId"] = this.editedItem.id;
-                    parameters["modify"] = true;
                 }
                 this.postEmotion(parameters);
             }
