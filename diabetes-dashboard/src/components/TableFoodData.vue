@@ -218,7 +218,7 @@ export default {
                     name: "Frozen Yoghurt",
                     type: "Dessert",
                     time: "16:00",
-                    date: moment("2027-04-10").format("L"),
+                    date: moment("06/15/2021").format("L"),
                     carbs: 24,
                     calories: 4,
                     glycemicIndex: 1,
@@ -227,7 +227,7 @@ export default {
                     name: "Ice cream sandwich",
                     type: "Dessert",
                     time: "12:00",
-                    date: moment("2027-04-10").format("L"),
+                    date: moment("06/15/2021").format("L"),
                     carbs: 24,
                     calories: 4,
                     glycemicIndex: 1,
@@ -236,7 +236,7 @@ export default {
                     name: "Eclair",
                     type: "Dessert",
                     time: "19:00",
-                    date: moment("2027-04-10").format("L"),
+                    date: moment("06/15/2021").format("L"),
                     carbs: 24,
                     calories: 4,
                     glycemicIndex: 1,
@@ -375,7 +375,25 @@ export default {
     computed: {},
     methods: {
         selectFood(food) {
-            this.$emit("selectedFood", food);
+            let startTime = moment(food.time, "HH:mm")
+                .subtract(2, "hours")
+                .format("HH:mm");
+            let endTime = moment(food.time, "HH:mm")
+                .add(2, "hours")
+                .format("HH:mm");
+            let start = moment(
+                moment(food.date + " " + startTime).format(
+                    "MM-DD-YYYY HH:mm"
+                )
+            ).format("YYYY-MM-DDTHH:mm");
+            let end = moment(
+                moment(food.date + " " + endTime).format("MM-DD-YYYY HH:mm")
+            ).format("YYYY-MM-DDTHH:mm");
+            this.$store.dispatch("setNewTimeFrame", {
+                start,
+                end,
+                now: moment(),
+            });
         },
     },
 };

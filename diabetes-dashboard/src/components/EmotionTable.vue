@@ -81,30 +81,30 @@
             </template>
 
             <template v-slot:item="{ item }">
-                <tr @click="selectEmotion(item)">
-                    <td width="10%">
+                <tr>
+                    <td width="10%" @click="selectEmotion(item)">
                         <v-icon size="25" color="blue darken-1">
                             {{ displayHappiness(item.happiness) }}
                         </v-icon>
                     </td>
-                    <td width="10%">
+                    <td width="10%" @click="selectEmotion(item)">
                         <v-icon size="25" color="blue darken-1">
                             {{ displayExcitement(item.excitement) }}
                         </v-icon>
                     </td>
-                    <td width="10%">
+                    <td width="10%" @click="selectEmotion(item)">
                         {{ item.date }}
                     </td>
-                    <td width="10%">
+                    <td width="10%" @click="selectEmotion(item)">
                         {{ item.time }}
                     </td>
                     <td width="10%">
                         <v-icon small @click="editItem(item)">
                             mdi-pencil
                         </v-icon>
-                        <!-- <v-icon small @click="deleteItem(item.id)">
+                        <v-icon small @click="showDeleteDialog(item)">
                             mdi-minus
-                        </v-icon> -->
+                        </v-icon>
                     </td>
                 </tr>
             </template>
@@ -238,7 +238,7 @@
                     </v-card>
                 </v-dialog>
 
-                <!-- <v-dialog v-model="dialogDelete" max-width="500px">
+                <v-dialog v-model="dialogDelete" max-width="500px">
                     <v-card>
                         <v-card-title class="headline">
                             <p style="font-size: 18px">
@@ -265,7 +265,7 @@
                             <v-spacer></v-spacer>
                         </v-card-actions>
                     </v-card>
-                </v-dialog> -->
+                </v-dialog>
             </template>
         </v-data-table>
     </div>
@@ -274,12 +274,13 @@
 <script>
 import moment from "moment";
 import { emotionMixin } from "@/helpers/emotionMixin.js";
+import { deleteMixin } from "@/helpers/deleteMixin.js";
 import HistoryDatePicker from "@/components/HistoryDatePicker.vue";
 import HistoryTimePicker from "@/components/HistoryTimePicker.vue";
 
 export default {
     name: "EmotionTable",
-    mixins: [emotionMixin],
+    mixins: [emotionMixin, deleteMixin],
     components: {
         HistoryDatePicker,
         HistoryTimePicker,
@@ -367,7 +368,7 @@ export default {
             date: "",
             time: "",
             dialog: false,
-            //dialogDelete: false,
+            dialogDelete: false,
             editing: false,
             editedItem: {
                 happiness: 0,
@@ -394,13 +395,13 @@ export default {
                     excitement: 2,
                     time: "12:00",
                     date: moment("2027-04-10").format("L"),
-                    id: 0,
+                    id: 11,
                 },
                 {
                     happiness: 3,
                     excitement: 3,
                     time: "17:00",
-                    date: moment("2027-04-10").format("L"),
+                    date: moment("06/15/2021").format("L"),
                     id: 1,
                 },
                 {
@@ -497,7 +498,25 @@ export default {
             this.editedItem.time = time;
         },
         selectEmotion(emotion) {
-            this.$emit("selectedEmotion", emotion);
+            let startTime = moment(emotion.time, "HH:mm")
+                .subtract(2, "hours")
+                .format("HH:mm");
+            let endTime = moment(emotion.time, "HH:mm")
+                .add(2, "hours")
+                .format("HH:mm");
+            let start = moment(
+                moment(emotion.date + " " + startTime).format(
+                    "MM-DD-YYYY HH:mm"
+                )
+            ).format("YYYY-MM-DDTHH:mm");
+            let end = moment(
+                moment(emotion.date + " " + endTime).format("MM-DD-YYYY HH:mm")
+            ).format("YYYY-MM-DDTHH:mm");
+            this.$store.dispatch("setNewTimeFrame", {
+                start,
+                end,
+                now: moment(),
+            });
         },
         displayHappiness(happiness) {
             if (happiness === 1) {
@@ -559,7 +578,6 @@ export default {
         },
         editItem(item) {
             this.editedItem = Object.assign({}, item);
-            //this.editedItem.originalId = item.id;
             this.dialog = true;
             this.editing = true;
         },
@@ -575,19 +593,20 @@ export default {
             this.checkEmotionInput(this.editing);
             this.close();
         },
-        // deleteItem(id) {
-        //     //this.editedItem.originalId = id;
-        //     this.dialogDelete = true;
-        // },
-        // deleteItemConfirm() {
-        //     this.closeDelete();
-        // },
-        // closeDelete() {
-        //     this.dialogDelete = false;
-        //     this.$nextTick(() => {
-        //         this.editedItem = Object.assign({}, this.defaultItem);
-        //     });
-        // },
+        showDeleteDialog(item) {
+            this.editedItem = Object.assign({}, item);
+            this.dialogDelete = true;
+        },
+        deleteItemConfirm() {
+            this.deleteItem( {activityId: this.editedItem.id,} );
+            this.closeDelete();
+        },
+        closeDelete() {
+            this.dialogDelete = false;
+            this.$nextTick(() => {
+                this.editedItem = Object.assign({}, this.defaultItem);
+            });
+        },
     },
 };
 </script>
@@ -603,8 +622,14 @@ export default {
 .mdi-plus {
     border-radius: 50%;
     padding: 0.2rem;
-    margin-left: 12px;
     background: rgba(0, 0, 0, 0.15);
+    margin-left: 27px;
+}
+.mdi-minus {
+    border-radius: 50%;
+    padding: 0.2rem;
+    background: rgba(0, 0, 0, 0.15);
+    margin-left:15px;
 }
 .mdi-pencil {
     border-radius: 50%;

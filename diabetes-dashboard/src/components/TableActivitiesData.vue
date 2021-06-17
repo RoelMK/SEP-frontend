@@ -270,8 +270,8 @@ export default {
                 {
                     name: "Run",
                     type: "Physical",
-                    startDate: moment("2027-04-10").format("L"),
-                    endDate: moment("2027-04-10").format("L"),
+                    startDate: moment("06/15/2021").format("L"),
+                    endDate: moment("06/15/2021").format("L"),
                     startTime: moment("08:15", "HH:mm").format("HH:mm"),
                     endTime: moment("18:10", "HH:mm").format("HH:mm"),
                     calories: 159,
@@ -279,8 +279,8 @@ export default {
                 {
                     name: "Walk",
                     type: "Physical",
-                    startDate: moment("2027-04-10").format("L"),
-                    endDate: moment("2027-04-10").format("L"),
+                    startDate: moment("06/15/2021").format("L"),
+                    endDate: moment("06/15/2021").format("L"),
                     startTime: moment("12:15", "HH:mm").format("HH:mm"),
                     endTime: moment("16:10", "HH:mm").format("HH:mm"),
                     //duration: 50,
@@ -461,7 +461,21 @@ export default {
     computed: {},
     methods: {
         selectActivity(activity) {
-            this.$emit("selectedActivity", activity);
+            let start = moment(
+                moment(activity.startDate + " " + activity.startTime).format(
+                    "MM-DD-YYYY HH:mm"
+                )
+            ).format("YYYY-MM-DDTHH:mm");
+            let end = moment(
+                moment(activity.endDate + " " + activity.endTime).format(
+                    "MM-DD-YYYY HH:mm"
+                )
+            ).format("YYYY-MM-DDTHH:mm");
+            this.$store.dispatch("setNewTimeFrame", {
+                start,
+                end,
+                now: moment(),
+            });
         },
     },
 };

@@ -12,7 +12,6 @@
                     >
                         <OverviewChart
                             ref="overview"
-                            :itemTimeFrame="chosenItemTimeFrame"
                         />
                     </v-card>
                 </div>
@@ -27,32 +26,21 @@
                             <v-tabs-items v-model="tab">
                                 <v-tab-item>
                                     <TableInsulinData
-                                        @selectedInsulin="
-                                            getSelectedFoodInsulinEmotion
-                                        "
                                     />
                                 </v-tab-item>
                                 <v-tab-item>
                                     <TableFoodData
-                                        @selectedFood="
-                                            getSelectedFoodInsulinEmotion
-                                        "
                                     />
                                 </v-tab-item>
                                 <v-tab-item>
                                     <TableActivitiesData
-                                        @selectedActivity="getSelectedActivity"
                                     />
                                 </v-tab-item>
                                 <v-tab-item>
                                     <EmotionTable
-                                        @selectedEmotion="
-                                            getSelectedFoodInsulinEmotion
-                                        "
                                     />
                                 </v-tab-item>
                             </v-tabs-items>
-                            <p>{{ chosenItemTimeFrame }}</p>
                         </v-card>
                     </v-card>
                 </div>
@@ -76,7 +64,6 @@ import TableFoodData from "@/components/TableFoodData.vue";
 import TableActivitiesData from "@/components/TableActivitiesData.vue";
 import TableInsulinData from "@/components/TableInsulinData.vue";
 import EmotionTable from "@/components/EmotionTable.vue";
-import moment from 'moment';
 import { mapState } from "vuex";
 
 export default {
@@ -97,52 +84,11 @@ export default {
         return {
             tab: null,
             items: ["insulin", "food", "activities", "emotions"],
-            chosenItemTimeFrame: null,
         };
     },
     created() {
         if (this.data.length <= 0)
             this.$router.push("/");
-    },
-    methods: {
-        getSelectedFoodInsulinEmotion(item) {
-            let startTime = moment(item.time, "HH:mm")
-                .subtract(2, "hours")
-                .format("HH:mm");
-            let endTime = moment(item.time, "HH:mm")
-                .add(2, "hours")
-                .format("HH:mm");
-            let start = moment(
-                moment(item.date + " " + startTime).format("MM-DD-YYYY HH:mm")
-            ).format("YYYY-MM-DDTHH:mm");
-            let end = moment(
-                moment(item.date + " " + endTime).format("MM-DD-YYYY HH:mm")
-            ).format("YYYY-MM-DDTHH:mm");
-
-            this.chosenItemTimeFrame = {
-                start,
-                end,
-                now: moment(),
-            };
-        },
-        getSelectedActivity(activity) {
-            let start = moment(
-                moment(activity.startDate + " " + activity.startTime).format(
-                    "MM-DD-YYYY HH:mm"
-                )
-            ).format("YYYY-MM-DDTHH:mm");
-            let end = moment(
-                moment(activity.endDate + " " + activity.endTime).format(
-                    "MM-DD-YYYY HH:mm"
-                )
-            ).format("YYYY-MM-DDTHH:mm");
-
-            this.chosenItemTimeFrame = {
-                start,
-                end,
-                now: moment(),
-            };
-        },
     },
 };
 </script>

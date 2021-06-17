@@ -39,7 +39,6 @@
             :headers="headers"
             :items="insulinData"
             elevation="0"
-            @click:row="selectInsulin"
         >
             <template v-slot:[`body.prepend`]>
                 <tr>
@@ -70,6 +69,32 @@
                     </td>
                 </tr>
             </template>
+
+            <template v-slot:item="{ item }">
+                <tr>
+                    <td width="10%" @click="selectInsulin(item)">
+                        {{ item.amount }}
+                    </td>
+                    <td width="10%" @click="selectInsulin(item)">
+                        {{ item.type }}
+                    </td>
+                    <td width="10%" @click="selectInsulin(item)">
+                        {{ item.date }}
+                    </td>
+                    <td width="10%" @click="selectInsulin(item)">
+                        {{ item.time }}
+                    </td>
+                    <td width="10%">
+                        <v-icon small @click="editItem(item)">
+                            mdi-pencil
+                        </v-icon>
+                        <v-icon small @click="showDeleteDialog(item)">
+                            mdi-minus
+                        </v-icon>
+                    </td>
+                </tr>
+            </template>
+
             <template v-slot:top>
                 <v-dialog v-model="dialog" max-width="500px">
                     <v-card>
@@ -120,7 +145,7 @@
                     </v-card>
                 </v-dialog>
 
-                <!-- <v-dialog v-model="dialogDelete" max-width="500px">
+                <v-dialog v-model="dialogDelete" max-width="500px">
                     <v-card>
                         <v-card-title class="headline">
                             <p style="font-size: 18px">
@@ -147,12 +172,7 @@
                             <v-spacer></v-spacer>
                         </v-card-actions>
                     </v-card>
-                </v-dialog> -->
-            </template>
-
-            <template v-slot:[`item.actions`]="{ item }">
-                <v-icon small @click="editItem(item)"> mdi-pencil </v-icon>
-                <!-- <v-icon small @click="deleteItem(item.id)"> mdi-minus </v-icon> -->
+                </v-dialog>
             </template>
         </v-data-table>
     </div>
@@ -163,9 +183,11 @@ import moment from "moment";
 import HistoryDatePicker from "@/components/HistoryDatePicker.vue";
 import HistoryTimePicker from "@/components/HistoryTimePicker.vue";
 import Insulin from "@/repositories/Insulin.js";
+import { deleteMixin } from "@/helpers/deleteMixin.js";
 
 export default {
     name: "TableInsulinData",
+    mixins: [deleteMixin],
     components: {
         HistoryDatePicker,
         HistoryTimePicker,
@@ -256,7 +278,7 @@ export default {
             ],
             editing: false,
             dialog: false,
-            //dialogDelete: false,
+            dialogDelete: false,
             editedItem: {
                 amount: 0,
                 type: "",
@@ -271,10 +293,10 @@ export default {
                 time: "",
                 id: -1,
             },
-            types: ["Rapid", "Long"],
+            types: ["Rapid", "Slow"],
             timeFilter: "",
             dateFilter: "",
-            typeFilterItems: ["", "Rapid", "Long"],
+            typeFilterItems: ["", "Rapid", "Slow"],
             amountFilter: "",
             amount: "",
             typeFilter: "",
@@ -284,42 +306,42 @@ export default {
             insulinData: [
                 {
                     amount: 1,
-                    type: "Long",
+                    type: "Slow",
                     date: "04/10/2027",
                     time: "16:00",
-                    id: 0,
+                    id: 11,
                 },
                 {
                     amount: 1,
-                    type: "Long",
+                    type: "Slow",
                     date: "04/10/2027",
                     time: "12:00",
                     id: 1,
                 },
                 {
                     amount: 1,
-                    type: "Long",
+                    type: "Slow",
                     date: "04/10/2027",
                     time: "10:00",
                     id: 2,
                 },
                 {
                     amount: 1,
-                    type: "Long",
+                    type: "Slow",
                     date: "04/10/2027",
                     time: "19:00",
                     id: 3,
                 },
                 {
                     amount: 1,
-                    type: "Long",
+                    type: "Slow",
                     date: "05/30/2021",
                     time: "16:00",
                     id: 4,
                 },
                 {
                     amount: 1,
-                    type: "Long",
+                    type: "Slow",
                     date: "05/30/2021",
                     time: "16:00",
                     id: 5,
@@ -365,7 +387,25 @@ export default {
     },
     methods: {
         selectInsulin(insulin) {
-            this.$emit("selectedInsulin", insulin);
+            let startTime = moment(insulin.time, "HH:mm")
+                .subtract(2, "hours")
+                .format("HH:mm");
+            let endTime = moment(insulin.time, "HH:mm")
+                .add(2, "hours")
+                .format("HH:mm");
+            let start = moment(
+                moment(insulin.date + " " + startTime).format(
+                    "MM-DD-YYYY HH:mm"
+                )
+            ).format("YYYY-MM-DDTHH:mm");
+            let end = moment(
+                moment(insulin.date + " " + endTime).format("MM-DD-YYYY HH:mm")
+            ).format("YYYY-MM-DDTHH:mm");
+            this.$store.dispatch("setNewTimeFrame", {
+                start,
+                end,
+                now: moment(),
+            });
         },
 
         getSelectedDate(date) {
@@ -443,20 +483,20 @@ export default {
             this.checkInsulinInput(this.editing);
             this.close();
         },
-        // deleteItem(id) {
-        //     this.editedItem.originalId = id;
-        //     this.dialogDelete = true;
-        // },
-        // deleteItemConfirm() {
-        //     //TODO:
-        //     this.closeDelete();
-        // },
-        // closeDelete() {
-        //     this.dialogDelete = false;
-        //     this.$nextTick(() => {
-        //         this.editedItem = Object.assign({}, this.defaultItem);
-        //     });
-        // },
+        showDeleteDialog(item) {
+            this.editedItem = Object.assign({}, item);
+            this.dialogDelete = true;
+        },
+        deleteItemConfirm() {
+            this.deleteItem( {activityId: this.editedItem.id,} );
+            this.closeDelete();
+        },
+        closeDelete() {
+            this.dialogDelete = false;
+            this.$nextTick(() => {
+                this.editedItem = Object.assign({}, this.defaultItem);
+            });
+        },
     },
     // state getters you need to use
     computed: {
@@ -481,16 +521,23 @@ export default {
     width: 100%;
     overflow: auto;
 }
+.mdi-plus {
+    border-radius: 50%;
+    padding: 0.2rem;
+    background: rgba(0, 0, 0, 0.15);
+    margin-left: 27px;
+}
+.mdi-minus {
+    border-radius: 50%;
+    padding: 0.2rem;
+    background: rgba(0, 0, 0, 0.15);
+    margin-left:15px;
+}
 .mdi-pencil {
     border-radius: 50%;
     padding: 0.2rem;
     background: rgba(0, 0, 0, 0.15);
     margin-left: 15px;
-}
-.mdi-plus {
-    border-radius: 50%;
-    padding: 0.2rem;
-    background: rgba(0, 0, 0, 0.15);
 }
 .selector {
     width: 12.3rem;
