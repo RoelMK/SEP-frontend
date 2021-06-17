@@ -57,7 +57,7 @@
 
         <v-data-table
             :headers="headers"
-            :items="activities"
+            :items="exercises"
             elevation="0"
             @click:row="selectActivity"
             class="tableSection"
@@ -122,9 +122,9 @@ export default {
     watch: {
         filteredData: function (value) {
             if (value.length > 0) {
-                this.exercises = this.convertExercises(value.exercises);
+                this.exercises = this.convertExercises(value.exercise);
             } else {
-                this.exercises = this.convertExercises(this.data.exercises);
+                this.exercises = this.convertExercises(this.data.exercise);
             }
         },
     },
@@ -316,9 +316,9 @@ export default {
     created() {
         console.log(this.data);
         if (this.filteredData > 0) {
-            this.exercises = this.convertExercises(this.filteredData.exercises);
+            this.exercises = this.convertExercises(this.filteredData.exercise);
         } else {
-            this.exercises = this.convertExercises(this.data.exercises);
+            this.exercises = this.convertExercises(this.data.exercise);
         }
     },
 };
