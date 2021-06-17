@@ -67,10 +67,22 @@ const store = new Vuex.Store({
             state.toast.color = toast.color;
             state.toast.btnColor = toast.btnColor;
         },
+        FILTER(state, lessThan) {
+            console.log(state.data);
+            const clone = Object.create(state.data);
+            state.filteredData.insulin = clone.insulin.filter(
+                function(value) {
+                    return value.insulinAmount <= lessThan;
+                }
+            ).map(function(x) {
+                return x;
+            });
+        },
         SHOW_FILTER(state, filter) {
             state.filter.show = filter.show;
         },
         UPDATE_DATA(state, data) {
+            state.filteredData = data;
             state.data = data;
         },
         UPDATE_FILTERED_DATA(state, data) {
