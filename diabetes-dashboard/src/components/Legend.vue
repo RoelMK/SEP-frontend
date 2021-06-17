@@ -46,12 +46,12 @@ export default {
             chartInstance: getInstanceByDom(document
                 .getElementById('overview-chart-container')
                 .firstElementChild
-                .firstElementChild
             ),
         };
     },
     methods: {
         toggleLegendItem(type, key) {
+            if (typeof this.chartInstance === 'undefined') return;
             if (type !== null) {
                 this.chartInstance.dispatchAction({
                     type: type,

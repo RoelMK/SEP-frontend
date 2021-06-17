@@ -16,7 +16,9 @@ export default {
     watch: {
         filteredData: function(newValue, oldValue) {
             if (newValue !== oldValue) {
-                this.$refs.overview.setOption(this.options(newValue));
+                setTimeout(() => {
+                    this.$refs.overview.setOption(this.options(newValue));
+                }, 500);
             } else {
                 this.$refs.overview.setOption(this.options(this.data));
             }
@@ -84,7 +86,7 @@ export default {
          */
         createTooltipBody(marker, name, value) {
             return `
-                <div>
+                <div style="min-width: 135px">
                     ${marker}
                     <span>${name}</span>
                     <span class="float-right font-weight-bold">
@@ -193,25 +195,86 @@ export default {
             }
             return glucose;
         },
+        parseRangeString(str) {
+            return str.match(/\d+\.?\d+/gi).map(d => parseFloat(d));
+        },
         options(data) {
-            const glucoseArray = data['glucose'];
-            if (typeof glucoseArray !== 'undefined') {
-                const maxGlucoseTimestamp = glucoseArray[0].timestamp;
-                const minGlucoseTimestamp = glucoseArray[
-                    glucoseArray.length - 1
-                ].timestamp;
-                const mood = this.prepareData(data, 'mood', 'timestamp',
-                    'valence', 'arousal');
-                const insulin = this.prepareData(data, 'insulin', 'timestamp',
-                    'insulinAmount');
-                const carbs = this.prepareData(data, 'food', 'timestamp',
-                    'carbohydrates', 'carbohydrates', 'glycemic_index');
-                const exercise = this.prepareData(data, 'exercise',
-                    'timestamp', 'calories', 'duration');
-                var glucose = this.prepareData(data, 'glucose', 'timestamp',
-                    'glucoseLevel');
-                glucose = this.alignGluconeData(glucose,
-                    mood, insulin, carbs, exercise);
+            const arr = data['glucose'];
+            if (typeof arr !== 'undefined') {
+                const maxGlucoseTimestamp = arr[0].timestamp;
+                const minGlucoseTimestamp = arr[arr.length - 1].timestamp;
+                const mood = this.prepareData(
+                    data,
+                    'mood',
+                    'timestamp',
+                    'valence',
+                    'arousal'
+                ).map(d => [
+                    d[0],
+                    (d[1] + d[2]) / 2,
+                    { type: "Valence", value: d[1] },
+                    { type: "Arousal", value: d[2] }
+                ]);
+                const insulin = this.prepareData(
+                    data,
+                    'insulin',
+                    'timestamp',
+                    'insulinAmount'
+                );
+                const carbs = this.prepareData(
+                    data,
+                    'food',
+                    'timestamp',
+                    'carbohydrates',
+                    'glycemic_index'
+                ).map(i => {
+                    if (i[2] === null) i[2] = 200;
+                    return i;
+                });
+                const exercise = this.prepareData(
+                    data,
+                    'exercise',
+                    'timestamp',
+                    'calories',
+                    'duration'
+                ).map(d => [
+                    d[0],
+                    this.scaleValue(d[1], [1, 5], [0, 200]),
+                    d[1],
+                ]);
+                var glucose = this.prepareData(
+                    data,
+                    'glucose',
+                    'timestamp',
+                    'glucoseLevel'
+                );
+                glucose = this.alignGluconeData(
+                    glucose,
+                    mood,
+                    insulin,
+                    carbs,
+                    exercise
+                );
+
+                const ranges = (localStorage.getItem('normalRange') === null)
+                    ? null
+                    : {
+                        veryLowValue: this.parseRangeString(
+                            localStorage.getItem('veryLowValue')
+                        ),
+                        lowRange: this.parseRangeString(
+                            localStorage.getItem('lowRange')
+                        ),
+                        normalRange: this.parseRangeString(
+                            localStorage.getItem('normalRange')
+                        ),
+                        highRange: this.parseRangeString(
+                            localStorage.getItem('highRange')
+                        ),
+                        veryHighValue: this.parseRangeString(
+                            localStorage.getItem('veryHighValue')
+                        )
+                    };
                 return {
                     legend: {
                         show: false,
@@ -264,14 +327,19 @@ export default {
                             show: true,
                             showDetail: true,
                             minValueSpan: 300 * 1000,
+                            labelFormatter: function (value) {
+                                return moment(value).format('YY-MM-DD HH:mm');
+                            },
                             xAxisIndex: [0, 1, 2, 3, 4],
+                            left: '8%',
+                            right: '8%',
                             bottom: "4%",
                         }
                     ],
                     grid: grid,
                     xAxis: xAxis(minGlucoseTimestamp, maxGlucoseTimestamp),
                     yAxis: yAxis,
-                    visualMap: visualMap,
+                    visualMap: visualMap(ranges),
                     series: [
                         {
                             xAxisIndex: 0,
@@ -282,7 +350,6 @@ export default {
                             lineStyle: {
                                 width: 3,
                             },
-                            connectNulls: true,
                             areaStyle: {
                                 color: "#3F7CAC",
                                 opacity: 0.2,
@@ -305,22 +372,7 @@ export default {
                                 borderColor: legend.sections[1]
                                     .properties[0].color,
                             },
-                            data: mood.map(d => {
-                                if (d[1] === null || d[2] === null)
-                                    return [d[0], null];
-                                return [
-                                    d[0],
-                                    (d[1] + d[2]) / 2,
-                                    {
-                                        type: "Valence",
-                                        value: d[1],
-                                    },
-                                    {
-                                        type: "Arousal",
-                                        value: d[2],
-                                    },
-                                ];
-                            }),
+                            data: mood
                         },
                         {
                             xAxisIndex: 2,
@@ -329,9 +381,9 @@ export default {
                             itemStyle: {
                                 color: legend.sections[2].properties[0].color,
                             },
-                            barWidth: 3,
+                            barWidth: 5,
                             type: "bar",
-                            data: insulin,
+                            data: insulin
                         },
                         {
                             xAxisIndex: 3,
@@ -340,30 +392,19 @@ export default {
                             type: "bar",
                             barWidth: 5,
                             symbol: "none",
-                            data: carbs.map(i => {
-                                if (i[3] === null) i[3] = 200;
-                                return i;
-                            })
+                            data: carbs
                         },
                         {
                             xAxisIndex: 4,
                             yAxisIndex: 4,
-                            name: 'Exercises',
+                            name: 'Burnt Calories',
                             type: 'custom',
                             itemStyle: {
                                 color: legend.sections[4].properties[1].color,
                                 borderWidth: 2,
                             },
-                            data: exercise.map(d => {
-                                if (d[1] === null)
-                                    return [d[0], null];
-                                return [
-                                    d[0],
-                                    this.scaleValue(d[1], [1, 5], [0, 200]),
-                                    d[1],
-                                ];
-                            }),
-                            renderItem: this.renderInterval,
+                            data: exercise,
+                            renderItem: this.renderInterval
                         },
                     ],
                 };

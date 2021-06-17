@@ -11,7 +11,9 @@ export default function(min, max) {
             },
             axisTick: {
                 show: false
-            }
+            },
+            min: min,
+            max: max
         },
         {
             show: true,

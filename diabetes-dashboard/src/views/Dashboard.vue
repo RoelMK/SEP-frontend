@@ -16,13 +16,33 @@
                 <v-col class="wide-chart" cols="9">
                     <v-card id="overview-chart-container" elevation="2">
                         <v-progress-circular indeterminate color="primary" size="50" v-if="!rendered" />
-                        <OverviewChart ref="overview" v-if="rendered" />
+                        <OverviewChart ref="overview" v-if="rendered && checkData" />
+                        <v-container fill-height fluid v-if="!checkData && rendered">
+                            <v-row align="center" justify="center">
+                                <div class="d-block text-center">
+                                    <p class="mb-0">No data is available for selected date</p>
+                                    <p>Please try a different date</p>
+                                    <v-btn
+                                        v-on:click="$store.dispatch('showFilter', { show: true })"
+                                    >
+                                        Change filters
+                                    </v-btn>
+                                </div>
+                            </v-row>
+                        </v-container>
                     </v-card>
                 </v-col>
                 <v-col cols="3">
                     <v-card class="full-height statistics" elevation="2">
                         <v-progress-circular indeterminate color="primary" size="50" v-if="!rendered" />
-                        <Statistics v-if="rendered" />
+                        <Statistics v-if="rendered && checkData" />
+                        <v-container fill-height fluid v-if="!checkData && rendered">
+                            <v-row align="center" justify="center">
+                                <div class="d-block text-center">
+                                    <p>No statistics is available</p>
+                                </div>
+                            </v-row>
+                        </v-container>
                     </v-card>
                 </v-col>
             </v-row>

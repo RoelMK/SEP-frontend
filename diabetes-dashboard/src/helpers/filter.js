@@ -19,19 +19,21 @@ function filterTime(data, date, start, end) {
     return null;
 }
 
-function filterGlucose(data, mode = null) {
+function filterGlucose(data, mode = null, ranges = null) {
     if (!mode) return data;
+    const high = (ranges) ? ranges.hypers : 10.0;
+    const low = (ranges) ? ranges.hypos : 4.0;
     for (let a in mode) {
-        if (mode[a] === "Normal" && data >= 3.9 && data <= 10.0) return data;
-        if (mode[a] === "Hypos" && data < 3.9) return data;
-        if (mode[a] === "Hypers" && data > 10.0) return data;
+        if (mode[a] === "Normal" && data >= low && data <= high) return data;
+        if (mode[a] === "Hypos" && data < low) return data;
+        if (mode[a] === "Hypers" && data > high) return data;
     }
     return null;
 }
 
 function filterEmotion(data, type = null) {
-    type = (type) ? type : 0;
-    if (data >= type)
+    if (type === null) return data;
+    if (data === type)
         return data;
     return null;
 }

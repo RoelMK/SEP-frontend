@@ -65,6 +65,7 @@ export default {
                 arousal: null,
                 valence: null,
             },
+            isApplied: false,
             properties: properties,
             reload: false,
             emotionMap: {
@@ -131,6 +132,16 @@ export default {
                                 .map(d => d.toUpperCase())
                                 .join(',')
                     };
+                    if (config.startDate.includes("Invalid") ||
+                        config.startDate.includes("Invalid")) {
+                        this.$toaster.showMessage({
+                            message: 'Please select date',
+                            color: 'dark',
+                            btnColor: 'pink',
+                            timeout: 6500
+                        });
+                        return;
+                    }
                     this.$store.dispatch('setDate', {
                         start: selection['date'][0],
                         end: selection['date'][1]
@@ -155,11 +166,21 @@ export default {
                     }
                 }
                 if (keys.includes('glucose')) {
+                    const ranges = (localStorage
+                        .getItem('valueHyperglycemia') === null)
+                        ? null
+                        : {
+                            hypers: parseFloat(localStorage
+                                .getItem('valueHyperglycemia')),
+                            hypos: parseFloat(localStorage
+                                .getItem('valueHypoglycemia')),
+                        };
                     for (let item in this.data['glucose']) {
                         items['glucose'][item].glucoseLevel =
                             filterHelpers['glucose'](
                                 this.data['glucose'][item].glucoseLevel,
-                                selection['glucose']
+                                selection['glucose'],
+                                ranges
                             );
                     }
                 }
