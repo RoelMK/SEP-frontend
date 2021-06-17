@@ -65,6 +65,7 @@ import TableActivitiesData from "@/components/TableActivitiesData.vue";
 import TableInsulinData from "@/components/TableInsulinData.vue";
 import EmotionTable from "@/components/EmotionTable.vue";
 import { mapState } from "vuex";
+import moment from 'moment';
 
 export default {
     name: "History",
