@@ -94,7 +94,7 @@ export default {
             this.cumulativeData.food.forEach((element) => {
                 totalCalories += element.calories ? element.calories : 0;
             });
-            console.log(totalCalories);
+            return totalCalories;
         },
         totalCarbs() {
             let totalCarbs = 0;
