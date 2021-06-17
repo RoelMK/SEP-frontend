@@ -91,30 +91,51 @@ const store = new Vuex.Store({
         },
         ADD_EMOTION(state, data) {
             state.data.mood.unshift(data);
+            if (state.filteredData.mood !== undefined) {
+                state.filteredData.mood.unshift(data);
+            }
         },
         DELETE_EMOTION(state, id) {
             state.data.mood = state.data.mood
                 .filter(emotion => emotion.activityId !== id);
+            if (state.filteredData.mood !== undefined) {
+                state.filteredData.mood = state.filteredData.mood
+                    .filter(emotion => emotion.activityId !== id);
+            }
         },
         UPDATE_EMOTION(state, data) {
             state.data.mood.splice(
                 state.data.mood.findIndex(emotion =>
                     emotion.activityId === data.activityId), 1, data);
+            if (state.filteredData.mood !== undefined) {
+                state.filteredData.mood.splice(
+                    state.filteredData.mood.findIndex(emotion =>
+                        emotion.activityId === data.activityId), 1, data);
+            }
         },
         ADD_INSULIN(state, data) {
             state.data.insulin.unshift(data);
-            if(state.filteredData.insulin !== undefined) {
+            if (state.filteredData.insulin !== undefined) {
                 state.filteredData.insulin.unshift(data);
             }
         },
         DELETE_INSULIN(state, id) {
             state.data.insulin = state.data.insulin
                 .filter(insulinInput => insulinInput.activityId !== id);
+            if (state.filteredData.insulin !== undefined) {
+                state.filteredData.insulin = state.filteredData.insulin
+                    .filter(insulinInput => insulinInput.activityId !== id);
+            }
         },
         UPDATE_INSULIN(state, data) {
             state.data.insulin.splice(
                 state.data.insulin.findIndex(insulinInput =>
                     insulinInput.activityId === data.activityId), 1, data);
+            if (state.filteredData.insulin !== undefined) {
+                state.filteredData.insulin.splice(
+                    state.filteredData.insulin.findIndex(insulinInput =>
+                        insulinInput.activityId === data.activityId), 1, data);
+            }
         },
     },
 });
