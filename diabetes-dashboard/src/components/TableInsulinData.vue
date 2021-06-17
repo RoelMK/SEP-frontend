@@ -35,11 +35,7 @@
             </tr>
         </div>
 
-        <v-data-table
-            :headers="headers"
-            :items="insulinData"
-            elevation="0"
-        >
+        <v-data-table :headers="headers" :items="insulinData" elevation="0">
             <template v-slot:[`body.prepend`]>
                 <tr>
                     <td>
@@ -76,7 +72,7 @@
                         {{ item.amount }}
                     </td>
                     <td width="10%" @click="selectInsulin(item)">
-                        {{ item.type }}
+                        {{ displayType(item.type) }}
                     </td>
                     <td width="10%" @click="selectInsulin(item)">
                         {{ item.date }}
@@ -184,6 +180,7 @@ import HistoryDatePicker from "@/components/HistoryDatePicker.vue";
 import HistoryTimePicker from "@/components/HistoryTimePicker.vue";
 import Insulin from "@/repositories/Insulin.js";
 import { deleteMixin } from "@/helpers/deleteMixin.js";
+import { mapState } from "vuex";
 
 export default {
     name: "TableInsulinData",
@@ -192,9 +189,19 @@ export default {
         HistoryDatePicker,
         HistoryTimePicker,
     },
+    watch: {
+        filteredData: function (value) {
+            if (value.length > 0) {
+                this.insulinData = this.convertInsulin(value.insulin);
+            } else {
+                this.insulinData = this.convertInsulin(this.data.insulin);
+            }
+        },
+    },
     // must match data values from json
     data() {
         return {
+            insulinData: [],
             items: ["<=", ">=", "="],
             // must be modified when we use real data
             headers: [
@@ -302,90 +309,19 @@ export default {
             typeFilter: "",
             date: "",
             time: "",
-
-            insulinData: [
-                {
-                    amount: 1,
-                    type: "Slow",
-                    date: "04/10/2027",
-                    time: "16:00",
-                    id: 11,
-                },
-                {
-                    amount: 1,
-                    type: "Slow",
-                    date: "04/10/2027",
-                    time: "12:00",
-                    id: 1,
-                },
-                {
-                    amount: 1,
-                    type: "Slow",
-                    date: "04/10/2027",
-                    time: "10:00",
-                    id: 2,
-                },
-                {
-                    amount: 1,
-                    type: "Slow",
-                    date: "04/10/2027",
-                    time: "19:00",
-                    id: 3,
-                },
-                {
-                    amount: 1,
-                    type: "Slow",
-                    date: "05/30/2021",
-                    time: "16:00",
-                    id: 4,
-                },
-                {
-                    amount: 1,
-                    type: "Slow",
-                    date: "05/30/2021",
-                    time: "16:00",
-                    id: 5,
-                },
-
-                {
-                    amount: 1,
-                    type: "Rapid",
-                    date: "05/30/2021",
-                    time: "16:00",
-                    id: 6,
-                },
-                {
-                    amount: 1,
-                    type: "Rapid",
-                    date: "05/30/2021",
-                    time: "16:00",
-                    id: 7,
-                },
-                {
-                    amount: 1,
-                    type: "Rapid",
-                    date: "05/30/2021",
-                    time: "16:00",
-                    id: 8,
-                },
-                {
-                    amount: 1,
-                    type: "Rapid",
-                    date: "05/30/2021",
-                    time: "16:00",
-                    id: 9,
-                },
-                {
-                    amount: 1,
-                    type: "Rapid",
-                    date: "05/30/2021",
-                    time: "16:00",
-                    id: 10,
-                },
-            ],
         };
     },
     methods: {
+        convertInsulin(data) {
+            return data.map((f) => ({
+                amount: f.insulinAmount,
+                type: f.insulinType,
+                date: moment(new Date(f.timestamp)).format("MM/DD/YY"),
+                time: moment(new Date(f.timestamp)).format("HH:mm"),
+                id: f.activityId,
+            }));
+        },
+
         selectInsulin(insulin) {
             let startTime = moment(insulin.time, "HH:mm")
                 .subtract(2, "hours")
@@ -416,22 +352,15 @@ export default {
             this.editedItem.time = time;
         },
 
-        async postInsulin(parameters) {
-            Insulin.post(parameters, this.$cookies.get("JWT")).then(
-                () => {
-                    this.$toaster.showMessage({
-                        message: "Upload is successful",
-                        color: "dark",
-                        btnColor: "pink",
-                    });
-                },
-                (error) => {
-                    console.log(error);
-                }
-            );
+        displayType(type) {
+            if (type === 0) {
+                return "Rapid";
+            } else {
+                return "Slow";
+            }
         },
 
-        checkInsulinInput(editing) {
+        async checkInsulinInput(editing) {
             if (
                 this.editedItem.amount === "" ||
                 this.editedItem.type === "" ||
@@ -455,14 +384,50 @@ export default {
                     timestamp: moment(
                         moment(date + " " + time).format("MM-DD-YYYY HH:mm")
                     ).format("x"),
-                    insulinType: this.editedItem.type.toLowerCase(),
+                    insulinType: this.editedItem.type === "Rapid" ? 0 : 1,
                     insulinAmount: parseInt(this.editedItem.amount),
                 };
                 if (editing) {
                     parameters["activityId"] = this.editedItem.id;
-                    parameters["modify"] = true;
+
+                    let insulin = await Insulin.post(
+                        parameters,
+                        this.$cookies.get("JWT")
+                    ).then(
+                        (resp) => {
+                            this.$toaster.showMessage({
+                                message: "Upload is successful",
+                                color: "dark",
+                                btnColor: "pink",
+                            });
+                            return resp.data;
+                        },
+                        (error) => {
+                            console.log(error);
+                        }
+                    );
+                    this.$store.commit("UPDATE_INSULIN", insulin);
+                    this.updateInsulinTable();
+                } else {
+                    let insulin = await Insulin.post(
+                        parameters,
+                        this.$cookies.get("JWT")
+                    ).then(
+                        (resp) => {
+                            this.$toaster.showMessage({
+                                message: "Upload is successful",
+                                color: "dark",
+                                btnColor: "pink",
+                            });
+                            return resp.data;
+                        },
+                        (error) => {
+                            console.log(error);
+                        }
+                    );
+                    this.$store.commit("ADD_INSULIN", insulin);
+                    this.updateInsulinTable();
                 }
-                this.postInsulin(parameters);
             }
         },
 
@@ -488,8 +453,11 @@ export default {
             this.dialogDelete = true;
         },
         deleteItemConfirm() {
-            this.deleteItem( {activityId: this.editedItem.id,} );
+            let parameters = { activityId: this.editedItem.id };
+            this.deleteItem(parameters);
             this.closeDelete();
+            this.$store.commit("DELETE_INSULIN", parameters.activityId);
+            this.updateInsulinTable();
         },
         closeDelete() {
             this.dialogDelete = false;
@@ -497,18 +465,28 @@ export default {
                 this.editedItem = Object.assign({}, this.defaultItem);
             });
         },
+        updateInsulinTable() {
+            if (this.filteredData > 0) {
+                this.insulinData = this.convertInsulin(
+                    this.filteredData.insulin
+                );
+            } else {
+                this.insulinData = this.convertInsulin(this.data.insulin);
+            }
+        },
     },
     // state getters you need to use
     computed: {
+        ...mapState(["filteredData", "data"]),
         formTitle() {
             return this.editing === false
                 ? "New Insulin Input"
                 : "Edit Insulin Input";
         },
     },
-    // when a component is created call actions
     created() {
-        //this.fetchInsulinData();
+        console.log(this.data);
+        this.updateInsulinTable();
     },
 };
 </script>
@@ -531,7 +509,7 @@ export default {
     border-radius: 50%;
     padding: 0.2rem;
     background: rgba(0, 0, 0, 0.15);
-    margin-left:15px;
+    margin-left: 15px;
 }
 .mdi-pencil {
     border-radius: 50%;
@@ -540,6 +518,6 @@ export default {
     margin-left: 15px;
 }
 .selector {
-    width: 12.3rem;
+    width: 13.3rem;
 }
 </style>

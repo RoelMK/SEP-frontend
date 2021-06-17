@@ -16,7 +16,7 @@
                     </v-card>
                 </div>
                 <div class="rightColumn">
-                    <v-card elevation="2" height="100%">
+                    <v-card elevation="2" height="52rem">
                         <v-card elevation="0">
                             <v-tabs v-model="tab">
                                 <v-tab v-for="item in items" :key="item">
@@ -90,6 +90,29 @@ export default {
         if (this.data.length <= 0)
             this.$router.push("/");
     },
+    methods: {
+        getSelectedFoodInsulinEmotion(item) {
+            console.log(item);
+        },
+        getSelectedActivity(activity) {
+            let start = moment(
+                moment(activity.startDate + " " + activity.startTime).format(
+                    "MM-DD-YYYY HH:mm"
+                )
+            ).format("YYYY-MM-DDTHH:mm");
+            let end = moment(
+                moment(activity.endDate + " " + activity.endTime).format(
+                    "MM-DD-YYYY HH:mm"
+                )
+            ).format("YYYY-MM-DDTHH:mm");
+
+            this.chosenItemTimeFrame = {
+                start,
+                end,
+                now: moment(),
+            };
+        },
+    },
 };
 </script>
 
@@ -115,13 +138,13 @@ export default {
 }
 .leftColumn {
     float: left;
-    width: 56%;
+    width: 52%;
     margin-right: 1%;
     margin-top: 1%;
 }
 .rightColumn {
     float: left;
-    width: 42%;
+    width: 46%;
     margin-left: 1%;
     margin-top: 1%;
 }

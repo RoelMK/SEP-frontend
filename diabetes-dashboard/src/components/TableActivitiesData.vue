@@ -57,7 +57,7 @@
 
         <v-data-table
             :headers="headers"
-            :items="activities"
+            :items="exercises"
             elevation="0"
             @click:row="selectActivity"
             class="tableSection"
@@ -106,6 +106,7 @@
                             type="string"
                         ></v-text-field>
                     </td>
+                    <td></td>
                 </tr>
             </template>
         </v-data-table>
@@ -114,9 +115,19 @@
 
 <script>
 import moment from "moment";
+import { mapState } from "vuex";
 
 export default {
     name: "TableActivitiesData",
+    watch: {
+        filteredData: function (value) {
+            if (value.length > 0) {
+                this.exercises = this.convertExercises(value.exercise);
+            } else {
+                this.exercises = this.convertExercises(this.data.exercise);
+            }
+        },
+    },
     data() {
         return {
             items: ["<=", ">=", "="],
@@ -144,6 +155,7 @@ export default {
                 {
                     text: "Start Date",
                     value: "startDate",
+                    width: "17%",
                     sortable: false,
                     filter: (value) => {
                         if (!this.startDate) return true;
@@ -168,6 +180,7 @@ export default {
                 {
                     text: "End Date",
                     value: "endDate",
+                    width: "17%",
                     sortable: false,
                     filter: (value) => {
                         if (!this.endDate) return true;
@@ -252,6 +265,11 @@ export default {
                         }
                     },
                 },
+                {
+                    text: "Dur.",
+                    value: "duration",
+                    sortable: false,
+                },
             ],
             name: "",
             type: "",
@@ -265,200 +283,12 @@ export default {
             startTimeFilter: "",
             endTimeFilter: "",
             caloriesFilter: "",
-
-            activities: [
-                {
-                    name: "Run",
-                    type: "Physical",
-                    startDate: moment("06/15/2021").format("L"),
-                    endDate: moment("06/15/2021").format("L"),
-                    startTime: moment("08:15", "HH:mm").format("HH:mm"),
-                    endTime: moment("18:10", "HH:mm").format("HH:mm"),
-                    calories: 159,
-                },
-                {
-                    name: "Walk",
-                    type: "Physical",
-                    startDate: moment("06/15/2021").format("L"),
-                    endDate: moment("06/15/2021").format("L"),
-                    startTime: moment("12:15", "HH:mm").format("HH:mm"),
-                    endTime: moment("16:10", "HH:mm").format("HH:mm"),
-                    //duration: 50,
-                    calories: 159,
-                },
-                {
-                    name: "Cycling",
-                    type: "Physical",
-                    startDate: moment().subtract(1, "day").format("L"),
-                    endDate: moment().subtract(1, "day").format("L"),
-                    startTime: moment().subtract(24, "hours").format("HH:mm"),
-                    endTime: moment()
-                        .subtract(23, "hours")
-                        .subtract(10, "minutes")
-                        .format("HH:mm"),
-                    //duration: 50,
-                    calories: 159,
-                },
-                {
-                    name: "Cycling and walking",
-                    type: "Physical",
-                    startDate: moment().subtract(1, "day").format("L"),
-                    endDate: moment().subtract(1, "day").format("L"),
-                    startTime: moment().subtract(24, "hours").format("HH:mm"),
-                    endTime: moment()
-                        .subtract(23, "hours")
-                        .subtract(10, "minutes")
-                        .format("HH:mm"),
-                    //duration: 50,
-                    calories: 600,
-                },
-                {
-                    name: "Walk",
-                    type: "Physical",
-                    startDate: moment().subtract(1, "day").format("L"),
-                    endDate: moment().subtract(1, "day").format("L"),
-                    startTime: moment().subtract(24, "hours").format("HH:mm"),
-                    endTime: moment()
-                        .subtract(23, "hours")
-                        .subtract(10, "minutes")
-                        .format("HH:mm"),
-                    //duration: 50,
-                    calories: 159,
-                },
-                {
-                    name: "Cycling",
-                    type: "Physical",
-                    startDate: moment().subtract(1, "day").format("L"),
-                    endDate: moment().subtract(1, "day").format("L"),
-                    startTime: moment().subtract(24, "hours").format("HH:mm"),
-                    endTime: moment()
-                        .subtract(23, "hours")
-                        .subtract(10, "minutes")
-                        .format("HH:mm"),
-                    //duration: 50,
-                    calories: 159,
-                },
-                {
-                    name: "Cycling and walking",
-                    type: "Physical",
-                    startDate: moment().subtract(1, "day").format("L"),
-                    endDate: moment().subtract(1, "day").format("L"),
-                    startTime: moment().subtract(24, "hours").format("HH:mm"),
-                    endTime: moment()
-                        .subtract(23, "hours")
-                        .subtract(10, "minutes")
-                        .format("HH:mm"),
-                    //duration: 50,
-                    calories: 600,
-                },
-                {
-                    name: "Cycling and walking",
-                    type: "Physical",
-                    startDate: moment().subtract(1, "day").format("L"),
-                    endDate: moment().subtract(1, "day").format("L"),
-                    startTime: moment().subtract(24, "hours").format("HH:mm"),
-                    endTime: moment()
-                        .subtract(23, "hours")
-                        .subtract(10, "minutes")
-                        .format("HH:mm"),
-                    //duration: 50,
-                    calories: 600,
-                },
-                {
-                    name: "Walk",
-                    type: "Physical",
-                    startDate: moment().subtract(1, "day").format("L"),
-                    endDate: moment().subtract(1, "day").format("L"),
-                    startTime: moment().subtract(24, "hours").format("HH:mm"),
-                    endTime: moment()
-                        .subtract(23, "hours")
-                        .subtract(10, "minutes")
-                        .format("HH:mm"),
-                    //duration: 50,
-                    calories: 159,
-                },
-                {
-                    name: "Cycling",
-                    type: "Physical",
-                    startDate: moment().subtract(1, "day").format("L"),
-                    endDate: moment().subtract(1, "day").format("L"),
-                    startTime: moment().subtract(24, "hours").format("HH:mm"),
-                    endTime: moment()
-                        .subtract(23, "hours")
-                        .subtract(10, "minutes")
-                        .format("HH:mm"),
-                    //duration: 50,
-                    calories: 159,
-                },
-                {
-                    name: "Cycling and walking",
-                    type: "Physical",
-                    startDate: moment().subtract(1, "day").format("L"),
-                    endDate: moment().subtract(1, "day").format("L"),
-                    startTime: moment().subtract(24, "hours").format("HH:mm"),
-                    endTime: moment()
-                        .subtract(23, "hours")
-                        .subtract(10, "minutes")
-                        .format("HH:mm"),
-                    //duration: 50,
-                    calories: 600,
-                },
-                {
-                    name: "Cycling and walking",
-                    type: "Physical",
-                    startDate: moment().subtract(1, "day").format("L"),
-                    endDate: moment().subtract(1, "day").format("L"),
-                    startTime: moment().subtract(24, "hours").format("HH:mm"),
-                    endTime: moment()
-                        .subtract(23, "hours")
-                        .subtract(10, "minutes")
-                        .format("HH:mm"),
-                    //duration: 50,
-                    calories: 600,
-                },
-                {
-                    name: "Walk",
-                    type: "Physical",
-                    startDate: moment().subtract(1, "day").format("L"),
-                    endDate: moment().subtract(1, "day").format("L"),
-                    startTime: moment().subtract(24, "hours").format("HH:mm"),
-                    endTime: moment()
-                        .subtract(23, "hours")
-                        .subtract(10, "minutes")
-                        .format("HH:mm"),
-                    //duration: 50,
-                    calories: 159,
-                },
-                {
-                    name: "Cycling",
-                    type: "Physical",
-                    startDate: moment().subtract(1, "day").format("L"),
-                    endDate: moment().subtract(1, "day").format("L"),
-                    startTime: moment().subtract(24, "hours").format("HH:mm"),
-                    endTime: moment()
-                        .subtract(23, "hours")
-                        .subtract(10, "minutes")
-                        .format("HH:mm"),
-                    //duration: 50,
-                    calories: 159,
-                },
-                {
-                    name: "Cycling and walking",
-                    type: "Physical",
-                    startDate: moment().subtract(1, "day").format("L"),
-                    endDate: moment().subtract(1, "day").format("L"),
-                    startTime: moment().subtract(24, "hours").format("HH:mm"),
-                    endTime: moment()
-                        .subtract(23, "hours")
-                        .subtract(10, "minutes")
-                        .format("HH:mm"),
-                    //duration: 50,
-                    calories: 600,
-                },
-            ],
+            exercises: [],
         };
     },
-    computed: {},
+    computed: {
+        ...mapState(["filteredData", "data"]),
+    },
     methods: {
         selectActivity(activity) {
             let start = moment(
@@ -477,6 +307,34 @@ export default {
                 now: moment(),
             });
         },
+        convertExercises(data) {
+            return data.map((f) => ({
+                name: f.name,
+                type: f.type,
+                startDate: moment(new Date(f.timestamp)).format("L"),
+                endDate: moment(
+                    moment(new Date(f.timestamp)).add(f.duration, "seconds")
+                ).format("L"),
+                startTime: moment(new Date(f.timestamp)).format("HH:mm"),
+                endTime: moment(
+                    moment(new Date(f.timestamp)).add(f.duration, "seconds")
+                ).format("HH:mm"),
+                calories: f.calories !== null ? f.calories : 0,
+                activityId: f.activityId,
+                duration:
+                    f.duration !== null
+                        ? Math.round((f.duration / 3600) * 10) / 10
+                        : 0,
+            }));
+        },
+    },
+    created() {
+        console.log(this.data);
+        if (this.filteredData > 0) {
+            this.exercises = this.convertExercises(this.filteredData.exercise);
+        } else {
+            this.exercises = this.convertExercises(this.data.exercise);
+        }
     },
 };
 </script>
@@ -495,6 +353,6 @@ export default {
     background: rgba(0, 0, 0, 0.15);
 }
 .selector {
-    width: 7.5rem;
+    width: 8rem;
 }
 </style>
