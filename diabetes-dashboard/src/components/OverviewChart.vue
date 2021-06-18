@@ -208,8 +208,6 @@ export default {
         options(data) {
             const arr = data['glucose'];
             if (typeof arr !== 'undefined') {
-                // var maxGlucoseTimestamp = null;
-                // var minGlucoseTimestamp = null;
                 const mood = this.prepareData(
                     data,
                     'mood',
@@ -261,23 +259,12 @@ export default {
                         d[2]
                     ];
                 });
-                // maxGlucoseTimestamp = arr[0].timestamp;
-                // minGlucoseTimestamp = arr[arr.length - 1].timestamp;
-
                 var glucose = this.prepareData(
                     data,
                     'glucose',
                     'timestamp',
                     'glucoseLevel'
-                );  
-                // glucose = this.alignGluconeData(
-                //     glucose,
-                //     mood,
-                //     insulin,
-                //     carbs,
-                //     exercise
-                // );
-
+                );
                 const ranges = (localStorage.getItem('normalRange') === null)
                     ? null
                     : {
