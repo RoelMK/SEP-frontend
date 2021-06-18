@@ -156,7 +156,7 @@ export default {
 }
 .legend {
     float: left;
-    width: 100%;
+    width: 52%;
     margin-top: 2%;
     margin-bottom: 2%;
 }
