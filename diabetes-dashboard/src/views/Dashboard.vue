@@ -121,10 +121,15 @@ export default {
             },
             (error) => { console.log(error); }
         );
+        let reminder = localStorage.getItem("emotionReminder");
+        let reminderset = true;
+        if (reminder){
+            reminderset = reminder == "true";
+        }
         if (
             this.$cookies.get("EMOTION_REMINDER") === null &&
             this.$store.getters.getEmotionReminderStatus &&
-            localStorage.getItem("emotionReminder") == "true"
+            reminderset
         ) {
             this.$toaster.showMessage({
                 message: "Reminder: Enter Emotion Status!",
