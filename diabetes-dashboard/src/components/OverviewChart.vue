@@ -265,6 +265,13 @@ export default {
                     'timestamp',
                     'glucoseLevel'
                 );
+                glucose = this.alignGluconeData(
+                    glucose,
+                    mood,
+                    insulin,
+                    carbs,
+                    exercise
+                );
                 const ranges = (localStorage.getItem('normalRange') === null)
                     ? null
                     : {
