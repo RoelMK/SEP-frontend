@@ -1,7 +1,7 @@
 <template>
     <v-card flat>
         <v-card-text class="statistics-container">
-            <ul>
+            <ul v-if="data['glucose'].length > 0 || filteredData['glucose'].length > 0">
                 <li>
                     A1C Est. <i class="text-caption">(last 3 months)</i>:
                     <span>{{ a1cCompute().toFixed(2) }} {{ unitBG }}</span>
