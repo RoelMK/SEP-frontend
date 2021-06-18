@@ -23,11 +23,14 @@ export default {
         };
     },
     created() {
-        let val = localStorage.getItem("emotionReminder");
-        if (val == "true") {
-            this.boolAsk = true;
-        } else {
-            this.boolAsk = false;
+        let val = true;
+        if (localStorage.getItem("emotionReminder") != null) {
+            val = localStorage.getItem("emotionReminder") == "true";
+            if (val == "true") {
+                this.boolAsk = true;
+            } else {
+                this.boolAsk = false;
+            }
         }
     },
     watch: {

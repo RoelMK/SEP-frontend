@@ -115,18 +115,12 @@ export default {
         };
     },
     async created() {
-        await Auth.getProfile(this.$cookies.get("JWT")).then(
-            (resp) => {
-                this.$store.commit("SET_USER", resp.data);
-            },
-            (error) => { console.log(error); }
-        );
         let reminder = localStorage.getItem("emotionReminder");
         let reminderCookie = this.$cookies.get("EMOTION_REMINDER");
         let reminderset = true;
         if (reminder && reminderCookie){
             reminderset = reminder == "true" &&
-                reminderCookie == "true";
+                reminderCookie != "true";
         }
         if (reminderset) {
             this.$toaster.showMessage({
@@ -136,6 +130,12 @@ export default {
             });
             this.$cookies.set("EMOTION_REMINDER", true, "1d");
         }
+        await Auth.getProfile(this.$cookies.get("JWT")).then(
+            (resp) => {
+                this.$store.commit("SET_USER", resp.data);
+            },
+            (error) => { console.log(error); }
+        );
 
         let nightscoutUrl = localStorage.getItem("nightscout_url");
         if (nightscoutUrl) {
