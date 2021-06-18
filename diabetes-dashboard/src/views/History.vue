@@ -45,13 +45,6 @@
                     </v-card>
                 </div>
             </div>
-            <div class="row">
-                <div class="legend">
-                    <v-card class="full-height legend-container" elevation="2">
-                        <Legend />
-                    </v-card>
-                </div>
-            </div>
         </div>
     </div>
 </template>
@@ -59,7 +52,6 @@
 <script>
 import Navbar from "@/components/Navbar.vue";
 import OverviewChart from "@/components/OverviewChart.vue";
-import Legend from "@/components/Legend.vue";
 import TableFoodData from "@/components/TableFoodData.vue";
 import TableActivitiesData from "@/components/TableActivitiesData.vue";
 import TableInsulinData from "@/components/TableInsulinData.vue";
@@ -76,7 +68,6 @@ export default {
         TableInsulinData,
         EmotionTable,
         OverviewChart,
-        Legend,
     },
     computed: {
         ...mapState(["data"]),
@@ -133,7 +124,7 @@ export default {
     height: 700px;
 }
 #overview-chart-container .v-progress-circular,
-.legend-container .v-progress-circular {
+ .v-progress-circular {
     left: 50%;
     top: 45%;
 }
@@ -142,23 +133,19 @@ export default {
     width: 52%;
     margin-right: 1%;
     margin-top: 1%;
+    margin-bottom: 1%;
 }
 .rightColumn {
     float: left;
     width: 46%;
     margin-left: 1%;
     margin-top: 1%;
+    margin-bottom: 1%;
 }
 .row:after {
     content: "";
     display: table;
     clear: both;
-}
-.legend {
-    float: left;
-    width: 100%;
-    margin-top: 2%;
-    margin-bottom: 2%;
 }
 .filterText {
     font-size: 0.75rem;
