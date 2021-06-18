@@ -415,7 +415,9 @@ export default {
             return data.map((f) => ({
                 happiness: f.valence,
                 excitement: f.arousal,
-                date: moment(new Date(f.timestamp)).format("L").toString(),
+                date: moment(new Date(f.timestamp))
+                    .format("yyyy-MM-DD")
+                    .toString(),
                 time: moment(new Date(f.timestamp)).format("HH:mm").toString(),
                 id: f.activityId,
             }));
@@ -434,12 +436,10 @@ export default {
                 .add(2, "hours")
                 .format("HH:mm");
             let start = moment(
-                moment(emotion.date + " " + startTime).format(
-                    "MM-DD-YYYY HH:mm"
-                )
+                moment(emotion.date + " " + startTime, "yyyy-MM-DD HH:mm")
             ).format("YYYY-MM-DDTHH:mm");
             let end = moment(
-                moment(emotion.date + " " + endTime).format("MM-DD-YYYY HH:mm")
+                moment(emotion.date + " " + endTime, "yyyy-MM-DD HH:mm")
             ).format("YYYY-MM-DDTHH:mm");
             this.$store.dispatch("setNewTimeFrame", {
                 start,
@@ -492,8 +492,8 @@ export default {
                     .toString();
                 let parameters = {
                     timestamp: moment(
-                        moment(date + " " + time, "MM/DD/YYYY HH:mm"))
-                        .format("x"),
+                        moment(date + " " + time, "MM/DD/YYYY HH:mm")
+                    ).format("x"),
                     arousal: this.editedItem.excitement,
                     valence: this.editedItem.happiness,
                 };

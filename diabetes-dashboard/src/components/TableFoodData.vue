@@ -84,8 +84,7 @@
                             type="string"
                         ></v-text-field>
                     </td>
-                    <td>
-                    </td>
+                    <td></td>
                 </tr>
             </template>
         </v-data-table>
@@ -235,12 +234,10 @@ export default {
                 .add(2, "hours")
                 .format("HH:mm");
             let start = moment(
-                moment(food.date + " " + startTime).format(
-                    "MM-DD-YYYY HH:mm"
-                )
+                moment(food.date + " " + startTime, "yyyy-MM-DD HH:mm")
             ).format("YYYY-MM-DDTHH:mm");
             let end = moment(
-                moment(food.date + " " + endTime).format("MM-DD-YYYY HH:mm")
+                moment(food.date + " " + endTime, "yyyy-MM-DD HH:mm")
             ).format("YYYY-MM-DDTHH:mm");
             this.$store.dispatch("setNewTimeFrame", {
                 start,
@@ -254,7 +251,9 @@ export default {
                 carbs: f.carbohydrates,
                 calories: f.calories !== null ? f.calories : 0,
                 glycemicIndex: f.glycemic_index !== null ? f.glycemic_index : 0,
-                date: moment(new Date(f.timestamp)).format("L").toString(),
+                date: moment(new Date(f.timestamp))
+                    .format("yyyy-MM-DD")
+                    .toString(),
                 time: moment(new Date(f.timestamp)).format("HH:mm").toString(),
                 id: f.activityId,
             }));
