@@ -121,7 +121,7 @@ export default {
         msg: String,
     },
     computed: {
-        ...mapState(['arousalIcon', 'valenceIcon'])
+        ...mapState(['arousalIcon', 'valenceIcon', 'data'])
     },
     async created() {
         if (this.$store.state.user.email) {
@@ -141,6 +141,13 @@ export default {
         showing: false
     }),
     methods: {
+        checkData() {
+            for (let d in this.data) {
+                if (this.data[d].length > 0)
+                    return true;
+            }
+            return false;
+        },
         logoClicked: function () {
             this.$router.push('/').catch(() => {});
         },
@@ -148,7 +155,8 @@ export default {
             this.$router.push('/profile').catch(() => {});
         },
         historyClicked: function () {
-            this.$router.push('/history').catch(() => {});
+            if (this.checkData())
+                this.$router.push('/history').catch(() => {});
         },
         logout() {
             this.$store.commit("LOGOUT");
