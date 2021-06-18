@@ -316,7 +316,7 @@ export default {
             return data.map((f) => ({
                 amount: f.insulinAmount,
                 type: f.insulinType,
-                date: moment(new Date(f.timestamp)).format("MM/DD/YY"),
+                date: moment(new Date(f.timestamp)).format("yyyy-MM-DD"),
                 time: moment(new Date(f.timestamp)).format("HH:mm"),
                 id: f.activityId,
             }));
@@ -330,12 +330,10 @@ export default {
                 .add(2, "hours")
                 .format("HH:mm");
             let start = moment(
-                moment(insulin.date + " " + startTime).format(
-                    "MM-DD-YYYY HH:mm"
-                )
+                moment(insulin.date + " " + startTime, "yyyy-MM-DD HH:mm")
             ).format("YYYY-MM-DDTHH:mm");
             let end = moment(
-                moment(insulin.date + " " + endTime).format("MM-DD-YYYY HH:mm")
+                moment(insulin.date + " " + endTime, "yyyy-MM-DD HH:mm")
             ).format("YYYY-MM-DDTHH:mm");
             this.$store.dispatch("setNewTimeFrame", {
                 start,

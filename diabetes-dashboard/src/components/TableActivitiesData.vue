@@ -292,13 +292,15 @@ export default {
     methods: {
         selectActivity(activity) {
             let start = moment(
-                moment(activity.startDate + " " + activity.startTime).format(
-                    "MM-DD-YYYY HH:mm"
+                moment(
+                    activity.startDate + " " + activity.startTime,
+                    "yyyy-MM-DD HH:mm"
                 )
             ).format("YYYY-MM-DDTHH:mm");
             let end = moment(
-                moment(activity.endDate + " " + activity.endTime).format(
-                    "MM-DD-YYYY HH:mm"
+                moment(
+                    activity.endDate + " " + activity.endTime,
+                    "yyyy-MM-DD HH:mm"
                 )
             ).format("YYYY-MM-DDTHH:mm");
             this.$store.dispatch("setNewTimeFrame", {
@@ -311,10 +313,10 @@ export default {
             return data.map((f) => ({
                 name: f.name,
                 type: f.type,
-                startDate: moment(new Date(f.timestamp)).format("L"),
+                startDate: moment(new Date(f.timestamp)).format("yyyy-MM-DD"),
                 endDate: moment(
                     moment(new Date(f.timestamp)).add(f.duration, "seconds")
-                ).format("L"),
+                ).format("yyyy-MM-DD"),
                 startTime: moment(new Date(f.timestamp)).format("HH:mm"),
                 endTime: moment(
                     moment(new Date(f.timestamp)).add(f.duration, "seconds")
