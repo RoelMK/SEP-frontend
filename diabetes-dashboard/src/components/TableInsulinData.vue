@@ -390,9 +390,14 @@ export default {
                 if (editing) {
                     parameters["activityId"] = this.editedItem.id;
 
+                    let token = this.$cookies.get("JWT");
+                    if (this.$store.state.supervising.token) {
+                        token = this.$store.state.supervising.token;
+                    }
+
                     let insulin = await Insulin.post(
                         parameters,
-                        this.$cookies.get("JWT")
+                        token
                     ).then(
                         (resp) => {
                             this.$toaster.showMessage({
@@ -409,9 +414,14 @@ export default {
                     this.$store.commit("UPDATE_INSULIN", insulin);
                     this.updateInsulinTable();
                 } else {
+
+                    let token = this.$cookies.get("JWT");
+                    if (this.$store.state.supervising.token) {
+                        token = this.$store.state.supervising.token;
+                    }
                     let insulin = await Insulin.post(
                         parameters,
-                        this.$cookies.get("JWT")
+                        token
                     ).then(
                         (resp) => {
                             this.$toaster.showMessage({
