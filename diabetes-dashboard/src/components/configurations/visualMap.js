@@ -7,6 +7,7 @@ export default function(ranges = null) {
             show: false,
             splitNumber: 4,
             seriesIndex: 0,
+            dimension: 1,
             pieces: [
                 {
                     min: 0,

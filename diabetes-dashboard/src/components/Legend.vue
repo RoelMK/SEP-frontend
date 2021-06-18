@@ -36,7 +36,6 @@ export default {
             this.chartInstance = getInstanceByDom(document
                 .getElementById('overview-chart-container')
                 .firstElementChild
-                .firstElementChild
             );
         },
     },

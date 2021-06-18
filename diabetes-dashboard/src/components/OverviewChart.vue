@@ -84,7 +84,7 @@ export default {
          */
         createTooltipBody(marker, name, value) {
             return `
-                <div style="min-width: 135px">
+                <div style="min-width: 150px">
                     ${marker}
                     <span>${name}</span>
                     <span class="float-right font-weight-bold">
@@ -101,8 +101,9 @@ export default {
                 ${params[0].axisValueLabel}</span>`;
             for (let param of params) {
                 var name = param.seriesName;
-                var value =
-                    param.value.length > 2 ? param.value[2] : param.value[1];
+                var value = param.value.length > 3
+                    ? param.value[3]
+                    : param.value.length > 2 ? param.value[2] : param.value[1];
                 var color =
                     typeof param.borderColor === "undefined"
                         ? param.color
@@ -137,7 +138,7 @@ export default {
         renderInterval(params, api) {
             var start = api.coord([api.value(0), api.value(1)]);
             var endDate = moment(api.value(0))
-                .add(api.value(2))
+                .add(api.value(4), 'seconds')
                 .format("YYYY-MM-DDTHH:MM");
             var end = api.coord([endDate, api.value(1)]);
 
@@ -196,23 +197,35 @@ export default {
         parseRangeString(str) {
             return str.match(/\d+\.?\d+/gi).map(d => parseFloat(d));
         },
+        addUnits(data, idx, units) {
+            for (let d in data) {
+                const value = data[d][idx];
+                if (value !== null)
+                    data[d].push(`${value} ${units}`);
+            }
+            return data;
+        },
         options(data) {
             const arr = data['glucose'];
             if (typeof arr !== 'undefined') {
-                const maxGlucoseTimestamp = arr[0].timestamp;
-                const minGlucoseTimestamp = arr[arr.length - 1].timestamp;
+                var maxGlucoseTimestamp = null;
+                var minGlucoseTimestamp = null;
                 const mood = this.prepareData(
                     data,
                     'mood',
                     'timestamp',
                     'valence',
                     'arousal'
-                ).map(d => [
-                    d[0],
-                    (d[1] + d[2]) / 2,
-                    { type: "Valence", value: d[1] },
-                    { type: "Arousal", value: d[2] }
-                ]);
+                ).map(d => {
+                    if (d[1] === null || d[2] === null)
+                        return [d[0], null];
+                    return [
+                        d[0],
+                        (d[1] + d[2]) / 2,
+                        { type: "Valence", value: d[1] },
+                        { type: "Arousal", value: d[2] }
+                    ];
+                });
                 const insulin = this.prepareData(
                     data,
                     'insulin',
@@ -229,30 +242,43 @@ export default {
                     if (i[2] === null) i[2] = 200;
                     return i;
                 });
+                // Last minute fix needs to be adjusted
+                // duplicate calories property
                 const exercise = this.prepareData(
                     data,
                     'exercise',
                     'timestamp',
                     'calories',
                     'duration'
-                ).map(d => [
-                    d[0],
-                    this.scaleValue(d[1], [1, 5], [0, 200]),
-                    d[1],
-                ]);
-                var glucose = this.prepareData(
-                    data,
-                    'glucose',
-                    'timestamp',
-                    'glucoseLevel'
-                );
-                glucose = this.alignGluconeData(
-                    glucose,
-                    mood,
-                    insulin,
-                    carbs,
-                    exercise
-                );
+                ).map(d => {
+                    if (d[1] === null)
+                        return [d[0], null];
+                    return [
+                        d[0],
+                        this.scaleValue(d[1], [1, 5], [0, 200]),
+                        d[1],
+                        d[1],
+                        d[2]
+                    ];
+                });
+                if (arr.length > 0) {
+                    maxGlucoseTimestamp = arr[0].timestamp;
+                    minGlucoseTimestamp = arr[arr.length - 1].timestamp;
+
+                    var glucose = this.prepareData(
+                        data,
+                        'glucose',
+                        'timestamp',
+                        'glucoseLevel'
+                    );
+                    glucose = this.alignGluconeData(
+                        glucose,
+                        mood,
+                        insulin,
+                        carbs,
+                        exercise
+                    );
+                }
 
                 const ranges = (localStorage.getItem('normalRange') === null)
                     ? null
@@ -352,7 +378,7 @@ export default {
                                 color: "#3F7CAC",
                                 opacity: 0.2,
                             },
-                            data: glucose
+                            data: this.addUnits(glucose, 1, 'mmol/L')
                         },
                         {
                             xAxisIndex: 1,
@@ -381,7 +407,7 @@ export default {
                             },
                             barWidth: 5,
                             type: "bar",
-                            data: insulin
+                            data: this.addUnits(insulin, 1, 'units')
                         },
                         {
                             xAxisIndex: 3,
@@ -390,7 +416,7 @@ export default {
                             type: "bar",
                             barWidth: 5,
                             symbol: "none",
-                            data: carbs
+                            data: this.addUnits(carbs, 1, 'carbs')
                         },
                         {
                             xAxisIndex: 4,
