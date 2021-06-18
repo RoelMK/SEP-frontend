@@ -4,47 +4,39 @@
             <ul>
                 <li>
                     A1C Est. <i class="text-caption">(last 3 months)</i>:
-                    <span>{{ a1c }} {{ unitBG }}</span>
-                </li>
-                <li>
-                    A1C Goal <i class="text-caption">(last 3 months)</i>:
-                    <span>{{ a1cGoal }} {{ unitBG }}</span>
+                    <span>{{ a1cCompute().toFixed(2) }} {{ unitBG }}</span>
                 </li>
                 <li>
                     Long Insulin:
-                    <span>{{ cumLongInsulin }} mg</span>
+                    <span>{{ totalInsulin(1) }} mg</span>
                 </li>
                 <li>
                     Short Insulin:
-                    <span>{{ cumShortInsulin }} mg</span>
+                    <span>{{ totalInsulin(0) }} mg</span>
                 </li>
                 <li>
                     Carbs:
-                    <span>{{ cumCarbs }} g</span>
+                    <span>{{ totalCarbs() }} g</span>
                 </li>
                 <li>
                     Calories:
-                    <span>{{ cumConsumedCarbs }} kcal</span>
-                </li>
-                <li>
-                    Calories Goal <i class="text-caption">(daily)</i>:
-                    <span>{{ consumedCaloriesGoal }} kcal</span>
+                    <span>{{ totalCalories() }} kcal</span>
                 </li>
                 <li>
                     Burnt Calories:
-                    <span>{{ cumBurntCarbs }} kcal</span>
+                    <span>{{ totalBurntCalories() }} kcal</span>
                 </li>
                 <li>
-                    Burnt Calories Goal <i class="text-caption">(daily)</i>:
-                    <span>{{ burntCaloriesGoal }} kcal</span>
+                    Average Glucose:
+                    <span>{{ averageGlucose().toFixed(2) }} {{ unitBG }}</span>
                 </li>
                 <li>
-                    Steps:
-                    <span>{{ cumSteps }}</span>
+                    Min Glucose:
+                    <span>{{ minGlucose() }} {{ unitBG }}</span>
                 </li>
                 <li>
-                    Average Heartbeat:
-                    <span>{{ avgHeartbeat }} bpm</span>
+                    Max Glucose:
+                    <span>{{ maxGlucose() }} {{ unitBG }}</span>
                 </li>
             </ul>
         </v-card-text>
@@ -52,26 +44,118 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+import moment from "moment";
 export default {
     name: "CumulativeStatistics",
+    watch: {
+        filteredData: function (value) {
+            if (this.filteredData > 0) {
+                this.cumulativeData = value;
+            } else {
+                this.cumulativeData = this.data;
+            }
+        },
+    },
     data() {
         return {
-            cumLongInsulin: 0,
-            cumShortInsulin: 0,
-            cumCarbs: 0,
-            cumConsumedCarbs: 0,
-            cumBurntCarbs: 0,
-            cumSteps: 0,
-            avgHeartbeat: 0,
-            a1c: 0,
-            a1cGoal: 0,
-            consumedCaloriesGoal: 0,
-            burntCaloriesGoal: 0,
+            cumulativeData: [],
             unitBG: "mmol/L",
         };
+    },
+    methods: {
+        totalCalories() {
+            if (!this.cumulativeData.food) return 0;
+            let totalCalories = 0;
+            this.cumulativeData.food.forEach((element) => {
+                totalCalories += element.calories ? element.calories : 0;
+            });
+            return totalCalories;
+        },
+        totalCarbs() {
+            if (!this.cumulativeData.food) return 0;
+            let totalCarbs = 0;
+            this.cumulativeData.food.forEach((element) => {
+                totalCarbs += element.carbohydrates ? element.carbohydrates : 0;
+            });
+            return totalCarbs;
+        },
+        totalInsulin(insulinType) {
+            if (!this.cumulativeData.insulin) return 0;
+            let totalInsulin = 0;
+            this.cumulativeData.insulin.forEach((element) => {
+                totalInsulin += element.insulinType == insulinType ? 1 : 0;
+            });
+            return totalInsulin;
+        },
+        totalBurntCalories() {
+            if (!this.cumulativeData.activities) return 0;
+            let totalBurnt = 0;
+            this.cumulativeData.activities.forEach((element) => {
+                totalBurnt += element.calories;
+            });
+            return totalBurnt;
+        },
+        averageGlucose() {
+            if (!this.cumulativeData.glucose) return 0;
+            let total = 0;
+            let count = this.cumulativeData.glucose.length;
+            this.cumulativeData.glucose.forEach((element) => {
+                total += element.glucoseLevel ? element.glucoseLevel : 0;
+            });
+            return total / count;
+        },
+        maxGlucose() {
+            // check for existence
+            if (!this.cumulativeData.glucose) return 0;
+            // calculate max
+            let max = 0;
+            this.cumulativeData.glucose.forEach((element) => {
+                max = element.glucoseLevel > max ? element.glucoseLevel : max;
+            });
+            return max;
+        },
+        minGlucose() {
+            // check for existence and length
+            if (!this.cumulativeData.glucose || this.cumulativeData.length == 0)
+                return 0;
+
+            //calculate min
+            let min = this.cumulativeData.glucose[0].glucoseLevel;
+            this.cumulativeData.glucose.forEach((element) => {
+                min = element.glucoseLevel < min ? element.glucoseLevel : min;
+            });
+            return min;
+        },
+        a1cCompute() {
+            if (!this.cumulativeData.glucose) return 0;
+            // in 13 digits
+            const a1cStart = moment().subtract(3, "months").unix() * 1000;
+            const dataA1C = this.cumulativeData.glucose.filter(function (
+                element
+            ) {
+                return element.timestamp >= a1cStart;
+            });
+            if (!dataA1C) return 0;
+            let estimate = 0;
+            let count = dataA1C.length;
+            dataA1C.forEach((element) => {
+                estimate += element.glucoseLevel ? element.glucoseLevel : 0;
+            });
+            return estimate / count;
+        },
+    },
+    computed: {
+        ...mapState(["filteredData", "data"]),
+    },
+    created() {
+        if (this.filteredData > 0) {
+            this.cumulativeData = this.filteredData;
+        } else {
+            this.cumulativeData = this.data;
+        }
     },
 };
 </script>
 
-<style>
-</style>
+<style></style>

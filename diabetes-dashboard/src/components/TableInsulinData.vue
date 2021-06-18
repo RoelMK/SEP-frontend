@@ -226,7 +226,7 @@ export default {
                     sortable: false,
                     filter: (value) => {
                         if (this.typeFilter === "") return true;
-                        return value === this.typeFilter;
+                        return this.displayType(value) === this.typeFilter;
                     },
                 },
                 {
