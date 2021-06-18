@@ -162,7 +162,7 @@ export default {
 
             axios({
                 method: "post",
-                url: "http://localhost:8080/upload",
+                url: "http://diabetter.win.tue.nl:8080/upload",
                 data: formData,
                 headers: { "Authorization":
                     "Bearer " + this.$cookies.get("JWT") }
@@ -188,7 +188,7 @@ export default {
             localStorage.setItem("nightscout_url", this.nightscoutUrl);
         },
         connectOnedrive() {
-            window.open('http://localhost:8080/onedrive/login');
+            window.open('http://diabetter.win.tue.nl:8080/onedrive/login');
         },
         disconnectOnedrive() {
             this.$cookies.remove('od_access_token');
