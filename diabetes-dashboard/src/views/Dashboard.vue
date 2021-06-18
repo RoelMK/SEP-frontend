@@ -3,17 +3,6 @@
         <Navbar class="header"></Navbar>
         <div class="clearfix"></div>
         <div class="main">
-            <v-row v-if="rendered && data['mood'].length > 0">
-                <v-col cols="12" sm="6" md="6" lg="6" class="pb-0">
-                    <p class="mb-0">Latest emotional status:</p>
-                    <div class="emotions">
-                        <p class="mb-0 mr-1">Valence: </p>
-                        <v-icon size="20" color="blue">{{ valenceIcon }}</v-icon>
-                        <p class="mb-0 ml-3 mr-1">Arousal: </p>
-                        <v-icon size="20" color="blue">{{ arousalIcon }}</v-icon>
-                    </div>
-                </v-col>
-            </v-row>
             <Cards />
             <v-row>
                 <v-col class="wide-chart" cols="9">
@@ -95,7 +84,7 @@ export default {
         Cards,
     },
     computed: {
-        ...mapState(['data']),
+        ...mapState(['data', 'arousalIcon', 'valenceIcon']),
         checkData() {
             for (let item in this.data) {
                 if (this.data[item].length > 0)
@@ -111,8 +100,6 @@ export default {
             chosenFood: { },
             chosenActivity: { activity: null, now: null },
             rendered: false,
-            valenceIcon: null,
-            arousalIcon: null,
             emotions: {
                 valence: {
                     1: 'fas fa-angry',
@@ -169,12 +156,18 @@ export default {
                         end: moment().format('DD-MM-YYYY')
                     });
                     if (this.data['mood'].length > 0) {
-                        this.valenceIcon = this.emotions['valence'][
-                            this.data['mood'][0].valence
-                        ];
-                        this.arousalIcon = this.emotions['arousal'][
-                            this.data['mood'][0].arousal
-                        ];
+                        this.$store.dispatch('setEmotion', {
+                            type: 'valence',
+                            icon: this.emotions['valence'][
+                                this.data['mood'][0].valence
+                            ]
+                        });
+                        this.$store.dispatch('setEmotion', {
+                            type: 'arousal',
+                            icon: this.emotions['arousal'][
+                                this.data['mood'][0].arousal
+                            ]
+                        });
                     }
                     this.rendered = true;
                 },
@@ -186,8 +179,14 @@ export default {
     },
     methods: {
         updateEmotions(parameters) {
-            this.valenceIcon = this.emotions['valence'][parameters.valence];
-            this.arousalIcon = this.emotions['arousal'][parameters.arousal];
+            this.$store.dispatch('setEmotion', {
+                type: 'valence',
+                icon: this.emotions['valence'][parameters.valence]
+            });
+            this.$store.dispatch('setEmotion', {
+                type: 'arousal',
+                icon: this.emotions['arousal'][parameters.arousal]
+            });
         }
     }
 };

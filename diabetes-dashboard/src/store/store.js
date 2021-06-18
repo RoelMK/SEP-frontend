@@ -9,6 +9,8 @@ const store = new Vuex.Store({
         filter: { show: false },
         user: {},
         supervising: {},
+        arousalIcon: null,
+        valenceIcon: null,
         data: [],
         date: {
             start: '',
@@ -58,6 +60,9 @@ const store = new Vuex.Store({
         },
         setNewTimeFrame({ commit }, timeFrame) {
             commit('UPDATE_TIME_FRAME', timeFrame);
+        },
+        setEmotion({ commit }, data) {
+            commit('UPDATE_EMOTION_STATUS', data);
         }
     },
 
@@ -69,6 +74,12 @@ const store = new Vuex.Store({
         },
         SHOW_FILTER(state, filter) {
             state.filter.show = filter.show;
+        },
+        UPDATE_EMOTION_STATUS(state, data) {
+            if (data.type === 'arousal')
+                state.arousalIcon = data.icon;
+            else
+                state.valenceIcon = data.icon;
         },
         UPDATE_DATA(state, data) {
             state.data = data;

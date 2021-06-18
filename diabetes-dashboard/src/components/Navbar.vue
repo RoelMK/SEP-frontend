@@ -48,10 +48,18 @@
                 </div>
 
                 <v-badge bottom overlap offset-x="11" offset-y="15" color="transparent">
+                    <span slot="badge">
+                        <v-icon size="15" color="blue">{{ valenceIcon }}</v-icon>
+                    </span>
                     <span slot="default">
                         <v-avatar size="35" color="primary">
                             <v-img :src="this.profileData.image"></v-img>
                         </v-avatar>
+                    </span>
+                </v-badge>
+                <v-badge bottom overlap offset-x="-5" offset-y="-3" color="transparent">
+                    <span slot="badge">
+                        <v-icon size="15" color="blue">{{ arousalIcon }}</v-icon>
                     </span>
                 </v-badge>
 
@@ -105,10 +113,15 @@ import Supervisor from '../repositories/Supervisor';
 import Auth from "../repositories/Auth";
 import Data from "../repositories/Data";
 import moment from 'moment';
+import { mapState } from 'vuex';
+
 export default {
     name: "Navbar",
     props: {
         msg: String,
+    },
+    computed: {
+        ...mapState(['arousalIcon', 'valenceIcon'])
     },
     async created() {
         if (this.$store.state.user.email) {
