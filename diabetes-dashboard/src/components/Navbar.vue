@@ -48,9 +48,6 @@
                 </div>
 
                 <v-badge bottom overlap offset-x="11" offset-y="15" color="transparent">
-                    <span slot="badge">
-                        <v-icon size="15" color="blue">mdi-emoticon</v-icon>
-                    </span>
                     <span slot="default">
                         <v-avatar size="35" color="primary">
                             <v-img :src="this.profileData.image"></v-img>
@@ -104,7 +101,6 @@
 </template>
 
 <script>
-import activities from '@/components/configurations/queryProperties.js';
 import Supervisor from '../repositories/Supervisor';
 import Auth from "../repositories/Auth";
 import Data from "../repositories/Data";
@@ -200,9 +196,7 @@ export default {
             );
             const config = {
                 startDate: moment().format('DD-MM-YYYY'),
-                endDate: moment().format('DD-MM-YYYY'),
-                exerciseTypes: activities[3].properties[0].properties
-                    .map(d => d.toUpperCase()).join(','),
+                endDate: moment().format('DD-MM-YYYY')
             };
             Data.fetch(config, token).then(
                 async (res) => {

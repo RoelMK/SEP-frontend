@@ -144,6 +144,7 @@ export default {
                             color: "dark",
                             btnColor: "pink",
                         });
+                        this.$emit('emotions', this.parameters);
                         return resp.data;
                     },
                     (error) => {

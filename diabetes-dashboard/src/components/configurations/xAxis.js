@@ -1,4 +1,4 @@
-export default function(min, max) {
+export default function(min = null, max = null) {
     return [
         {
             gridIndex: 0,
@@ -12,8 +12,8 @@ export default function(min, max) {
             axisTick: {
                 show: false
             },
-            min: min,
-            max: max
+            min: (min) ? min : 'dataMin',
+            max: (max) ? max : 'dataMax'
         },
         {
             show: true,
@@ -25,8 +25,8 @@ export default function(min, max) {
             axisLabel: {
                 show: false
             },
-            min: min,
-            max: max
+            min: (min) ? min : 'dataMin',
+            max: (max) ? max : 'dataMax'
         },
         {
             show: true,
@@ -38,8 +38,8 @@ export default function(min, max) {
             axisLabel: {
                 show: false
             },
-            min: min,
-            max: max
+            min: (min) ? min : 'dataMin',
+            max: (max) ? max : 'dataMax'
         },
         {
             show: true,
@@ -51,8 +51,8 @@ export default function(min, max) {
             axisLabel: {
                 show: false
             },
-            min: min,
-            max: max
+            min: (min) ? min : 'dataMin',
+            max: (max) ? max : 'dataMax'
         },
         {
             show: true,
@@ -64,8 +64,8 @@ export default function(min, max) {
             axisLabel: {
                 show: false
             },
-            min: min,
-            max: max
+            min: (min) ? min : 'dataMin',
+            max: (max) ? max : 'dataMax'
         },
     ];
 }

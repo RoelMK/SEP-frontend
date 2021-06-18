@@ -48,7 +48,6 @@ import properties from '@/components/configurations/queryProperties.js';
 import filterHelpers from '@/helpers/filter.js';
 import moment from 'moment';
 import Data from '@/repositories/Data.js';
-import activities from '@/components/configurations/queryProperties.js';
 import { mapState } from 'vuex';
 export default {
     components: {
@@ -120,18 +119,22 @@ export default {
                     const config = {
                         startDate: (this.parameters.date)
                             ? selection['date'][0]
-                            : this.date.start.format('DD-MM-YYYY'),
+                            : this.date.start,
                         endDate: (this.parameters.date)
                             ? selection['date'][1]
-                            : this.date.end.format('DD-MM-YYYY'),
+                            : this.date.end,
                         exerciseTypes: (this.parameters.activity)
                             ? selection['activity']
                                 .map(d => d.toUpperCase())
                                 .join(',')
-                            : activities[3].properties[0].properties
-                                .map(d => d.toUpperCase())
-                                .join(',')
+                            : ''
                     };
+                    if (this.parameters.date) {
+                        this.$store.dispatch('setDate', {
+                            start: selection['date'][0],
+                            end: selection['date'][1]
+                        });
+                    }
                     if (config.startDate.includes("Invalid") ||
                         config.startDate.includes("Invalid")) {
                         this.$toaster.showMessage({
@@ -142,16 +145,12 @@ export default {
                         });
                         return;
                     }
-                    this.$store.dispatch('setDate', {
-                        start: selection['date'][0],
-                        end: selection['date'][1]
-                    });
                     await Data.fetch(config, this.$cookies.get('JWT')).then(
                         (dataPromise) => dataPromise,
                         (err) => console.log(err))
                         .then(data => {
-                            items = data.data;
-                            this.$store.dispatch('setData', items);
+                            items = JSON.parse(JSON.stringify(data.data));
+                            this.$store.dispatch('setData', data.data);
                         });
                 } else {
                     items = JSON.parse(JSON.stringify(this.data));
@@ -186,16 +185,19 @@ export default {
                 }
                 if (keys.includes('emotion')) {
                     for (let item in this.data['mood']) {
-                        items['mood'][item].arousal =
-                            filterHelpers['emotion'](
-                                this.data['mood'][item].arousal,
-                                selection['emotion'][0],
-                            );
-                        items['mood'][item].valence =
-                            filterHelpers['emotion'](
-                                this.data['mood'][item].valence,
-                                selection['emotion'][1],
-                            );
+                        var value = items['mood'][item];
+                        value.arousal = filterHelpers['emotion'](
+                            this.data['mood'][item].arousal,
+                            selection['emotion'][0],
+                        );
+                        value.valence = filterHelpers['emotion'](
+                            this.data['mood'][item].valence,
+                            selection['emotion'][1],
+                        );
+                        if (value.arousal === null || value.values === null) {
+                            value.arousal = null;
+                            value.valence = null;
+                        }
                     }
                 }
                 this.$store.dispatch('setFilteredData', items);

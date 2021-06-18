@@ -10,7 +10,7 @@
                     <v-row class="centered">
                         <v-col>
                             <p id="inlined" class="cardValue">98</p>
-                            <p id="inlined" class="cardUnits">mg/dL</p>
+                            <p id="inlined" class="cardUnits">mmol/L</p>
                         </v-col>
                         <v-col class="rightAligned">
                             <p id="inlined" class="cardTime">t: 14:00</p>

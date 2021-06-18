@@ -3,12 +3,15 @@
         <Navbar class="header"></Navbar>
         <div class="clearfix"></div>
         <div class="main">
-            <v-row>
+            <v-row v-if="rendered && data['mood'].length > 0">
                 <v-col cols="12" sm="6" md="6" lg="6" class="pb-0">
-                    <p>23 May 2021</p>
-                </v-col>
-                <v-col cols="12" sm="6" md="6" lg="6" class="rightAligned pb-0">
-                    <p>00:00 - 24:00</p>
+                    <p class="mb-0">Latest emotional status:</p>
+                    <div class="emotions">
+                        <p class="mb-0 mr-1">Valence: </p>
+                        <v-icon size="20" color="blue">{{ valenceIcon }}</v-icon>
+                        <p class="mb-0 ml-3 mr-1">Arousal: </p>
+                        <v-icon size="20" color="blue">{{ arousalIcon }}</v-icon>
+                    </div>
                 </v-col>
             </v-row>
             <Cards />
@@ -60,7 +63,7 @@
                 </v-col>
                 <v-col col="3">
                     <v-card class="full-height" elevation="2">
-                        <EmotionsComponent />
+                        <EmotionsComponent v-on:emotions="updateEmotions" />
                     </v-card>
                 </v-col>
             </v-row>
@@ -77,7 +80,6 @@ import Navbar from '@/components/Navbar.vue';
 import Cards from '@/components/Cards.vue';
 import Upload from "@/repositories/Upload";
 import Data from '@/repositories/Data.js';
-import activities from '@/components/configurations/queryProperties.js';
 import moment from 'moment';
 import Auth from "../repositories/Auth";
 import { mapState } from 'vuex';
@@ -108,7 +110,21 @@ export default {
             items: ['insulin', 'food', 'activities'],
             chosenFood: { },
             chosenActivity: { activity: null, now: null },
-            rendered: false
+            rendered: false,
+            valenceIcon: null,
+            arousalIcon: null,
+            emotions: {
+                valence: {
+                    1: 'fas fa-angry',
+                    2: 'fas fa-smile-beam',
+                    3: 'fas fa-laugh-beam',
+                },
+                arousal: {
+                    1: 'fas fa-tired',
+                    2: 'fas fa-smile-beam',
+                    3: 'fas fa-grin-stars',
+                },
+            },
         };
     },
     async created() {
@@ -143,23 +159,35 @@ export default {
         if (this.data.length <= 0) {
             const config = {
                 startDate: moment().format('DD-MM-YYYY'),
-                endDate: moment().format('DD-MM-YYYY'),
-                exerciseTypes: activities[3].properties[0].properties
-                    .map(d => d.toUpperCase()).join(','),
+                endDate: moment().format('DD-MM-YYYY')
             };
             Data.fetch(config, this.$cookies.get("JWT")).then(
                 async (res) => {
                     await this.$store.dispatch('setData', res.data);
                     await this.$store.dispatch('setDate', {
-                        start: moment(),
-                        end: moment()
+                        start: moment().format('DD-MM-YYYY'),
+                        end: moment().format('DD-MM-YYYY')
                     });
+                    if (this.data['mood'].length > 0) {
+                        this.valenceIcon = this.emotions['valence'][
+                            this.data['mood'][0].valence
+                        ];
+                        this.arousalIcon = this.emotions['arousal'][
+                            this.data['mood'][0].arousal
+                        ];
+                    }
                     this.rendered = true;
                 },
                 (err) => console.log(err)
             );
         } else {
             this.rendered = true;
+        }
+    },
+    methods: {
+        updateEmotions(parameters) {
+            this.valenceIcon = this.emotions['valence'][parameters.valence];
+            this.arousalIcon = this.emotions['arousal'][parameters.arousal];
         }
     }
 };
@@ -182,6 +210,10 @@ export default {
 }
 .rightAligned {
     text-align: right;
+}
+.emotions {
+    display: flex;
+    vertical-align: middle;
 }
 #overview-chart-container {
     height: 700px;
