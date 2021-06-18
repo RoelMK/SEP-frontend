@@ -208,8 +208,8 @@ export default {
         options(data) {
             const arr = data['glucose'];
             if (typeof arr !== 'undefined') {
-                var maxGlucoseTimestamp = null;
-                var minGlucoseTimestamp = null;
+                // var maxGlucoseTimestamp = null;
+                // var minGlucoseTimestamp = null;
                 const mood = this.prepareData(
                     data,
                     'mood',
@@ -261,24 +261,22 @@ export default {
                         d[2]
                     ];
                 });
-                if (arr.length > 0) {
-                    maxGlucoseTimestamp = arr[0].timestamp;
-                    minGlucoseTimestamp = arr[arr.length - 1].timestamp;
+                // maxGlucoseTimestamp = arr[0].timestamp;
+                // minGlucoseTimestamp = arr[arr.length - 1].timestamp;
 
-                    var glucose = this.prepareData(
-                        data,
-                        'glucose',
-                        'timestamp',
-                        'glucoseLevel'
-                    );
-                    glucose = this.alignGluconeData(
-                        glucose,
-                        mood,
-                        insulin,
-                        carbs,
-                        exercise
-                    );
-                }
+                var glucose = this.prepareData(
+                    data,
+                    'glucose',
+                    'timestamp',
+                    'glucoseLevel'
+                );  
+                // glucose = this.alignGluconeData(
+                //     glucose,
+                //     mood,
+                //     insulin,
+                //     carbs,
+                //     exercise
+                // );
 
                 const ranges = (localStorage.getItem('normalRange') === null)
                     ? null
@@ -361,7 +359,7 @@ export default {
                         }
                     ],
                     grid: grid,
-                    xAxis: xAxis(minGlucoseTimestamp, maxGlucoseTimestamp),
+                    xAxis: xAxis(null, null),
                     yAxis: yAxis,
                     visualMap: visualMap(ranges),
                     series: [
