@@ -146,7 +146,7 @@ export default {
                             0,
                             this.computeTimeDistribution(data)[4][0],
                             `${this.computeTimeDistribution(data)[4][0]}%`,
-                            `${this.computeTimeDistribution(data)[4][1]} min`
+                            `${this.computeTimeDistribution(data)[4][1]} hours`
                         ]],
                         encode: {
                             x: 0,
