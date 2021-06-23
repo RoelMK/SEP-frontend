@@ -2,8 +2,6 @@
     <v-card flat>
         <v-card-text class="statistics-container">
             <StackedBarChart />
-            <ul>
-            </ul>
         </v-card-text>
     </v-card>
 </template>

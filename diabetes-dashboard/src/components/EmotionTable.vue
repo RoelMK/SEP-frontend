@@ -273,7 +273,7 @@
 
 <script>
 import moment from "moment";
-import Emotion from "@/repositories/Emotion.js";
+import Data from "@/repositories/Data.js";
 import { deleteMixin } from "@/helpers/deleteMixin.js";
 import HistoryDatePicker from "@/components/HistoryDatePicker.vue";
 import HistoryTimePicker from "@/components/HistoryTimePicker.vue";
@@ -501,7 +501,7 @@ export default {
                 if (editing) {
                     parameters["activityId"] = this.editedItem.id;
 
-                    let emotion = await Emotion.post(
+                    let emotion = await Data.postEmotion(
                         parameters,
                         this.$cookies.get("JWT")
                     ).then(
@@ -520,7 +520,7 @@ export default {
                     this.$store.commit("UPDATE_EMOTION", emotion);
                     this.updateEmotionTable();
                 } else {
-                    let emotion = await Emotion.post(
+                    let emotion = await Data.postEmotion(
                         parameters,
                         this.$cookies.get("JWT")
                     ).then(

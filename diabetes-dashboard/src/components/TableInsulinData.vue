@@ -178,7 +178,7 @@
 import moment from "moment";
 import HistoryDatePicker from "@/components/HistoryDatePicker.vue";
 import HistoryTimePicker from "@/components/HistoryTimePicker.vue";
-import Insulin from "@/repositories/Insulin.js";
+import Data from "@/repositories/Data.js";
 import { deleteMixin } from "@/helpers/deleteMixin.js";
 import { mapState } from "vuex";
 
@@ -393,7 +393,7 @@ export default {
                         token = this.$store.state.supervising.token;
                     }
 
-                    let insulin = await Insulin.post(
+                    let insulin = await Data.postInsulin(
                         parameters,
                         token
                     ).then(
@@ -417,7 +417,7 @@ export default {
                     if (this.$store.state.supervising.token) {
                         token = this.$store.state.supervising.token;
                     }
-                    let insulin = await Insulin.post(
+                    let insulin = await Data.postInsulin(
                         parameters,
                         token
                     ).then(

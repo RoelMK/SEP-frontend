@@ -8,11 +8,6 @@
                     :reload="reload"
                     v-on:dateUpdated="update('change', prop.index, $event)"
                 />
-                <TimePicker
-                    v-else-if="prop.isTime"
-                    :reload="reload"
-                    v-on:timeUpdated="update('change', prop.index, $event)"
-                />
                 <v-text-field
                     v-else-if="prop.isSearchable"
                     v-model="model[index]"
@@ -73,12 +68,10 @@
 </template>
 
 <script>
-import TimePicker from '@/components/TimePicker.vue';
 import DatePicker from '@/components/DatePicker.vue';
 
 export default {
     components: {
-        TimePicker,
         DatePicker
     },
     props: {

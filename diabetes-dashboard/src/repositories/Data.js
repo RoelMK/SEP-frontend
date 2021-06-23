@@ -15,4 +15,34 @@ export default {
         };
         return Client.get(url, config);
     },
+    deleteItem(payload, token) {
+        let url = `${resource}activities/delete`;
+        let config = {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+        };
+        let data = payload;
+        return Client.post(url, data, config);
+    },
+    postEmotion(payload, token) {
+        let url = `${resource}mood`;
+        let config = {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+        };
+        let data = payload;
+        return Client.post(url, data, config);
+    },
+    postInsulin(payload, token) {
+        let url = `${resource}insulin`;
+        let config = {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+        };
+        let data = payload;
+        return Client.post(url, data, config);
+    },
 };

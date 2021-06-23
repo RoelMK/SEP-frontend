@@ -8,7 +8,7 @@
             </v-tabs>
             <v-tabs-items v-model="tab">
                 <v-tab-item>
-                    <BloodGlucoseStatistics />
+                    <GlucoseStatistics />
                 </v-tab-item>
                 <v-tab-item>
                     <CumulativeStatistics />
@@ -19,13 +19,13 @@
 </template>
 
 <script>
-import BloodGlucoseStatistics from "@/components/BloodGlucoseStatistics.vue";
+import GlucoseStatistics from "@/components/GlucoseStatistics.vue";
 import CumulativeStatistics from "@/components/CumulativeStatistics.vue";
 
 export default {
     name: "Statistics",
     components: {
-        BloodGlucoseStatistics,
+        GlucoseStatistics,
         CumulativeStatistics,
     },
     data() {

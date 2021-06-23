@@ -52,7 +52,7 @@
                 </v-col>
                 <v-col col="3">
                     <v-card class="full-height" elevation="2">
-                        <EmotionsComponent v-on:emotions="updateEmotions" />
+                        <Emotions v-on:emotions="updateEmotions" />
                     </v-card>
                 </v-col>
             </v-row>
@@ -63,7 +63,7 @@
 <script>
 import OverviewChart from '@/components/OverviewChart.vue';
 import Statistics from '@/components/Statistics.vue';
-import EmotionsComponent from '@/components/EmotionsComponent.vue';
+import Emotions from '@/components/Emotions.vue';
 import Legend from '@/components/Legend.vue';
 import Navbar from '@/components/Navbar.vue';
 import Cards from '@/components/Cards.vue';
@@ -77,7 +77,7 @@ export default {
     name: "Dashboard",
     components: {
         Statistics,
-        EmotionsComponent,
+        Emotions,
         OverviewChart,
         Navbar,
         Legend,

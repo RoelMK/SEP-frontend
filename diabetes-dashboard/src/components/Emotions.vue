@@ -107,7 +107,7 @@
 
 <script>
 import moment from "moment";
-import Emotion from "@/repositories/Emotion.js";
+import Data from "@/repositories/Data.js";
 
 export default {
     name: "EmotionComponent",
@@ -134,7 +134,7 @@ export default {
                     btnColor: "pink",
                 });
             } else {
-                let emotion = await Emotion.post(
+                let emotion = await Data.postEmotion(
                     this.parameters,
                     this.$cookies.get("JWT")
                 ).then(
