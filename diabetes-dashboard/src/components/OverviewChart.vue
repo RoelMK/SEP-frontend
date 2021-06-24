@@ -1,5 +1,5 @@
 <template>
-    <v-chart ref="overview" :option="options(data)" autoresize />
+    <v-chart ref="overview" v-on:datazoom="emitProportions" :option="options(data)" autoresize />
 </template>
 
 <script>
@@ -54,6 +54,9 @@ export default {
         };
     },
     methods: {
+        emitProportions(params) {
+            this.$emit('propchanged', [params.start, params.end]);
+        },
         /**
          * Scale value to a certain range
          * @param  { int }      value Value to be scaled
@@ -279,6 +282,7 @@ export default {
 
                 if (arr.length > 0) {
                     minMax = this.findMinMax(data);
+                    this.$emit('minmaxchanged', minMax);
                     var glucose = this.prepareData(
                         data,
                         'glucose',

@@ -8,7 +8,12 @@
                 <v-col class="wide-chart" cols="9">
                     <v-card id="overview-chart-container" elevation="2">
                         <v-progress-circular indeterminate color="primary" size="50" v-if="!rendered" />
-                        <OverviewChart ref="overview" v-if="rendered && checkData" />
+                        <OverviewChart
+                            ref="overview"
+                            v-on:minmaxchanged="updateMinMax"
+                            v-on:propchanged="updateProportions"
+                            v-if="rendered && checkData"
+                        />
                         <v-container fill-height fluid v-if="!checkData && rendered">
                             <v-row align="center" justify="center">
                                 <div class="d-block text-center">
@@ -27,7 +32,7 @@
                 <v-col cols="3">
                     <v-card class="full-height statistics" elevation="2">
                         <v-progress-circular indeterminate color="primary" size="50" v-if="!rendered" />
-                        <Statistics v-if="rendered && checkData" />
+                        <Statistics :minMax="minMax" :proportions="proportions" v-if="rendered && checkData" />
                         <v-container fill-height fluid v-if="!checkData && rendered">
                             <v-row align="center" justify="center">
                                 <div class="d-block text-center">
@@ -95,10 +100,6 @@ export default {
     },
     data() {
         return {
-            tab: null,
-            items: ['insulin', 'food', 'activities'],
-            chosenFood: { },
-            chosenActivity: { activity: null, now: null },
             rendered: false,
             emotions: {
                 valence: {
@@ -112,6 +113,8 @@ export default {
                     3: 'fas fa-grin-stars',
                 },
             },
+            proportions: [0, 100],
+            minMax: [null, null]
         };
     },
     async created() {
@@ -181,6 +184,12 @@ export default {
         }
     },
     methods: {
+        updateMinMax(parameters) {
+            this.minMax = parameters;
+        },
+        updateProportions(parameters) {
+            this.proportions = parameters;
+        },
         updateEmotions(parameters) {
             this.$store.dispatch('setEmotion', {
                 type: 'valence',

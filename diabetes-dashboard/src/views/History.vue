@@ -92,9 +92,6 @@ export default {
             this.$router.push("/");
     },
     methods: {
-        getSelectedFoodInsulinEmotion(item) {
-            console.log(item);
-        },
         getSelectedActivity(activity) {
             let start = moment(
                 moment(activity.startDate + " " + activity.startTime).format(

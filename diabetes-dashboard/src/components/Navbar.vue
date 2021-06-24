@@ -110,7 +110,6 @@
 
 <script>
 import Supervisor from '../repositories/Supervisor';
-import Auth from "../repositories/Auth";
 import Data from "../repositories/Data";
 import moment from 'moment';
 import { mapState } from 'vuex';

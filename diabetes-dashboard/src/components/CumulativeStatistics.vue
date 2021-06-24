@@ -57,17 +57,39 @@ export default {
             }
         },
     },
+    props: {
+        proportions: {
+            type: Array,
+            default: null
+        },
+        minMax: {
+            type: Array,
+            default: null
+        },
+    },
     data() {
         return {
             cumulativeData: [],
-            unitBG: "mmol/L",
+            unitBG: "mmol/L"
         };
     },
     methods: {
+        getStartEnd(){
+            const start = this.minMax[0]
+                + (this.minMax[1] - this.minMax[0]) * this.proportions[0] /100;
+            const end = this.minMax[0]
+                + (this.minMax[1] - this.minMax[0]) * this.proportions[1] /100;
+            return [start, end];
+        },
         totalCalories() {
             if (!this.cumulativeData.food) return 0;
+            this.getStartEnd();
             let totalCalories = 0;
-            this.cumulativeData.food.forEach((element) => {
+            var localData = JSON.parse(JSON.stringify(this.cumulativeData));
+            var datetime = this.getStartEnd();
+            localData.food.filter(f => {
+                return f.timestamp<= datetime[1] && f.timestamp >= datetime[0];
+            }).forEach((element) => {
                 totalCalories += element.calories ? element.calories : 0;
             });
             return totalCalories;
@@ -75,7 +97,11 @@ export default {
         totalCarbs() {
             if (!this.cumulativeData.food) return 0;
             let totalCarbs = 0;
-            this.cumulativeData.food.forEach((element) => {
+            var localData = JSON.parse(JSON.stringify(this.cumulativeData));
+            var datetime = this.getStartEnd();
+            localData.food.filter(f => {
+                return f.timestamp <= datetime[1] &&f.timestamp >= datetime[0];
+            }).forEach((element) => {
                 totalCarbs += element.carbohydrates ? element.carbohydrates : 0;
             });
             return totalCarbs;
@@ -83,15 +109,26 @@ export default {
         totalInsulin(insulinType) {
             if (!this.cumulativeData.insulin) return 0;
             let totalInsulin = 0;
-            this.cumulativeData.insulin.forEach((element) => {
-                totalInsulin += element.insulinType == insulinType ? 1 : 0;
+            var localData = JSON.parse(JSON.stringify(this.cumulativeData));
+            var datetime = this.getStartEnd();
+            localData.insulin.filter(f => {
+                return f.timestamp <= datetime[1] &&f.timestamp >= datetime[0];
+            }).forEach((element) => {
+                totalInsulin
+                    += element.insulinType == insulinType
+                        ? element.insulinAmount
+                        : 0;
             });
             return totalInsulin;
         },
         totalBurntCalories() {
             if (!this.cumulativeData.activities) return 0;
             let totalBurnt = 0;
-            this.cumulativeData.activities.forEach((element) => {
+            var localData = JSON.parse(JSON.stringify(this.cumulativeData));
+            var datetime = this.getStartEnd();
+            localData.exercise.filter(f => {
+                return f.timestamp <= datetime[1] &&f.timestamp >= datetime[0];
+            }).forEach((element) => {
                 totalBurnt += element.calories;
             });
             return totalBurnt;
@@ -100,7 +137,11 @@ export default {
             if (!this.cumulativeData.glucose) return 0;
             let total = 0;
             let count = this.cumulativeData.glucose.length;
-            this.cumulativeData.glucose.forEach((element) => {
+            var localData = JSON.parse(JSON.stringify(this.cumulativeData));
+            var datetime = this.getStartEnd();
+            localData.glucose.filter(f => {
+                return f.timestamp <= datetime[1] &&f.timestamp >= datetime[0];
+            }).forEach((element) => {
                 total += element.glucoseLevel ? element.glucoseLevel : 0;
             });
             return total / count;
@@ -110,7 +151,11 @@ export default {
             if (!this.cumulativeData.glucose) return 0;
             // calculate max
             let max = 0;
-            this.cumulativeData.glucose.forEach((element) => {
+            var localData = JSON.parse(JSON.stringify(this.cumulativeData));
+            var datetime = this.getStartEnd();
+            localData.glucose.filter(f => {
+                return f.timestamp <= datetime[1] &&f.timestamp >= datetime[0];
+            }).forEach((element) => {
                 max = element.glucoseLevel > max ? element.glucoseLevel : max;
             });
             return max;
@@ -119,10 +164,13 @@ export default {
             // check for existence and length
             if (!this.cumulativeData.glucose || this.cumulativeData.length == 0)
                 return 0;
-
             //calculate min
             let min = this.cumulativeData.glucose[0].glucoseLevel;
-            this.cumulativeData.glucose.forEach((element) => {
+            var localData = JSON.parse(JSON.stringify(this.cumulativeData));
+            var datetime = this.getStartEnd();
+            localData.glucose.filter(f => {
+                return f.timestamp <= datetime[1] &&f.timestamp >= datetime[0];
+            }).forEach((element) => {
                 min = element.glucoseLevel < min ? element.glucoseLevel : min;
             });
             return min;

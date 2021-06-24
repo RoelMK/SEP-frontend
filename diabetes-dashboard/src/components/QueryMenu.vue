@@ -49,6 +49,7 @@ import filterHelpers from '@/helpers/filter.js';
 import moment from 'moment';
 import Data from '@/repositories/Data.js';
 import { mapState } from 'vuex';
+
 export default {
     components: {
         Query
@@ -83,11 +84,14 @@ export default {
     },
     computed: {
         ...mapState(['filter', 'data', 'date', 'filteredData']),
+        // Check parameters that were selected from the query
+        // menu in order to show label in the UI
         selectedParameters() {
             return Object.entries(this.parameters)
                 .filter(f => f[1] !== null)
                 .map(d => d[0]);
         },
+        // Validate min/max fields
         validation() {
             if (this.parameters.insulinMax < this.parameters.insulinMin
                 && this.parameters.insulinMax !== null)
@@ -96,7 +100,12 @@ export default {
         }
     },
     methods: {
+        /**
+         * Apply filtering onto data object
+         * @return void
+         */
         async applyFiltering() {
+            // Validate fields before filtering
             if (this.validation) {
                 var items = [];
                 const selection = this.checkSelection({
@@ -213,19 +222,47 @@ export default {
                 });
             }
         },
+        /**
+         * Create tooltip body
+         * @param  { String }   marker marker HTML
+         * @param  { String }   name   name of item label
+         * @param  { String }   value  value of item label
+         * @return
+         */
         resetSelection() {
             for (let element in this.parameters) {
                 this.parameters[element] = null;
             }
             this.reload = !this.reload;
         },
+        /**
+         * Create tooltip body
+         * @param  { String }   marker marker HTML
+         * @param  { String }   name   name of item label
+         * @param  { String }   value  value of item label
+         * @return
+         */
         updateParameters(index, value) {
             this.parameters[index] = value;
         },
+        /**
+         * Create tooltip body
+         * @param  { String }   marker marker HTML
+         * @param  { String }   name   name of item label
+         * @param  { String }   value  value of item label
+         * @return
+         */
         cancelFiltering() {
             this.$store.dispatch('showFilter', { show: false });
             this.resetSelection();
         },
+        /**
+         * Create tooltip body
+         * @param  { String }   marker marker HTML
+         * @param  { String }   name   name of item label
+         * @param  { String }   value  value of item label
+         * @return
+         */
         formatLabel(str) {
             var isCapital =  str.match(/[A-Z]/);
             if (isCapital) {
@@ -234,6 +271,13 @@ export default {
             }
             return str.charAt(0).toUpperCase() + str.slice(1);
         },
+        /**
+         * Create tooltip body
+         * @param  { String }   marker marker HTML
+         * @param  { String }   name   name of item label
+         * @param  { String }   value  value of item label
+         * @return
+         */
         setupParameters(parameters) {
             // TODO: Remove 10-04-2027
             if (!parameters.date)
@@ -247,6 +291,13 @@ export default {
                     : ''
             };
         },
+        /**
+         * Create tooltip body
+         * @param  { String }   marker marker HTML
+         * @param  { String }   name   name of item label
+         * @param  { String }   value  value of item label
+         * @return
+         */
         checkSelection(parameters) {
             const output = {};
             for (let param in parameters) {

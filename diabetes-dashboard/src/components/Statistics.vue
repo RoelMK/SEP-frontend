@@ -8,10 +8,14 @@
             </v-tabs>
             <v-tabs-items v-model="tab">
                 <v-tab-item>
-                    <GlucoseStatistics />
+                    <v-card flat>
+                        <v-card-text class="statistics-container">
+                            <StackedBarChart />
+                        </v-card-text>
+                    </v-card>
                 </v-tab-item>
                 <v-tab-item>
-                    <CumulativeStatistics />
+                    <CumulativeStatistics :minMax="minMax" :proportions="proportions" />
                 </v-tab-item>
             </v-tabs-items>
         </v-card>
@@ -19,14 +23,24 @@
 </template>
 
 <script>
-import GlucoseStatistics from "@/components/GlucoseStatistics.vue";
+import StackedBarChart from '@/components/StackedBarChart.vue';
 import CumulativeStatistics from "@/components/CumulativeStatistics.vue";
 
 export default {
     name: "Statistics",
     components: {
-        GlucoseStatistics,
+        StackedBarChart,
         CumulativeStatistics,
+    },
+    props: {
+        proportions: {
+            type: Array,
+            default: null
+        },
+        minMax: {
+            type: Array,
+            default: null
+        }
     },
     data() {
         return {
@@ -51,5 +65,8 @@ export default {
 }
 .statistics-container li span {
     font-weight: bold;
+}
+.statistics-container .echarts {
+    height: 270px;
 }
 </style>
