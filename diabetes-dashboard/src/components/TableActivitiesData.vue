@@ -295,13 +295,13 @@ export default {
                 moment(
                     activity.startDate + " " + activity.startTime,
                     "yyyy-MM-DD HH:mm"
-                )
+                ).subtract(2, "hours")
             ).format("YYYY-MM-DDTHH:mm");
             let end = moment(
                 moment(
                     activity.endDate + " " + activity.endTime,
                     "yyyy-MM-DD HH:mm"
-                )
+                ).add(2, "hours")
             ).format("YYYY-MM-DDTHH:mm");
             this.$store.dispatch("setNewTimeFrame", {
                 start,

@@ -26,6 +26,7 @@
                         :thumb-color="colors.veryHigh"
                         @change="onClick"
                         @input="catchVeryHighSlider"
+                        :key="sliderKeyHigh"
                     ></v-slider>
                 </div>
             </v-col>
@@ -102,6 +103,7 @@
                         :track-color="colors.trackColor"
                         @click="onClick"
                         @input="catchVeryLowSlider"
+                        :key="sliderKeyLow"
                     ></v-slider>
                 </div>
             </v-col>
@@ -175,6 +177,8 @@ export default {
                 veryLow: legend.sections[0].properties[0].color,
                 trackColor: "gray",
             },
+            sliderKeyHigh: 0,
+            sliderKeyLow: 0
         };
     },
     created() {
@@ -216,53 +220,48 @@ export default {
             }
             // Post request to Gamebus to make the changes
         },
-        getUpperVeryHighRange() {
-            let str = localStorage.highRange.split(",")[1];
-            return str.slice(0, -1);
-        },
-        getLowerVeryLowRange() {
-            let str = localStorage.lowRange.split(",")[0];
-            return str.substring(1);
-        },
         catchVeryHighSlider(e) {
-            if (e < this.getUpperVeryHighRange()) {
+            if (e < this.healthSettings.highRange[1]) {
                 this.healthSettings.veryHighValue =
-                    this.getUpperVeryHighRange();
+                    this.healthSettings.highRange[1] + 0.1;
+                this.sliderKeyHigh++;
             }
         },
         catchHighSlider(e) {
             if (e[1] > this.healthSettings.veryHighValue) {
                 this.healthSettings.highRange[1] =
-                    this.healthSettings.veryHighValue;
+                    this.healthSettings.veryHighValue - 0.1;
             }
             if (e[0] < this.healthSettings.normalRange[1]) {
                 this.healthSettings.highRange[0] =
-                    this.healthSettings.normalRange[1];
+                    this.healthSettings.normalRange[1] + 0.1;
             }
         },
         catchNormalSlider(e) {
             if (e[1] > this.healthSettings.highRange[0]) {
                 this.healthSettings.normalRange[1] =
-                    this.healthSettings.highRange[0];
+                    this.healthSettings.highRange[0] - 0.1;
             }
             if (e[0] < this.healthSettings.lowRange[1]) {
                 this.healthSettings.normalRange[0] =
-                    this.healthSettings.lowRange[1];
+                    this.healthSettings.lowRange[1] + 0.1;
             }
         },
         catchLowSlider(e) {
             if (e[1] > this.healthSettings.normalRange[0]) {
                 this.healthSettings.lowRange[1] =
-                    this.healthSettings.normalRange[0];
+                    this.healthSettings.normalRange[0] - 0.1;
             }
             if (e[0] < this.healthSettings.veryLowValue) {
                 this.healthSettings.lowRange[0] =
-                    this.healthSettings.veryLowValue;
+                    this.healthSettings.veryLowValue + 0.1;
             }
         },
         catchVeryLowSlider(e) {
-            if (e > this.getLowerVeryLowRange()) {
-                this.healthSettings.veryLowValue = this.getLowerVeryLowRange();
+            if (e > this.healthSettings.lowRange[0]) {
+                this.healthSettings.veryLowValue =
+                    this.healthSettings.lowRange[0] - 0.1;
+                this.sliderKeyLow++;
             }
         },
     },
