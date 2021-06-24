@@ -14,12 +14,6 @@ export default {
     components: {
         StackedBarChart
     },
-    props: {
-        data: {
-            type: Array,
-            default: null
-        }
-    },
     data() {
         return {
             avgBG: 0,

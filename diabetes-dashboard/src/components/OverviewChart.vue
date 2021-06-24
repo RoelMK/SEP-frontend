@@ -205,9 +205,26 @@ export default {
             }
             return data;
         },
+        findMinMax(data) {
+            var timestamps = [];
+            for (let prop in data) {
+                for (let idx in data[prop]) {
+                    try {
+                        timestamps.push(data[prop][idx].timestamp);
+                    } catch {
+                        continue;
+                    }
+                }
+            }
+            return [
+                Math.min.apply(null, timestamps),
+                Math.max.apply(null, timestamps)
+            ];
+        },
         options(data) {
             const arr = data['glucose'];
             if (typeof arr !== 'undefined') {
+                var minMax = [null, null];
                 const mood = this.prepareData(
                     data,
                     'mood',
@@ -259,19 +276,23 @@ export default {
                         d[2]
                     ];
                 });
-                var glucose = this.prepareData(
-                    data,
-                    'glucose',
-                    'timestamp',
-                    'glucoseLevel'
-                );
-                glucose = this.alignGluconeData(
-                    glucose,
-                    mood,
-                    insulin,
-                    carbs,
-                    exercise
-                );
+
+                if (arr.length > 0) {
+                    minMax = this.findMinMax(data);
+                    var glucose = this.prepareData(
+                        data,
+                        'glucose',
+                        'timestamp',
+                        'glucoseLevel'
+                    );
+                    glucose = this.alignGluconeData(
+                        glucose,
+                        mood,
+                        insulin,
+                        carbs,
+                        exercise
+                    );
+                }
                 const ranges = (localStorage.getItem('normalRange') === null)
                     ? null
                     : {
@@ -353,7 +374,7 @@ export default {
                         }
                     ],
                     grid: grid,
-                    xAxis: xAxis(null, null),
+                    xAxis: xAxis(...minMax),
                     yAxis: yAxis,
                     visualMap: visualMap(ranges),
                     series: [
