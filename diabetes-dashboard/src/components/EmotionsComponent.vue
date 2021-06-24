@@ -110,11 +110,15 @@ import moment from "moment";
 import Emotion from "@/repositories/Emotion.js";
 
 export default {
+    // set name of component
     name: "EmotionComponent",
     data() {
         return {
+            // selected happiness value
             selectedButtonHappiness: "",
+            // selected excitement value
             selectedButtonExcitement: "",
+            // parameters for post request
             parameters: {
                 timestamp: +moment(),
                 arousal: 0,
@@ -123,7 +127,12 @@ export default {
         };
     },
     methods: {
+        /**
+         * Method to check emotion input and add it
+         * @return
+         */ 
         async checkEmotionInput() {
+            // check if a necessary property was not set
             if (
                 this.parameters.arousal === 0 ||
                 this.parameters.valance === 0
@@ -134,6 +143,7 @@ export default {
                     btnColor: "pink",
                 });
             } else {
+                // make a post request
                 let emotion = await Emotion.post(
                     this.parameters,
                     this.$cookies.get("JWT")
@@ -151,6 +161,7 @@ export default {
                         console.log(error);
                     }
                 );
+                // update local data
                 this.$store.commit("ADD_EMOTION", emotion);
             }
         },

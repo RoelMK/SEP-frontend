@@ -68,7 +68,9 @@ import { mapState } from "vuex";
 import moment from 'moment';
 
 export default {
+    // name the view
     name: "History",
+    // include the following components
     components: {
         Navbar,
         TableFoodData,
@@ -78,41 +80,21 @@ export default {
         OverviewChart,
         Legend,
     },
+    // get data from store state
     computed: {
         ...mapState(["data"]),
     },
     data() {
         return {
             tab: null,
+            // tab names
             items: ["insulin", "food", "activities", "emotions"],
         };
     },
+    // if there is no data redirect user to main page
     created() {
         if (this.data.length <= 0)
             this.$router.push("/");
-    },
-    methods: {
-        getSelectedFoodInsulinEmotion(item) {
-            console.log(item);
-        },
-        getSelectedActivity(activity) {
-            let start = moment(
-                moment(activity.startDate + " " + activity.startTime).format(
-                    "MM-DD-YYYY HH:mm"
-                )
-            ).format("YYYY-MM-DDTHH:mm");
-            let end = moment(
-                moment(activity.endDate + " " + activity.endTime).format(
-                    "MM-DD-YYYY HH:mm"
-                )
-            ).format("YYYY-MM-DDTHH:mm");
-
-            this.chosenItemTimeFrame = {
-                start,
-                end,
-                now: moment(),
-            };
-        },
     },
 };
 </script>

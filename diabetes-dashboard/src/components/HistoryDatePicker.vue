@@ -48,15 +48,20 @@
 <script>
 import moment from "moment";
 export default {
+    // name component
     name: "HistoryDatePicker",
+    // state props used by component
     props: ["date"],
     data() {
         return {
+            // store date menu showing state
             dateMenu: false,
+            // store date
             insulinDate: "",
         };
     },
     computed: {
+        // method to convert date in menu
         convertDate() {
             if (this.insulinDate)
                 return moment(this.insulinDate).format("DD/MM/YYYY").toString();
@@ -64,13 +69,16 @@ export default {
         },
     },
     methods: {
+        // emit date to parent component
         emitDate() {
             this.$emit("selectedDate", this.insulinDate);
         },
     },
     watch: {
+        // watch date prop for changes
         date: {
             handler(after) {
+                // update date
                 this.insulinDate = after;
             },
             immediate: true,
