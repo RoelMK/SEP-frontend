@@ -259,11 +259,11 @@ export default {
     },
     methods: {
         /**
-         * Method to set the latest time frame of a selected table entry 
+         * Method to set the latest time frame of a selected table entry
          * to the time frame of the selected food entiry from table
          * @param  { Object }    insulin converted food object
          * @return
-         */ 
+         */
         selectFood(food) {
             let startTime = moment(food.time, "HH:mm")
                 .subtract(2, "hours")
@@ -287,7 +287,7 @@ export default {
          * Method to convert food entires for table
          * @param  { Array }    data array of food model objects
          * @return { Array }    array of converted food objects
-         */ 
+         */
         convertFood(data) {
             return data.map((f) => ({
                 type: f.meal_type !== null ? f.meal_type : "-",

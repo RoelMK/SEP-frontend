@@ -448,7 +448,7 @@ export default {
          * Method to convert emotion entires for table
          * @param  { Array }    data array of mood model objects
          * @return { Array }    array of converted mood objects
-         */ 
+         */
         convertEmotions(data) {
             return data.map((f) => ({
                 happiness: f.valence,
@@ -464,7 +464,7 @@ export default {
          * Method to set the date of an editem item
          * @param  { String }    date new date
          * @return
-         */ 
+         */
         getSelectedDate(date) {
             this.editedItem.date = date;
         },
@@ -472,16 +472,16 @@ export default {
          * Method to set the time of an editem item
          * @param  { String }    date new date
          * @return
-         */ 
+         */
         getSelectedTime(time) {
             this.editedItem.time = time;
         },
         /**
-         * Method to set the latest time frame of a selected table entry 
+         * Method to set the latest time frame of a selected table entry
          * to the time frame of the selected emotion entiry from table
          * @param  { Object }    emotion converted emotion object
          * @return
-         */ 
+         */
         selectEmotion(emotion) {
             let startTime = moment(emotion.time, "HH:mm")
                 .subtract(2, "hours")
@@ -505,7 +505,7 @@ export default {
          * Method to return emoticon label based on happiness value
          * @param  { Integer }    happiness happiness value
          * @return
-         */ 
+         */
         displayHappiness(happiness) {
             if (happiness === 1) {
                 return "fas fa-angry";
@@ -521,7 +521,7 @@ export default {
          * Method to return emoticon label based on excitement value
          * @param  { Integer }    happiness excitement value
          * @return
-         */ 
+         */
         displayExcitement(excitement) {
             if (excitement === 1) {
                 return "fas fa-tired";
@@ -537,9 +537,9 @@ export default {
          * Method to check emotion item and add/edit it
          * @param  { Boolean }    editing editing state
          * @return
-         */ 
+         */
         async checkEmotionInput(editing) {
-             // check if a necessary property was not set
+            // check if a necessary property was not set
             if (
                 this.editedItem.happiness === 0 ||
                 this.editedItem.excitement === 0 ||
@@ -577,7 +577,7 @@ export default {
                     // if in editing mode, add activityId and set it
                     parameters["activityId"] = this.editedItem.id;
 
-                    // make a put request 
+                    // make a put request
                     let emotion = await Emotion.post(
                         parameters,
                         this.$cookies.get("JWT")

@@ -347,7 +347,7 @@ export default {
          * Method to convert insulin entires for table
          * @param  { Array }    data array of insulin model objects
          * @return { Array }    array of converted insulin objects
-         */ 
+         */
         convertInsulin(data) {
             return data.map((f) => ({
                 amount: f.insulinAmount,
@@ -359,11 +359,11 @@ export default {
         },
 
         /**
-         * Method to set the latest time frame of a selected table entry 
+         * Method to set the latest time frame of a selected table entry
          * to the time frame of the selected insulin entiry from table
          * @param  { Object }    insulin converted insulin object
          * @return
-         */ 
+         */
         selectInsulin(insulin) {
             let startTime = moment(insulin.time, "HH:mm")
                 .subtract(2, "hours")
@@ -388,7 +388,7 @@ export default {
          * Method to set the date of an editem item
          * @param  { String }    date new date
          * @return
-         */ 
+         */
         getSelectedDate(date) {
             this.editedItem.date = date;
         },
@@ -397,7 +397,7 @@ export default {
          * Method to set the time of an editem item
          * @param  { String }    date new date
          * @return
-         */ 
+         */
         getSelectedTime(time) {
             this.editedItem.time = time;
         },
@@ -406,7 +406,7 @@ export default {
          * Method to display the type of an item
          * @param  { Integer }    type type of insulin
          * @return
-         */ 
+         */
         displayType(type) {
             if (type === 0) {
                 return "Rapid";
@@ -419,7 +419,7 @@ export default {
          * Method to check insulin item and add/edit it
          * @param  { Boolean }    editing editing state
          * @return
-         */ 
+         */
         async checkInsulinInput(editing) {
             // check if a necessary property was not set
             if (
@@ -447,8 +447,8 @@ export default {
                 let parameters = {
                     // get timestamp
                     timestamp: moment(
-                        moment(date + " " + time, "MM/DD/YYYY HH:mm"))
-                        .format("x"),
+                        moment(date + " " + time, "MM/DD/YYYY HH:mm")
+                    ).format("x"),
                     //get insulin type
                     insulinType: this.editedItem.type === "Rapid" ? 0 : 1,
                     // get insulin amount
@@ -462,11 +462,8 @@ export default {
                     if (this.$store.state.supervising.token) {
                         token = this.$store.state.supervising.token;
                     }
-                    // make a put request 
-                    let insulin = await Insulin.post(
-                        parameters,
-                        token
-                    ).then(
+                    // make a put request
+                    let insulin = await Insulin.post(parameters, token).then(
                         (resp) => {
                             this.$toaster.showMessage({
                                 message: "Upload is successful",
@@ -488,11 +485,8 @@ export default {
                     if (this.$store.state.supervising.token) {
                         token = this.$store.state.supervising.token;
                     }
-                    // make a post request 
-                    let insulin = await Insulin.post(
-                        parameters,
-                        token
-                    ).then(
+                    // make a post request
+                    let insulin = await Insulin.post(parameters, token).then(
                         (resp) => {
                             this.$toaster.showMessage({
                                 message: "Upload is successful",

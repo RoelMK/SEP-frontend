@@ -130,7 +130,7 @@ export default {
         /**
          * Method to check emotion input and add it
          * @return
-         */ 
+         */
         async checkEmotionInput() {
             // check if a necessary property was not set
             if (
@@ -154,7 +154,7 @@ export default {
                             color: "dark",
                             btnColor: "pink",
                         });
-                        this.$emit('emotions', this.parameters);
+                        this.$emit("emotions", this.parameters);
                         return resp.data;
                     },
                     (error) => {

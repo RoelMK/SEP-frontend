@@ -5,7 +5,7 @@ export const deleteMixin = {
          * Method to delete emotion/insulin entry
          * @param  { Object }    parameters includes activityId propery
          * @return
-         */ 
+         */
         async deleteItem(parameters) {
             // obtain proper token
             let token = this.$cookies.get("JWT");

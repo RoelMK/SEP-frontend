@@ -327,11 +327,11 @@ export default {
     },
     methods: {
         /**
-         * Method to set the latest time frame of a selected table entry 
+         * Method to set the latest time frame of a selected table entry
          * to the time frame of the selected exercise entiry from table
          * @param  { Object }    activity converted exercise object
          * @return
-         */ 
+         */
         selectActivity(activity) {
             let start = moment(
                 moment(
@@ -355,7 +355,7 @@ export default {
          * Method to convert exercise entires for table
          * @param  { Array }    data array of exercise model objects
          * @return { Array }    array of converted exercise objects
-         */ 
+         */
         convertExercises(data) {
             return data.map((f) => ({
                 name: f.name,
