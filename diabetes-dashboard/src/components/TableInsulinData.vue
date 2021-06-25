@@ -116,13 +116,13 @@
                                 </v-row>
                                 <v-row>
                                     <HistoryDatePicker
-                                        @selectedDate="getSelectedDate"
+                                        @selectedDate="this.editedItem.date = $event"
                                         :date="editedItem.date"
                                     />
                                 </v-row>
                                 <v-row>
                                     <HistoryTimePicker
-                                        @selectedTime="getSelectedTime"
+                                        @selectedTime="this.editedItem.time = $event"
                                         :time="editedItem.time"
                                     />
                                 </v-row>
@@ -198,12 +198,10 @@ export default {
             }
         },
     },
-    // must match data values from json
     data() {
         return {
             insulinData: [],
             items: ["<=", ">=", "="],
-            // must be modified when we use real data
             headers: [
                 {
                     text: "Amount",
@@ -312,6 +310,11 @@ export default {
         };
     },
     methods: {
+        /**
+         * Convert initial data object to a structure used in a table
+         * @param  { any }    data data object
+         * @return { void }
+         */
         convertInsulin(data) {
             return data.map((f) => ({
                 amount: f.insulinAmount,
@@ -321,7 +324,11 @@ export default {
                 id: f.activityId,
             }));
         },
-
+        /**
+         * Handle row click action
+         * @param  { any }    insulin insulin object
+         * @return { void }
+         */
         selectInsulin(insulin) {
             let startTime = moment(insulin.time, "HH:mm")
                 .subtract(2, "hours")
@@ -341,15 +348,11 @@ export default {
                 now: moment(),
             });
         },
-
-        getSelectedDate(date) {
-            this.editedItem.date = date;
-        },
-
-        getSelectedTime(time) {
-            this.editedItem.time = time;
-        },
-
+        /**
+         * Convert value of insulin type to a respective string
+         * @param  { number }    type insulin type as a number
+         * @return { string }
+         */
         displayType(type) {
             if (type === 0) {
                 return "Rapid";
@@ -357,7 +360,12 @@ export default {
                 return "Slow";
             }
         },
-
+        /**
+         * Check insulin fields in editing mode and post new
+         * settings upon change approval
+         * @param  { boolean }    editing validation variable
+         * @return { void }
+         */
         async checkInsulinInput(editing) {
             if (
                 this.editedItem.amount === "" ||
@@ -438,13 +446,20 @@ export default {
                 }
             }
         },
-
+        /**
+         * Assign field value to an object upon input
+         * @param  { any }    item selected item from table
+         * @return { void }
+         */
         editItem(item) {
             this.editedItem = Object.assign({}, item);
             this.dialog = true;
             this.editing = true;
         },
-
+        /**
+         * Close editing pop up
+         * @return { void }
+         */
         close() {
             this.dialog = false;
             this.$nextTick(() => {
@@ -452,14 +467,27 @@ export default {
                 this.editing = false;
             });
         },
+        /**
+         * Save modified fields
+         * @return { void }
+         */
         save() {
             this.checkInsulinInput(this.editing);
             this.close();
         },
+        /**
+         * Show delete pop up
+         * @param  { any }    item item selected item from table
+         * @return { void }
+         */
         showDeleteDialog(item) {
             this.editedItem = Object.assign({}, item);
             this.dialogDelete = true;
         },
+        /**
+         * Confirm deletion of the item from table
+         * @return { void }
+         */
         deleteItemConfirm() {
             let parameters = { activityId: this.editedItem.id };
             this.deleteItem(parameters);
@@ -467,12 +495,20 @@ export default {
             this.$store.commit("DELETE_INSULIN", parameters.activityId);
             this.updateInsulinTable();
         },
+        /**
+         * Close delete pop up
+         * @return { void }
+         */
         closeDelete() {
             this.dialogDelete = false;
             this.$nextTick(() => {
                 this.editedItem = Object.assign({}, this.defaultItem);
             });
         },
+        /**
+         * Update values in insulin table
+         * @return { void }
+         */
         updateInsulinTable() {
             if (this.filteredData > 0) {
                 this.insulinData = this.convertInsulin(
@@ -483,7 +519,6 @@ export default {
             }
         },
     },
-    // state getters you need to use
     computed: {
         ...mapState(["filteredData", "data"]),
         formTitle() {
@@ -493,7 +528,6 @@ export default {
         },
     },
     created() {
-        console.log(this.data);
         this.updateInsulinTable();
     },
 };

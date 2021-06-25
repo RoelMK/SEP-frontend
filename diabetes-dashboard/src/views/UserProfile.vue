@@ -31,8 +31,8 @@ import GlucoseSettings from './profileComponents/GlucoseSettings';
 import SupervisorSettings from './profileComponents/SupervisorSettings';
 import UnitsSettings from './profileComponents/UnitsSettings';
 import Navbar from '@/components/Navbar.vue';
-
 import Auth from "../repositories/Auth";
+
 export default {
     name: "Dashboard",
     components: {
@@ -62,19 +62,10 @@ export default {
   background-color: #F4FAFD;
 }
 
-.card {
-  padding: 20px;
-  background-color: white;
-}
-
 .profile {
   background-color: #F4FAFD;
   padding: 1% 2% 2% 2%;
   min-height: 93vh;
-}
-
-.full-height {
-  height: 100%;
 }
 
 .marBot {

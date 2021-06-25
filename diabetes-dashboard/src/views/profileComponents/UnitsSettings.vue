@@ -18,8 +18,6 @@ export default {
     name: "UnitsSettings",
     data() {
         return {
-            boolAsk: true,
-            gUnit: "mmol/L",
             active: 0
         };
     },

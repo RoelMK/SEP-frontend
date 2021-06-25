@@ -36,7 +36,8 @@
 </template>
 
 <script>
-import Auth from "../repositories/Auth.js";
+import Auth from "@/repositories/Auth.js";
+
 export default {
     name: "login",
     data () {
@@ -47,6 +48,11 @@ export default {
         };
     },
     methods: {
+        /**
+         * Handle login button click, in user with the provided email exists in gamebus
+         * redirect to the gamebus platform to link data provider with diabetter
+         * @return { void }
+         */
         async loginClicked() {
             Auth.login({ email: this.email })
                 .then(
@@ -66,6 +72,11 @@ export default {
                     });
 
         },
+        /**
+         * Check whether gamebus was linked with diabetter and set upon
+         * success set JWT to get access to the dashboard
+         * @return { void }
+         */
         async confirmLogin() {
             Auth.login({ loginToken: this.$cookies.get("LOGIN_TOKEN") })
                 .then(
@@ -81,7 +92,7 @@ export default {
                                 (err) => { console.log(err); }
                             );
                     },
-                    (error) => {
+                    () => {
                         this.$toaster.showMessage({
                             message: 'Something went wrong, try again later!',
                             color: 'dark',
@@ -90,6 +101,10 @@ export default {
                     });
 
         },
+        /**
+         * Handle cancel button click
+         * @return { void }
+         */
         cancel() {
             this.enteredEmail = false;
             this.$cookies.remove("LOGIN_TOKEN");

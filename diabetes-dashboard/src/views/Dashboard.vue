@@ -74,8 +74,8 @@ import Navbar from '@/components/Navbar.vue';
 import Cards from '@/components/Cards.vue';
 import Upload from "@/repositories/Upload";
 import Data from '@/repositories/Data.js';
+import Auth from "@/repositories/Auth";
 import moment from 'moment';
-import Auth from "../repositories/Auth";
 import { mapState } from 'vuex';
 
 export default {
@@ -90,6 +90,7 @@ export default {
     },
     computed: {
         ...mapState(['data', 'arousalIcon', 'valenceIcon']),
+        // Check if data exists for the selected data range
         checkData() {
             for (let item in this.data) {
                 if (this.data[item].length > 0)
@@ -118,6 +119,7 @@ export default {
         };
     },
     async created() {
+        // Set up emotion reminder cookies
         let reminder = localStorage.getItem("emotionReminder");
         let reminderCookie = this.$cookies.get("EMOTION_REMINDER");
         let reminderset = true;
@@ -140,6 +142,8 @@ export default {
             (error) => { console.log(error); }
         );
 
+        // Set up nightscout connection if option was selection
+        // on the profile page
         let nightscoutUrl = localStorage.getItem("nightscout_url");
         if (nightscoutUrl) {
             Upload.connectNightscout({ host: nightscoutUrl }).then(
@@ -149,6 +153,9 @@ export default {
                 }
             );
         }
+        // Check if data object has any values
+        // if not fetch it from backend once retrieved
+        // set allow component render
         if (this.data.length <= 0) {
             const config = {
                 startDate: moment().format('DD-MM-YYYY'),
@@ -184,12 +191,27 @@ export default {
         }
     },
     methods: {
+        /**
+         * Update minMax value which is going to be passed to statistics component
+         * @param  { Array<string> }    parameters received parameters from the parent
+         * @return { void }
+         */
         updateMinMax(parameters) {
             this.minMax = parameters;
         },
+        /**
+         * Update proportions value which is going to be passed to statistics component
+         * @param  { Array<number> }   parameters received parameters from the parent
+         * @return { void }
+         */
         updateProportions(parameters) {
             this.proportions = parameters;
         },
+        /**
+         * Update emotions value which is going to be passed to emotions component
+         * @param  { any }   parameters received parameters from the parent
+         * @return { void }
+         */
         updateEmotions(parameters) {
             this.$store.dispatch('setEmotion', {
                 type: 'valence',
@@ -205,9 +227,6 @@ export default {
 </script>
 
 <style>
-.unalloc {
-    min-height: 40vh;
-}
 .full-height {
     height: 100%;
 }
@@ -216,15 +235,9 @@ export default {
     padding: 0 2% 0 2%;
 }
 .clearfix {
+    height: 40px;
     height: 3vh;
     background-color: #f4fafd;
-}
-.rightAligned {
-    text-align: right;
-}
-.emotions {
-    display: flex;
-    vertical-align: middle;
 }
 #overview-chart-container {
     height: 700px;

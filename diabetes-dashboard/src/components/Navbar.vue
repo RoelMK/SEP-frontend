@@ -5,7 +5,7 @@
                 <div class="ml-n5 mt-3">
                     <img src="../assets/DiabetterLogo.png"
                          height="100" width="200"
-                         v-on:click="logoClicked" class="pointer">
+                         v-on:click="$router.push('/').catch(() => {})" class="pointer">
                 </div>
 
                 <v-spacer></v-spacer>
@@ -75,7 +75,7 @@
                     </template>
                     <v-list class="dropdown-list">
                         <v-list-item>
-                            <v-list-item-title class="pointer" v-on:click="profileClicked">
+                            <v-list-item-title class="pointer" v-on:click="$router.push('/profile').catch(() => {})">
                                 Profile
                             </v-list-item-title>
                         </v-list-item>
@@ -109,8 +109,8 @@
 </template>
 
 <script>
-import Supervisor from '../repositories/Supervisor';
-import Data from "../repositories/Data";
+import Supervisor from '@/repositories/Supervisor';
+import Data from "@/repositories/Data";
 import moment from 'moment';
 import { mapState } from 'vuex';
 
@@ -128,18 +128,24 @@ export default {
             await this.fetchUserRole();
         }
     },
-    data: () => ({
-        notifications: true,
-        profileData: {
-            name: "",
-            image: ""
-        },
-        supervisor: false,
-        children: [],
-        childToSupervise: null,
-        showing: false
-    }),
+    data() {
+        return {
+            notifications: true,
+            profileData: {
+                name: "",
+                image: ""
+            },
+            supervisor: false,
+            children: [],
+            childToSupervise: null,
+            showing: false
+        };
+    },
     methods: {
+        /**
+         * Check if data object is not empty
+         * @return { boolean }
+         */
         checkData() {
             for (let d in this.data) {
                 if (this.data[d].length > 0)
@@ -147,22 +153,31 @@ export default {
             }
             return false;
         },
-        logoClicked: function () {
-            this.$router.push('/').catch(() => {});
-        },
-        profileClicked: function () {
-            this.$router.push('/profile').catch(() => {});
-        },
-        historyClicked: function () {
+        /**
+         * Callback function for handling redirect to the history page.
+         * Before redirecting to the history view check whether there is data to display
+         * Otherwise keep user on the dashboard view
+         * @return { void }
+         */
+        historyClicked() {
             if (this.checkData())
                 this.$router.push('/history').catch(() => {});
         },
+        /**
+         * Callback function for logout
+         * Remove JWT token, clear local storage and redirect to the login view
+         * @return { void }
+         */
         logout() {
             this.$store.commit("LOGOUT");
             this.$cookies.remove("JWT");
             this.$router.push('/login').catch(() => {});
             localStorage.clear();
         },
+        /**
+         * Refresh user data
+         * @return { void }
+         */
         refreshUser() {
             this.profileData = {
                 name: this.$store.state.user.firstName +
@@ -171,6 +186,10 @@ export default {
             };
             this.profileData.image = this.$store.state.user.image;
         },
+        /**
+         * Fetch user role for displaying in the navbar
+         * @return { boolean | null }
+         */
         async fetchUserRole() {
             this.supervisor = await Supervisor.getRole({
                 email: this.$store.state.user.email
@@ -183,10 +202,10 @@ export default {
         }
     },
     watch: {
+        // Retrieve supervisor settings
         '$store.state.user.email': async function() {
             await this.refreshUser();
             await this.fetchUserRole();
-            console.log(this.supervisor);
             Supervisor.getChildren(
                 {
                     supervisorEmail: this.$store.state.user.email
@@ -201,6 +220,7 @@ export default {
                 (error) => { console.log(error); }
             );
         },
+        // Set supervisor settings
         childToSupervise: async function() {
             let token = await Supervisor.getToken({
                 childEmail: this.childToSupervise,
@@ -227,6 +247,7 @@ export default {
                 (err) => console.log(err)
             );
         },
+        // Check supervisor status
         supervisor: function() {
             if (this.supervisor) {
                 Supervisor.getChildren(

@@ -23,6 +23,11 @@ export default {
         ...mapState(['filteredData', 'data']),
     },
     methods: {
+        /**
+         * Generate options object which is used to generate eCharts object
+         * @param  { any }   data data object
+         * @return { any }
+         */
         options(data) {
             return {
                 tooltip: {
@@ -157,6 +162,11 @@ export default {
                 ],
             };
         },
+        /**
+         * Generate options object which is used to generate eCharts object
+         * @param  { any }              data data object
+         * @return { Array<number> }
+         */
         computeTimeDistribution(data) {
             const total = data['glucose']
                 .filter(f => f.glucoseLevel !== null).length;
@@ -166,6 +176,9 @@ export default {
                 var i1 = data['glucose'][i];
                 var i2 = data['glucose'][i + 1];
 
+                // Check whether current and next point are within
+                // specified interval in order to calculate total
+                // time for specific condition
                 if (0 < i1.glucoseLevel && i1.glucoseLevel < 2.9)
                     vLow.push(moment.duration(
                         moment(i1.timestamp)
@@ -193,16 +206,19 @@ export default {
                     );
             }
 
+            // Round number to 2 decimal places
             const round = function(value) {
                 return Math.round(value * 100) / 100;
             };
 
+            // Sum elements within array
             const sumArray = function(arr) {
                 if (arr.length > 0)
                     return arr.reduce((a, b) => a + b);
                 return 0;
             };
 
+            // Calculate percentage of time distribution
             const calcPercentage = function(arr, total) {
                 return Math.round((arr.length / total) * 10000) / 100;
             };
@@ -217,5 +233,3 @@ export default {
     }
 };
 </script>
-
-<style scoped></style>

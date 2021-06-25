@@ -213,13 +213,13 @@
                                 </v-row>
                                 <v-row>
                                     <HistoryDatePicker
-                                        @selectedDate="getSelectedDate"
+                                        @selectedDate="this.editedItem.date = $event"
                                         :date="editedItem.date"
                                     />
                                 </v-row>
                                 <v-row>
                                     <HistoryTimePicker
-                                        @selectedTime="getSelectedTime"
+                                        @selectedTime="this.editedItem.time = $event"
                                         :time="editedItem.time"
                                     />
                                 </v-row>
@@ -401,7 +401,6 @@ export default {
             excitementFilter: "",
         };
     },
-    // state getters you need to use
     computed: {
         ...mapState(["filteredData", "data"]),
         formTitle() {
@@ -411,6 +410,11 @@ export default {
         },
     },
     methods: {
+        /**
+         * Convert initial data object to a structure used in a table
+         * @param  { any }    data data object
+         * @return { void }
+         */
         convertEmotions(data) {
             return data.map((f) => ({
                 happiness: f.valence,
@@ -422,12 +426,11 @@ export default {
                 id: f.activityId,
             }));
         },
-        getSelectedDate(date) {
-            this.editedItem.date = date;
-        },
-        getSelectedTime(time) {
-            this.editedItem.time = time;
-        },
+        /**
+         * Handle row click action
+         * @param  { any }    emotion emotion object
+         * @return { void }
+         */
         selectEmotion(emotion) {
             let startTime = moment(emotion.time, "HH:mm")
                 .subtract(2, "hours")
@@ -447,6 +450,11 @@ export default {
                 now: moment(),
             });
         },
+        /**
+         * Convert hapiness value to an emoticon
+         * @param  { number }    happiness hapiness value
+         * @return { string }
+         */
         displayHappiness(happiness) {
             if (happiness === 1) {
                 return "fas fa-angry";
@@ -458,6 +466,11 @@ export default {
                 return "";
             }
         },
+        /**
+         * Convert hapiness value to an emoticon
+         * @param  { number }    excitement excitement value
+         * @return { string }
+         */
         displayExcitement(excitement) {
             if (excitement === 1) {
                 return "fas fa-tired";
@@ -469,8 +482,13 @@ export default {
                 return "";
             }
         },
+        /**
+         * Check emotion fields in editing mode and post new
+         * settings upon change approval
+         * @param  { boolean }    editing validation variable
+         * @return { void }
+         */
         async checkEmotionInput(editing) {
-            // no need to check id here
             if (
                 this.editedItem.happiness === 0 ||
                 this.editedItem.excitement === 0 ||
@@ -541,12 +559,20 @@ export default {
                 }
             }
         },
+        /**
+         * Assign field value to an object upon input
+         * @param  { any }    item selected item from table
+         * @return { void }
+         */
         editItem(item) {
             this.editedItem = Object.assign({}, item);
             this.dialog = true;
             this.editing = true;
         },
-
+        /**
+         * Close editing pop up
+         * @return { void }
+         */
         close() {
             this.dialog = false;
             this.$nextTick(() => {
@@ -554,14 +580,27 @@ export default {
                 this.editing = false;
             });
         },
+        /**
+         * Save modified fields
+         * @return { void }
+         */
         save() {
             this.checkEmotionInput(this.editing);
             this.close();
         },
+        /**
+         * Show delete pop up
+         * @param  { any }    item item selected item from table
+         * @return { void }
+         */
         showDeleteDialog(item) {
             this.editedItem = Object.assign({}, item);
             this.dialogDelete = true;
         },
+        /**
+         * Confirm deletion of the item from table
+         * @return { void }
+         */
         deleteItemConfirm() {
             let parameters = { activityId: this.editedItem.id };
             this.deleteItem(parameters);
@@ -569,12 +608,20 @@ export default {
             this.$store.commit("DELETE_EMOTION", parameters.activityId);
             this.updateEmotionTable();
         },
+        /**
+         * Close delete pop up
+         * @return { void }
+         */
         closeDelete() {
             this.dialogDelete = false;
             this.$nextTick(() => {
                 this.editedItem = Object.assign({}, this.defaultItem);
             });
         },
+        /**
+         * Update values in emotion table
+         * @return { void }
+         */
         updateEmotionTable() {
             if (this.filteredData > 0) {
                 this.emotions = this.convertEmotions(this.filteredData.mood);
@@ -582,9 +629,6 @@ export default {
                 this.emotions = this.convertEmotions(this.data.mood);
             }
         },
-    },
-    created() {
-        this.updateEmotionTable();
     },
 };
 </script>

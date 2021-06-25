@@ -1,5 +1,11 @@
 import legend from '@/components/configurations/legend.js';
 
+/**
+ * Configure coloring of regions in overview visualization
+ * @param { any | null }    ranges range object that contains intervals
+ * for different conditions
+ * @return { Array<any> }
+ */
 export default function(ranges = null) {
     return [
         {

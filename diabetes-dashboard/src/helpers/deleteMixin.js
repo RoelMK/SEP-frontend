@@ -1,6 +1,12 @@
 import Data from "@/repositories/Data.js";
+
 export const deleteMixin = {
     methods: {
+        /**
+         * Delete item from the table
+         * @param  { any }      parameters item object
+         * @return { void }
+         */
         async deleteItem(parameters) {
             let token = this.$cookies.get("JWT");
             if (this.$store.state.supervising.token) {

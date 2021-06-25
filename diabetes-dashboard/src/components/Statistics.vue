@@ -2,9 +2,8 @@
     <v-container>
         <v-card elevation="0">
             <v-tabs fixed-tabs v-model="tab">
-                <v-tab v-for="item in items" :key="item">
-                    {{ item }}
-                </v-tab>
+                <v-tab>Glucose</v-tab>
+                <v-tab>Cumulative</v-tab>
             </v-tabs>
             <v-tabs-items v-model="tab">
                 <v-tab-item>
@@ -45,7 +44,6 @@ export default {
     data() {
         return {
             tab: null,
-            items: ["glucose", "cumulative"],
         };
     },
 };

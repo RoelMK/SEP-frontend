@@ -290,6 +290,11 @@ export default {
         ...mapState(["filteredData", "data"]),
     },
     methods: {
+        /**
+         * Handle row click action
+         * @param  { any }    activity activity object
+         * @return { void }
+         */
         selectActivity(activity) {
             let start = moment(
                 moment(
@@ -309,6 +314,11 @@ export default {
                 now: moment(),
             });
         },
+        /**
+         * Convert initial data object to a structure used in a table
+         * @param  { any }    data data object
+         * @return { void }
+         */
         convertExercises(data) {
             return data.map((f) => ({
                 name: f.name,
@@ -329,14 +339,6 @@ export default {
                         : 0,
             }));
         },
-    },
-    created() {
-        console.log(this.data);
-        if (this.filteredData > 0) {
-            this.exercises = this.convertExercises(this.filteredData.exercise);
-        } else {
-            this.exercises = this.convertExercises(this.data.exercise);
-        }
     },
 };
 </script>

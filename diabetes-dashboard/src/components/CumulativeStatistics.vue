@@ -46,9 +46,13 @@
 <script>
 import { mapState } from "vuex";
 import moment from "moment";
+
 export default {
     name: "CumulativeStatistics",
     watch: {
+        // Check whether data was filtered
+        // Use filteredData if that is the case
+        // Otherwise use data object
         filteredData: function (value) {
             if (this.filteredData > 0) {
                 this.cumulativeData = value;
@@ -67,6 +71,16 @@ export default {
             default: null
         },
     },
+    computed: {
+        ...mapState(["filteredData", "data"]),
+    },
+    created() {
+        if (this.filteredData > 0) {
+            this.cumulativeData = this.filteredData;
+        } else {
+            this.cumulativeData = this.data;
+        }
+    },
     data() {
         return {
             cumulativeData: [],
@@ -74,6 +88,10 @@ export default {
         };
     },
     methods: {
+        /**
+         * Get start and end timestamps to filter statistics
+         * @return { Array<number> }
+         */
         getStartEnd(){
             const start = this.minMax[0]
                 + (this.minMax[1] - this.minMax[0]) * this.proportions[0] /100;
@@ -81,6 +99,10 @@ export default {
                 + (this.minMax[1] - this.minMax[0]) * this.proportions[1] /100;
             return [start, end];
         },
+        /**
+         * Calculate total calories within selected range
+         * @return { number }
+         */
         totalCalories() {
             if (!this.cumulativeData.food) return 0;
             this.getStartEnd();
@@ -94,6 +116,10 @@ export default {
             });
             return totalCalories;
         },
+        /**
+         * Calculate total carbohydrates within selected range
+         * @return { number }
+         */
         totalCarbs() {
             if (!this.cumulativeData.food) return 0;
             let totalCarbs = 0;
@@ -106,6 +132,11 @@ export default {
             });
             return totalCarbs;
         },
+        /**
+         * Calculate total insulin within selected range
+         * @param { number }    insulinType Type of insulin that is going to be calculated
+         * @return { number }
+         */
         totalInsulin(insulinType) {
             if (!this.cumulativeData.insulin) return 0;
             let totalInsulin = 0;
@@ -121,6 +152,10 @@ export default {
             });
             return totalInsulin;
         },
+        /**
+         * Calculate total calories within selected range
+         * @return { number }
+         */
         totalBurntCalories() {
             if (!this.cumulativeData.activities) return 0;
             let totalBurnt = 0;
@@ -133,6 +168,10 @@ export default {
             });
             return totalBurnt;
         },
+        /**
+         * Calculate average glucose within selected range
+         * @return { number }
+         */
         averageGlucose() {
             if (!this.cumulativeData.glucose) return 0;
             let total = 0;
@@ -146,6 +185,10 @@ export default {
             });
             return total / count;
         },
+        /**
+         * Calculate max glucose value within selected range
+         * @return { number }
+         */
         maxGlucose() {
             // check for existence
             if (!this.cumulativeData.glucose) return 0;
@@ -160,6 +203,10 @@ export default {
             });
             return max;
         },
+        /**
+         * Calculate min glucose value within selected range
+         * @return { number }
+         */
         minGlucose() {
             // check for existence and length
             if (!this.cumulativeData.glucose || this.cumulativeData.length == 0)
@@ -175,6 +222,11 @@ export default {
             });
             return min;
         },
+        /**
+         * Calculate A1C. If selected range is less than 3 months
+         * use all glucose values. Otherwise use only last 3 months
+         * @return { number }
+         */
         a1cCompute() {
             if (!this.cumulativeData.glucose) return 0;
             // in 13 digits
@@ -192,17 +244,7 @@ export default {
             });
             return estimate / count;
         },
-    },
-    computed: {
-        ...mapState(["filteredData", "data"]),
-    },
-    created() {
-        if (this.filteredData > 0) {
-            this.cumulativeData = this.filteredData;
-        } else {
-            this.cumulativeData = this.data;
-        }
-    },
+    }
 };
 </script>
 

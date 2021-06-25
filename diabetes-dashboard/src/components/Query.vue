@@ -85,6 +85,7 @@ export default {
         },
     },
     watch: {
+        // if reload variable was modified reset query field models
         reload() {
             this.model = [];
         }
@@ -95,6 +96,13 @@ export default {
         };
     },
     methods: {
+        /**
+         * Update/reset query menu fields
+         * @param  { string }   event type of the event to be emitted
+         * @param  { number }   index index of the field
+         * @param  { any }      value Value of the field
+         * @return { void }
+         */
         update(event, index, value) {
             if (Array.isArray(value)) {
                 if (value.length <= 0) {

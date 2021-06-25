@@ -36,7 +36,7 @@
                 color="primary"
                 @click="
                     $refs.timeMenu.save(insulinTime);
-                    emitTime();
+                    $emit('selectedTime', insulinTime)
                 "
             >
                 OK
@@ -64,11 +64,6 @@ export default {
                     .format("HH:mm")
                     .toString();
             else return "Select Time";
-        },
-    },
-    methods: {
-        emitTime() {
-            this.$emit("selectedTime", this.insulinTime);
         },
     },
     watch: {

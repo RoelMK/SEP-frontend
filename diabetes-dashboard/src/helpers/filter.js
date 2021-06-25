@@ -1,6 +1,13 @@
 const MAX = Number.MAX_SAFE_INTEGER;
 const MIN = Number.MIN_SAFE_INTEGER;
 
+/**
+ * Filter insulin data
+ * @param  { any }      data initial data object
+ * @param  { number }   max upper-bound for insulin ammount
+ * @param  { number }   min lower-bound for insulin ammount
+ * @return { any | null }
+ */
 function filterInsulin(data, max = null, min = null) {
     max = (max) ? max : MAX;
     min = (min) ? min : MIN;
@@ -9,6 +16,13 @@ function filterInsulin(data, max = null, min = null) {
     return null;
 }
 
+/**
+ * Filter glucose data
+ * @param  { any }      data initial data object
+ * @param  { string }   mode glucose condition
+ * @param  { any }      ranges provided settings for glucose conditions
+ * @return { any | null }
+ */
 function filterGlucose(data, mode = null, ranges = null) {
     if (!mode) return data;
     const high = (ranges) ? ranges.hypers : 10.0;
@@ -21,6 +35,12 @@ function filterGlucose(data, mode = null, ranges = null) {
     return null;
 }
 
+/**
+ * Filter emotion data
+ * @param  { any }      data initial data object
+ * @param  { string }   type type of the emotion
+ * @return { any | null }
+ */
 function filterEmotion(data, type = null) {
     if (type === null) return data;
     if (data === type)

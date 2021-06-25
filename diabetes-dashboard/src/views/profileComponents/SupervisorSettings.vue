@@ -104,6 +104,7 @@ import Supervisor from "../../repositories/Supervisor";
 export default {
     name: "SupervisorSettings",
     async created() {
+        // Check for the supervisor requests
         if (this.$store.state.user.email) {
             this.getRequested();
             this.getApproved();
@@ -125,6 +126,10 @@ export default {
         }
     },
     methods: {
+        /**
+         * Request supervisor role from another user
+         * @return { void }
+         */
         request() {
             Supervisor.request({
                 supervisorEmail: this.$store.state.user.email,
@@ -139,6 +144,11 @@ export default {
                 }
             );
         },
+        /**
+         * Check whether someone has requested to be a supervisor
+         * of the current user
+         * @return { void }
+         */
         getRequested() {
             Supervisor.getSupervisors({
                 childEmail: this.$store.state.user.email,
@@ -151,6 +161,11 @@ export default {
                 }
             );
         },
+        /**
+         * Approve supervisor request
+         * @param { any }   supervisor supervisor info object
+         * @return { void }
+         */
         approve(supervisor) {
             Supervisor.request({
                 supervisorEmail: supervisor.supervisor_email,
@@ -174,6 +189,11 @@ export default {
                 }
             );
         },
+        /**
+         * Reject supervisor request
+         * @param { any }   supervisor supervisor info object
+         * @return { void }
+         */
         reject(supervisor) {
             Supervisor.deleteSupervisor({
                 supervisorEmail: supervisor.supervisor_email,
@@ -191,6 +211,10 @@ export default {
                 }
             );
         },
+        /**
+         * Handle the approve request
+         * @return { void }
+         */
         getApproved() {
             Supervisor.getApproved({
                 childEmail: this.$store.state.user.email,
@@ -203,6 +227,11 @@ export default {
                 }
             );
         },
+        /**
+         * Remove supervisor access
+         * @param { any }   supervisor supervisor info object
+         * @return { void }
+         */
         remove(supervisor) {
             Supervisor.deleteSupervisor({
                 supervisorEmail: supervisor.supervisor_email,

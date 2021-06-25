@@ -14,6 +14,9 @@ import moment from "moment";
 export default {
     name: "overviewChart",
     watch: {
+        // Check if data was filtered
+        // In case it was filtered use filteredData object
+        // Otherwise use data object
         filteredData: function(newValue, oldValue) {
             if (newValue !== oldValue) {
                 setTimeout(() => {
@@ -23,6 +26,8 @@ export default {
                 this.$refs.overview.setOption(this.options(this.data));
             }
         },
+        // Check if time frame was selected in the table in the
+        // History view
         newTimeFrame: function (value) {
             if (value !== null) {
                 var newOptions = this.$refs.overview.getOption();
@@ -59,10 +64,10 @@ export default {
         },
         /**
          * Scale value to a certain range
-         * @param  { int }      value Value to be scaled
-         * @param  { Array }     from Original range of the value
-         * @param  { Array }    to Resulting range after scaling
-         * @return
+         * @param  { number }           value Value to be scaled
+         * @param  { Array<number> }    from Original range of the value
+         * @param  { Array<number> }    to Resulting range after scaling
+         * @return { number }
          */
         scaleValue(value, from, to) {
             var scale = (to[1] - to[0]) / (from[1] - from[0]);
@@ -71,8 +76,9 @@ export default {
         },
         /**
          * Set up received data in eCharts format
-         * @param  { Object }   data Data object
-         * @param  { Array }    properties Properties to be extracted from data
+         * @param  { any }              data Data object
+         * @param  { string }           model property inside data object to iterate through
+         * @param  { Array<string> }    properties Properties to be extracted from data
          * @return
          */
         prepareData(data, model, ...properties) {
@@ -80,10 +86,10 @@ export default {
         },
         /**
          * Create tooltip body
-         * @param  { String }   marker marker HTML
-         * @param  { String }   name   name of item label
-         * @param  { String }   value  value of item label
-         * @return
+         * @param  { string }   marker marker HTML
+         * @param  { string }   name   name of item label
+         * @param  { string }   value  value of item label
+         * @return { string }
          */
         createTooltipBody(marker, name, value) {
             return `
@@ -96,8 +102,8 @@ export default {
         },
         /**
          * Set up received data in eCharts format
-         * @param  { Object }   params Chart object parameters
-         * @return
+         * @param  { any }   params Chart object parameters
+         * @return { string }
          */
         prepareTooltip(params) {
             var tooltip = `<span class="mb-3">
@@ -133,10 +139,11 @@ export default {
             return tooltip;
         },
         /**
-         * Create custom eCharts shape
-         * @param  { Object }   params Chart object parameters
-         * @param  { Object }   api    Chart object instance
-         * @return
+         * Create custom eCharts shape to represent interval
+         * to display duration of the activity
+         * @param  { any }   params Chart object parameters
+         * @param  { any }   api    Chart object instance
+         * @return { any }
          */
         renderInterval(params, api) {
             var start = api.coord([api.value(0), api.value(1)]);
@@ -182,6 +189,14 @@ export default {
                 ],
             };
         },
+        /**
+         * Create dummy points in the glucose data to align
+         * axis pointer in the overview visualization
+         * @param  { any }          glucose Glucose data
+         * @param  { Array<any> }   data Array containing other data models,
+         * for example, insulin, exercise, carbs
+         * @return { any }
+         */
         alignGluconeData(glucose, ...data) {
             var glucoseTimestamps = glucose.map(d => d[0]);
             for (let d in data) {
@@ -197,9 +212,21 @@ export default {
             }
             return glucose;
         },
+        /**
+         * Convert string to float
+         * @param  { string }   str string that is going to be converted to float
+         * @return { number }
+         */
         parseRangeString(str) {
             return str.match(/\d+\.?\d+/gi).map(d => parseFloat(d));
         },
+        /**
+         * Create tooltip entry from data value and append provided units
+         * @param  { string }   str string that is going to be converted to float
+         * @param  { number }   idx index of the data value used in eCharts format
+         * @param  { string }   units units which are going to be appended to data value
+         * @return { string }
+         */
         addUnits(data, idx, units) {
             for (let d in data) {
                 const value = data[d][idx];
@@ -208,6 +235,11 @@ export default {
             }
             return data;
         },
+        /**
+         * Find min and max timestamps in the data object
+         * @param  { any }   data Data object containing all models, e.t.c. insulin, glucose, ...
+         * @return { Array<number> }
+         */
         findMinMax(data) {
             var timestamps = [];
             for (let prop in data) {
@@ -224,8 +256,15 @@ export default {
                 Math.max.apply(null, timestamps)
             ];
         },
+        /**
+         * Generate options object which is used to generate eCharts object
+         * @param  { any }   data data object
+         * @return { any }
+         */
         options(data) {
             const arr = data['glucose'];
+            // Check whether fetched data contains glucose property
+            // Otherwise return empty object
             if (typeof arr !== 'undefined') {
                 var minMax = [null, null];
                 const mood = this.prepareData(
@@ -260,8 +299,6 @@ export default {
                     if (i[2] === null) i[2] = 200;
                     return i;
                 });
-                // Last minute fix needs to be adjusted
-                // duplicate calories property
                 const exercise = this.prepareData(
                     data,
                     'exercise',
@@ -280,6 +317,7 @@ export default {
                     ];
                 });
 
+                // Check whether there are glucose entries in fetched data
                 if (arr.length > 0) {
                     minMax = this.findMinMax(data);
                     this.$emit('minmaxchanged', minMax);
@@ -297,6 +335,8 @@ export default {
                         exercise
                     );
                 }
+                // User settings provided in the profile view
+                // to color different glucose conditions
                 const ranges = (localStorage.getItem('normalRange') === null)
                     ? null
                     : {

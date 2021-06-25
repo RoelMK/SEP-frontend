@@ -1,5 +1,4 @@
 <template>
-
     <v-card class="pa-4">
         <h4 class="">Upload</h4>
         <v-form
@@ -107,11 +106,14 @@
 </template>
 
 <script>
-import Upload from '../../repositories/Upload';
+import Upload from '@/repositories/Upload';
 import axios from "axios";
+
 export default {
     name: "UploadData",
     created() {
+        // Check for previous nightscout and onedrive connection if such exists
+        // in local storage
         this.nightscoutUrl = localStorage.getItem("nightscout_url") || "";
         this.onedriveFileUrl = localStorage.getItem("od_path") || "";
         if (this.$route.query.accessToken && this.$route.query.homeAccountId) {
@@ -139,24 +141,13 @@ export default {
         };
     },
     methods: {
+        /**
+         * Pass data to the backend
+         * @return { void }
+         */
         fileUpload() {
             let formData = new FormData();
-            let format = "";
-            /** SOFTWARE TRANSFER DOCUMENT:
-             * This switch statement can be changed
-             * to STRIP blank spaces .toLowercase()
-            */
-            switch (this.value) {
-            case 'Food diary':
-                format = "fooddiary";
-                break;
-            case 'Eetmeter':
-                format = "eetmeter";
-                break;
-            case 'Abbott':
-                format = "abbott";
-                break;
-            }
+            var format = this.value.split(' ').join('').toLowerCase();
             formData.append('file', this.file);
             formData.append('format', format);
 
@@ -168,14 +159,14 @@ export default {
                     "Bearer " + this.$cookies.get("JWT") }
             })
                 .then(
-                    (resp) => {
+                    () => {
                         this.$toaster.showMessage({
                             message: 'File uploaded successfully!',
                             color: 'green',
                             btnColor: 'pink'
                         });
                     },
-                    (error) => {
+                    () => {
                         this.$toaster.showMessage({
                             message: 'Something went wrong',
                             color: 'dark',
@@ -184,17 +175,33 @@ export default {
                     }
                 );
         },
+        /**
+         * Add nightscout connection string into local storage
+         * @return { void }
+         */
         connectNightscout() {
             localStorage.setItem("nightscout_url", this.nightscoutUrl);
         },
+        /**
+         * Redirect to ondedrive connection view
+         * @return { void }
+         */
         connectOnedrive() {
             window.open('http://diabetter.win.tue.nl:5000/onedrive/login');
         },
+        /**
+         * Reset cookies and flags upon disconnecting from the onedrive
+         * @return { void }
+         */
         disconnectOnedrive() {
             this.$cookies.remove('od_access_token');
             this.$cookies.remove('od_homeaccount_id');
             this.onedriveSet = true;
         },
+        /**
+         * Upload onedrive file
+         * @return { void }
+         */
         uploadOnedrive() {
             let access_token = this.$cookies.get("od_access_token");
             if (!access_token) {
@@ -215,7 +222,7 @@ export default {
                 oneDriveToken: access_token,
                 filePath: this.onedriveFileUrl
             }, this.$cookies.get("JWT")).then(
-                (resp) => {
+                () => {
                     localStorage.setItem("od_path", this.onedriveFileUrl);
                     this.fileUploading = false;
                     this.$toaster.showMessage({
@@ -224,7 +231,7 @@ export default {
                         btnColor: "pink",
                     });
                 },
-                (error) => {
+                () => {
                     this.$toaster.showMessage({
                         message: "Something went wrong, " +
                         "try again later or contact a developer",
@@ -243,6 +250,7 @@ export default {
     },
 };
 </script>
+
 <style>
 .gTitle {
     font-size: 15px;
