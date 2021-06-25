@@ -1,6 +1,5 @@
 <template>
     <div>
-        <Navbar class="header"></Navbar>
         <div class="clearfix"></div>
         <div class="profile">
             <v-row>
@@ -30,7 +29,6 @@ import EmotionSettings from "./profileComponents/EmotionSettings";
 import GlucoseSettings from './profileComponents/GlucoseSettings';
 import SupervisorSettings from './profileComponents/SupervisorSettings';
 import UnitsSettings from './profileComponents/UnitsSettings';
-import Navbar from '@/components/Navbar.vue';
 import Auth from "../repositories/Auth";
 
 export default {
@@ -42,8 +40,7 @@ export default {
         EmotionSettings,
         GlucoseSettings,
         SupervisorSettings,
-        UnitsSettings,
-        Navbar
+        UnitsSettings
     },
     created() {
         Auth.getProfile(this.$cookies.get("JWT")).then(
