@@ -1,6 +1,5 @@
 <template>
     <div id="dashboard">
-        <Navbar class="header"></Navbar>
         <div class="clearfix"></div>
         <div class="main">
             <Cards />
@@ -70,7 +69,6 @@ import OverviewChart from '@/components/OverviewChart.vue';
 import Statistics from '@/components/Statistics.vue';
 import Emotions from '@/components/Emotions.vue';
 import Legend from '@/components/Legend.vue';
-import Navbar from '@/components/Navbar.vue';
 import Cards from '@/components/Cards.vue';
 import Upload from "@/repositories/Upload";
 import Data from '@/repositories/Data.js';
@@ -84,7 +82,6 @@ export default {
         Statistics,
         Emotions,
         OverviewChart,
-        Navbar,
         Legend,
         Cards,
     },

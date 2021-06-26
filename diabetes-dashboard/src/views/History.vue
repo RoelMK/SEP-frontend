@@ -1,6 +1,5 @@
 <template>
     <div id="dashboard">
-        <Navbar class="header"></Navbar>
         <div class="clearfix"></div>
         <div class="main">
             <div class="row">
@@ -58,7 +57,6 @@
 </template>
 
 <script>
-import Navbar from "@/components/Navbar.vue";
 import OverviewChart from "@/components/OverviewChart.vue";
 import Legend from "@/components/Legend.vue";
 import TableFoodData from "@/components/TableFoodData.vue";
@@ -72,7 +70,6 @@ export default {
     name: "History",
     // include the following components
     components: {
-        Navbar,
         TableFoodData,
         TableActivitiesData,
         TableInsulinData,

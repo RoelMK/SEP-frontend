@@ -1,5 +1,6 @@
 <template>
     <v-app id="app">
+        <Navbar v-if="$route.meta.showNavbar" />
         <router-view/>
         <Toast/>
         <QueryMenu/>
@@ -9,12 +10,14 @@
 <script>
 import Toast from '@/components/Toast.vue';
 import QueryMenu from '@/components/QueryMenu.vue';
+import Navbar from '@/components/Navbar';
 
 export default {
     name: 'App',
     components: {
         Toast,
-        QueryMenu
+        QueryMenu,
+        Navbar
     },
 };
 </script>

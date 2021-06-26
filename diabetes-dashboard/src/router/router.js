@@ -18,12 +18,14 @@ const routes = [
         name: "dashboard",
         beforeEnter: (to, from, next) => {
             auth(to, from, next);
-        }
+        },
+        meta: { showNavbar: true }
     },
     {
         path: '/login',
         component: () => import('@/views/Login.vue'),
-        name: "login"
+        name: "login",
+        meta: { showNavbar: false }
     },
     {
         path: '/profile:homeAccountId?:accessToken?:expiresOn?',
@@ -31,7 +33,8 @@ const routes = [
         name: "profile",
         beforeEnter: (to, from, next) => {
             auth(to, from, next);
-        }
+        },
+        meta: { showNavbar: true }
     },
     {
         path: '/history',
@@ -39,7 +42,8 @@ const routes = [
         name: "history",
         beforeEnter: (to, from, next) => {
             auth(to, from, next);
-        }
+        },
+        meta: { showNavbar: true }
     },
 ];
 
