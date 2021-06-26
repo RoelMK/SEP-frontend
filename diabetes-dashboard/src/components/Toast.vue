@@ -25,6 +25,8 @@ export default {
         ...mapState(['toast'])
     },
     created() {
+        // Pass updated values to the component once
+        // state was changed
         this.$store.subscribe((mutation, state) => {
             if (mutation.type === 'SHOW_MESSAGE') {
                 this.message = state.toast.message;

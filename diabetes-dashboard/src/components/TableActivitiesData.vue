@@ -327,10 +327,9 @@ export default {
     },
     methods: {
         /**
-         * Method to set the latest time frame of a selected table entry
-         * to the time frame of the selected exercise entiry from table
-         * @param  { Object }    activity converted exercise object
-         * @return
+         * Handle row click action
+         * @param  { any }    activity activity object
+         * @return { void }
          */
         selectActivity(activity) {
             let start = moment(
@@ -352,9 +351,9 @@ export default {
             });
         },
         /**
-         * Method to convert exercise entires for table
-         * @param  { Array }    data array of exercise model objects
-         * @return { Array }    array of converted exercise objects
+         * Convert initial data object to a structure used in a table
+         * @param  { any }    data data object
+         * @return { void }
          */
         convertExercises(data) {
             return data.map((f) => ({
@@ -376,16 +375,6 @@ export default {
                         : 0,
             }));
         },
-    },
-    created() {
-        // update exercise table based on data from the store state
-        // if filteredData has contents use that to update table
-        if (this.filteredData > 0) {
-            this.exercises = this.convertExercises(this.filteredData.exercise);
-        } else {
-            // otherwise use data
-            this.exercises = this.convertExercises(this.data.exercise);
-        }
     },
 };
 </script>

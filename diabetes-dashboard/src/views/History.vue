@@ -19,9 +19,10 @@
                     <v-card elevation="2" height="52rem">
                         <v-card elevation="0">
                             <v-tabs v-model="tab">
-                                <v-tab v-for="item in items" :key="item">
-                                    {{ $t(item) }}
-                                </v-tab>
+                                <v-tab>insulin</v-tab>
+                                <v-tab>food</v-tab>
+                                <v-tab>activities</v-tab>
+                                <v-tab>emotions</v-tab>
                             </v-tabs>
                             <v-tabs-items v-model="tab">
                                 <v-tab-item>
@@ -65,7 +66,6 @@ import TableActivitiesData from "@/components/TableActivitiesData.vue";
 import TableInsulinData from "@/components/TableInsulinData.vue";
 import EmotionTable from "@/components/EmotionTable.vue";
 import { mapState } from "vuex";
-import moment from 'moment';
 
 export default {
     // name the view
@@ -86,16 +86,15 @@ export default {
     },
     data() {
         return {
-            tab: null,
-            // tab names
-            items: ["insulin", "food", "activities", "emotions"],
+            tab: null
         };
     },
     // if there is no data redirect user to main page
     created() {
+        // If there is no data redirect back to the dashboard view
         if (this.data.length <= 0)
             this.$router.push("/");
-    },
+    }
 };
 </script>
 

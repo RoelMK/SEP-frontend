@@ -36,7 +36,7 @@
                 color="primary"
                 @click="
                     $refs.dateMenu.save(insulinDate);
-                    emitDate();
+                    $emit('selectedDate', insulinDate);
                 "
             >
                 OK
@@ -66,12 +66,6 @@ export default {
             if (this.insulinDate)
                 return moment(this.insulinDate).format("DD/MM/YYYY").toString();
             else return "Select Date";
-        },
-    },
-    methods: {
-        // emit date to parent component
-        emitDate() {
-            this.$emit("selectedDate", this.insulinDate);
         },
     },
     watch: {

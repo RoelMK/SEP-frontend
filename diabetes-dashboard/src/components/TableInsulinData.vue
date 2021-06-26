@@ -116,13 +116,13 @@
                                 </v-row>
                                 <v-row>
                                     <HistoryDatePicker
-                                        @selectedDate="getSelectedDate"
+                                        @selectedDate="editedItem.date = $event"
                                         :date="editedItem.date"
                                     />
                                 </v-row>
                                 <v-row>
                                     <HistoryTimePicker
-                                        @selectedTime="getSelectedTime"
+                                        @selectedTime="editedItem.time = $event"
                                         :time="editedItem.time"
                                     />
                                 </v-row>
@@ -178,7 +178,7 @@
 import moment from "moment";
 import HistoryDatePicker from "@/components/HistoryDatePicker.vue";
 import HistoryTimePicker from "@/components/HistoryTimePicker.vue";
-import Insulin from "@/repositories/Insulin.js";
+import Data from "@/repositories/Data.js";
 import { deleteMixin } from "@/helpers/deleteMixin.js";
 import { mapState } from "vuex";
 
@@ -211,7 +211,6 @@ export default {
             insulinData: [],
             // local filter operators
             items: ["<=", ">=", "="],
-            // table headers
             headers: [
                 // amount header
                 {
@@ -344,9 +343,9 @@ export default {
     },
     methods: {
         /**
-         * Method to convert insulin entires for table
-         * @param  { Array }    data array of insulin model objects
-         * @return { Array }    array of converted insulin objects
+         * Convert initial data object to a structure used in a table
+         * @param  { any }    data data object
+         * @return { void }
          */
         convertInsulin(data) {
             return data.map((f) => ({
@@ -357,12 +356,10 @@ export default {
                 id: f.activityId,
             }));
         },
-
         /**
-         * Method to set the latest time frame of a selected table entry
-         * to the time frame of the selected insulin entiry from table
-         * @param  { Object }    insulin converted insulin object
-         * @return
+         * Handle row click action
+         * @param  { any }    insulin insulin object
+         * @return { void }
          */
         selectInsulin(insulin) {
             let startTime = moment(insulin.time, "HH:mm")
@@ -383,29 +380,10 @@ export default {
                 now: moment(),
             });
         },
-
         /**
-         * Method to set the date of an editem item
-         * @param  { String }    date new date
-         * @return
-         */
-        getSelectedDate(date) {
-            this.editedItem.date = date;
-        },
-
-        /**
-         * Method to set the time of an editem item
-         * @param  { String }    date new date
-         * @return
-         */
-        getSelectedTime(time) {
-            this.editedItem.time = time;
-        },
-
-        /**
-         * Method to display the type of an item
-         * @param  { Integer }    type type of insulin
-         * @return
+         * Convert value of insulin type to a respective string
+         * @param  { number }    type insulin type as a number
+         * @return { string }
          */
         displayType(type) {
             if (type === 0) {
@@ -414,11 +392,11 @@ export default {
                 return "Slow";
             }
         },
-
         /**
-         * Method to check insulin item and add/edit it
-         * @param  { Boolean }    editing editing state
-         * @return
+         * Check insulin fields in editing mode and post new
+         * settings upon change approval
+         * @param  { boolean }    editing validation variable
+         * @return { void }
          */
         async checkInsulinInput(editing) {
             // check if a necessary property was not set
@@ -462,8 +440,11 @@ export default {
                     if (this.$store.state.supervising.token) {
                         token = this.$store.state.supervising.token;
                     }
-                    // make a put request
-                    let insulin = await Insulin.post(parameters, token).then(
+
+                    let insulin = await Data.postInsulin(
+                        parameters,
+                        token
+                    ).then(
                         (resp) => {
                             this.$toaster.showMessage({
                                 message: "Upload is successful",
@@ -485,8 +466,10 @@ export default {
                     if (this.$store.state.supervising.token) {
                         token = this.$store.state.supervising.token;
                     }
-                    // make a post request
-                    let insulin = await Insulin.post(parameters, token).then(
+                    let insulin = await Data.postInsulin(
+                        parameters,
+                        token
+                    ).then(
                         (resp) => {
                             this.$toaster.showMessage({
                                 message: "Upload is successful",
@@ -505,14 +488,20 @@ export default {
                 }
             }
         },
-
-        // set editedItem to current item and update editing and dialog state
+        /**
+         * Assign field value to an object upon input
+         * @param  { any }    item selected item from table
+         * @return { void }
+         */
         editItem(item) {
             this.editedItem = Object.assign({}, item);
             this.dialog = true;
             this.editing = true;
         },
-        // close dialog and revert editedItem
+        /**
+         * Close editing pop up
+         * @return { void }
+         */
         close() {
             this.dialog = false;
             this.$nextTick(() => {
@@ -520,17 +509,27 @@ export default {
                 this.editing = false;
             });
         },
-        // save changes and close pop up
+        /**
+         * Save modified fields
+         * @return { void }
+         */
         save() {
             this.checkInsulinInput(this.editing);
             this.close();
         },
-        // show delete pop up and update editedItem to current item
+        /**
+         * Show delete pop up
+         * @param  { any }    item item selected item from table
+         * @return { void }
+         */
         showDeleteDialog(item) {
             this.editedItem = Object.assign({}, item);
             this.dialogDelete = true;
         },
-        // delete item and remove from local data
+        /**
+         * Confirm deletion of the item from table
+         * @return { void }
+         */
         deleteItemConfirm() {
             let parameters = { activityId: this.editedItem.id };
             this.deleteItem(parameters);
@@ -538,14 +537,20 @@ export default {
             this.$store.commit("DELETE_INSULIN", parameters.activityId);
             this.updateInsulinTable();
         },
-        // close delete pop up
+        /**
+         * Close delete pop up
+         * @return { void }
+         */
         closeDelete() {
             this.dialogDelete = false;
             this.$nextTick(() => {
                 this.editedItem = Object.assign({}, this.defaultItem);
             });
         },
-        // update inuslin table based on data from the store state
+        /**
+         * Update values in insulin table
+         * @return { void }
+         */
         updateInsulinTable() {
             // if filteredData has contents use that to update table
             if (this.filteredData > 0) {

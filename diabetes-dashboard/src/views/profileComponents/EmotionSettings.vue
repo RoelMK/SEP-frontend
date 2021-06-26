@@ -23,6 +23,7 @@ export default {
         };
     },
     created() {
+        // Set reminder options upon rendering the component
         let val = true;
         if (localStorage.getItem("emotionReminder") != null) {
             val = localStorage.getItem("emotionReminder") == "true";
@@ -34,6 +35,7 @@ export default {
         }
     },
     watch: {
+        // Watch toggler for changes and save them in the local storage
         boolAsk: function() {
             localStorage.setItem("emotionReminder", this.boolAsk);
         }

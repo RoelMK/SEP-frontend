@@ -49,6 +49,7 @@ import filterHelpers from '@/helpers/filter.js';
 import moment from 'moment';
 import Data from '@/repositories/Data.js';
 import { mapState } from 'vuex';
+
 export default {
     components: {
         Query
@@ -83,11 +84,14 @@ export default {
     },
     computed: {
         ...mapState(['filter', 'data', 'date', 'filteredData']),
+        // Check parameters that were selected from the query
+        // menu in order to show label in the UI
         selectedParameters() {
             return Object.entries(this.parameters)
                 .filter(f => f[1] !== null)
                 .map(d => d[0]);
         },
+        // Validate min/max fields
         validation() {
             if (this.parameters.insulinMax < this.parameters.insulinMin
                 && this.parameters.insulinMax !== null)
@@ -96,9 +100,15 @@ export default {
         }
     },
     methods: {
+        /**
+         * Apply filtering onto data object
+         * @return { void }
+         */
         async applyFiltering() {
+            // Validate fields before filtering
             if (this.validation) {
                 var items = [];
+                // Create an object with selected parameters
                 const selection = this.checkSelection({
                     date: this.parameters.date,
                     activity: this.parameters.activity,
@@ -115,6 +125,8 @@ export default {
                     }
                 });
                 const keys = Object.keys(selection);
+                // Check selected filtering options and if that
+                // property exists in an object apply specific filtering
                 if (keys.includes('date') || keys.includes('activity')) {
                     const config = {
                         startDate: (this.parameters.date)
@@ -200,6 +212,7 @@ export default {
                         }
                     }
                 }
+                // Save filtered object in vuex
                 this.$store.dispatch('setFilteredData', items);
                 this.$store.dispatch('showFilter', { show: false });
                 this.resetSelection();
@@ -213,19 +226,37 @@ export default {
                 });
             }
         },
+        /**
+         * Reset selection in a query menu
+         * @return { void }
+         */
         resetSelection() {
             for (let element in this.parameters) {
                 this.parameters[element] = null;
             }
             this.reload = !this.reload;
         },
+        /**
+         * Update parameters object
+         * @return { void }
+         */
         updateParameters(index, value) {
             this.parameters[index] = value;
         },
+        /**
+         * Cancel filtering
+         * @return { void }
+         */
         cancelFiltering() {
             this.$store.dispatch('showFilter', { show: false });
             this.resetSelection();
         },
+        /**
+         * Capitalize first letter of the attribute
+         * Split attribute if it is provided in camel case format
+         * @param  { string }   str string which is going to be formatted
+         * @return { string }
+         */
         formatLabel(str) {
             var isCapital =  str.match(/[A-Z]/);
             if (isCapital) {
@@ -234,11 +265,14 @@ export default {
             }
             return str.charAt(0).toUpperCase() + str.slice(1);
         },
+        /**
+         * Setup parameters for sending fetch request
+         * @param  { any }  parameters Payload of the request
+         * @return { any }
+         */
         setupParameters(parameters) {
-            // TODO: Remove 10-04-2027
             if (!parameters.date)
-                var now = moment('10-04-2027', 'DD-MM-YYYY')
-                    .format('DD-MM-YYYY');
+                var now = moment().format('DD-MM-YYYY');
             return {
                 startDate: (parameters.date) ? parameters.date.start : now,
                 endDate: (parameters.date) ? parameters.date.end : now,
@@ -247,6 +281,12 @@ export default {
                     : ''
             };
         },
+        /**
+         * Check Selected properties from query menu
+         * @param  { any }   parameters Object containing all the properties from
+         * query menu. Properties that are not selected are null
+         * @return { any }
+         */
         checkSelection(parameters) {
             const output = {};
             for (let param in parameters) {

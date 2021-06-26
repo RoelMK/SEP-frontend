@@ -259,10 +259,9 @@ export default {
     },
     methods: {
         /**
-         * Method to set the latest time frame of a selected table entry
-         * to the time frame of the selected food entiry from table
-         * @param  { Object }    insulin converted food object
-         * @return
+         * Handle row click action
+         * @param  { any }    food food object
+         * @return { void }
          */
         selectFood(food) {
             let startTime = moment(food.time, "HH:mm")
@@ -284,9 +283,9 @@ export default {
             });
         },
         /**
-         * Method to convert food entires for table
-         * @param  { Array }    data array of food model objects
-         * @return { Array }    array of converted food objects
+         * Convert initial data object to a structure used in a table
+         * @param  { any }    data data object
+         * @return { void }
          */
         convertFood(data) {
             return data.map((f) => ({
@@ -301,16 +300,6 @@ export default {
                 id: f.activityId,
             }));
         },
-    },
-    created() {
-        // update food table based on data from the store state
-        // if filteredData has contents use that to update table
-        if (this.filteredData > 0) {
-            this.food = this.convertFood(this.filteredData.food);
-        } else {
-            // otherwise use data
-            this.food = this.convertFood(this.data.food);
-        }
     },
 };
 </script>

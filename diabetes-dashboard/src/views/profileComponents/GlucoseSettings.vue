@@ -182,6 +182,7 @@ export default {
         };
     },
     created() {
+        // Set glucose settings upon rendering the component
         for (const [key, value] of Object.entries(this.healthSettings)) {
             let val = localStorage.getItem(key);
             if (key.includes("Range")) {
@@ -200,15 +201,26 @@ export default {
         }
     },
     methods: {
+        /**
+         * Display editing options upon clicking on settings card
+         * @return { void }
+         */
         onClick() {
             if (!this.editing) {
                 this.editing = !this.editing;
             }
         },
+        /**
+         * Reset editing options upon 'cancel' button click
+         * @return { void }
+         */
         onCancel() {
             this.editing = false;
-            // No changes are made
         },
+        /**
+         * Save settings in local storage upon 'Done' button click
+         * @return { void }
+         */
         onDone() {
             this.editing = false;
             for (const [key, value] of Object.entries(this.healthSettings)) {

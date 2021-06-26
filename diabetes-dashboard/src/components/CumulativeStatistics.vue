@@ -46,11 +46,14 @@
 <script>
 import { mapState } from "vuex";
 import moment from "moment";
+
 export default {
     // name component
     name: "CumulativeStatistics",
     watch: {
-        // watch filteredData for changes
+        // Check whether data was filtered
+        // Use filteredData if that is the case
+        // Otherwise use data object
         filteredData: function (value) {
             // if filteredData has contents
             if (this.filteredData > 0) {
@@ -62,85 +65,172 @@ export default {
             }
         },
     },
+    props: {
+        proportions: {
+            type: Array,
+            default: null
+        },
+        minMax: {
+            type: Array,
+            default: null
+        },
+    },
+    computed: {
+        ...mapState(["filteredData", "data"]),
+    },
+    created() {
+        if (this.filteredData > 0) {
+            this.cumulativeData = this.filteredData;
+        } else {
+            this.cumulativeData = this.data;
+        }
+    },
     data() {
         return {
             cumulativeData: [],
-            // declare unit
-            unitBG: "mmol/L",
+            unitBG: "mmol/L"
         };
     },
     methods: {
-        // method to compute total calories
+        /**
+         * Get start and end timestamps to filter statistics
+         * @return { Array<number> }
+         */
+        getStartEnd(){
+            const start = this.minMax[0]
+                + (this.minMax[1] - this.minMax[0]) * this.proportions[0] /100;
+            const end = this.minMax[0]
+                + (this.minMax[1] - this.minMax[0]) * this.proportions[1] /100;
+            return [start, end];
+        },
+        /**
+         * Calculate total calories within selected range
+         * @return { number }
+         */
         totalCalories() {
             if (!this.cumulativeData.food) return 0;
+            this.getStartEnd();
             let totalCalories = 0;
-            this.cumulativeData.food.forEach((element) => {
+            var localData = JSON.parse(JSON.stringify(this.cumulativeData));
+            var datetime = this.getStartEnd();
+            localData.food.filter(f => {
+                return f.timestamp<= datetime[1] && f.timestamp >= datetime[0];
+            }).forEach((element) => {
                 totalCalories += element.calories ? element.calories : 0;
             });
             return totalCalories;
         },
-        // method to compute total carbs
+        /**
+         * Calculate total carbohydrates within selected range
+         * @return { number }
+         */
         totalCarbs() {
             if (!this.cumulativeData.food) return 0;
             let totalCarbs = 0;
-            this.cumulativeData.food.forEach((element) => {
+            var localData = JSON.parse(JSON.stringify(this.cumulativeData));
+            var datetime = this.getStartEnd();
+            localData.food.filter(f => {
+                return f.timestamp <= datetime[1] &&f.timestamp >= datetime[0];
+            }).forEach((element) => {
                 totalCarbs += element.carbohydrates ? element.carbohydrates : 0;
             });
             return totalCarbs;
         },
-        // method to compute total inulin based on type
+        /**
+         * Calculate total insulin within selected range
+         * @param { number }    insulinType Type of insulin that is going to be calculated
+         * @return { number }
+         */
         totalInsulin(insulinType) {
             if (!this.cumulativeData.insulin) return 0;
             let totalInsulin = 0;
-            this.cumulativeData.insulin.forEach((element) => {
-                totalInsulin += element.insulinType == insulinType ? 1 : 0;
+            var localData = JSON.parse(JSON.stringify(this.cumulativeData));
+            var datetime = this.getStartEnd();
+            localData.insulin.filter(f => {
+                return f.timestamp <= datetime[1] &&f.timestamp >= datetime[0];
+            }).forEach((element) => {
+                totalInsulin
+                    += element.insulinType == insulinType
+                        ? element.insulinAmount
+                        : 0;
             });
             return totalInsulin;
         },
-        // method to compute total burnt calories
+        /**
+         * Calculate total calories within selected range
+         * @return { number }
+         */
         totalBurntCalories() {
             if (!this.cumulativeData.activities) return 0;
             let totalBurnt = 0;
-            this.cumulativeData.activities.forEach((element) => {
+            var localData = JSON.parse(JSON.stringify(this.cumulativeData));
+            var datetime = this.getStartEnd();
+            localData.exercise.filter(f => {
+                return f.timestamp <= datetime[1] &&f.timestamp >= datetime[0];
+            }).forEach((element) => {
                 totalBurnt += element.calories;
             });
             return totalBurnt;
         },
-        // method to compute average glucose
+        /**
+         * Calculate average glucose within selected range
+         * @return { number }
+         */
         averageGlucose() {
             if (!this.cumulativeData.glucose) return 0;
             let total = 0;
             let count = this.cumulativeData.glucose.length;
-            this.cumulativeData.glucose.forEach((element) => {
+            var localData = JSON.parse(JSON.stringify(this.cumulativeData));
+            var datetime = this.getStartEnd();
+            localData.glucose.filter(f => {
+                return f.timestamp <= datetime[1] &&f.timestamp >= datetime[0];
+            }).forEach((element) => {
                 total += element.glucoseLevel ? element.glucoseLevel : 0;
             });
             return total / count;
         },
-        // method to compute max glucose
+        /**
+         * Calculate max glucose value within selected range
+         * @return { number }
+         */
         maxGlucose() {
             // check for existence
             if (!this.cumulativeData.glucose) return 0;
             // calculate max
             let max = 0;
-            this.cumulativeData.glucose.forEach((element) => {
+            var localData = JSON.parse(JSON.stringify(this.cumulativeData));
+            var datetime = this.getStartEnd();
+            localData.glucose.filter(f => {
+                return f.timestamp <= datetime[1] &&f.timestamp >= datetime[0];
+            }).forEach((element) => {
                 max = element.glucoseLevel > max ? element.glucoseLevel : max;
             });
             return max;
         },
-        // method to compute min glucose
+        /**
+         * Calculate min glucose value within selected range
+         * @return { number }
+         */
         minGlucose() {
             // check for existence and length
             if (!this.cumulativeData.glucose || this.cumulativeData.length == 0)
                 return 0;
-
             //calculate min
             let min = this.cumulativeData.glucose[0].glucoseLevel;
-            this.cumulativeData.glucose.forEach((element) => {
+            var localData = JSON.parse(JSON.stringify(this.cumulativeData));
+            var datetime = this.getStartEnd();
+            localData.glucose.filter(f => {
+                return f.timestamp <= datetime[1] &&f.timestamp >= datetime[0];
+            }).forEach((element) => {
                 min = element.glucoseLevel < min ? element.glucoseLevel : min;
             });
             return min;
         },
-        // method to compute A1C estimate
+        /**
+         * Calculate A1C. If selected range is less than 3 months
+         * use all glucose values. Otherwise use only last 3 months
+         * @return { number }
+         */
         a1cCompute() {
             if (!this.cumulativeData.glucose) return 0;
             // in 13 digits
@@ -158,21 +248,7 @@ export default {
             });
             return estimate / count;
         },
-    },
-    computed: {
-        // get "filteredData", "data" from store state
-        ...mapState(["filteredData", "data"]),
-    },
-    created() {
-        // update cumulativeData based on data from the store state
-        // if filteredData has contents use that to update cumulativeData
-        if (this.filteredData > 0) {
-            this.cumulativeData = this.filteredData;
-        } else {
-            // otherwise use data
-            this.cumulativeData = this.data;
-        }
-    },
+    }
 };
 </script>
 

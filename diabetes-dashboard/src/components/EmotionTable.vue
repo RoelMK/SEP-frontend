@@ -213,13 +213,13 @@
                                 </v-row>
                                 <v-row>
                                     <HistoryDatePicker
-                                        @selectedDate="getSelectedDate"
+                                        @selectedDate="editedItem.date = $event"
                                         :date="editedItem.date"
                                     />
                                 </v-row>
                                 <v-row>
                                     <HistoryTimePicker
-                                        @selectedTime="getSelectedTime"
+                                        @selectedTime="editedItem.time = $event"
                                         :time="editedItem.time"
                                     />
                                 </v-row>
@@ -273,7 +273,7 @@
 
 <script>
 import moment from "moment";
-import Emotion from "@/repositories/Emotion.js";
+import Data from "@/repositories/Data.js";
 import { deleteMixin } from "@/helpers/deleteMixin.js";
 import HistoryDatePicker from "@/components/HistoryDatePicker.vue";
 import HistoryTimePicker from "@/components/HistoryTimePicker.vue";
@@ -445,9 +445,9 @@ export default {
     },
     methods: {
         /**
-         * Method to convert emotion entires for table
-         * @param  { Array }    data array of mood model objects
-         * @return { Array }    array of converted mood objects
+         * Convert initial data object to a structure used in a table
+         * @param  { any }    data data object
+         * @return { void }
          */
         convertEmotions(data) {
             return data.map((f) => ({
@@ -461,26 +461,9 @@ export default {
             }));
         },
         /**
-         * Method to set the date of an editem item
-         * @param  { String }    date new date
-         * @return
-         */
-        getSelectedDate(date) {
-            this.editedItem.date = date;
-        },
-        /**
-         * Method to set the time of an editem item
-         * @param  { String }    date new date
-         * @return
-         */
-        getSelectedTime(time) {
-            this.editedItem.time = time;
-        },
-        /**
-         * Method to set the latest time frame of a selected table entry
-         * to the time frame of the selected emotion entiry from table
-         * @param  { Object }    emotion converted emotion object
-         * @return
+         * Handle row click action
+         * @param  { any }    emotion emotion object
+         * @return { void }
          */
         selectEmotion(emotion) {
             let startTime = moment(emotion.time, "HH:mm")
@@ -502,9 +485,9 @@ export default {
             });
         },
         /**
-         * Method to return emoticon label based on happiness value
-         * @param  { Integer }    happiness happiness value
-         * @return
+         * Convert hapiness value to an emoticon
+         * @param  { number }    happiness hapiness value
+         * @return { string }
          */
         displayHappiness(happiness) {
             if (happiness === 1) {
@@ -518,9 +501,9 @@ export default {
             }
         },
         /**
-         * Method to return emoticon label based on excitement value
-         * @param  { Integer }    happiness excitement value
-         * @return
+         * Convert hapiness value to an emoticon
+         * @param  { number }    excitement excitement value
+         * @return { string }
          */
         displayExcitement(excitement) {
             if (excitement === 1) {
@@ -534,12 +517,12 @@ export default {
             }
         },
         /**
-         * Method to check emotion item and add/edit it
-         * @param  { Boolean }    editing editing state
-         * @return
+         * Check emotion fields in editing mode and post new
+         * settings upon change approval
+         * @param  { boolean }    editing validation variable
+         * @return { void }
          */
         async checkEmotionInput(editing) {
-            // check if a necessary property was not set
             if (
                 this.editedItem.happiness === 0 ||
                 this.editedItem.excitement === 0 ||
@@ -577,8 +560,7 @@ export default {
                     // if in editing mode, add activityId and set it
                     parameters["activityId"] = this.editedItem.id;
 
-                    // make a put request
-                    let emotion = await Emotion.post(
+                    let emotion = await Data.postEmotion(
                         parameters,
                         this.$cookies.get("JWT")
                     ).then(
@@ -598,8 +580,7 @@ export default {
                     this.$store.commit("UPDATE_EMOTION", emotion);
                     this.updateEmotionTable();
                 } else {
-                    // make a post request
-                    let emotion = await Emotion.post(
+                    let emotion = await Data.postEmotion(
                         parameters,
                         this.$cookies.get("JWT")
                     ).then(
@@ -621,13 +602,20 @@ export default {
                 }
             }
         },
-        // set editedItem to current item and update editing and dialog state
+        /**
+         * Assign field value to an object upon input
+         * @param  { any }    item selected item from table
+         * @return { void }
+         */
         editItem(item) {
             this.editedItem = Object.assign({}, item);
             this.dialog = true;
             this.editing = true;
         },
-        // close dialog and revert editedItem
+        /**
+         * Close editing pop up
+         * @return { void }
+         */
         close() {
             this.dialog = false;
             this.$nextTick(() => {
@@ -635,17 +623,27 @@ export default {
                 this.editing = false;
             });
         },
-        // save changes and close pop up
+        /**
+         * Save modified fields
+         * @return { void }
+         */
         save() {
             this.checkEmotionInput(this.editing);
             this.close();
         },
-        // show delete pop up and update editedItem to current item
+        /**
+         * Show delete pop up
+         * @param  { any }    item item selected item from table
+         * @return { void }
+         */
         showDeleteDialog(item) {
             this.editedItem = Object.assign({}, item);
             this.dialogDelete = true;
         },
-        // delete item and remove from local data
+        /**
+         * Confirm deletion of the item from table
+         * @return { void }
+         */
         deleteItemConfirm() {
             let parameters = { activityId: this.editedItem.id };
             this.deleteItem(parameters);
@@ -653,14 +651,20 @@ export default {
             this.$store.commit("DELETE_EMOTION", parameters.activityId);
             this.updateEmotionTable();
         },
-        // close delete pop up
+        /**
+         * Close delete pop up
+         * @return { void }
+         */
         closeDelete() {
             this.dialogDelete = false;
             this.$nextTick(() => {
                 this.editedItem = Object.assign({}, this.defaultItem);
             });
         },
-        // update emotion table based on data from the store state
+        /**
+         * Update values in emotion table
+         * @return { void }
+         */
         updateEmotionTable() {
             // if filteredData has contents use that to update table
             if (this.filteredData > 0) {
@@ -670,9 +674,6 @@ export default {
                 this.emotions = this.convertEmotions(this.data.mood);
             }
         },
-    },
-    created() {
-        this.updateEmotionTable();
     },
 };
 </script>
