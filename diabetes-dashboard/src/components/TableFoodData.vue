@@ -96,34 +96,45 @@ import moment from "moment";
 import { mapState } from "vuex";
 
 export default {
+    // name component
     name: "TableFoodData",
+    //watch filteredData for changes
     watch: {
         filteredData: function (value) {
+            // if filteredData has contents
             if (value.length > 0) {
+                // update food using it
                 this.food = this.convertFood(value.food);
             } else {
+                // otherwise update food using data
                 this.food = this.convertFood(this.data.food);
             }
         },
     },
     data() {
         return {
+            // local filter operators
             items: ["<=", ">=", "="],
+            // table headers
             headers: [
+                // type header
                 {
                     text: "Type",
                     value: "type",
                     sortable: false,
+                    // filter on type
                     filter: (f) => {
                         return (f + "")
                             .toLowerCase()
                             .includes(this["type"].toLowerCase());
                     },
                 },
+                // time header
                 {
                     text: "Time",
                     value: "time",
                     sortable: false,
+                    // filter time based on chosen filter operator and value
                     filter: (value) => {
                         if (!this.time) return true;
                         if (this.timeFilter === "<=") {
@@ -144,10 +155,12 @@ export default {
                         }
                     },
                 },
+                // date header
                 {
                     text: "Date",
                     value: "date",
                     sortable: false,
+                    // filter date based on chosen filter operator and value
                     filter: (value) => {
                         if (!this.date) return true;
                         if (this.dateFilter === "<=") {
@@ -168,10 +181,12 @@ export default {
                         }
                     },
                 },
+                // carbs header
                 {
                     text: "Carbs (g)",
                     value: "carbs",
                     sortable: false,
+                    // filter carbs based on chosen filter operator and value
                     filter: (value) => {
                         if (!this.carbs) return true;
                         if (this.carbsFilter === "<=") {
@@ -183,10 +198,12 @@ export default {
                         }
                     },
                 },
+                // calories header
                 {
                     text: "Calories (kcal)",
                     value: "calories",
                     sortable: false,
+                    // filter calories based on chosen filter operator and value
                     filter: (value) => {
                         if (!this.calories) return true;
                         if (this.caloriesFilter === "<=") {
@@ -198,31 +215,46 @@ export default {
                         }
                     },
                 },
+                // GI headers
                 {
                     text: "GI",
                     value: "glycemicIndex",
                     sortable: false,
+                    // filter GI based on chosen filter operator and value
                     filter: (value) => {
                         if (!this.glycemicIndex) return true;
                         return value <= this.glycemicIndex;
                     },
                 },
             ],
+            // store food data
             food: [],
+            // name of food
             name: "",
+            // type of food
             type: "",
+            // time of food
             time: "",
+            // date of food
             date: "",
+            // carbs of food
             carbs: "",
+            // calories of food
             calories: "",
+            // glycemic index of food
             glycemicIndex: "",
+            // chosen time filter operator
             timeFilter: "",
+            // chosen date filter operator
             dateFilter: "",
+            // chosen carbs filter operator
             carbsFilter: "",
+            // chosen calories filter operator
             caloriesFilter: "",
         };
     },
     computed: {
+        // get "filteredData", "data" from store state
         ...mapState(["filteredData", "data"]),
     },
     methods: {

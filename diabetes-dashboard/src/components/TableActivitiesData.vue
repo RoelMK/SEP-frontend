@@ -118,45 +118,58 @@ import moment from "moment";
 import { mapState } from "vuex";
 
 export default {
+    // component name
     name: "TableActivitiesData",
+    // watch filteredData for changes
     watch: {
         filteredData: function (value) {
+            // if filteredData has contents
             if (value.length > 0) {
+                // update exercises using it
                 this.exercises = this.convertExercises(value.exercise);
             } else {
+                // otherwise update exercises using data
                 this.exercises = this.convertExercises(this.data.exercise);
             }
         },
     },
     data() {
         return {
+            // local filter operators
             items: ["<=", ">=", "="],
+            // table headers
             headers: [
+                // name header
                 {
                     text: "Name",
                     value: "name",
                     sortable: false,
+                    // filter on name
                     filter: (f) => {
                         return (f + "")
                             .toLowerCase()
                             .includes(this["name"].toLowerCase());
                     },
                 },
+                // type header
                 {
                     text: "Type",
                     value: "type",
                     sortable: false,
+                    // filter on type
                     filter: (f) => {
                         return (f + "")
                             .toLowerCase()
                             .includes(this["type"].toLowerCase());
                     },
                 },
+                // start date header
                 {
                     text: "Start Date",
                     value: "startDate",
                     width: "17%",
                     sortable: false,
+                    // filter start date based on chosen filter operator and value
                     filter: (value) => {
                         if (!this.startDate) return true;
                         if (this.startDateFilter === "<=") {
@@ -177,11 +190,13 @@ export default {
                         }
                     },
                 },
+                // end date header
                 {
                     text: "End Date",
                     value: "endDate",
                     width: "17%",
                     sortable: false,
+                    // filter end date based on chosen filter operator and value
                     filter: (value) => {
                         if (!this.endDate) return true;
                         if (this.endDateFilter === "<=") {
@@ -202,10 +217,12 @@ export default {
                         }
                     },
                 },
+                // start time header
                 {
                     text: "Start Time",
                     value: "startTime",
                     sortable: false,
+                    // filter start time based on chosen filter operator and value
                     filter: (value) => {
                         if (!this.startTime) return true;
                         if (this.startTimeFilter === "<=") {
@@ -226,10 +243,12 @@ export default {
                         }
                     },
                 },
+                // end time header
                 {
                     text: "End Time",
                     value: "endTime",
                     sortable: false,
+                    // filter end time based on chosen filter operator and value
                     filter: (value) => {
                         if (!this.endTime) return true;
                         if (this.endTimeFilter === "<=") {
@@ -250,10 +269,12 @@ export default {
                         }
                     },
                 },
+                // calories header
                 {
                     text: "Calories (kcal)",
                     value: "calories",
                     sortable: false,
+                    // filter calories based on chosen filter operator and value
                     filter: (value) => {
                         if (!this.calories) return true;
                         if (this.caloriesFilter === "<=") {
@@ -265,28 +286,43 @@ export default {
                         }
                     },
                 },
+                // duration header
                 {
                     text: "Dur.",
                     value: "duration",
                     sortable: false,
                 },
             ],
+            // name of exercise
             name: "",
+            // type of exercise
             type: "",
+            // start date of exercise
             startDate: "",
+            // end date of exercise
             endDate: "",
+            // start time of exercise
             startTime: "",
+            // end time of exercise
             endTime: "",
+            // calories of exercise
             calories: "",
+            // chosen start date filter
             startDateFilter: "",
+            // chosen end date filter
             endDateFilter: "",
+            // chosen start time filter
             startTimeFilter: "",
+            // chosen end time filter
             endTimeFilter: "",
+            // chosen calories filter
             caloriesFilter: "",
+            // exercises
             exercises: [],
         };
     },
     computed: {
+        // get "filteredData", "data" from store state
         ...mapState(["filteredData", "data"]),
     },
     methods: {
@@ -300,13 +336,13 @@ export default {
                 moment(
                     activity.startDate + " " + activity.startTime,
                     "yyyy-MM-DD HH:mm"
-                )
+                ).subtract(2, "hours")
             ).format("YYYY-MM-DDTHH:mm");
             let end = moment(
                 moment(
                     activity.endDate + " " + activity.endTime,
                     "yyyy-MM-DD HH:mm"
-                )
+                ).add(2, "hours")
             ).format("YYYY-MM-DDTHH:mm");
             this.$store.dispatch("setNewTimeFrame", {
                 start,
