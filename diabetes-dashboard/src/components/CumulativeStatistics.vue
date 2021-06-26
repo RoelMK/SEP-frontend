@@ -48,15 +48,19 @@ import { mapState } from "vuex";
 import moment from "moment";
 
 export default {
+    // name component
     name: "CumulativeStatistics",
     watch: {
         // Check whether data was filtered
         // Use filteredData if that is the case
         // Otherwise use data object
         filteredData: function (value) {
+            // if filteredData has contents
             if (this.filteredData > 0) {
+                // update cumulativeData using it
                 this.cumulativeData = value;
             } else {
+                // otherwise update cumulativeData using data
                 this.cumulativeData = this.data;
             }
         },

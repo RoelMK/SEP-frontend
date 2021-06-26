@@ -68,7 +68,9 @@ import EmotionTable from "@/components/EmotionTable.vue";
 import { mapState } from "vuex";
 
 export default {
+    // name the view
     name: "History",
+    // include the following components
     components: {
         Navbar,
         TableFoodData,
@@ -78,6 +80,7 @@ export default {
         OverviewChart,
         Legend,
     },
+    // get data from store state
     computed: {
         ...mapState(["data"]),
     },
@@ -86,6 +89,7 @@ export default {
             tab: null
         };
     },
+    // if there is no data redirect user to main page
     created() {
         // If there is no data redirect back to the dashboard view
         if (this.data.length <= 0)

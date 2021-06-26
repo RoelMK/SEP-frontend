@@ -8,6 +8,7 @@ export const deleteMixin = {
          * @return { void }
          */
         async deleteItem(parameters) {
+            // obtain proper token
             let token = this.$cookies.get("JWT");
             if (this.$store.state.supervising.token) {
                 token = this.$store.state.supervising.token;
