@@ -3,12 +3,11 @@ import Data from "@/repositories/Data.js";
 export const deleteMixin = {
     methods: {
         /**
-         * Method to delete emotion/insulin entry
-         * @param  { Object }    parameters includes activityId propery
+         * Delete item from the table
+         * @param  { any }      parameters item object
          * @return { void }
          */
         async deleteItem(parameters) {
-            // obtain proper token
             let token = this.$cookies.get("JWT");
             if (this.$store.state.supervising.token) {
                 token = this.$store.state.supervising.token;

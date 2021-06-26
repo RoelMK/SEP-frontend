@@ -26,9 +26,7 @@ import StackedBarChart from '@/components/StackedBarChart.vue';
 import CumulativeStatistics from "@/components/CumulativeStatistics.vue";
 
 export default {
-    // set name of component
     name: "Statistics",
-    // specify components used in this component
     components: {
         StackedBarChart,
         CumulativeStatistics,

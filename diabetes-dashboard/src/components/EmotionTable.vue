@@ -213,13 +213,13 @@
                                 </v-row>
                                 <v-row>
                                     <HistoryDatePicker
-                                        @selectedDate="editedItem.date = $event"
+                                        @selectedDate="this.editedItem.date = $event"
                                         :date="editedItem.date"
                                     />
                                 </v-row>
                                 <v-row>
                                     <HistoryTimePicker
-                                        @selectedTime="editedItem.time = $event"
+                                        @selectedTime="this.editedItem.time = $event"
                                         :time="editedItem.time"
                                     />
                                 </v-row>
@@ -280,70 +280,52 @@ import HistoryTimePicker from "@/components/HistoryTimePicker.vue";
 import { mapState } from "vuex";
 
 export default {
-    // name component
     name: "EmotionTable",
-    // specify mixins
     mixins: [deleteMixin],
-    // include the following components
     components: {
         HistoryDatePicker,
         HistoryTimePicker,
     },
     watch: {
-        //watch filteredData for changes
         filteredData: function (value) {
-            // if filteredData has contents
             if (value.length > 0) {
-                // update emotions using it
                 this.emotions = this.convertEmotions(value.mood);
             } else {
-                // otherwise update emotions using data
                 this.emotions = this.convertEmotions(this.data.mood);
             }
         },
     },
     data() {
         return {
-            // store emotions data
             emotions: [],
-            // local filter operators
             items: ["<=", ">=", "="],
-            // possible emotion values for filter
             emotionValues: ["", 1, 2, 3],
-            // state of date menu
             dateMenu: false,
-            // state of time menu
             timeMenu: false,
-            // table headers
+            // must be modified when we use real data
             headers: [
-                // happiness header
                 {
                     text: "Happiness",
                     value: "happiness",
                     sortable: false,
-                    // filter happiness based on selected happiness filter
                     filter: (value) => {
                         if (this.happinessFilter === "") return true;
                         return value === this.happinessFilter;
                     },
                 },
-                // excitement header
                 {
                     text: "Excitement",
                     value: "excitement",
                     sortable: false,
-                    // filter excitement based on selected excitement filter
                     filter: (value) => {
                         if (this.excitementFilter === "") return true;
                         return value === this.excitementFilter;
                     },
                 },
-                // date header
                 {
                     text: "Date",
                     value: "date",
                     sortable: false,
-                    // filter date based on chosen filter operator and value
                     filter: (value) => {
                         if (!this.date) return true;
                         if (this.dateFilter === "<=") {
@@ -364,12 +346,10 @@ export default {
                         }
                     },
                 },
-                // time header
                 {
                     text: "Time",
                     value: "time",
                     sortable: false,
-                    // filter time based on chosen filter operator and value
                     filter: (value) => {
                         if (!this.time) return true;
                         if (this.timeFilter === "<=") {
@@ -390,24 +370,17 @@ export default {
                         }
                     },
                 },
-                // actions header
                 {
                     text: "Actions",
                     value: "actions",
                     sortable: false,
                 },
             ],
-            // emotion date
             date: "",
-            // emotion time
             time: "",
-            // edit pop up status
             dialog: false,
-            // delete pop up status
             dialogDelete: false,
-            // edit status
             editing: false,
-            // object to store property values of an edited item
             editedItem: {
                 happiness: 0,
                 excitement: 0,
@@ -415,7 +388,6 @@ export default {
                 time: "",
                 id: -1,
             },
-            // object to represent a default item
             defaultItem: {
                 happiness: 0,
                 excitement: 0,
@@ -423,20 +395,14 @@ export default {
                 time: "",
                 id: -1,
             },
-            // chosen time filter
             timeFilter: "",
-            // chosen date filter
             dateFilter: "",
-            // chosen happiness filter
             happinessFilter: "",
-            // chosen excitement filter
             excitementFilter: "",
         };
     },
     computed: {
-        // get "filteredData", "data" from store state
         ...mapState(["filteredData", "data"]),
-        // update title of pop up
         formTitle() {
             return this.editing === false
                 ? "New Emotion Input"
@@ -535,29 +501,22 @@ export default {
                     btnColor: "pink",
                 });
             } else {
-                // prepare the date for request
                 let date = moment(this.editedItem.date)
                     .format("MM/DD/YYYY")
                     .toString();
-                // prepare the time for request
                 let time = moment
                     .utc(this.editedItem.time, "HH:mm")
                     .format("HH:mm")
                     .toString();
-                // set parameters for request
                 let parameters = {
-                    // get timestamp
                     timestamp: moment(
                         moment(date + " " + time, "MM/DD/YYYY HH:mm")
                     ).format("x"),
-                    // get arousal value
                     arousal: this.editedItem.excitement,
-                    // get valence value
                     valence: this.editedItem.happiness,
                 };
 
                 if (editing) {
-                    // if in editing mode, add activityId and set it
                     parameters["activityId"] = this.editedItem.id;
 
                     let emotion = await Data.postEmotion(
@@ -576,7 +535,6 @@ export default {
                             console.log(error);
                         }
                     );
-                    // update local data
                     this.$store.commit("UPDATE_EMOTION", emotion);
                     this.updateEmotionTable();
                 } else {
@@ -596,7 +554,6 @@ export default {
                             console.log(error);
                         }
                     );
-                    // update local data
                     this.$store.commit("ADD_EMOTION", emotion);
                     this.updateEmotionTable();
                 }
@@ -666,11 +623,9 @@ export default {
          * @return { void }
          */
         updateEmotionTable() {
-            // if filteredData has contents use that to update table
             if (this.filteredData > 0) {
                 this.emotions = this.convertEmotions(this.filteredData.mood);
             } else {
-                // otherwise use data
                 this.emotions = this.convertEmotions(this.data.mood);
             }
         },

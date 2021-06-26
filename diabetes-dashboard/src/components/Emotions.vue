@@ -110,7 +110,6 @@ import moment from "moment";
 import Data from "@/repositories/Data.js";
 
 export default {
-    // set name of component
     name: "EmotionComponent",
     data() {
         return {
@@ -130,7 +129,6 @@ export default {
          * @return { void }
          */
         async checkEmotionInput() {
-            // check if a necessary property was not set
             if (
                 this.parameters.arousal === 0 ||
                 this.parameters.valance === 0
@@ -151,14 +149,13 @@ export default {
                             color: "dark",
                             btnColor: "pink",
                         });
-                        this.$emit("emotions", this.parameters);
+                        this.$emit('emotions', this.parameters);
                         return resp.data;
                     },
                     (error) => {
                         console.log(error);
                     }
                 );
-                // update local data
                 this.$store.commit("ADD_EMOTION", emotion);
             }
         },

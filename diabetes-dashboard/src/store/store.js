@@ -33,7 +33,6 @@ const store = new Vuex.Store({
             goalA1C: 7,
         },
         emotionReminderStatus: false,
-        // time frame of selected table item
         newTimeFrame: null
     },
     getters: {
@@ -59,7 +58,6 @@ const store = new Vuex.Store({
         setFilteredData({ commit }, data) {
             commit('UPDATE_FILTERED_DATA', data);
         },
-        // set newTimeFrame to the time frame of the latest selected table entry
         setNewTimeFrame({ commit }, timeFrame) {
             commit('UPDATE_TIME_FRAME', timeFrame);
         },
@@ -115,38 +113,31 @@ const store = new Vuex.Store({
         SET_USER(state, user) {
             state.user = user;
         },
-        // change newTimeFrame
         UPDATE_TIME_FRAME(state, timeFrame) {
             state.newTimeFrame = timeFrame;
         },
         SUPERVISING(state, data) {
             state.supervising = data;
         },
-        // add an emotion to the local data
         ADD_EMOTION(state, data) {
             state.data.mood.unshift(data);
         },
-        // delete an emotion from the local data
         DELETE_EMOTION(state, id) {
             state.data.mood = state.data.mood
                 .filter(emotion => emotion.activityId !== id);
         },
-        // update an emotion from the local data
         UPDATE_EMOTION(state, data) {
             state.data.mood.splice(
                 state.data.mood.findIndex(emotion =>
                     emotion.activityId === data.activityId), 1, data);
         },
-        // add an insulin input to the local data
         ADD_INSULIN(state, data) {
             state.data.insulin.unshift(data);
         },
-        // delete an insulin input from the local data
         DELETE_INSULIN(state, id) {
             state.data.insulin = state.data.insulin
                 .filter(insulinInput => insulinInput.activityId !== id);
         },
-        // update an insulin input from the local data
         UPDATE_INSULIN(state, data) {
             state.data.insulin.splice(
                 state.data.insulin.findIndex(insulinInput =>
