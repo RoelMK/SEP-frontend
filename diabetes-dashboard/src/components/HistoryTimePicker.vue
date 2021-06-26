@@ -48,15 +48,20 @@
 <script>
 import moment from "moment";
 export default {
+    // name component
     name: "HistoryTimePicker",
+    // state props used by component
     props: ["time"],
     data() {
         return {
+            // store time menu showing state
             timeMenu: false,
+            // store time
             insulinTime: "",
         };
     },
     computed: {
+        // method to convert time in menu
         convertTime() {
             if (this.insulinTime)
                 return moment
@@ -67,13 +72,16 @@ export default {
         },
     },
     methods: {
+        // emit time to parent component
         emitTime() {
             this.$emit("selectedTime", this.insulinTime);
         },
     },
     watch: {
+        // watch time prop for changes
         time: {
             handler(after) {
+                // update time
                 this.insulinTime = after;
             },
             immediate: true,

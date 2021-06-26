@@ -47,12 +47,17 @@
 import { mapState } from "vuex";
 import moment from "moment";
 export default {
+    // name component
     name: "CumulativeStatistics",
     watch: {
+        // watch filteredData for changes
         filteredData: function (value) {
+            // if filteredData has contents
             if (this.filteredData > 0) {
+                // update cumulativeData using it
                 this.cumulativeData = value;
             } else {
+                // otherwise update cumulativeData using data
                 this.cumulativeData = this.data;
             }
         },
@@ -60,10 +65,12 @@ export default {
     data() {
         return {
             cumulativeData: [],
+            // declare unit
             unitBG: "mmol/L",
         };
     },
     methods: {
+        // method to compute total calories
         totalCalories() {
             if (!this.cumulativeData.food) return 0;
             let totalCalories = 0;
@@ -72,6 +79,7 @@ export default {
             });
             return totalCalories;
         },
+        // method to compute total carbs
         totalCarbs() {
             if (!this.cumulativeData.food) return 0;
             let totalCarbs = 0;
@@ -80,6 +88,7 @@ export default {
             });
             return totalCarbs;
         },
+        // method to compute total inulin based on type
         totalInsulin(insulinType) {
             if (!this.cumulativeData.insulin) return 0;
             let totalInsulin = 0;
@@ -88,6 +97,7 @@ export default {
             });
             return totalInsulin;
         },
+        // method to compute total burnt calories
         totalBurntCalories() {
             if (!this.cumulativeData.activities) return 0;
             let totalBurnt = 0;
@@ -96,6 +106,7 @@ export default {
             });
             return totalBurnt;
         },
+        // method to compute average glucose
         averageGlucose() {
             if (!this.cumulativeData.glucose) return 0;
             let total = 0;
@@ -105,6 +116,7 @@ export default {
             });
             return total / count;
         },
+        // method to compute max glucose
         maxGlucose() {
             // check for existence
             if (!this.cumulativeData.glucose) return 0;
@@ -115,6 +127,7 @@ export default {
             });
             return max;
         },
+        // method to compute min glucose
         minGlucose() {
             // check for existence and length
             if (!this.cumulativeData.glucose || this.cumulativeData.length == 0)
@@ -127,6 +140,7 @@ export default {
             });
             return min;
         },
+        // method to compute A1C estimate
         a1cCompute() {
             if (!this.cumulativeData.glucose) return 0;
             // in 13 digits
@@ -146,12 +160,16 @@ export default {
         },
     },
     computed: {
+        // get "filteredData", "data" from store state
         ...mapState(["filteredData", "data"]),
     },
     created() {
+        // update cumulativeData based on data from the store state
+        // if filteredData has contents use that to update cumulativeData
         if (this.filteredData > 0) {
             this.cumulativeData = this.filteredData;
         } else {
+            // otherwise use data
             this.cumulativeData = this.data;
         }
     },

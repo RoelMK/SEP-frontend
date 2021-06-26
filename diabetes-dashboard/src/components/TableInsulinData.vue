@@ -183,32 +183,42 @@ import { deleteMixin } from "@/helpers/deleteMixin.js";
 import { mapState } from "vuex";
 
 export default {
+    // name component
     name: "TableInsulinData",
+    // specify mixins
     mixins: [deleteMixin],
+    // include the following components
     components: {
         HistoryDatePicker,
         HistoryTimePicker,
     },
     watch: {
+        //watch filteredData for changes
         filteredData: function (value) {
+            // if filteredData has contents
             if (value.length > 0) {
+                // update insulinData using it
                 this.insulinData = this.convertInsulin(value.insulin);
             } else {
+                // otherwise update insulinData using data
                 this.insulinData = this.convertInsulin(this.data.insulin);
             }
         },
     },
-    // must match data values from json
     data() {
         return {
+            // store insulin data
             insulinData: [],
+            // local filter operators
             items: ["<=", ">=", "="],
-            // must be modified when we use real data
+            // table headers
             headers: [
+                // amount header
                 {
                     text: "Amount",
                     value: "amount",
                     sortable: false,
+                    // filter amount based on chosen filter operator and value
                     filter: (value) => {
                         if (!this.amount) return true;
                         if (this.amountFilter === "<=") {
@@ -220,19 +230,23 @@ export default {
                         }
                     },
                 },
+                // type header
                 {
                     text: "Type",
                     value: "type",
                     sortable: false,
+                    // filter type
                     filter: (value) => {
                         if (this.typeFilter === "") return true;
                         return this.displayType(value) === this.typeFilter;
                     },
                 },
+                // date header
                 {
                     text: "Date",
                     value: "date",
                     sortable: false,
+                    // filter date based on chosen filter operator and value
                     filter: (value) => {
                         if (!this.date) return true;
                         if (this.dateFilter === "<=") {
@@ -253,10 +267,12 @@ export default {
                         }
                     },
                 },
+                // time header
                 {
                     text: "Time",
                     value: "time",
                     sortable: false,
+                    // filter time based on chosen filter operator and value
                     filter: (value) => {
                         if (!this.time) return true;
                         if (this.timeFilter === "<=") {
@@ -277,15 +293,20 @@ export default {
                         }
                     },
                 },
+                // actions header
                 {
                     text: "Actions",
                     value: "actions",
                     sortable: false,
                 },
             ],
+            // variable to store editing state
             editing: false,
+            // variable to store dialog state
             dialog: false,
+            // variable to store delete editing state
             dialogDelete: false,
+            // object to store property values of an edited item
             editedItem: {
                 amount: 0,
                 type: "",
@@ -293,6 +314,7 @@ export default {
                 time: "",
                 id: -1,
             },
+            // object to represent a default item
             defaultItem: {
                 amount: "",
                 type: "",
@@ -300,18 +322,32 @@ export default {
                 time: "",
                 id: -1,
             },
+            // insulin types
             types: ["Rapid", "Slow"],
+            // chosen time filter
             timeFilter: "",
+            // chosen date filter
             dateFilter: "",
+            // insulin filter types
             typeFilterItems: ["", "Rapid", "Slow"],
+            // chosen amount filter
             amountFilter: "",
+            // store insulin amount
             amount: "",
+            // chosen type filter
             typeFilter: "",
+            // date value
             date: "",
+            // time value
             time: "",
         };
     },
     methods: {
+        /**
+         * Method to convert insulin entires for table
+         * @param  { Array }    data array of insulin model objects
+         * @return { Array }    array of converted insulin objects
+         */
         convertInsulin(data) {
             return data.map((f) => ({
                 amount: f.insulinAmount,
@@ -322,6 +358,12 @@ export default {
             }));
         },
 
+        /**
+         * Method to set the latest time frame of a selected table entry
+         * to the time frame of the selected insulin entiry from table
+         * @param  { Object }    insulin converted insulin object
+         * @return
+         */
         selectInsulin(insulin) {
             let startTime = moment(insulin.time, "HH:mm")
                 .subtract(2, "hours")
@@ -342,14 +384,29 @@ export default {
             });
         },
 
+        /**
+         * Method to set the date of an editem item
+         * @param  { String }    date new date
+         * @return
+         */
         getSelectedDate(date) {
             this.editedItem.date = date;
         },
 
+        /**
+         * Method to set the time of an editem item
+         * @param  { String }    date new date
+         * @return
+         */
         getSelectedTime(time) {
             this.editedItem.time = time;
         },
 
+        /**
+         * Method to display the type of an item
+         * @param  { Integer }    type type of insulin
+         * @return
+         */
         displayType(type) {
             if (type === 0) {
                 return "Rapid";
@@ -358,7 +415,13 @@ export default {
             }
         },
 
+        /**
+         * Method to check insulin item and add/edit it
+         * @param  { Boolean }    editing editing state
+         * @return
+         */
         async checkInsulinInput(editing) {
+            // check if a necessary property was not set
             if (
                 this.editedItem.amount === "" ||
                 this.editedItem.type === "" ||
@@ -371,32 +434,36 @@ export default {
                     btnColor: "pink",
                 });
             } else {
+                // prepare the date for request
                 let date = moment(this.editedItem.date)
                     .format("MM/DD/YYYY")
                     .toString();
+                // prepare the time for request
                 let time = moment
                     .utc(this.editedItem.time, "HH:mm")
                     .format("HH:mm")
                     .toString();
+                // set parameters for request
                 let parameters = {
+                    // get timestamp
                     timestamp: moment(
-                        moment(date + " " + time, "MM/DD/YYYY HH:mm"))
-                        .format("x"),
+                        moment(date + " " + time, "MM/DD/YYYY HH:mm")
+                    ).format("x"),
+                    //get insulin type
                     insulinType: this.editedItem.type === "Rapid" ? 0 : 1,
+                    // get insulin amount
                     insulinAmount: parseInt(this.editedItem.amount),
                 };
                 if (editing) {
+                    // if in editing mode, add activityId and set it
                     parameters["activityId"] = this.editedItem.id;
-
+                    // get token
                     let token = this.$cookies.get("JWT");
                     if (this.$store.state.supervising.token) {
                         token = this.$store.state.supervising.token;
                     }
-
-                    let insulin = await Insulin.post(
-                        parameters,
-                        token
-                    ).then(
+                    // make a put request
+                    let insulin = await Insulin.post(parameters, token).then(
                         (resp) => {
                             this.$toaster.showMessage({
                                 message: "Upload is successful",
@@ -409,18 +476,17 @@ export default {
                             console.log(error);
                         }
                     );
+                    // update local data
                     this.$store.commit("UPDATE_INSULIN", insulin);
                     this.updateInsulinTable();
                 } else {
-
+                    // get token
                     let token = this.$cookies.get("JWT");
                     if (this.$store.state.supervising.token) {
                         token = this.$store.state.supervising.token;
                     }
-                    let insulin = await Insulin.post(
-                        parameters,
-                        token
-                    ).then(
+                    // make a post request
+                    let insulin = await Insulin.post(parameters, token).then(
                         (resp) => {
                             this.$toaster.showMessage({
                                 message: "Upload is successful",
@@ -433,18 +499,20 @@ export default {
                             console.log(error);
                         }
                     );
+                    // update local data
                     this.$store.commit("ADD_INSULIN", insulin);
                     this.updateInsulinTable();
                 }
             }
         },
 
+        // set editedItem to current item and update editing and dialog state
         editItem(item) {
             this.editedItem = Object.assign({}, item);
             this.dialog = true;
             this.editing = true;
         },
-
+        // close dialog and revert editedItem
         close() {
             this.dialog = false;
             this.$nextTick(() => {
@@ -452,14 +520,17 @@ export default {
                 this.editing = false;
             });
         },
+        // save changes and close pop up
         save() {
             this.checkInsulinInput(this.editing);
             this.close();
         },
+        // show delete pop up and update editedItem to current item
         showDeleteDialog(item) {
             this.editedItem = Object.assign({}, item);
             this.dialogDelete = true;
         },
+        // delete item and remove from local data
         deleteItemConfirm() {
             let parameters = { activityId: this.editedItem.id };
             this.deleteItem(parameters);
@@ -467,25 +538,30 @@ export default {
             this.$store.commit("DELETE_INSULIN", parameters.activityId);
             this.updateInsulinTable();
         },
+        // close delete pop up
         closeDelete() {
             this.dialogDelete = false;
             this.$nextTick(() => {
                 this.editedItem = Object.assign({}, this.defaultItem);
             });
         },
+        // update inuslin table based on data from the store state
         updateInsulinTable() {
+            // if filteredData has contents use that to update table
             if (this.filteredData > 0) {
                 this.insulinData = this.convertInsulin(
                     this.filteredData.insulin
                 );
             } else {
+                // otherwise use data
                 this.insulinData = this.convertInsulin(this.data.insulin);
             }
         },
     },
-    // state getters you need to use
     computed: {
+        // obtain "filteredData", "data" from store state
         ...mapState(["filteredData", "data"]),
+        // set title of the pop up
         formTitle() {
             return this.editing === false
                 ? "New Insulin Input"
@@ -493,7 +569,6 @@ export default {
         },
     },
     created() {
-        console.log(this.data);
         this.updateInsulinTable();
     },
 };

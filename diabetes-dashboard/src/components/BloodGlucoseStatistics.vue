@@ -12,10 +12,13 @@
 import StackedBarChart from '@/components/StackedBarChart.vue';
 
 export default {
+    // name component
     name: "BGStatistics",
+    // state components used in this component
     components: {
         StackedBarChart
     },
+    // state props used in component
     props: {
         data: {
             type: Array,
@@ -24,9 +27,13 @@ export default {
     },
     data() {
         return {
+            // store average blood glucose
             avgBG: 0,
+            // store minimum blood glucose
             minBG: 0,
+            // store maximum blood glucose
             maxBG: 0,
+            // store blood glucose unit
             unitBG: "mmol/L",
         };
     },

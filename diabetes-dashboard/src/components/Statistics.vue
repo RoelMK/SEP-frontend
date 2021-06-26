@@ -23,7 +23,9 @@ import BloodGlucoseStatistics from "@/components/BloodGlucoseStatistics.vue";
 import CumulativeStatistics from "@/components/CumulativeStatistics.vue";
 
 export default {
+    // set name of component
     name: "Statistics",
+    // specify components used in this component
     components: {
         BloodGlucoseStatistics,
         CumulativeStatistics,
@@ -31,6 +33,7 @@ export default {
     data() {
         return {
             tab: null,
+            // component tab names
             items: ["glucose", "cumulative"],
         };
     },

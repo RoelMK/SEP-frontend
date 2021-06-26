@@ -280,52 +280,70 @@ import HistoryTimePicker from "@/components/HistoryTimePicker.vue";
 import { mapState } from "vuex";
 
 export default {
+    // name component
     name: "EmotionTable",
+    // specify mixins
     mixins: [deleteMixin],
+    // include the following components
     components: {
         HistoryDatePicker,
         HistoryTimePicker,
     },
     watch: {
+        //watch filteredData for changes
         filteredData: function (value) {
+            // if filteredData has contents
             if (value.length > 0) {
+                // update emotions using it
                 this.emotions = this.convertEmotions(value.mood);
             } else {
+                // otherwise update emotions using data
                 this.emotions = this.convertEmotions(this.data.mood);
             }
         },
     },
     data() {
         return {
+            // store emotions data
             emotions: [],
+            // local filter operators
             items: ["<=", ">=", "="],
+            // possible emotion values for filter
             emotionValues: ["", 1, 2, 3],
+            // state of date menu
             dateMenu: false,
+            // state of time menu
             timeMenu: false,
-            // must be modified when we use real data
+            // table headers
             headers: [
+                // happiness header
                 {
                     text: "Happiness",
                     value: "happiness",
                     sortable: false,
+                    // filter happiness based on selected happiness filter
                     filter: (value) => {
                         if (this.happinessFilter === "") return true;
                         return value === this.happinessFilter;
                     },
                 },
+                // excitement header
                 {
                     text: "Excitement",
                     value: "excitement",
                     sortable: false,
+                    // filter excitement based on selected excitement filter
                     filter: (value) => {
                         if (this.excitementFilter === "") return true;
                         return value === this.excitementFilter;
                     },
                 },
+                // date header
                 {
                     text: "Date",
                     value: "date",
                     sortable: false,
+                    // filter date based on chosen filter operator and value
                     filter: (value) => {
                         if (!this.date) return true;
                         if (this.dateFilter === "<=") {
@@ -346,10 +364,12 @@ export default {
                         }
                     },
                 },
+                // time header
                 {
                     text: "Time",
                     value: "time",
                     sortable: false,
+                    // filter time based on chosen filter operator and value
                     filter: (value) => {
                         if (!this.time) return true;
                         if (this.timeFilter === "<=") {
@@ -370,17 +390,24 @@ export default {
                         }
                     },
                 },
+                // actions header
                 {
                     text: "Actions",
                     value: "actions",
                     sortable: false,
                 },
             ],
+            // emotion date
             date: "",
+            // emotion time
             time: "",
+            // edit pop up status
             dialog: false,
+            // delete pop up status
             dialogDelete: false,
+            // edit status
             editing: false,
+            // object to store property values of an edited item
             editedItem: {
                 happiness: 0,
                 excitement: 0,
@@ -388,6 +415,7 @@ export default {
                 time: "",
                 id: -1,
             },
+            // object to represent a default item
             defaultItem: {
                 happiness: 0,
                 excitement: 0,
@@ -395,15 +423,20 @@ export default {
                 time: "",
                 id: -1,
             },
+            // chosen time filter
             timeFilter: "",
+            // chosen date filter
             dateFilter: "",
+            // chosen happiness filter
             happinessFilter: "",
+            // chosen excitement filter
             excitementFilter: "",
         };
     },
-    // state getters you need to use
     computed: {
+        // get "filteredData", "data" from store state
         ...mapState(["filteredData", "data"]),
+        // update title of pop up
         formTitle() {
             return this.editing === false
                 ? "New Emotion Input"
@@ -411,6 +444,11 @@ export default {
         },
     },
     methods: {
+        /**
+         * Method to convert emotion entires for table
+         * @param  { Array }    data array of mood model objects
+         * @return { Array }    array of converted mood objects
+         */
         convertEmotions(data) {
             return data.map((f) => ({
                 happiness: f.valence,
@@ -422,12 +460,28 @@ export default {
                 id: f.activityId,
             }));
         },
+        /**
+         * Method to set the date of an editem item
+         * @param  { String }    date new date
+         * @return
+         */
         getSelectedDate(date) {
             this.editedItem.date = date;
         },
+        /**
+         * Method to set the time of an editem item
+         * @param  { String }    date new date
+         * @return
+         */
         getSelectedTime(time) {
             this.editedItem.time = time;
         },
+        /**
+         * Method to set the latest time frame of a selected table entry
+         * to the time frame of the selected emotion entiry from table
+         * @param  { Object }    emotion converted emotion object
+         * @return
+         */
         selectEmotion(emotion) {
             let startTime = moment(emotion.time, "HH:mm")
                 .subtract(2, "hours")
@@ -447,6 +501,11 @@ export default {
                 now: moment(),
             });
         },
+        /**
+         * Method to return emoticon label based on happiness value
+         * @param  { Integer }    happiness happiness value
+         * @return
+         */
         displayHappiness(happiness) {
             if (happiness === 1) {
                 return "fas fa-angry";
@@ -458,6 +517,11 @@ export default {
                 return "";
             }
         },
+        /**
+         * Method to return emoticon label based on excitement value
+         * @param  { Integer }    happiness excitement value
+         * @return
+         */
         displayExcitement(excitement) {
             if (excitement === 1) {
                 return "fas fa-tired";
@@ -469,8 +533,13 @@ export default {
                 return "";
             }
         },
+        /**
+         * Method to check emotion item and add/edit it
+         * @param  { Boolean }    editing editing state
+         * @return
+         */
         async checkEmotionInput(editing) {
-            // no need to check id here
+            // check if a necessary property was not set
             if (
                 this.editedItem.happiness === 0 ||
                 this.editedItem.excitement === 0 ||
@@ -483,24 +552,32 @@ export default {
                     btnColor: "pink",
                 });
             } else {
+                // prepare the date for request
                 let date = moment(this.editedItem.date)
                     .format("MM/DD/YYYY")
                     .toString();
+                // prepare the time for request
                 let time = moment
                     .utc(this.editedItem.time, "HH:mm")
                     .format("HH:mm")
                     .toString();
+                // set parameters for request
                 let parameters = {
+                    // get timestamp
                     timestamp: moment(
                         moment(date + " " + time, "MM/DD/YYYY HH:mm")
                     ).format("x"),
+                    // get arousal value
                     arousal: this.editedItem.excitement,
+                    // get valence value
                     valence: this.editedItem.happiness,
                 };
 
                 if (editing) {
+                    // if in editing mode, add activityId and set it
                     parameters["activityId"] = this.editedItem.id;
 
+                    // make a put request
                     let emotion = await Emotion.post(
                         parameters,
                         this.$cookies.get("JWT")
@@ -517,9 +594,11 @@ export default {
                             console.log(error);
                         }
                     );
+                    // update local data
                     this.$store.commit("UPDATE_EMOTION", emotion);
                     this.updateEmotionTable();
                 } else {
+                    // make a post request
                     let emotion = await Emotion.post(
                         parameters,
                         this.$cookies.get("JWT")
@@ -536,17 +615,19 @@ export default {
                             console.log(error);
                         }
                     );
+                    // update local data
                     this.$store.commit("ADD_EMOTION", emotion);
                     this.updateEmotionTable();
                 }
             }
         },
+        // set editedItem to current item and update editing and dialog state
         editItem(item) {
             this.editedItem = Object.assign({}, item);
             this.dialog = true;
             this.editing = true;
         },
-
+        // close dialog and revert editedItem
         close() {
             this.dialog = false;
             this.$nextTick(() => {
@@ -554,14 +635,17 @@ export default {
                 this.editing = false;
             });
         },
+        // save changes and close pop up
         save() {
             this.checkEmotionInput(this.editing);
             this.close();
         },
+        // show delete pop up and update editedItem to current item
         showDeleteDialog(item) {
             this.editedItem = Object.assign({}, item);
             this.dialogDelete = true;
         },
+        // delete item and remove from local data
         deleteItemConfirm() {
             let parameters = { activityId: this.editedItem.id };
             this.deleteItem(parameters);
@@ -569,16 +653,20 @@ export default {
             this.$store.commit("DELETE_EMOTION", parameters.activityId);
             this.updateEmotionTable();
         },
+        // close delete pop up
         closeDelete() {
             this.dialogDelete = false;
             this.$nextTick(() => {
                 this.editedItem = Object.assign({}, this.defaultItem);
             });
         },
+        // update emotion table based on data from the store state
         updateEmotionTable() {
+            // if filteredData has contents use that to update table
             if (this.filteredData > 0) {
                 this.emotions = this.convertEmotions(this.filteredData.mood);
             } else {
+                // otherwise use data
                 this.emotions = this.convertEmotions(this.data.mood);
             }
         },
