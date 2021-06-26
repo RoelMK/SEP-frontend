@@ -32,7 +32,7 @@ export default {
         ...mapState(['filteredData', 'data'])
     },
     watch: {
-        filteredData: function(newValue, oldValue) {
+        filteredData: function() {
             this.chartInstance = getInstanceByDom(document
                 .getElementById('overview-chart-container')
                 .firstElementChild
@@ -49,9 +49,16 @@ export default {
         };
     },
     methods: {
+        /**
+         * Toggle visibility of the selected item in overview visualization
+         * @param  { string }   type type of the dispatched action
+         * @param  { string }   key key of the item in eCharts object that should be toggled
+         * @return { void }
+         */
         toggleLegendItem(type, key) {
             if (typeof this.chartInstance === 'undefined') return;
             if (type !== null) {
+                console.log(typeof key);
                 this.chartInstance.dispatchAction({
                     type: type,
                     name: key

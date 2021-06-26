@@ -7,11 +7,11 @@
                 class="icon"
                 size="25"
                 v-on:click="
-                    selectedButtonHappiness = 'laugh';
+                    happinessOption = 'laugh';
                     parameters.valence = 3;
                 "
                 v-bind:color="
-                    selectedButtonHappiness === 'laugh'
+                    happinessOption === 'laugh'
                         ? 'blue darken-2'
                         : 'gray'
                 "
@@ -22,11 +22,11 @@
                 class="icon"
                 size="25"
                 v-on:click="
-                    selectedButtonHappiness = 'smile';
+                    happinessOption = 'smile';
                     parameters.valence = 2;
                 "
                 v-bind:color="
-                    selectedButtonHappiness === 'smile'
+                    happinessOption === 'smile'
                         ? 'blue darken-2'
                         : 'gray'
                 "
@@ -37,11 +37,11 @@
                 class="icon"
                 size="25"
                 v-on:click="
-                    selectedButtonHappiness = 'angry';
+                    happinessOption = 'angry';
                     parameters.valence = 1;
                 "
                 v-bind:color="
-                    selectedButtonHappiness === 'angry'
+                    happinessOption === 'angry'
                         ? 'blue darken-2'
                         : 'gray'
                 "
@@ -55,11 +55,11 @@
                 class="icon"
                 size="25"
                 v-on:click="
-                    selectedButtonExcitement = 'excited';
+                    excitementOption = 'excited';
                     parameters.arousal = 3;
                 "
                 v-bind:color="
-                    selectedButtonExcitement === 'excited'
+                    excitementOption === 'excited'
                         ? 'blue darken-2'
                         : 'gray'
                 "
@@ -70,11 +70,11 @@
                 class="icon"
                 size="25"
                 v-on:click="
-                    selectedButtonExcitement = 'smile-2';
+                    excitementOption = 'smile-2';
                     parameters.arousal = 2;
                 "
                 v-bind:color="
-                    selectedButtonExcitement === 'smile-2'
+                    excitementOption === 'smile-2'
                         ? 'blue darken-2'
                         : 'gray'
                 "
@@ -85,11 +85,11 @@
                 class="icon"
                 size="25"
                 v-on:click="
-                    selectedButtonExcitement = 'tired';
+                    excitementOption = 'tired';
                     parameters.arousal = 1;
                 "
                 v-bind:color="
-                    selectedButtonExcitement === 'tired'
+                    excitementOption === 'tired'
                         ? 'blue darken-2'
                         : 'gray'
                 "
@@ -107,14 +107,14 @@
 
 <script>
 import moment from "moment";
-import Emotion from "@/repositories/Emotion.js";
+import Data from "@/repositories/Data.js";
 
 export default {
     name: "EmotionComponent",
     data() {
         return {
-            selectedButtonHappiness: "",
-            selectedButtonExcitement: "",
+            happinessOption: "",
+            excitementOption: "",
             parameters: {
                 timestamp: +moment(),
                 arousal: 0,
@@ -123,6 +123,11 @@ export default {
         };
     },
     methods: {
+        /**
+         * Check provided input, translate it from emoticons to numbers and
+         * post selection to the backend
+         * @return { void }
+         */
         async checkEmotionInput() {
             if (
                 this.parameters.arousal === 0 ||
@@ -134,7 +139,7 @@ export default {
                     btnColor: "pink",
                 });
             } else {
-                let emotion = await Emotion.post(
+                let emotion = await Data.postEmotion(
                     this.parameters,
                     this.$cookies.get("JWT")
                 ).then(

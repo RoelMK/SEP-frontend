@@ -226,6 +226,11 @@ export default {
         ...mapState(["filteredData", "data"]),
     },
     methods: {
+        /**
+         * Handle row click action
+         * @param  { any }    food food object
+         * @return { void }
+         */
         selectFood(food) {
             let startTime = moment(food.time, "HH:mm")
                 .subtract(2, "hours")
@@ -245,6 +250,11 @@ export default {
                 now: moment(),
             });
         },
+        /**
+         * Convert initial data object to a structure used in a table
+         * @param  { any }    data data object
+         * @return { void }
+         */
         convertFood(data) {
             return data.map((f) => ({
                 type: f.meal_type !== null ? f.meal_type : "-",
@@ -258,14 +268,6 @@ export default {
                 id: f.activityId,
             }));
         },
-    },
-    created() {
-        console.log(this.data);
-        if (this.filteredData > 0) {
-            this.food = this.convertFood(this.filteredData.food);
-        } else {
-            this.food = this.convertFood(this.data.food);
-        }
     },
 };
 </script>

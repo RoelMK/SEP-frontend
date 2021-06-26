@@ -1,3 +1,25 @@
+const OFFSET = 300000;
+
+/**
+ * Add offset to minimum value of the x-axis
+ * @return { number }
+ */
+function addMinOffset(value) {
+    return value.min - OFFSET;
+}
+
+/**
+ * Add offset to maximum value of the x-axis
+ * @return { number }
+ */
+function addMaxOffset(value) {
+    return value.max + OFFSET;
+}
+
+/**
+ * Generate options for displaying x-axis of the overview visualization
+ * @return { Array<any> }
+ */
 export default function(min = null, max = null) {
     return [
         {
@@ -12,8 +34,8 @@ export default function(min = null, max = null) {
             axisTick: {
                 show: false
             },
-            min: (min) ? min : 'dataMin',
-            max: (max) ? max : 'dataMax'
+            min: (min) ? min : addMinOffset,
+            max: (max) ? max : addMaxOffset
         },
         {
             show: true,
@@ -25,8 +47,8 @@ export default function(min = null, max = null) {
             axisLabel: {
                 show: false
             },
-            min: (min) ? min : 'dataMin',
-            max: (max) ? max : 'dataMax'
+            min: (min) ? min : addMinOffset,
+            max: (max) ? max : addMaxOffset
         },
         {
             show: true,
@@ -38,8 +60,8 @@ export default function(min = null, max = null) {
             axisLabel: {
                 show: false
             },
-            min: (min) ? min : 'dataMin',
-            max: (max) ? max : 'dataMax'
+            min: (min) ? min : addMinOffset,
+            max: (max) ? max : addMaxOffset
         },
         {
             show: true,
@@ -51,8 +73,8 @@ export default function(min = null, max = null) {
             axisLabel: {
                 show: false
             },
-            min: (min) ? min : 'dataMin',
-            max: (max) ? max : 'dataMax'
+            min: (min) ? min : addMinOffset,
+            max: (max) ? max : addMaxOffset
         },
         {
             show: true,
@@ -64,8 +86,8 @@ export default function(min = null, max = null) {
             axisLabel: {
                 show: false
             },
-            min: (min) ? min : 'dataMin',
-            max: (max) ? max : 'dataMax'
+            min: (min) ? min : addMinOffset,
+            max: (max) ? max : addMaxOffset
         },
     ];
 }

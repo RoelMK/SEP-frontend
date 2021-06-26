@@ -1,9 +1,6 @@
 <template>
     <v-card>
         <v-row>
-            <!-- <v-col cols="9" class="rightAligned editBtn pointer pr-8">
-                <p @click="editInfo">{{tIsEdit}}</p>
-            </v-col> -->
             <v-col cols="12" class="cRow rightAligned editBtn pointer pr-8">
                 <p @click="editInfo">{{tIsEdit}}</p>
                 <p @click="onCancel" id="cancel" class="pr-3" v-if="editing">Cancel</p>
@@ -16,7 +13,6 @@
                 </v-avatar>
             </v-col>
         </v-row>
-
         <!-- Not editing -->
         <v-row v-if="!editing">
             <v-col cols="12">
@@ -65,7 +61,6 @@
                 </div>
             </v-col>
         </v-row>
-
         <!-- Editing -->
         <v-row v-if="editing">
             <v-col cols="12">
@@ -133,6 +128,10 @@ export default {
         }
     },
     methods: {
+        /**
+         * Edit information inside setting cards
+         * @return { void }
+         */
         editInfo() {
             this.editing = !this.editing;
             if (this.editing) {
@@ -146,11 +145,18 @@ export default {
                 );
             }
         },
+        /**
+         * Reset settings upon 'cancel' button click
+         * @return { void }
+         */
         onCancel() {
             this.editing = false;
             this.tIsEdit = "Edit";
-            // No changes are made
         },
+        /**
+         * Refresh user after settings were set
+         * @return { void }
+         */
         refreshUser() {
             this.profileData = {
                 name: this.$store.state.user.firstName +
@@ -185,6 +191,8 @@ export default {
         };
     },
     watch: {
+        // watch for changes to the user state and refresh
+        // settings upon state change
         '$store.state.user': async function() {
             await this.refreshUser();
             this.supervisor = await Supervisor.getRole({
@@ -199,6 +207,7 @@ export default {
     }
 };
 </script>
+
 <style>
 .centered-input input {
   text-align: center

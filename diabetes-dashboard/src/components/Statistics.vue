@@ -2,16 +2,19 @@
     <v-container>
         <v-card elevation="0">
             <v-tabs fixed-tabs v-model="tab">
-                <v-tab v-for="item in items" :key="item">
-                    {{ item }}
-                </v-tab>
+                <v-tab>Glucose</v-tab>
+                <v-tab>Cumulative</v-tab>
             </v-tabs>
             <v-tabs-items v-model="tab">
                 <v-tab-item>
-                    <BloodGlucoseStatistics />
+                    <v-card flat>
+                        <v-card-text class="statistics-container">
+                            <StackedBarChart />
+                        </v-card-text>
+                    </v-card>
                 </v-tab-item>
                 <v-tab-item>
-                    <CumulativeStatistics />
+                    <CumulativeStatistics :minMax="minMax" :proportions="proportions" />
                 </v-tab-item>
             </v-tabs-items>
         </v-card>
@@ -19,19 +22,28 @@
 </template>
 
 <script>
-import BloodGlucoseStatistics from "@/components/BloodGlucoseStatistics.vue";
+import StackedBarChart from '@/components/StackedBarChart.vue';
 import CumulativeStatistics from "@/components/CumulativeStatistics.vue";
 
 export default {
     name: "Statistics",
     components: {
-        BloodGlucoseStatistics,
+        StackedBarChart,
         CumulativeStatistics,
+    },
+    props: {
+        proportions: {
+            type: Array,
+            default: null
+        },
+        minMax: {
+            type: Array,
+            default: null
+        }
     },
     data() {
         return {
             tab: null,
-            items: ["glucose", "cumulative"],
         };
     },
 };
@@ -51,5 +63,8 @@ export default {
 }
 .statistics-container li span {
     font-weight: bold;
+}
+.statistics-container .echarts {
+    height: 270px;
 }
 </style>

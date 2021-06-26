@@ -73,11 +73,13 @@ export default {
         };
     },
     watch: {
+        // Reset field if reload variable was modified
         reload: function() {
             this.dateRange = { start: null, end: null };
         }
     },
     computed: {
+        // Compute fields text
         dateRangeText() {
             if (this.dateRange.start && this.dateRange.end)
                 return (
@@ -90,6 +92,10 @@ export default {
         },
     },
     methods: {
+        /**
+         * Update date selection on 'ok' button click
+         * @return { void }
+         */
         update() {
             var format = 'DD-MM-YYYY';
             this.$refs.dateMenu.save(this.dateRange);
@@ -98,6 +104,10 @@ export default {
                 end: moment(this.dateRange.end).format(format)
             });
         },
+        /**
+         * Reset selection on 'close' button click
+         * @return { void }
+         */
         clear() {
             this.dateRange = { start: null, end: null };
             this.$emit('dateUpdated', null);
