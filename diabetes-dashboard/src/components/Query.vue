@@ -1,8 +1,8 @@
 <template>
     <div class="property">
-        <p>{{ property.heading }}</p>
+        <p>{{ properties.heading }}</p>
         <v-row>
-            <v-col v-for="(prop, index) in property.properties" :key="index">
+            <v-col v-for="(prop, index) in properties.properties" :key="index">
                 <DatePicker
                     v-if="prop.isDate"
                     :reload="reload"
@@ -75,7 +75,7 @@ export default {
         DatePicker
     },
     props: {
-        property: {
+        properties: {
             type: Object,
             default: null
         },
