@@ -141,9 +141,10 @@ export default {
                     btnColor: "pink",
                 });
             } else {
-                let emotion = await Data.postEmotion(
+                let emotion = await Data.postItem(
                     this.parameters,
-                    this.$cookies.get("JWT")
+                    this.$cookies.get("JWT"),
+                    'mood'
                 ).then(
                     (resp) => {
                         this.$toaster.showMessage({
