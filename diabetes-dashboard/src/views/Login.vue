@@ -42,7 +42,6 @@ export default {
     name: "login",
     data () {
         return {
-            showPass: false,
             email: "",
             enteredEmail: false,
         };
@@ -88,7 +87,7 @@ export default {
                             token: resp.data.newJwt
                         })
                             .then(
-                                (resp) => { console.log(resp); },
+                                () => {},
                                 (err) => { console.log(err); }
                             );
                     },

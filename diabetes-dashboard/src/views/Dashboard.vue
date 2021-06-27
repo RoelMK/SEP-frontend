@@ -86,7 +86,7 @@ export default {
         Cards,
     },
     computed: {
-        ...mapState(['data', 'arousalIcon', 'valenceIcon']),
+        ...mapState(['data']),
         // Check if data exists for the selected data range
         checkData() {
             for (let item in this.data) {
@@ -144,7 +144,7 @@ export default {
         let nightscoutUrl = localStorage.getItem("nightscout_url");
         if (nightscoutUrl) {
             Upload.connectNightscout({ host: nightscoutUrl }).then(
-                (resp) => {},
+                () => {},
                 (err) => {
                     console.log(err);
                 }

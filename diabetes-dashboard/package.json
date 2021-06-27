@@ -75,7 +75,6 @@
           "ignoreHTMLTextContents": false
         }
       ],
-      "no-unused-vars": "off",
       "semi": [
         "error",
         "always"

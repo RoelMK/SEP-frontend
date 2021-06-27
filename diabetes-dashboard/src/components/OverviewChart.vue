@@ -1,5 +1,10 @@
 <template>
-    <v-chart ref="overview" v-on:datazoom="emitProportions" :option="options(data)" autoresize />
+    <v-chart
+        ref="overview"
+        v-on:datazoom="$emit('propchanged', [$event.start, $event.end])"
+        :option="options(data)"
+        autoresize
+    />
 </template>
 
 <script>
@@ -59,9 +64,6 @@ export default {
         };
     },
     methods: {
-        emitProportions(params) {
-            this.$emit('propchanged', [params.start, params.end]);
-        },
         /**
          * Scale value to a certain range
          * @param  { number }           value Value to be scaled
@@ -75,11 +77,11 @@ export default {
             return ~~(capped * scale + to[0]);
         },
         /**
-         * Set up received data in eCharts format
+         * Set up provided data to eCharts format
          * @param  { any }              data Data object
          * @param  { string }           model property inside data object to iterate through
          * @param  { Array<string> }    properties Properties to be extracted from data
-         * @return
+         * @return { Array<Array<any>> }
          */
         prepareData(data, model, ...properties) {
             return data[model].map((d) => properties.map((prop) => d[prop]));
@@ -88,7 +90,7 @@ export default {
          * Create tooltip body
          * @param  { string }   marker marker HTML
          * @param  { string }   name   name of item label
-         * @param  { string }   value  value of item label
+         * @param  { number }   value  value of item label
          * @return { string }
          */
         createTooltipBody(marker, name, value) {
@@ -257,7 +259,7 @@ export default {
             ];
         },
         /**
-         * Generate options object which is used to generate eCharts object
+         * Creates options object which is used to generate eCharts object
          * @param  { any }   data data object
          * @return { any }
          */
