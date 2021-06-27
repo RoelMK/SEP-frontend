@@ -8,7 +8,7 @@ export default {
      * @param  { string }   token jwt token
      * @return { any }
      */
-    async fetch(payload, token) {
+    fetch(payload, token) {
         let url = `${resource}data`;
         let config = {
             headers: {
