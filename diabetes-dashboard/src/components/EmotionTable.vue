@@ -560,9 +560,10 @@ export default {
                     // if in editing mode, add activityId and set it
                     parameters["activityId"] = this.editedItem.id;
 
-                    let emotion = await Data.postEmotion(
+                    let emotion = await Data.postItem(
                         parameters,
-                        this.$cookies.get("JWT")
+                        this.$cookies.get("JWT"),
+                        'mood'
                     ).then(
                         (resp) => {
                             this.$toaster.showMessage({
@@ -580,9 +581,10 @@ export default {
                     this.$store.commit("UPDATE_EMOTION", emotion);
                     this.updateEmotionTable();
                 } else {
-                    let emotion = await Data.postEmotion(
+                    let emotion = await Data.postItem(
                         parameters,
-                        this.$cookies.get("JWT")
+                        this.$cookies.get("JWT"),
+                        'mood'
                     ).then(
                         (resp) => {
                             this.$toaster.showMessage({

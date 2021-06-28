@@ -25,7 +25,7 @@
                     v-for="(property, index) in properties"
                     :reload="reload"
                     :key="index"
-                    :property="property"
+                    :properties="property"
                     v-on:change="updateParameters"
                 />
             </v-card-text>
@@ -65,7 +65,6 @@ export default {
                 arousal: null,
                 valence: null,
             },
-            isApplied: false,
             properties: properties,
             reload: false,
             emotionMap: {

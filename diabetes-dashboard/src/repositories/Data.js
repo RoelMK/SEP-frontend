@@ -8,7 +8,7 @@ export default {
      * @param  { string }   token jwt token
      * @return { any }
      */
-    async fetch(payload, token) {
+    fetch(payload, token) {
         let url = `${resource}data`;
         let config = {
             headers: {
@@ -22,7 +22,7 @@ export default {
         return Client.get(url, config);
     },
     /**
-     * Delete selected item
+     * Delete selected item to the backend
      * @param  { any }      payload payload of the request
      * @param  { string }   token jwt token
      * @return { any }
@@ -38,29 +38,14 @@ export default {
         return Client.post(url, data, config);
     },
     /**
-     * Post emotion
-     * @param  { any }      payload payload of the request
-     * @param  { string }   token jwt token
+     * Post item to the backend
+     * @param { any }      payload payload of the request
+     * @param { string }   token jwt token
+     * @param { string }   endpoint endpoint name
      * @return { any }
      */
-    postEmotion(payload, token) {
-        let url = `${resource}mood`;
-        let config = {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            },
-        };
-        let data = payload;
-        return Client.post(url, data, config);
-    },
-    /**
-     * Post insulin
-     * @param  { any }      payload payload of the request
-     * @param  { string }   token jwt token
-     * @return { any }
-     */
-    postInsulin(payload, token) {
-        let url = `${resource}insulin`;
+    postItem(payload, token, endpoint) {
+        let url = `${resource}${endpoint}`;
         let config = {
             headers: {
                 'Authorization': `Bearer ${token}`

@@ -1,6 +1,6 @@
 export default [
     {
-        heading: 'DateTime Range',
+        heading: 'Date Range',
         label: null,
         properties: [
             {
