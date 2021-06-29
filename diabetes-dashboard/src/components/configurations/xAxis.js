@@ -1,3 +1,4 @@
+// 5 minute offset
 const OFFSET = 300000;
 
 /**

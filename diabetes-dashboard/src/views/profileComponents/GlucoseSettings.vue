@@ -183,6 +183,7 @@ export default {
     },
     created() {
         // Set glucose settings upon rendering the component
+        // eslint-disable-next-line
         for (const [key, value] of Object.entries(this.healthSettings)) {
             let val = localStorage.getItem(key);
             if (key.includes("Range")) {
