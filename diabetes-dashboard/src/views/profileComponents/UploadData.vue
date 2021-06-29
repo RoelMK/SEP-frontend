@@ -108,6 +108,7 @@
 <script>
 import Upload from '@/repositories/Upload';
 import axios from "axios";
+import { baseURL } from '@/repositories/Client.js';
 
 export default {
     name: "UploadData",
@@ -153,7 +154,7 @@ export default {
 
             axios({
                 method: "post",
-                url: "http://diabetter.win.tue.nl:5000/upload",
+                url: `${baseURL}/upload`,
                 data: formData,
                 headers: { "Authorization":
                     "Bearer " + this.$cookies.get("JWT") }
@@ -187,7 +188,7 @@ export default {
          * @return { void }
          */
         connectOnedrive() {
-            window.open('http://diabetter.win.tue.nl:5000/onedrive/login');
+            window.open(`${baseURL}/onedrive/login`);
         },
         /**
          * Reset cookies and flags upon disconnecting from the onedrive
