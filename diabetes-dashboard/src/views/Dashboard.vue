@@ -146,7 +146,7 @@ export default {
             Upload.connectNightscout({ host: nightscoutUrl },
                 this.$cookies.get("JWT")
             ).then(
-                (resp) => {},
+                () => {},
                 (err) => {
                     console.log(err);
                 }
