@@ -99,18 +99,6 @@ export default {
     data() {
         return {
             rendered: false,
-            emotions: {
-                valence: {
-                    1: 'fas fa-angry',
-                    2: 'fas fa-smile-beam',
-                    3: 'fas fa-laugh-beam',
-                },
-                arousal: {
-                    1: 'fas fa-tired',
-                    2: 'fas fa-smile-beam',
-                    3: 'fas fa-grin-stars',
-                },
-            },
             proportions: [0, 100],
             minMax: [null, null]
         };
@@ -168,13 +156,13 @@ export default {
                     if (this.data['mood'].length > 0) {
                         this.$store.dispatch('setEmotion', {
                             type: 'valence',
-                            icon: this.emotions['valence'][
+                            icon: this.$store.state.valueToEmotion['valence'][
                                 this.data['mood'][0].valence
                             ]
                         });
                         this.$store.dispatch('setEmotion', {
                             type: 'arousal',
-                            icon: this.emotions['arousal'][
+                            icon: this.$store.state.valueToEmotion['arousal'][
                                 this.data['mood'][0].arousal
                             ]
                         });
@@ -212,11 +200,13 @@ export default {
         updateEmotions(parameters) {
             this.$store.dispatch('setEmotion', {
                 type: 'valence',
-                icon: this.emotions['valence'][parameters.valence]
+                icon: this.$store.state
+                    .valueToEmotion['valence'][parameters.valence]
             });
             this.$store.dispatch('setEmotion', {
                 type: 'arousal',
-                icon: this.emotions['arousal'][parameters.arousal]
+                icon: this.$store.state
+                    .valueToEmotion['arousal'][parameters.arousal]
             });
         }
     }

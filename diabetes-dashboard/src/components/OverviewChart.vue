@@ -47,22 +47,6 @@ export default {
     computed: {
         ...mapState(["filteredData", "data", "newTimeFrame"]),
     },
-    data() {
-        return {
-            emotions: {
-                Valence: {
-                    1: '<i class="fas fa-angry"></i>',
-                    2: '<i class="fas fa-smile-beam"></i>',
-                    3: '<i class="fas fa-laugh-beam"></i>',
-                },
-                Arousal: {
-                    1: '<i class="fas fa-tired"></i>',
-                    2: '<i class="fas fa-smile-beam"></i>',
-                    3: '<i class="fas fa-grin-stars"></i>',
-                },
-            },
-        };
-    },
     methods: {
         /**
          * Scale value to a certain range
@@ -125,10 +109,13 @@ export default {
                     if (axisValue === params[0].axisValue) {
                         if (typeof value === 'object') {
                             for (let prop of param.value.slice(2)) {
+                                var propType = prop.type.toLowerCase();
+                                var classes = this.$store.state
+                                    .valueToEmotion[propType][prop.value];
                                 tooltip += this.createTooltipBody(
                                     marker,
                                     prop.type,
-                                    this.emotions[prop.type][prop.value]
+                                    `<i class="${classes}"></i>`
                                 );
                             }
                         } else {
