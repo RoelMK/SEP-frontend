@@ -9,7 +9,7 @@ This repo contains UI interface for Diabetter dashboard. It is written using Vue
 2. Install [Visual Studio Code](https://code.visualstudio.com/) (or any other IDE)
 3. Clone this repo
 4. Run `yarn install` or `npm install` to install the relavent packages
-5. Execute `yarn dev` or `npm run dev` depending on the installed package manager
+5. Execute `yarn serve` or `npm run serve` depending on the installed package manager
 6. Navigate to https://localhost:8081 to start using Diabetter dashboard. Note: diabetter uses back-end API which uses port 8080. Therefore, front-end must use any other port except for 8080
 
 ### Build:
