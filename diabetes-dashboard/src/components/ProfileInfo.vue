@@ -113,8 +113,8 @@
 </template>
 
 <script>
-import Auth from "../../repositories/Auth";
-import Supervisor from "../../repositories/Supervisor";
+import Auth from "@/repositories/Auth";
+import Supervisor from "@/repositories/Supervisor";
 import CountryFlag from 'vue-country-flag';
 
 export default {

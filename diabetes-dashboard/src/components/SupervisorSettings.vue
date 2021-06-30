@@ -100,7 +100,7 @@
 </template>
 
 <script>
-import Supervisor from "../../repositories/Supervisor";
+import Supervisor from "@/repositories/Supervisor";
 export default {
     name: "SupervisorSettings",
     async created() {
