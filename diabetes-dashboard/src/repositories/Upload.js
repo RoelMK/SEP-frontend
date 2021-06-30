@@ -48,11 +48,15 @@ export default {
     /**
      * Connect to nightscout
      * @param  { any }      payload payload of the request
+     * @param  { any }      token jwt token
      * @return { any }
      */
-    connectNightscout(payload) {
+    connectNightscout(payload, token) {
         let url = `${resource}nightscout`;
         let config = {
+            headers: {
+                "Authorization": "Bearer " + token
+            },
             params: payload
         };
         return Client.get(url, config);

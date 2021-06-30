@@ -231,8 +231,13 @@ export default {
                     localStorage.setItem(key, value);
                 }
             }
-            // Post request to Gamebus to make the changes
         },
+        /**
+         * Restricts slider functionality to prevent setting value lower than
+         * preceding slider
+         * @param { number }    e current value of the slider
+         * @return { void }
+         */
         catchVeryHighSlider(e) {
             if (e < this.healthSettings.highRange[1]) {
                 this.healthSettings.veryHighValue =
@@ -240,6 +245,12 @@ export default {
                 this.sliderKeyHigh++;
             }
         },
+        /**
+         * Restricts slider functionality to prevent setting value lower than
+         * preceding slider
+         * @param { number }    e current value of the slider
+         * @return { void }
+         */
         catchHighSlider(e) {
             if (e[1] > this.healthSettings.veryHighValue) {
                 this.healthSettings.highRange[1] =
@@ -250,6 +261,12 @@ export default {
                     this.healthSettings.normalRange[1] + 0.1;
             }
         },
+        /**
+         * Restricts slider functionality to prevent setting value lower than
+         * preceding slider
+         * @param { number }    e current value of the slider
+         * @return { void }
+         */
         catchNormalSlider(e) {
             if (e[1] > this.healthSettings.highRange[0]) {
                 this.healthSettings.normalRange[1] =
@@ -260,6 +277,12 @@ export default {
                     this.healthSettings.lowRange[1] + 0.1;
             }
         },
+        /**
+         * Restricts slider functionality to prevent setting value lower than
+         * preceding slider
+         * @param { number }    e current value of the slider
+         * @return { void }
+         */
         catchLowSlider(e) {
             if (e[1] > this.healthSettings.normalRange[0]) {
                 this.healthSettings.lowRange[1] =
@@ -270,6 +293,12 @@ export default {
                     this.healthSettings.veryLowValue + 0.1;
             }
         },
+        /**
+         * Restricts slider functionality to prevent setting value lower than
+         * preceding slider
+         * @param { number }    e current value of the slider
+         * @return { void }
+         */
         catchVeryLowSlider(e) {
             if (e > this.healthSettings.lowRange[0]) {
                 this.healthSettings.veryLowValue =

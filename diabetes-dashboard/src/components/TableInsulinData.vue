@@ -441,9 +441,10 @@ export default {
                         token = this.$store.state.supervising.token;
                     }
 
-                    let insulin = await Data.postInsulin(
+                    let insulin = await Data.postItem(
                         parameters,
-                        token
+                        token,
+                        'insulin'
                     ).then(
                         (resp) => {
                             this.$toaster.showMessage({
@@ -466,9 +467,10 @@ export default {
                     if (this.$store.state.supervising.token) {
                         token = this.$store.state.supervising.token;
                     }
-                    let insulin = await Data.postInsulin(
+                    let insulin = await Data.postItem(
                         parameters,
-                        token
+                        token,
+                        'insulin'
                     ).then(
                         (resp) => {
                             this.$toaster.showMessage({
