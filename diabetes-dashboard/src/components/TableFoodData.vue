@@ -96,7 +96,6 @@ import moment from "moment";
 import { mapState } from "vuex";
 
 export default {
-    // name component
     name: "TableFoodData",
     //watch filteredData for changes
     watch: {
@@ -229,8 +228,6 @@ export default {
             ],
             // store food data
             food: [],
-            // name of food
-            name: "",
             // type of food
             type: "",
             // time of food

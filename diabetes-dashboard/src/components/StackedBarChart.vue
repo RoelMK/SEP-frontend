@@ -24,7 +24,7 @@ export default {
     },
     methods: {
         /**
-         * Generate options object which is used to generate eCharts object
+         * Creates options object which is used to generate eCharts object
          * @param  { any }   data data object
          * @return { any }
          */
@@ -163,9 +163,9 @@ export default {
             };
         },
         /**
-         * Generate options object which is used to generate eCharts object
+         * Computes time distribution of glucose data
          * @param  { any }              data data object
-         * @return { Array<number> }
+         * @return { Array<Array<number>> }
          */
         computeTimeDistribution(data) {
             const total = data['glucose']

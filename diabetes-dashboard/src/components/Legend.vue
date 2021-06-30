@@ -50,7 +50,7 @@ export default {
     },
     methods: {
         /**
-         * Toggle visibility of the selected item in overview visualization
+         * Toggle visibility of the selected item in overview chart visualization
          * @param  { string }   type type of the dispatched action
          * @param  { string }   key key of the item in eCharts object that should be toggled
          * @return { void }

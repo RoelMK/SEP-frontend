@@ -22,13 +22,13 @@
 </template>
 
 <script>
-import ProfileInfo from "./profileComponents/ProfileInfo";
-import UploadData from "./profileComponents/UploadData";
-import FoodSettings from "./profileComponents/FoodSettings";
-import EmotionSettings from "./profileComponents/EmotionSettings";
-import GlucoseSettings from './profileComponents/GlucoseSettings';
-import SupervisorSettings from './profileComponents/SupervisorSettings';
-import UnitsSettings from './profileComponents/UnitsSettings';
+import ProfileInfo from "@/components/ProfileInfo.vue";
+import UploadData from "@/components/UploadData.vue";
+import FoodSettings from "@/components/FoodSettings.vue";
+import EmotionSettings from "@/components/EmotionSettings.vue";
+import GlucoseSettings from '@/components/GlucoseSettings.vue';
+import SupervisorSettings from '@/components/SupervisorSettings.vue';
+import UnitsSettings from '@/components/UnitsSettings.vue';
 import Auth from "../repositories/Auth";
 
 export default {

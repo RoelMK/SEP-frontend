@@ -40,6 +40,7 @@ export default {
     },
     created() {
         // Set food settings upon rendering the component
+        // eslint-disable-next-line
         for (const [key, value] of Object.entries(this.settings)) {
             let val = localStorage.getItem(key);
             if (key.includes("Range")) {

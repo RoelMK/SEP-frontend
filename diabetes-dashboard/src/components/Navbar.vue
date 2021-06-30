@@ -116,9 +116,6 @@ import { mapState } from 'vuex';
 
 export default {
     name: "Navbar",
-    props: {
-        msg: String,
-    },
     computed: {
         ...mapState(['arousalIcon', 'valenceIcon', 'data'])
     },
@@ -130,7 +127,6 @@ export default {
     },
     data() {
         return {
-            notifications: true,
             profileData: {
                 name: "",
                 image: ""

@@ -310,10 +310,6 @@ export default {
             items: ["<=", ">=", "="],
             // possible emotion values for filter
             emotionValues: ["", 1, 2, 3],
-            // state of date menu
-            dateMenu: false,
-            // state of time menu
-            timeMenu: false,
             // table headers
             headers: [
                 // happiness header
