@@ -34,7 +34,31 @@ const store = new Vuex.Store({
         },
         emotionReminderStatus: false,
         // time frame of selected table item
-        newTimeFrame: null
+        newTimeFrame: null,
+        emotionToValue: {
+            valence: {
+                'fas fa-angry': 1,
+                'fas fa-smile-beam': 2,
+                'fas fas fa-laugh-beam': 3
+            },
+            arousal: {
+                'fas fa-tired': 1,
+                'fas fa-smile-beam': 2,
+                'fas fa-grin-stars': 3
+            },
+        },
+        valueToEmotion: {
+            valence: {
+                1: 'fas fa-angry',
+                2: 'fas fa-smile-beam',
+                3: 'fas fa-laugh-beam',
+            },
+            arousal: {
+                1: 'fas fa-tired',
+                2: 'fas fa-smile-beam',
+                3: 'fas fa-grin-stars',
+            },
+        }
     },
     getters: {
         getHealthSettings: state => state.healthSettings,

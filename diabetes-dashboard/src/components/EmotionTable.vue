@@ -35,12 +35,12 @@
                         >
                             <template v-slot:selection="slotProps">
                                 <v-icon size="25" color="blue darken-1">
-                                    {{ displayHappiness(slotProps.item) }}
+                                    {{ $store.state.valueToEmotion['valence'][slotProps.item] }}
                                 </v-icon>
                             </template>
                             <template v-slot:item="slotProps">
                                 <v-icon size="25" color="blue darken-1">
-                                    {{ displayHappiness(slotProps.item) }}
+                                    {{ $store.state.valueToEmotion['valence'][slotProps.item] }}
                                 </v-icon>
                             </template>
                         </v-select>
@@ -52,12 +52,12 @@
                         >
                             <template v-slot:selection="slotProps">
                                 <v-icon size="25" color="blue darken-1">
-                                    {{ displayExcitement(slotProps.item) }}
+                                    {{ $store.state.valueToEmotion['arousal'][slotProps.item] }}
                                 </v-icon>
                             </template>
                             <template v-slot:item="slotProps">
                                 <v-icon size="25" color="blue darken-1">
-                                    {{ displayExcitement(slotProps.item) }}
+                                    {{ $store.state.valueToEmotion['arousal'][slotProps.item] }}
                                 </v-icon>
                             </template>
                         </v-select>
@@ -84,12 +84,12 @@
                 <tr>
                     <td width="10%" @click="selectEmotion(item)">
                         <v-icon size="25" color="blue darken-1">
-                            {{ displayHappiness(item.happiness) }}
+                            {{ $store.state.valueToEmotion['valence'][item.happiness] }}
                         </v-icon>
                     </td>
                     <td width="10%" @click="selectEmotion(item)">
                         <v-icon size="25" color="blue darken-1">
-                            {{ displayExcitement(item.excitement) }}
+                            {{ $store.state.valueToEmotion['arousal'][item.excitement] }}
                         </v-icon>
                     </td>
                     <td width="10%" @click="selectEmotion(item)">
@@ -479,38 +479,6 @@ export default {
                 end,
                 now: moment(),
             });
-        },
-        /**
-         * Convert hapiness value to an emoticon
-         * @param  { number }    happiness hapiness value
-         * @return { string }
-         */
-        displayHappiness(happiness) {
-            if (happiness === 1) {
-                return "fas fa-angry";
-            } else if (happiness === 2) {
-                return "fas fa-smile-beam";
-            } else if (happiness === 3) {
-                return "fas fa-laugh-beam";
-            } else {
-                return "";
-            }
-        },
-        /**
-         * Convert hapiness value to an emoticon
-         * @param  { number }    excitement excitement value
-         * @return { string }
-         */
-        displayExcitement(excitement) {
-            if (excitement === 1) {
-                return "fas fa-tired";
-            } else if (excitement === 2) {
-                return "fas fa-smile-beam";
-            } else if (excitement === 3) {
-                return "fas fa-grin-stars";
-            } else {
-                return "";
-            }
         },
         /**
          * Check emotion fields in editing mode and post new

@@ -66,19 +66,7 @@ export default {
                 valence: null,
             },
             properties: properties,
-            reload: false,
-            emotionMap: {
-                valence: {
-                    'fas fa-angry': 1,
-                    'fas fa-smile-beam': 2,
-                    'fas fas fa-laugh-beam': 3
-                },
-                arousal: {
-                    'fas fa-tired': 1,
-                    'fas fa-smile-beam': 2,
-                    'fas fa-grin-stars': 3
-                },
-            }
+            reload: false
         };
     },
     computed: {
@@ -117,9 +105,9 @@ export default {
                     },
                     glucose: this.parameters.glucose,
                     emotion: {
-                        arousal: this.emotionMap
+                        arousal: this.$store.state.emotionToValue
                             .arousal[this.parameters.arousal],
-                        valence: this.emotionMap
+                        valence: this.$store.state.emotionToValue
                             .valence[this.parameters.valence]
                     }
                 });
