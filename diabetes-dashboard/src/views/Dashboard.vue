@@ -143,8 +143,10 @@ export default {
         // on the profile page
         let nightscoutUrl = localStorage.getItem("nightscout_url");
         if (nightscoutUrl) {
-            Upload.connectNightscout({ host: nightscoutUrl }).then(
-                (resp) => {},
+            Upload.connectNightscout({ host: nightscoutUrl },
+                this.$cookies.get("JWT")
+            ).then(
+                () => {},
                 (err) => {
                     console.log(err);
                 }
