@@ -490,7 +490,7 @@ export default {
                 this.editedItem.time === ""
             ) {
                 this.$toaster.showMessage({
-                    message: "Enter all options!",
+                    message: "Please, fill in all emotion fields.",
                     color: "dark",
                     btnColor: "pink",
                 });
@@ -594,15 +594,6 @@ export default {
             this.close();
         },
         /**
-         * Show delete pop up
-         * @param  { any }    item item selected item from table
-         * @return { void }
-         */
-        showDeleteDialog(item) {
-            this.editedItem = Object.assign({}, item);
-            this.dialogDelete = true;
-        },
-        /**
          * Confirm deletion of the item from table
          * @return { void }
          */
@@ -635,6 +626,15 @@ export default {
                 // otherwise use data
                 this.emotions = this.convertEmotions(this.data.mood);
             }
+        },
+        /**
+         * Show delete pop up
+         * @param  { any }    item item selected item from table
+         * @return { void }
+         */
+        showDeleteDialog(item) {
+            this.editedItem = Object.assign({}, item);
+            this.dialogDelete = true;
         },
     },
 };

@@ -35,14 +35,14 @@ export default {
     },
     // Use these props to adjust statistics to a data slider value
     props: {
+        minMax: {
+            type: Array,
+            default: null
+        },
         proportions: {
             type: Array,
             default: null
         },
-        minMax: {
-            type: Array,
-            default: null
-        }
     },
     data() {
         // Keeps track of the currently displayed tab

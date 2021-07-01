@@ -203,15 +203,6 @@ export default {
     },
     methods: {
         /**
-         * Display editing options upon clicking on settings card
-         * @return { void }
-         */
-        onClick() {
-            if (!this.editing) {
-                this.editing = !this.editing;
-            }
-        },
-        /**
          * Reset editing options upon 'cancel' button click
          * @return { void }
          */
@@ -219,17 +210,12 @@ export default {
             this.editing = false;
         },
         /**
-         * Save settings in local storage upon 'Done' button click
+         * Display editing options upon clicking on settings card
          * @return { void }
          */
-        onDone() {
-            this.editing = false;
-            for (const [key, value] of Object.entries(this.healthSettings)) {
-                if (key.includes("Range")) {
-                    localStorage.setItem(key, JSON.stringify(value));
-                } else {
-                    localStorage.setItem(key, value);
-                }
+        onClick() {
+            if (!this.editing) {
+                this.editing = !this.editing;
             }
         },
         /**
@@ -304,6 +290,20 @@ export default {
                 this.healthSettings.veryLowValue =
                     this.healthSettings.lowRange[0] - 0.1;
                 this.sliderKeyLow++;
+            }
+        },
+        /**
+         * Save settings in local storage upon 'Done' button click
+         * @return { void }
+         */
+        onDone() {
+            this.editing = false;
+            for (const [key, value] of Object.entries(this.healthSettings)) {
+                if (key.includes("Range")) {
+                    localStorage.setItem(key, JSON.stringify(value));
+                } else {
+                    localStorage.setItem(key, value);
+                }
             }
         },
     },

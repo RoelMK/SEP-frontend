@@ -155,13 +155,13 @@ export default {
                 {
                     text: "Type",
                     value: "type",
-                    sortable: false,
                     // filter on type
                     filter: (f) => {
                         return (f + "")
                             .toLowerCase()
                             .includes(this["type"].toLowerCase());
                     },
+                    sortable: false,
                 },
                 // start date header
                 {

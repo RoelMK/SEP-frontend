@@ -185,13 +185,6 @@ import { mapState } from "vuex";
 export default {
     // name component
     name: "TableInsulinData",
-    // specify mixins
-    mixins: [deleteMixin],
-    // include the following components
-    components: {
-        HistoryDatePicker,
-        HistoryTimePicker,
-    },
     watch: {
         //watch filteredData for changes
         filteredData: function (value) {
@@ -204,6 +197,13 @@ export default {
                 this.insulinData = this.convertInsulin(this.data.insulin);
             }
         },
+    },
+    // specify mixins
+    mixins: [deleteMixin],
+    // include the following components
+    components: {
+        HistoryDatePicker,
+        HistoryTimePicker,
     },
     data() {
         return {
@@ -393,6 +393,14 @@ export default {
             }
         },
         /**
+         * Save modified fields
+         * @return { void }
+         */
+        save() {
+            this.checkInsulinInput(this.editing);
+            this.close();
+        },
+        /**
          * Check insulin fields in editing mode and post new
          * settings upon change approval
          * @param  { boolean }    editing validation variable
@@ -407,7 +415,7 @@ export default {
                 this.editedItem.time === ""
             ) {
                 this.$toaster.showMessage({
-                    message: "Enter all options!",
+                    message: "Please, fill in all insulin fields.",
                     color: "dark",
                     btnColor: "pink",
                 });
@@ -491,16 +499,6 @@ export default {
             }
         },
         /**
-         * Assign field value to an object upon input
-         * @param  { any }    item selected item from table
-         * @return { void }
-         */
-        editItem(item) {
-            this.editedItem = Object.assign({}, item);
-            this.dialog = true;
-            this.editing = true;
-        },
-        /**
          * Close editing pop up
          * @return { void }
          */
@@ -512,12 +510,14 @@ export default {
             });
         },
         /**
-         * Save modified fields
+         * Assign field value to an object upon input
+         * @param  { any }    item selected item from table
          * @return { void }
          */
-        save() {
-            this.checkInsulinInput(this.editing);
-            this.close();
+        editItem(item) {
+            this.editedItem = Object.assign({}, item);
+            this.dialog = true;
+            this.editing = true;
         },
         /**
          * Show delete pop up

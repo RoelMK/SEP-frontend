@@ -20,7 +20,9 @@ var insulin = {
 /**
  * Options for displaying query fields in QueryMenu component
  * Can be modified to add new properties. Not that this file only
- * adds UI elements without any functionality.
+ * adds UI elements without any functionality. In order to
+ * add functionality navigate to /src/helpers/filter.js and
+ * link corresponding filtering functionality to a UI element.
  */
 export default [
     // Date range filter

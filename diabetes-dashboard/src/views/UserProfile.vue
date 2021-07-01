@@ -32,7 +32,9 @@ import UnitsSettings from '@/components/UnitsSettings.vue';
 import Auth from "../repositories/Auth";
 
 export default {
-    name: "Dashboard",
+    // Assign name to the view
+    name: "UserProfile",
+    // Register various components
     components: {
         ProfileInfo,
         UploadData,
@@ -46,9 +48,10 @@ export default {
     created() {
         Auth.getProfile(this.$cookies.get("JWT")).then(
             (resp) => {
+                // Commit changes to the vuex state
                 this.$store.commit("SET_USER", resp.data);
             },
-            // In case of errors console log them
+            // In case of errors log them in browser console
             (error) => { console.log(error); }
         );
     }

@@ -69,8 +69,9 @@ export default {
                     show: false,
                     type: 'value'
                 },
-                // For each series entry we calculate time distribution for
-                // glucose level condition
+                // For each series entry calculate time distribution for
+                // glucose level condition. Furthermore, assign other
+                // rendering options to an eCharts object.
                 series: [
                     {
                         name: 'Very Low',

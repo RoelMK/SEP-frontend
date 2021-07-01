@@ -26,15 +26,15 @@ import {
     DataZoomComponent,
     ToolboxComponent,
 } from 'echarts/components';
+// Import i18n to enable different localizations
 import i18n from './i18n';
 
 import CountryFlag from 'vue-country-flag';
 
-// Register components and libraries in Vue application
-Vue.component('country-flag', CountryFlag);
-
+// Disable production tip
 Vue.config.productionTip = false;
 
+// Register libraries
 use([
     CanvasRenderer,
     GridComponent,
@@ -55,6 +55,8 @@ Vue.use(VueCompositionAPI);
 Vue.use(VCalendar, { componentPrefix: 'vc' });
 Vue.use(snackbarPlugin, { store });
 
+// Register external components
+Vue.component('country-flag', CountryFlag);
 Vue.component('v-chart', ECharts);
 
 // Create entry point of the application

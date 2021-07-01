@@ -13,6 +13,7 @@ import QueryMenu from '@/components/QueryMenu.vue';
 import Navbar from '@/components/Navbar';
 
 // Entry point of the application which renders all the necessary components
+// Router-view renders view based on the current path
 export default {
     name: 'App',
     components: {

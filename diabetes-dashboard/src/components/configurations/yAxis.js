@@ -1,12 +1,16 @@
 // Default options for displaying yAxis along different grids
 var options = {
+    // Modify default string format
     nameTextStyle: {
         fontSize: 14,
         padding: [0, 0, 25, 0],
     },
+    // Set up location of the label
     nameLocation: 'center',
+    // Add gap between labels
     nameGap: 5,
     type: 'value',
+    // Assign boundary gap
     boundaryGap: [0, '100%']
 };
 

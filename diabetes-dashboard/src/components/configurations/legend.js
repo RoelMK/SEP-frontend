@@ -1,7 +1,9 @@
 /**
  * Options for displaying legend.
  * Used in several components in order to keep using consistent colors
- * throughout the whole application
+ * throughout the whole application.
+ * Each section item should contain type and properties array.
+ * Properties, in turn, must contain key, type, label, color and class
  */
 export default {
     sections: [
