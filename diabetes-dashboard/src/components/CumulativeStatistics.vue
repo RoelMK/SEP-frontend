@@ -109,7 +109,6 @@ export default {
          */
         totalCalories() {
             if (!this.cumulativeData.food) return 0;
-            this.getStartEnd();
             let totalCalories = 0;
             var localData = JSON.parse(JSON.stringify(this.cumulativeData));
             var datetime = this.getStartEnd();

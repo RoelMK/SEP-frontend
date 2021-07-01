@@ -129,7 +129,7 @@ export default {
                             : ''
                     };
                     if (this.parameters.date) {
-                        this.$store.dispatch('setDate', {
+                        this.$store.commit('SET_DATE', {
                             start: selection['date'][0],
                             end: selection['date'][1]
                         });
@@ -200,8 +200,8 @@ export default {
                     }
                 }
                 // Save filtered object in vuex
-                this.$store.dispatch('setFilteredData', items);
-                this.$store.dispatch('showFilter', { show: false });
+                this.$store.commit('UPDATE_FILTERED_DATA', items);
+                this.$store.commit('SHOW_FILTER', { show: false });
                 this.resetSelection();
             } else {
                 this.$toaster.showMessage({
@@ -235,7 +235,7 @@ export default {
          * @return { void }
          */
         cancelFiltering() {
-            this.$store.dispatch('showFilter', { show: false });
+            this.$store.commit('SHOW_FILTER', { show: false });
             this.resetSelection();
         },
         /**

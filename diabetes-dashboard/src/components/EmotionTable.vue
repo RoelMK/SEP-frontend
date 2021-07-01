@@ -279,6 +279,14 @@ import HistoryDatePicker from "@/components/HistoryDatePicker.vue";
 import HistoryTimePicker from "@/components/HistoryTimePicker.vue";
 import { mapState } from "vuex";
 
+var defaultValues = {
+    happiness: 0,
+    excitement: 0,
+    date: "",
+    time: "",
+    id: -1,
+};
+
 export default {
     // name component
     name: "EmotionTable",
@@ -404,21 +412,9 @@ export default {
             // edit status
             editing: false,
             // object to store property values of an edited item
-            editedItem: {
-                happiness: 0,
-                excitement: 0,
-                date: "",
-                time: "",
-                id: -1,
-            },
+            editedItem: defaultValues,
             // object to represent a default item
-            defaultItem: {
-                happiness: 0,
-                excitement: 0,
-                date: "",
-                time: "",
-                id: -1,
-            },
+            defaultItem: defaultValues,
             // chosen time filter
             timeFilter: "",
             // chosen date filter
@@ -474,7 +470,7 @@ export default {
             let end = moment(
                 moment(emotion.date + " " + endTime, "yyyy-MM-DD HH:mm")
             ).format("YYYY-MM-DDTHH:mm");
-            this.$store.dispatch("setNewTimeFrame", {
+            this.$store.commit("UPDATE_TIME_FRAME", {
                 start,
                 end,
                 now: moment(),
@@ -494,7 +490,7 @@ export default {
                 this.editedItem.time === ""
             ) {
                 this.$toaster.showMessage({
-                    message: "Enter all options!",
+                    message: "Please, fill in all emotion fields.",
                     color: "dark",
                     btnColor: "pink",
                 });
@@ -598,15 +594,6 @@ export default {
             this.close();
         },
         /**
-         * Show delete pop up
-         * @param  { any }    item item selected item from table
-         * @return { void }
-         */
-        showDeleteDialog(item) {
-            this.editedItem = Object.assign({}, item);
-            this.dialogDelete = true;
-        },
-        /**
          * Confirm deletion of the item from table
          * @return { void }
          */
@@ -639,6 +626,15 @@ export default {
                 // otherwise use data
                 this.emotions = this.convertEmotions(this.data.mood);
             }
+        },
+        /**
+         * Show delete pop up
+         * @param  { any }    item item selected item from table
+         * @return { void }
+         */
+        showDeleteDialog(item) {
+            this.editedItem = Object.assign({}, item);
+            this.dialogDelete = true;
         },
     },
 };

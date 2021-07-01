@@ -3,6 +3,13 @@ import VueRouter from 'vue-router';
 
 Vue.use(VueRouter);
 
+/**
+ * Check whether user is authenticated if not redirect to the login view
+ * @param { any } to Object containing information about next route
+ * @param { any } from Object containing information about current route
+ * @param { function } next Function that handles transition between routes
+ * @returns
+ */
 function auth(to, from, next) {
     let jwt = Vue.$cookies.get("JWT");
     if (jwt) {
@@ -11,6 +18,7 @@ function auth(to, from, next) {
     return next("/login");
 }
 
+// Map routes in the application to the corresponding view
 const routes = [
     {
         path: '/',
@@ -47,6 +55,7 @@ const routes = [
     },
 ];
 
+// Router settings
 const router = new VueRouter({
     mode: 'history',
     base: process.env.BASE_URL,

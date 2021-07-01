@@ -360,7 +360,10 @@ export default {
                                 title: 'Reset',
                                 icon: 'path://M3.8,33.4 M47,18.9h9.8V8.7 M56.3,20.1 C52.1,9,40.5,0.6,26.8,2.1C12.6,3.7,1.6,16.2,2.1,30.6 M13,41.1H3.1v10.2 M3.7,39.9c4.2,11.1,15.8,19.5,29.5,18 c14.2-1.6,25.2-14.1,24.7-28.5',
                                 onclick: () => {
-                                    this.$store.dispatch('setFilteredData', []);
+                                    this.$store.commit(
+                                        'UPDATE_FILTERED_DATA',
+                                        []
+                                    );
                                     this.$refs.overview.dispatchAction({
                                         type: 'dataZoom',
                                         start: 0,
@@ -375,7 +378,7 @@ export default {
                                 title: 'Add filters',
                                 icon: 'path://M12 12V19.88C12.04 20.18 11.94 20.5 11.71 20.71C11.32 21.1 10.69 21.1 10.3 20.71L8.29 18.7C8.06 18.47 7.96 18.16 8 17.87V12H7.97L2.21 4.62C1.87 4.19 1.95 3.56 2.38 3.22C2.57 3.08 2.78 3 3 3H17C17.22 3 17.43 3.08 17.62 3.22C18.05 3.56 18.13 4.19 17.79 4.62L12.03 12H12M15 17H18V14H20V17H23V19H20V22H18V19H15V17Z',
                                 onclick: () => {
-                                    this.$store.dispatch("showFilter", {
+                                    this.$store.commit("SHOW_FILTER", {
                                         show: true,
                                     });
                                 },

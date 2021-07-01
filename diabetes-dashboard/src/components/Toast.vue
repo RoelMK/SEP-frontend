@@ -21,12 +21,14 @@ export default {
             timeout: 5000,
         };
     },
+    // Get current state of the toast
     computed: {
         ...mapState(['toast'])
     },
     created() {
         // Pass updated values to the component once
-        // state was changed
+        // state was changed and update local variables
+        // before displaying the message
         this.$store.subscribe((mutation, state) => {
             if (mutation.type === 'SHOW_MESSAGE') {
                 this.message = state.toast.message;

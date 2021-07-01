@@ -19,7 +19,7 @@
                                     <p class="mb-0">No data is available for selected date</p>
                                     <p>Please try a different date</p>
                                     <v-btn
-                                        v-on:click="$store.dispatch('showFilter', { show: true })"
+                                        v-on:click="$store.commit('SHOW_FILTER', { show: true })"
                                     >
                                         Change filters
                                     </v-btn>
@@ -151,18 +151,18 @@ export default {
             Data.fetch(config, this.$cookies.get("JWT")).then(
                 async (res) => {
                     await this.$store.dispatch('setData', res.data);
-                    await this.$store.dispatch('setDate', {
+                    await this.$store.commit('SET_DATE', {
                         start: moment().format('DD-MM-YYYY'),
                         end: moment().format('DD-MM-YYYY')
                     });
                     if (this.data['mood'].length > 0) {
-                        this.$store.dispatch('setEmotion', {
+                        this.$store.commit('UPDATE_EMOTION_STATUS', {
                             type: 'valence',
                             icon: this.$store.state.valueToEmotion['valence'][
                                 this.data['mood'][0].valence
                             ]
                         });
-                        this.$store.dispatch('setEmotion', {
+                        this.$store.commit('UPDATE_EMOTION_STATUS', {
                             type: 'arousal',
                             icon: this.$store.state.valueToEmotion['arousal'][
                                 this.data['mood'][0].arousal
@@ -200,12 +200,12 @@ export default {
          * @return { void }
          */
         updateEmotions(parameters) {
-            this.$store.dispatch('setEmotion', {
+            this.$store.commit('UPDATE_EMOTION_STATUS', {
                 type: 'valence',
                 icon: this.$store.state
                     .valueToEmotion['valence'][parameters.valence]
             });
-            this.$store.dispatch('setEmotion', {
+            this.$store.commit('UPDATE_EMOTION_STATUS', {
                 type: 'arousal',
                 icon: this.$store.state
                     .valueToEmotion['arousal'][parameters.arousal]

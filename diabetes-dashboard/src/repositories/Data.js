@@ -29,13 +29,11 @@ export default {
      */
     deleteItem(payload, token) {
         let url = `${resource}activities/delete`;
-        let config = {
+        return Client.post(url, payload, {
             headers: {
                 'Authorization': `Bearer ${token}`
-            },
-        };
-        let data = payload;
-        return Client.post(url, data, config);
+            }
+        });
     },
     /**
      * Post item to the backend
@@ -46,12 +44,10 @@ export default {
      */
     postItem(payload, token, endpoint) {
         let url = `${resource}${endpoint}`;
-        let config = {
+        return Client.post(url, payload, {
             headers: {
                 'Authorization': `Bearer ${token}`
-            },
-        };
-        let data = payload;
-        return Client.post(url, data, config);
+            }
+        });
     },
 };

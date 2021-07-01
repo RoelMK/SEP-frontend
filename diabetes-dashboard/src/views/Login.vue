@@ -39,7 +39,7 @@
 import Auth from "@/repositories/Auth.js";
 
 export default {
-    name: "login",
+    name: "Login",
     data () {
         return {
             email: "",

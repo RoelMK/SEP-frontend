@@ -112,8 +112,6 @@ export default {
     },
     data() {
         return {
-            // local filter operators
-            items: ["<=", ">=", "="],
             // table headers
             headers: [
                 // type header
@@ -226,6 +224,8 @@ export default {
                     },
                 },
             ],
+            // local filter operators
+            items: ["<=", ">=", "="],
             // store food data
             food: [],
             // type of food
@@ -273,7 +273,7 @@ export default {
             let end = moment(
                 moment(food.date + " " + endTime, "yyyy-MM-DD HH:mm")
             ).format("YYYY-MM-DDTHH:mm");
-            this.$store.dispatch("setNewTimeFrame", {
+            this.$store.commit("UPDATE_TIME_FRAME", {
                 start,
                 end,
                 now: moment(),

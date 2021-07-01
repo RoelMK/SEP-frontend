@@ -1,4 +1,31 @@
+// Default options for displaying emotion fields
+var emotions = {
+    isDate: false,
+    isIcon: true,
+    isMultiple: false,
+    isSearchable: false,
+    isNumber: false,
+};
+
+// Default options for displaying insulin fields
+var insulin = {
+    isDate: false,
+    isIcon: false,
+    isMultiple: false,
+    isSearchable: false,
+    isNumber: true,
+    properties: []
+};
+
+/**
+ * Options for displaying query fields in QueryMenu component
+ * Can be modified to add new properties. Not that this file only
+ * adds UI elements without any functionality. In order to
+ * add functionality navigate to /src/helpers/filter.js and
+ * link corresponding filtering functionality to a UI element.
+ */
 export default [
+    // Date range filter
     {
         heading: 'Date Range',
         label: null,
@@ -15,6 +42,7 @@ export default [
             }
         ],
     },
+    // Glucose level conditions filter
     {
         heading: 'Glucose Parameters',
         label: 'Glucose Conditions',
@@ -31,6 +59,7 @@ export default [
             }
         ]
     },
+    // Insulin amount filters. Includes filter for min/max values
     {
         heading: 'Insulin Range',
         label: 'Insulin',
@@ -38,25 +67,17 @@ export default [
             {
                 index: 'insulinMin',
                 label: 'Min',
-                isDate: false,
-                isIcon: false,
-                isMultiple: false,
-                isSearchable: false,
-                isNumber: true,
-                properties: [],
+                ...insulin
             },
             {
                 index: 'insulinMax',
                 label: 'Max',
-                isDate: false,
-                isIcon: false,
-                isMultiple: false,
-                isSearchable: false,
-                isNumber: true,
-                properties: [],
+                ...insulin
             }
         ]
     },
+    // Activity type filter, includes all activity types supported by
+    // GameBus Platform
     {
         heading: 'Activity Parameters',
         label: 'Activity Type',
@@ -111,6 +132,8 @@ export default [
             }
         ],
     },
+    // Emotional status filter, contains separate filters for
+    // valence and arousal
     {
         heading: 'Emotion Parameters',
         label: 'Emotion Status',
@@ -118,11 +141,7 @@ export default [
             {
                 index: 'valence',
                 label: 'Happiness',
-                isDate: false,
-                isIcon: true,
-                isMultiple: false,
-                isSearchable: false,
-                isNumber: false,
+                ...emotions,
                 properties: [
                     'fas fa-angry',
                     'fas fa-smile-beam',
@@ -132,11 +151,7 @@ export default [
             {
                 index: 'arousal',
                 label: 'Excitement',
-                isDate: false,
-                isIcon: true,
-                isMultiple: false,
-                isSearchable: false,
-                isNumber: false,
+                ...emotions,
                 properties: [
                     'fas fa-tired',
                     'fas fa-smile-beam',

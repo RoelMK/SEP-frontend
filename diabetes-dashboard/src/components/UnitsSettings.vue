@@ -14,10 +14,13 @@
 </template>
 
 <script>
+// Currently this component does not have any functionality. Needs to be implemented
+// in the future releases.
 export default {
     name: "UnitsSettings",
     data() {
         return {
+            // Default settings for displaying glucose units in the application
             active: 0
         };
     },

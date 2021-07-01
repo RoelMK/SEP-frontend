@@ -155,13 +155,13 @@ export default {
                 {
                     text: "Type",
                     value: "type",
-                    sortable: false,
                     // filter on type
                     filter: (f) => {
                         return (f + "")
                             .toLowerCase()
                             .includes(this["type"].toLowerCase());
                     },
+                    sortable: false,
                 },
                 // start date header
                 {
@@ -344,7 +344,7 @@ export default {
                     "yyyy-MM-DD HH:mm"
                 ).add(2, "hours")
             ).format("YYYY-MM-DDTHH:mm");
-            this.$store.dispatch("setNewTimeFrame", {
+            this.$store.commit("UPDATE_TIME_FRAME", {
                 start,
                 end,
                 now: moment(),

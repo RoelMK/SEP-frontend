@@ -19,11 +19,14 @@ export default {
     name: "EmotionSettings",
     data() {
         return {
+            // Variable that indicates whether emotional status notifications
+            // should be displayed
             boolAsk: true,
         };
     },
     created() {
-        // Set reminder options upon rendering the component
+        // Save reminder options in local storage upon rendering the component.
+        // Show notification based on the set value
         let val = true;
         if (localStorage.getItem("emotionReminder") != null) {
             val = localStorage.getItem("emotionReminder") == "true";

@@ -110,7 +110,6 @@ import moment from "moment";
 import Data from "@/repositories/Data.js";
 
 export default {
-    // set name of component
     name: "EmotionComponent",
     data() {
         return {
@@ -130,17 +129,18 @@ export default {
          * @return { void }
          */
         async checkEmotionInput() {
-            // check if a necessary property was not set
             if (
                 this.parameters.arousal === 0 ||
                 this.parameters.valance === 0
             ) {
+                // If not all the parameters were set display a message
                 this.$toaster.showMessage({
                     message: "Enter happiness and excitement!",
                     color: "dark",
                     btnColor: "pink",
                 });
             } else {
+                // Post user input to the backend
                 let emotion = await Data.postItem(
                     this.parameters,
                     this.$cookies.get("JWT"),
@@ -155,6 +155,7 @@ export default {
                         this.$emit("emotions", this.parameters);
                         return resp.data;
                     },
+                    // Console log error in case of error
                     (error) => {
                         console.log(error);
                     }

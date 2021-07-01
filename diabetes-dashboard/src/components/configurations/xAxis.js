@@ -22,6 +22,16 @@ function addMaxOffset(value) {
  * @return { Array<any> }
  */
 export default function(min = null, max = null) {
+    var options = {
+        axisTick: {
+            show: false
+        },
+        axisLabel: {
+            show: false
+        },
+        min: (min) ? min : addMinOffset,
+        max: (max) ? max : addMaxOffset
+    };
     return [
         {
             gridIndex: 0,
@@ -32,63 +42,31 @@ export default function(min = null, max = null) {
             splitArea: {
                 show: true
             },
-            axisTick: {
-                show: false
-            },
-            min: (min) ? min : addMinOffset,
-            max: (max) ? max : addMaxOffset
+            ...options
         },
         {
             show: true,
             gridIndex: 1,
             type: 'time',
-            axisTick: {
-                show: false,
-            },
-            axisLabel: {
-                show: false
-            },
-            min: (min) ? min : addMinOffset,
-            max: (max) ? max : addMaxOffset
+            ...options
         },
         {
             show: true,
             gridIndex: 2,
             type: 'time',
-            axisTick: {
-                show: false,
-            },
-            axisLabel: {
-                show: false
-            },
-            min: (min) ? min : addMinOffset,
-            max: (max) ? max : addMaxOffset
+            ...options
         },
         {
             show: true,
             gridIndex: 3,
             type: 'time',
-            axisTick: {
-                show: false,
-            },
-            axisLabel: {
-                show: false
-            },
-            min: (min) ? min : addMinOffset,
-            max: (max) ? max : addMaxOffset
+            ...options
         },
         {
             show: true,
             gridIndex: 4,
             type: 'time',
-            axisTick: {
-                show: false,
-            },
-            axisLabel: {
-                show: false
-            },
-            min: (min) ? min : addMinOffset,
-            max: (max) ? max : addMaxOffset
+            ...options
         },
     ];
 }

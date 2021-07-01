@@ -58,7 +58,6 @@ export default {
         toggleLegendItem(type, key) {
             if (typeof this.chartInstance === 'undefined') return;
             if (type !== null) {
-                console.log(typeof key);
                 this.chartInstance.dispatchAction({
                     type: type,
                     name: key

@@ -17,21 +17,6 @@ const store = new Vuex.Store({
             end: '',
         },
         filteredData: [],
-        healthSettings: {
-            unit: "mmol/L",
-            veryHighThreshold: 13.9,
-            highRangeMin: 10.1,
-            highRangeMax: 13.9,
-            normalRangeMin: 3.9,
-            normalRangeMax: 10.0,
-            lowRangeMin: 3.0,
-            lowRangeMax: 3.8,
-            veryLowThreshold: 3.0,
-            fastingRangeMin: 4.4,
-            fastingRangeMax: 7.2,
-            ppRangeThreshold: 10.0,
-            goalA1C: 7,
-        },
         emotionReminderStatus: false,
         // time frame of selected table item
         newTimeFrame: null,
@@ -65,112 +50,149 @@ const store = new Vuex.Store({
         getEmotionReminderStatus: state => state.emotionReminderStatus,
     },
     actions: {
-        showMessage({ commit }, toast) {
-            commit('SHOW_MESSAGE', toast);
-        },
-        showFilter({ commit }, filter) {
-            commit('SHOW_FILTER', filter);
-        },
-        setEmotionReminderStatus({ commit }, newStatus) {
-            commit('SET_REMINDER_STATUS', newStatus);
-        },
         setData({ commit }, data) {
             commit('UPDATE_DATA', data);
         },
-        setDate({ commit }, data) {
-            commit('SET_DATE', data);
-        },
-        setFilteredData({ commit }, data) {
-            commit('UPDATE_FILTERED_DATA', data);
-        },
-        // set newTimeFrame to the time frame of the latest selected table entry
-        setNewTimeFrame({ commit }, timeFrame) {
-            commit('UPDATE_TIME_FRAME', timeFrame);
-        },
-        setEmotion({ commit }, data) {
-            commit('UPDATE_EMOTION_STATUS', data);
-        }
     },
 
     mutations: {
+        /**
+         * Change state of the toaster message
+         * @param { string } state vuex state
+         * @param { any } toast options for creating a toaster
+         */
         SHOW_MESSAGE(state, toast) {
             state.toast.message = toast.message;
             state.toast.color = toast.color;
             state.toast.btnColor = toast.btnColor;
         },
-        FILTER(state, lessThan) {
-            console.log(state.data);
-            const clone = Object.create(state.data);
-            state.filteredData.insulin = clone.insulin.filter(
-                function(value) {
-                    return value.insulinAmount <= lessThan;
-                }
-            ).map(function(x) {
-                return x;
-            });
-        },
+        /**
+         * Change state of the filter pop up
+         * @param { string } state vuex state
+         * @param { any } filter filter pop up options
+         */
         SHOW_FILTER(state, filter) {
             state.filter.show = filter.show;
         },
+        /**
+         * Update vuex state of the emotional status
+         * @param { string } state vuex state
+         * @param { any } data data object containing emotional status options
+         */
         UPDATE_EMOTION_STATUS(state, data) {
             if (data.type === 'arousal')
                 state.arousalIcon = data.icon;
             else
                 state.valenceIcon = data.icon;
         },
+        /**
+         * Update vuex state of the data object
+         * @param { string } state vuex state
+         * @param { any } data data object that is fetched from backend
+         */
         UPDATE_DATA(state, data) {
             state.filteredData = data;
             state.data = data;
         },
+        /**
+         * Update vuex state of the filteredData object
+         * @param { string } state vuex state
+         * @param { any } data data object containing filtered data values
+         */
         UPDATE_FILTERED_DATA(state, data) {
             state.filteredData = data;
         },
+        /**
+         * Update date of the fetched data
+         * @param { string } state vuex state
+         * @param { any } data data containing start and end dates
+         */
         SET_DATE(state, data) {
             state.date = data;
         },
-        SET_REMINDER_STATUS: (state, newEmotionReminderStatus) => {
-            state.emotionReminderStatus = newEmotionReminderStatus;
-        },
+        /**
+         * Reset data, user and supervising states upon logout
+         * @param { string } state vuex state
+         */
         LOGOUT(state) {
             state.data = [];
             state.user = {};
             state.supervising = {};
         },
+        /**
+         * Set user
+         * @param { string } state vuex state
+         * @param { any } user user data
+         */
         SET_USER(state, user) {
             state.user = user;
         },
-        // change newTimeFrame
+        /**
+         * Update newTimeFrame state which is used for creating a link between
+         * data slider and statistics component
+         * @param { string } state vuex state
+         * @param { any } timeFrame selected time frame in data slider
+         */
         UPDATE_TIME_FRAME(state, timeFrame) {
             state.newTimeFrame = timeFrame;
         },
+        /**
+         * Update data object of supervised user
+         * @param { string } state vuex state
+         * @param { any } data data object fetched from backend
+         */
         SUPERVISING(state, data) {
             state.supervising = data;
         },
-        // add an emotion to the local data
+        /**
+         * Add an emotion to the local data
+         * @param { string } state vuex state
+         * @param { any } data new mood data
+         */
         ADD_EMOTION(state, data) {
             state.data.mood.unshift(data);
         },
-        // delete an emotion from the local data
+        /**
+         * Delete an emotion from the local data
+         * @param { string } state vuex state
+         * @param { any } data new mood data
+         */
         DELETE_EMOTION(state, id) {
             state.data.mood = state.data.mood
                 .filter(emotion => emotion.activityId !== id);
         },
-        // update an emotion from the local data
+        /**
+         * Update an emotion from the local data
+         * @param { string } state vuex state
+         * @param { any } data new mood data
+         */
         UPDATE_EMOTION(state, data) {
             state.data.mood.splice(
                 state.data.mood.findIndex(emotion =>
                     emotion.activityId === data.activityId), 1, data);
         },
-        // add an insulin input to the local data
+        /**
+         * Add an insulin input to the local data
+         * @param { string } state vuex state
+         * @param { any } data new insulin data
+         */
         ADD_INSULIN(state, data) {
             state.data.insulin.unshift(data);
         },
-        // delete an insulin input from the local data
+        /**
+         * Delete an insulin input from the local data
+         * @param { string } state vuex state
+         * @param { any } data new insulin data
+         */
         DELETE_INSULIN(state, id) {
             state.data.insulin = state.data.insulin
                 .filter(insulinInput => insulinInput.activityId !== id);
         },
-        // update an insulin input from the local data
+        /**
+         * Update an insulin input from the local data
+         * @param { string } state vuex state
+         * @param { any } data new insulin data
+         */
         UPDATE_INSULIN(state, data) {
             state.data.insulin.splice(
                 state.data.insulin.findIndex(insulinInput =>

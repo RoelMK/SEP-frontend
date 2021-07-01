@@ -1,3 +1,9 @@
+/**
+ * Grid options for the eCharts object
+ * Grid id is equal to the index of the grid object in an array
+ * In order to increase readability sum of the heights of all
+ * grid objects must be equal to 50%
+ */
 export default [
     {
         top: '10%',
