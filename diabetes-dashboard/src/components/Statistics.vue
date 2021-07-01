@@ -33,6 +33,7 @@ export default {
         StackedBarChart,
         CumulativeStatistics,
     },
+    // Use these props to adjust statistics to a data slider value
     props: {
         proportions: {
             type: Array,
@@ -44,6 +45,7 @@ export default {
         }
     },
     data() {
+        // Keeps track of the currently displayed tab
         return {
             tab: null,
         };

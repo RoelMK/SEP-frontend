@@ -18,6 +18,7 @@ export default {
     name: "UnitsSettings",
     data() {
         return {
+            // Default settings for displaying glucose units in the application
             active: 0
         };
     },

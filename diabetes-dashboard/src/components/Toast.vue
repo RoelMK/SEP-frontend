@@ -21,6 +21,7 @@ export default {
             timeout: 5000,
         };
     },
+    // Get current state of the toast
     computed: {
         ...mapState(['toast'])
     },

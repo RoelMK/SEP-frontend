@@ -1,9 +1,10 @@
 import axios from "axios";
 
-// const baseDomain = "http://diabetter.win.tue.nl:5000";
+// Base URL that needs to be adjusted depending on your host
 const baseDomain = "http://localhost:8080";
 export const baseURL = `${baseDomain}`;
 
+// Create a basic axios object with the base URL and the headers.
 export default axios.create({
     baseURL,
     headers: {

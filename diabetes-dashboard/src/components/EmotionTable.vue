@@ -279,6 +279,14 @@ import HistoryDatePicker from "@/components/HistoryDatePicker.vue";
 import HistoryTimePicker from "@/components/HistoryTimePicker.vue";
 import { mapState } from "vuex";
 
+var defaultValues = {
+    happiness: 0,
+    excitement: 0,
+    date: "",
+    time: "",
+    id: -1,
+};
+
 export default {
     // name component
     name: "EmotionTable",
@@ -404,21 +412,9 @@ export default {
             // edit status
             editing: false,
             // object to store property values of an edited item
-            editedItem: {
-                happiness: 0,
-                excitement: 0,
-                date: "",
-                time: "",
-                id: -1,
-            },
+            editedItem: defaultValues,
             // object to represent a default item
-            defaultItem: {
-                happiness: 0,
-                excitement: 0,
-                date: "",
-                time: "",
-                id: -1,
-            },
+            defaultItem: defaultValues,
             // chosen time filter
             timeFilter: "",
             // chosen date filter

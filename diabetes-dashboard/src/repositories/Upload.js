@@ -37,13 +37,12 @@ export default {
      */
     uploadOnedrive(payload, token) {
         let url = `${resource}onedrive/onedrive`;
-        let config = {
+        return Client.get(url, {
             headers: {
                 "Authorization": "Bearer " + token
             },
             params: payload
-        };
-        return Client.get(url, config);
+        });
     },
     /**
      * Connect to nightscout
@@ -53,12 +52,11 @@ export default {
      */
     connectNightscout(payload, token) {
         let url = `${resource}nightscout`;
-        let config = {
+        return Client.get(url, {
             headers: {
                 "Authorization": "Bearer " + token
             },
             params: payload
-        };
-        return Client.get(url, config);
+        });
     },
 };

@@ -9,8 +9,7 @@ export default {
      */
     request(payload) {
         let url = `${resource}request`;
-        let headers = {};
-        return Client.post(url, payload, headers);
+        return Client.post(url, payload, {});
     },
     /**
      * Get users that are being supervised by a current user
@@ -19,12 +18,7 @@ export default {
      */
     getChildren(payload) {
         let url = `${resource}getChildren`;
-        let config = {
-            headers: {
-            },
-            params: payload
-        };
-        return Client.get(url, config);
+        return Client.get(url, { headers: {}, params: payload });
     },
     /**
      * Get supervisors of current user
@@ -33,12 +27,7 @@ export default {
      */
     getSupervisors(payload) {
         let url = `${resource}getSupervisors`;
-        let config = {
-            headers: {
-            },
-            params: payload
-        };
-        return Client.get(url, config);
+        return Client.get(url, { headers: {}, params: payload });
     },
     /**
      * Delete specific supervisor
@@ -47,8 +36,7 @@ export default {
      */
     deleteSupervisor(payload) {
         let url = `${resource}retractPermission`;
-        let headers = {};
-        return Client.post(url, payload, headers);
+        return Client.post(url, payload, {});
     },
     /**
      * Approve supervisor
@@ -57,12 +45,7 @@ export default {
      */
     getApproved(payload) {
         let url = `${resource}getApproved`;
-        let config = {
-            headers: {
-            },
-            params: payload
-        };
-        return Client.get(url, config);
+        return Client.get(url, { headers: {}, params: payload });
     },
     /**
      * Get current user role
@@ -71,12 +54,7 @@ export default {
      */
     getRole(payload) {
         let url = `${resource}role`;
-        let config = {
-            headers: {
-            },
-            params: payload
-        };
-        return Client.get(url, config);
+        return Client.get(url, { headers: {}, params: payload });
     },
     /**
      * Get token of the user that is being supervised
@@ -85,10 +63,6 @@ export default {
      */
     getToken(payload) {
         let url = `${resource}getToken`;
-        let config = {
-            headers: {},
-            params: payload
-        };
-        return Client.get(url, config);
+        return Client.get(url, { headers: {}, params: payload });
     }
 };

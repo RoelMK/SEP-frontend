@@ -42,11 +42,13 @@ export default {
         SupervisorSettings,
         UnitsSettings
     },
+    // Get current user settings and update the vuex state
     created() {
         Auth.getProfile(this.$cookies.get("JWT")).then(
             (resp) => {
                 this.$store.commit("SET_USER", resp.data);
             },
+            // In case of errors console log them
             (error) => { console.log(error); }
         );
     }

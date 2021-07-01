@@ -29,6 +29,11 @@ export default {
          * @return { any }
          */
         options(data) {
+            var encode = {
+                x: 0,
+                y: 1,
+                tooltip: [2, 3]
+            };
             return {
                 tooltip: {
                     trigger: 'item',
@@ -58,6 +63,8 @@ export default {
                     show: false,
                     type: 'value'
                 },
+                // For each series entry we calculate time distribution for
+                // glucose level condition
                 series: [
                     {
                         name: 'Very Low',
@@ -73,11 +80,7 @@ export default {
                             `${this.computeTimeDistribution(data)[0][0]}%`,
                             `${this.computeTimeDistribution(data)[0][1]} hours`
                         ]],
-                        encode: {
-                            x: 0,
-                            y: 1,
-                            tooltip: [2, 3]
-                        },
+                        encode: encode
                     },
                     {
                         name: 'Low',
@@ -93,11 +96,7 @@ export default {
                             `${this.computeTimeDistribution(data)[1][0]}%`,
                             `${this.computeTimeDistribution(data)[1][1]} hours`
                         ]],
-                        encode: {
-                            x: 0,
-                            y: 1,
-                            tooltip: [2, 3]
-                        },
+                        encode: encode
                     },
                     {
                         name: 'Normal',
@@ -113,11 +112,7 @@ export default {
                             `${this.computeTimeDistribution(data)[2][0]}%`,
                             `${this.computeTimeDistribution(data)[2][1]} hours`
                         ]],
-                        encode: {
-                            x: 0,
-                            y: 1,
-                            tooltip: [2, 3]
-                        },
+                        encode: encode
                     },
                     {
                         name: 'High',
@@ -133,11 +128,7 @@ export default {
                             `${this.computeTimeDistribution(data)[3][0]}%`,
                             `${this.computeTimeDistribution(data)[3][1]} hours`
                         ]],
-                        encode: {
-                            x: 0,
-                            y: 1,
-                            tooltip: [2, 3]
-                        },
+                        encode: encode
                     },
                     {
                         name: 'Very High',
@@ -153,11 +144,7 @@ export default {
                             `${this.computeTimeDistribution(data)[4][0]}%`,
                             `${this.computeTimeDistribution(data)[4][1]} hours`
                         ]],
-                        encode: {
-                            x: 0,
-                            y: 1,
-                            tooltip: [2, 3]
-                        },
+                        encode: encode
                     }
                 ],
             };
@@ -222,6 +209,8 @@ export default {
             const calcPercentage = function(arr, total) {
                 return Math.round((arr.length / total) * 10000) / 100;
             };
+
+            // Output array containing array tuples with [percentage, hours]
             return [
                 [calcPercentage(vLow, total), round(sumArray(vLow))],
                 [calcPercentage(low, total), round(sumArray(low))],

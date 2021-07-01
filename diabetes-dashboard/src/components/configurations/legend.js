@@ -1,3 +1,8 @@
+/**
+ * Options for displaying legend.
+ * Used in several components in order to keep using consistent colors
+ * throughout the whole application
+ */
 export default {
     sections: [
         {

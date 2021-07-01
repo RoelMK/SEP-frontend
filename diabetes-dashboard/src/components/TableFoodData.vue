@@ -112,8 +112,6 @@ export default {
     },
     data() {
         return {
-            // local filter operators
-            items: ["<=", ">=", "="],
             // table headers
             headers: [
                 // type header
@@ -226,6 +224,8 @@ export default {
                     },
                 },
             ],
+            // local filter operators
+            items: ["<=", ">=", "="],
             // store food data
             food: [],
             // type of food

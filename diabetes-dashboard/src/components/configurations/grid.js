@@ -1,3 +1,7 @@
+/**
+ * Grid options for the eCharts object
+ * Grid id is equal to the index of the grid object in an array
+ */
 export default [
     {
         top: '10%',

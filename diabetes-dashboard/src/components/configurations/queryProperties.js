@@ -1,3 +1,27 @@
+// Default options for displaying emotion fields
+var emotions = {
+    isDate: false,
+    isIcon: true,
+    isMultiple: false,
+    isSearchable: false,
+    isNumber: false,
+};
+
+// Default options for displaying insulin fields
+var insulin = {
+    isDate: false,
+    isIcon: false,
+    isMultiple: false,
+    isSearchable: false,
+    isNumber: true,
+    properties: []
+};
+
+/**
+ * Options for displaying query fields in QueryMenu component
+ * Can be modified to add new properties. Not that this file only
+ * adds UI elements without any functionality.
+ */
 export default [
     {
         heading: 'Date Range',
@@ -38,22 +62,12 @@ export default [
             {
                 index: 'insulinMin',
                 label: 'Min',
-                isDate: false,
-                isIcon: false,
-                isMultiple: false,
-                isSearchable: false,
-                isNumber: true,
-                properties: [],
+                ...insulin
             },
             {
                 index: 'insulinMax',
                 label: 'Max',
-                isDate: false,
-                isIcon: false,
-                isMultiple: false,
-                isSearchable: false,
-                isNumber: true,
-                properties: [],
+                ...insulin
             }
         ]
     },
@@ -118,11 +132,7 @@ export default [
             {
                 index: 'valence',
                 label: 'Happiness',
-                isDate: false,
-                isIcon: true,
-                isMultiple: false,
-                isSearchable: false,
-                isNumber: false,
+                ...emotions,
                 properties: [
                     'fas fa-angry',
                     'fas fa-smile-beam',
@@ -132,11 +142,7 @@ export default [
             {
                 index: 'arousal',
                 label: 'Excitement',
-                isDate: false,
-                isIcon: true,
-                isMultiple: false,
-                isSearchable: false,
-                isNumber: false,
+                ...emotions,
                 properties: [
                     'fas fa-tired',
                     'fas fa-smile-beam',

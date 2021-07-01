@@ -25,30 +25,19 @@
                             </v-tabs>
                             <v-tabs-items v-model="tab">
                                 <v-tab-item>
-                                    <TableInsulinData
-                                    />
+                                    <TableInsulinData />
                                 </v-tab-item>
                                 <v-tab-item>
-                                    <TableFoodData
-                                    />
+                                    <TableFoodData />
                                 </v-tab-item>
                                 <v-tab-item>
-                                    <TableActivitiesData
-                                    />
+                                    <TableActivitiesData />
                                 </v-tab-item>
                                 <v-tab-item>
-                                    <EmotionTable
-                                    />
+                                    <EmotionTable />
                                 </v-tab-item>
                             </v-tabs-items>
                         </v-card>
-                    </v-card>
-                </div>
-            </div>
-            <div class="row">
-                <div class="legend">
-                    <v-card class="full-height legend-container" elevation="2">
-                        <Legend />
                     </v-card>
                 </div>
             </div>
@@ -58,7 +47,6 @@
 
 <script>
 import OverviewChart from "@/components/OverviewChart.vue";
-import Legend from "@/components/Legend.vue";
 import TableFoodData from "@/components/TableFoodData.vue";
 import TableActivitiesData from "@/components/TableActivitiesData.vue";
 import TableInsulinData from "@/components/TableInsulinData.vue";
@@ -74,8 +62,7 @@ export default {
         TableActivitiesData,
         TableInsulinData,
         EmotionTable,
-        OverviewChart,
-        Legend,
+        OverviewChart
     },
     // get data from store state
     computed: {
@@ -83,7 +70,8 @@ export default {
     },
     data() {
         return {
-            tab: null
+            // Keeps track of the currently displayed tab
+            tab: null,
         };
     },
     // if there is no data redirect user to main page

@@ -7,6 +7,7 @@ import legend from '@/components/configurations/legend.js';
  * @return { Array<any> }
  */
 export default function(ranges = null) {
+    // Create visual map options for glucose line chart
     return [
         {
             type: 'piecewise',
@@ -42,6 +43,7 @@ export default function(ranges = null) {
                 },
             ],
         },
+        // Create visual map options for carbs bar chart
         {
             type: 'piecewise',
             show: false,
