@@ -23,6 +23,7 @@ var insulin = {
  * adds UI elements without any functionality.
  */
 export default [
+    // Date range filter
     {
         heading: 'Date Range',
         label: null,
@@ -39,6 +40,7 @@ export default [
             }
         ],
     },
+    // Glucose level conditions filter
     {
         heading: 'Glucose Parameters',
         label: 'Glucose Conditions',
@@ -55,6 +57,7 @@ export default [
             }
         ]
     },
+    // Insulin amount filters. Includes filter for min/max values
     {
         heading: 'Insulin Range',
         label: 'Insulin',
@@ -71,6 +74,8 @@ export default [
             }
         ]
     },
+    // Activity type filter, includes all activity types supported by
+    // GameBus Platform
     {
         heading: 'Activity Parameters',
         label: 'Activity Type',
@@ -125,6 +130,8 @@ export default [
             }
         ],
     },
+    // Emotional status filter, contains separate filters for
+    // valence and arousal
     {
         heading: 'Emotion Parameters',
         label: 'Emotion Status',

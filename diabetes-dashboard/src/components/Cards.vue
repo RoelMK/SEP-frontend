@@ -81,6 +81,7 @@
 
 <script>
 export default {
+    // Name of the static component
     name: "Cards",
 };
 </script>

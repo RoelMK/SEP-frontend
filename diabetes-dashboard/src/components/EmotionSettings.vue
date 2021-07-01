@@ -19,6 +19,8 @@ export default {
     name: "EmotionSettings",
     data() {
         return {
+            // Variable that indicates whether emotional status notifications
+            // should be displayed
             boolAsk: true,
         };
     },

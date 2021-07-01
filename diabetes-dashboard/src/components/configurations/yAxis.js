@@ -12,9 +12,11 @@ var options = {
 
 // Default options for displaying yAxis along sub grids
 var axes = {
+    // Remove split lines in sub charts
     splitLine: {
         show: false
     },
+    // Remove axis labels to enable better readability
     axisLabel: {
         show: false,
     }

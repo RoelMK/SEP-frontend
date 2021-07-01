@@ -1,3 +1,4 @@
+// Import varios modules
 import App from './App.vue';
 import Vue from 'vue';
 import vuetify from '@/plugins/vuetify';
@@ -12,6 +13,8 @@ import VueCookies from 'vue-cookies';
 
 import '@mdi/font/css/materialdesignicons.css';
 import '@fortawesome/fontawesome-free/css/all.css';
+// In order to prevent importing entire eCharts library we only import
+// necessary for our application modules
 import { CanvasRenderer } from 'echarts/renderers';
 import { LineChart, ScatterChart, BarChart, CustomChart } from 'echarts/charts';
 import {
@@ -27,6 +30,7 @@ import i18n from './i18n';
 
 import CountryFlag from 'vue-country-flag';
 
+// Register components and libraries in Vue application
 Vue.component('country-flag', CountryFlag);
 
 Vue.config.productionTip = false;
@@ -53,6 +57,7 @@ Vue.use(snackbarPlugin, { store });
 
 Vue.component('v-chart', ECharts);
 
+// Create entry point of the application
 new Vue({
     store,
     vuetify,

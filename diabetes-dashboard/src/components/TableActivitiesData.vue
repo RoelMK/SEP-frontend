@@ -344,7 +344,7 @@ export default {
                     "yyyy-MM-DD HH:mm"
                 ).add(2, "hours")
             ).format("YYYY-MM-DDTHH:mm");
-            this.$store.dispatch("setNewTimeFrame", {
+            this.$store.commit("UPDATE_TIME_FRAME", {
                 start,
                 end,
                 now: moment(),

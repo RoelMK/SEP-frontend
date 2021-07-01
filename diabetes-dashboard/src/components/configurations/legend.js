@@ -5,6 +5,7 @@
  */
 export default {
     sections: [
+        // Object containing legend items for different glucose level conditions
         {
             type: 'Glucose',
             properties: [
@@ -45,6 +46,7 @@ export default {
                 }
             ]
         },
+        // Object containing legend item for emotional status
         {
             type: 'Emotions',
             properties: [
@@ -57,6 +59,7 @@ export default {
                 },
             ],
         },
+        // Object containing legend item for insulin
         {
             type: 'Insulin',
             properties: [
@@ -69,6 +72,7 @@ export default {
                 },
             ]
         },
+        // Object containing legend item for glycemic index
         {
             type: 'GI',
             properties: [
@@ -95,6 +99,7 @@ export default {
                 }
             ],
         },
+        // Object containing legend item for exercises
         {
             type: 'Exercises',
             properties: [

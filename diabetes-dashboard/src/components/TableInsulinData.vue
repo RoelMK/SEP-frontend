@@ -374,7 +374,7 @@ export default {
             let end = moment(
                 moment(insulin.date + " " + endTime, "yyyy-MM-DD HH:mm")
             ).format("YYYY-MM-DDTHH:mm");
-            this.$store.dispatch("setNewTimeFrame", {
+            this.$store.commit("UPDATE_TIME_FRAME", {
                 start,
                 end,
                 now: moment(),

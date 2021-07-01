@@ -8,6 +8,8 @@ import legend from '@/components/configurations/legend.js';
  */
 export default function(ranges = null) {
     // Create visual map options for glucose line chart
+    // Check whether glucose level condition ranges were set by the user
+    // in User Profile view, otherwise use default values
     return [
         {
             type: 'piecewise',
@@ -44,6 +46,9 @@ export default function(ranges = null) {
             ],
         },
         // Create visual map options for carbs bar chart
+        // Use default values to differentiate between low, normal and high
+        // glycemic index, if there is no glycemic index value assigned to
+        // food use grey color
         {
             type: 'piecewise',
             show: false,

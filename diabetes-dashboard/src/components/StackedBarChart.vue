@@ -29,16 +29,19 @@ export default {
          * @return { any }
          */
         options(data) {
+            // Default encode options
             var encode = {
                 x: 0,
                 y: 1,
                 tooltip: [2, 3]
             };
             return {
+                // Toolip options
                 tooltip: {
                     trigger: 'item',
                     position: 'right',
                 },
+                // Grid options
                 grid: {
                     height: 200,
                     width: '20%',
@@ -47,6 +50,7 @@ export default {
                     bottom: 0,
                     top: '10%',
                 },
+                // Legend options
                 legend: {
                     orient: 'vertical',
                     selectedMode: false,
@@ -54,11 +58,13 @@ export default {
                     left: '35%',
                     data: ['Very High', 'High', 'Normal', 'Low', 'Very Low']
                 },
+                // X-axis options
                 xAxis: {
                     type: 'category',
                     show: false,
                     data: ['Distribution'],
                 },
+                // Y-axis options
                 yAxis: {
                     show: false,
                     type: 'value'

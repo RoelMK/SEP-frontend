@@ -27,7 +27,8 @@ export default {
     },
     created() {
         // Pass updated values to the component once
-        // state was changed
+        // state was changed and update local variables
+        // before displaying the message
         this.$store.subscribe((mutation, state) => {
             if (mutation.type === 'SHOW_MESSAGE') {
                 this.message = state.toast.message;
