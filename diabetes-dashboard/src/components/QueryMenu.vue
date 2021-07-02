@@ -144,7 +144,11 @@ export default {
                         });
                         return;
                     }
-                    await Data.fetch(config, this.$cookies.get('JWT')).then(
+                    let token = this.$cookies.get("JWT");
+                    if (this.$store.state.supervising.token) {
+                        token = this.$store.state.supervising.token;
+                    }
+                    await Data.fetch(config, token).then(
                         (dataPromise) => dataPromise,
                         (err) => console.log(err))
                         .then(data => {
